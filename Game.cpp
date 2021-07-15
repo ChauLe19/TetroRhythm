@@ -116,12 +116,20 @@ void Game::run(RenderWindow& window)
 			}
 		}
 
-		window.clear(Color::White);
+		window.clear(Color::Black);
 		//window.draw(bgSprite);
 		board.render(window);
 		currentPiecePtr->render(window, board);
 		if (holdPiecePtr != nullptr)
 			holdPiecePtr->render(window, 50, 100);
+		int counter = 0;
+		std::list<Tetromino*>::iterator fifthIt = bag.begin();
+		advance(fifthIt, 5);
+		for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
+		{
+			(*it)->render(window, 300, 100 + 50 * counter);
+			counter++;
+		}
 		window.display();
 	}
 }

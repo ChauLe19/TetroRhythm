@@ -26,7 +26,7 @@ void Board::render(RenderWindow& window)
 {
 
 	RectangleShape rect(Vector2f(18 * 10, 18 * 20));
-	rect.setFillColor(Color::Green);
+	rect.setFillColor(Color::Blue);
 	rect.setPosition(xPos, yPos);
 	window.draw(rect);
 	// Doesn't render the first line
