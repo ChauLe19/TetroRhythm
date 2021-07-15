@@ -2,7 +2,7 @@
 //
 #include <SFML/Graphics.hpp>
 #include <iostream>
-//#include "Game.h"
+#include "Game.h"
 #include "Board.h"
 #include "Tetromino.h"
 using namespace std;
@@ -16,57 +16,8 @@ int main()
 	Board board(100, 100);
 	srand(time(NULL));
 
-
-	 Tetromino* currentPiecePtr = new Tetromino(static_cast<Type>(rand() % 7));
-	 Tetromino currentPiece = *currentPiecePtr;
-	 while (window.isOpen())
-	 {
-		 Event event;
-		 while (window.pollEvent(event))
-		 {
-			 if (event.type == Event::Closed)
-				 window.close();
-			 if (event.type == Event::KeyPressed)
-			 {
-				 switch (event.key.code)
-				 {
-				 case Keyboard::F:
-					 currentPiece.rotate(Rotational_Direction::CW, board);
-					 break;
-				 case Keyboard::A:
-					 currentPiece.rotate(Rotational_Direction::CCW, board);
-					 break;
-				 case Keyboard::S:
-					 currentPiece.rotate(Rotational_Direction::R180, board);
-					 break;
-				 case Keyboard::L:
-					 currentPiece.move(Moving_Direction::RIGHT_DIR, board);
-					 break;
-				 case Keyboard::J:
-					 currentPiece.move(Moving_Direction::LEFT_DIR, board);
-					 break;
-				 case Keyboard::K:
-					 currentPiece.move(Moving_Direction::DOWN_DIR, board);
-					 break;
-				 case Keyboard::I:
-					 currentPiece.hardDrop(board);
-					 //currentPiece = nextPiece();
-					 currentPiecePtr = new Tetromino(static_cast<Type>(rand() % 7));
-					 currentPiece = *currentPiecePtr;
-					 break;
-				 }
-				 board.clearLines();
-			 }
-		 }
-
-		 window.clear(Color::White);
-		 //window.draw(bgSprite);
-		 board.render(window);
-		 currentPiece.render(window, board);
-		 window.display();
-	 }
-	//Game game;
-	//game.run(window);
+	Game game;
+	game.run(window);
 
 	return 0;
 }

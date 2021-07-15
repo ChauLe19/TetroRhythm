@@ -12,7 +12,7 @@ enum class Type { I = 0, O = 1, T = 2, S = 3, Z = 4, J = 5, L = 6 };
 enum class Orientation { SPAWN = 0, RIGHT = 1, FLIP = 2, LEFT = 3 };
 enum class Rotational_Direction { CCW = -1, NORO = 0, CW = 1, R180 = 2 };
 enum class Moving_Direction { UP_DIR = 0, LEFT_DIR = 1, RIGHT_DIR = 2, DOWN_DIR = 3 };
-const static array<Type, 7> allPieces = { { Type::I, Type::O, Type::T, Type::S, Type::Z,Type::J,Type::L } };
+const static vector<Type> allPieces{ Type::I, Type::O, Type::T, Type::S, Type::Z,Type::J,Type::L };
 
 
 
@@ -124,7 +124,7 @@ class Tetromino
 private:
 	array<array<int, 4>, 4> cells = { 0 };
 	Type type;
-	int xPos = 4;
+	int xPos = 3;
 	int yPos = 0;
 	Texture cellsTexture;
 	Sprite cellImage;
@@ -146,6 +146,9 @@ public:
 	bool move(Moving_Direction dir, Board& board);
 	bool checkCollision(int xPos, int yPos, array<array<int, 4>, 4> cells, Board& board);
 	void render(RenderWindow& window, Board& board);
+	void render(RenderWindow& window, int x, int y);
+	void reset();
+	Type getType();
 };
 
 #endif

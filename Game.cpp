@@ -4,37 +4,72 @@ Game::Game()
 {
 	cout << "Initializing game" << endl;
 	//board = Board(boardX, boardY);
-	/*bag.insert(bag.end(), allPieces.begin(), allPieces.end());
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-	shuffle(bag.begin(), bag.end(), default_random_engine(seed));
-	bag.insert(bag.end(), allPieces.begin(), allPieces.end());
-	list<Tetromino>::iterator it = bag.begin();
-	advance(it, 7);
-	shuffle(it, bag.end(), default_random_engine(seed));*/
-	currentPiece = Tetromino(static_cast<Type>(rand() % 7));
-	//holdPiece = Tetromino(static_cast<Type>(rand() % 7));
 
+	// add 2 initial 7-bags
+	for (int j = 0; j < 2; j++)
+	{
+		vector<Type> tempTypeVector = allPieces;
+		shuffle(tempTypeVector.begin(), tempTypeVector.end(), default_random_engine(seed));
+
+		while (!tempTypeVector.empty())
+		{
+			Type tempType = tempTypeVector.back();
+			tempTypeVector.pop_back();
+			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
+		}
+	}
+
+	currentPiecePtr = &nextPiece();
+
+}
+
+void Game::hold()
+{
+	if (!alreadyHold)
+	{
+		if (holdPiecePtr == nullptr)
+		{
+			holdPiecePtr = currentPiecePtr;
+			currentPiecePtr = &nextPiece();
+		}
+		else
+		{
+			Tetromino* tempPiecePtr = holdPiecePtr;
+			holdPiecePtr = currentPiecePtr;
+			currentPiecePtr = tempPiecePtr;
+		}
+		holdPiecePtr->reset();
+		alreadyHold = true;
+	}
 }
 
 Tetromino& Game::nextPiece()
 {
-	//currentPiece = bag.front();
-	//bag.pop_front();
+	currentPiecePtr = bag.front();
+	bag.pop_front();
 
-	//unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-	//if (bag.size() <= 7)
-	//{
-	//	for (int i = 0; i < 7; i++)
-	//	{
-	//		bag.push_back(Tetromino(allPieces[i])); // append all 7 pieces to he bag
-	//	}
-	//}
-	//list<Tetromino>::iterator it = bag.begin();
-	//advance(it, 7);
-	//shuffle(it, bag.end(), default_random_engine(seed));
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	if (bag.size() <= 7)
+	{
+		vector<Type> tempTypeVector = allPieces;
+		shuffle(tempTypeVector.begin(), tempTypeVector.end(), default_random_engine(seed));
 
-	return currentPiece;
+		while (!tempTypeVector.empty())
+		{
+			Type tempType = tempTypeVector.back();
+			tempTypeVector.pop_back();
+			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
+		}
+	}
+	cout << endl;
+
+
+	return *currentPiecePtr;
 }
+
+
+
 
 void Game::run(RenderWindow& window)
 {
@@ -50,27 +85,31 @@ void Game::run(RenderWindow& window)
 				switch (event.key.code)
 				{
 				case Keyboard::F:
-					currentPiece.rotate(Rotational_Direction::CW, board);
+					currentPiecePtr->rotate(Rotational_Direction::CW, board);
 					break;
 				case Keyboard::A:
-					currentPiece.rotate(Rotational_Direction::CCW, board);
+					currentPiecePtr->rotate(Rotational_Direction::CCW, board);
 					break;
 				case Keyboard::S:
-					currentPiece.rotate(Rotational_Direction::R180, board);
+					currentPiecePtr->rotate(Rotational_Direction::R180, board);
 					break;
 				case Keyboard::L:
-					currentPiece.move(Moving_Direction::RIGHT_DIR, board);
+					currentPiecePtr->move(Moving_Direction::RIGHT_DIR, board);
 					break;
 				case Keyboard::J:
-					currentPiece.move(Moving_Direction::LEFT_DIR, board);
+					currentPiecePtr->move(Moving_Direction::LEFT_DIR, board);
 					break;
 				case Keyboard::K:
-					currentPiece.move(Moving_Direction::DOWN_DIR, board);
+					currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
 					break;
 				case Keyboard::I:
-					currentPiece.hardDrop(board);
+					currentPiecePtr->hardDrop(board);
 					//currentPiece = nextPiece();
-					currentPiece = Tetromino(static_cast<Type>(rand() % 7));
+					currentPiecePtr = &nextPiece();
+					alreadyHold = false;
+					break;
+				case Keyboard::D:
+					hold();
 					break;
 				}
 				board.clearLines();
@@ -80,12 +119,16 @@ void Game::run(RenderWindow& window)
 		window.clear(Color::White);
 		//window.draw(bgSprite);
 		board.render(window);
-		currentPiece.render(window, board);
+		currentPiecePtr->render(window, board);
+		if (holdPiecePtr != nullptr)
+			holdPiecePtr->render(window, 50, 100);
 		window.display();
 	}
 }
 
 Game::~Game()
 {
+	delete currentPiecePtr;
+	delete holdPiecePtr;
 }
 
