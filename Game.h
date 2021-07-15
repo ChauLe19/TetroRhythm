@@ -25,12 +25,15 @@ private:
 	Tetromino* currentPiecePtr;
 	Tetromino* holdPiecePtr;
 	Tetromino& nextPiece();
+	int frameCount = 0;
+	int onGroundCount = 0;
 	void hold();
 public:
 	Game();
+	~Game();
 	//Tetromino& nextPiece();
 	void run(RenderWindow& window);
-	~Game();
+	void tick(RenderWindow& window);
 	void run();
 	void tick();
 	void render(RenderWindow& window);

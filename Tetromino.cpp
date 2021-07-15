@@ -116,6 +116,40 @@ void Tetromino::setPiece(Board& board)
 	}
 }
 
+bool Tetromino::checkIsOnGround(Board& board)
+{
+	bool bottomDetected = false;
+	for (int i = 3; i >= 0; i--)
+	{
+	
+		for (int j = 0; j < 4; j++)
+		{
+			if (cells[i][j] > 0)
+			{
+				bottomDetected = true;
+				cout << xPos + j << ',' << yPos + i + 1<<endl;
+				if (yPos + i + 1 >= boardHeight || board.getCell(yPos + i + 1, xPos + j) > 0)
+				{
+					isOnGround = true;
+					return isOnGround;
+				}
+			}
+		}
+		if (bottomDetected)
+		{
+			isOnGround = false;
+			return isOnGround;
+		}
+	}
+	// probably never reach
+	return isOnGround;
+}
+
+bool Tetromino::getIsOnGround(Board& board)
+{
+	return isOnGround;
+}
+
 // Rotate a square array
 // TODO: Check rotation is correct
 void Tetromino::rotateArray(array<array<int, 4>, 4>& arr, int size, Rotational_Direction rDir)
@@ -154,7 +188,9 @@ bool Tetromino::move(Moving_Direction dir, Board& board)
 	{
 		newYPos++;
 	}
-	return setXY(newXPos, newYPos, board);
+	bool isPossible = setXY(newXPos, newYPos, board);
+	checkIsOnGround(board);
+	return isPossible;
 }
 
 bool Tetromino::checkCollision(int xPos, int yPos, array<array<int, 4>, 4> cells, Board& board)
@@ -169,7 +205,7 @@ bool Tetromino::checkCollision(int xPos, int yPos, array<array<int, 4>, 4> cells
 			if (cells[i][j] <= 0) continue;
 
 			// else if that location on board hit the wall or a non-empty block => not valid move
-			if (xPos + j < 0 || xPos + j >= boardWidth || yPos + i >= boardHeight || boardMatrix[yPos + i][xPos + j] > 0)
+			if (xPos + j < 0 || xPos + j >= boardWidth || yPos + i >= boardHeight || yPos+i < 0 || boardMatrix[yPos + i][xPos + j] > 0)
 			{
 				//cout << xPos + j << ',' << yPos + i << endl;
 				return false;
@@ -202,7 +238,7 @@ void Tetromino::render(RenderWindow& window, int x, int y)
 		{
 			if (cells[i][j] > 0)
 			{
-				cellImage.setPosition(x+ j * 18, y + i * 18);
+				cellImage.setPosition(x + j * 18, y + i * 18);
 				window.draw(cellImage);
 			}
 		}
@@ -215,6 +251,7 @@ void Tetromino::reset()
 	yPos = 0;
 	orientation = Orientation::SPAWN;
 	cells = tetrominos[static_cast<int>(type)];
+	isOnGround = false;
 
 }
 

@@ -13,11 +13,29 @@ int main()
 {
 
 	RenderWindow window(sf::VideoMode(1024, 768), "TetroRythm");
+	window.setFramerateLimit(60);
+	Font font;
+	Text text;
+	text.setFont(font);
+	text.setCharacterSize(20);
+	text.setFillColor(Color::White);
+	if (!font.loadFromFile("arial.ttf")) return 1;
 	Board board(100, 100);
 	srand(time(NULL));
-
+	Clock clock;
 	Game game;
-	game.run(window);
+	while (window.isOpen())
+	{
+
+		Time elapsed = clock.restart();
+		text.setString(to_string(round(1 / elapsed.asSeconds())));
+		game.tick(window);
+		window.clear(Color::Black);
+		window.draw(text);
+		game.render(window);
+		window.display();
+	}
+
 
 	return 0;
 }

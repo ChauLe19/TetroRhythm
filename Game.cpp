@@ -71,66 +71,83 @@ Tetromino& Game::nextPiece()
 
 
 
-void Game::run(RenderWindow& window)
-{
-	while (window.isOpen())
-	{
-		Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == Event::Closed)
-				window.close();
-			if (event.type == Event::KeyPressed)
-			{
-				switch (event.key.code)
-				{
-				case Keyboard::F:
-					currentPiecePtr->rotate(Rotational_Direction::CW, board);
-					break;
-				case Keyboard::A:
-					currentPiecePtr->rotate(Rotational_Direction::CCW, board);
-					break;
-				case Keyboard::S:
-					currentPiecePtr->rotate(Rotational_Direction::R180, board);
-					break;
-				case Keyboard::L:
-					currentPiecePtr->move(Moving_Direction::RIGHT_DIR, board);
-					break;
-				case Keyboard::J:
-					currentPiecePtr->move(Moving_Direction::LEFT_DIR, board);
-					break;
-				case Keyboard::K:
-					currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
-					break;
-				case Keyboard::I:
-					currentPiecePtr->hardDrop(board);
-					//currentPiece = nextPiece();
-					currentPiecePtr = &nextPiece();
-					alreadyHold = false;
-					break;
-				case Keyboard::D:
-					hold();
-					break;
-				}
-				board.clearLines();
-			}
-		}
 
-		window.clear(Color::Black);
-		//window.draw(bgSprite);
-		board.render(window);
-		currentPiecePtr->render(window, board);
-		if (holdPiecePtr != nullptr)
-			holdPiecePtr->render(window, 50, 100);
-		int counter = 0;
-		std::list<Tetromino*>::iterator fifthIt = bag.begin();
-		advance(fifthIt, 5);
-		for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
+void Game::tick(RenderWindow& window)
+{
+	frameCount++;
+	Event event;
+	if (frameCount >= 48)
+	{
+		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
+		frameCount = 0;
+	}
+	while (window.pollEvent(event))
+	{
+		if (event.type == Event::Closed)
+			window.close();
+		if (event.type == Event::KeyPressed)
 		{
-			(*it)->render(window, 300, 100 + 50 * counter);
-			counter++;
+			switch (event.key.code)
+			{
+			case Keyboard::F:
+				currentPiecePtr->rotate(Rotational_Direction::CW, board);
+				break;
+			case Keyboard::A:
+				currentPiecePtr->rotate(Rotational_Direction::CCW, board);
+				break;
+			case Keyboard::S:
+				currentPiecePtr->rotate(Rotational_Direction::R180, board);
+				break;
+			case Keyboard::L:
+				currentPiecePtr->move(Moving_Direction::RIGHT_DIR, board);
+				break;
+			case Keyboard::J:
+				currentPiecePtr->move(Moving_Direction::LEFT_DIR, board);
+				break;
+			case Keyboard::K:
+				currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
+				break;
+			case Keyboard::I:
+				currentPiecePtr->hardDrop(board);
+				//currentPiece = nextPiece();
+				currentPiecePtr = &nextPiece();
+				currentPiecePtr->checkIsOnGround(board);
+				alreadyHold = false;
+				onGroundCount = 0;
+				break;
+			case Keyboard::D:
+				hold();
+				break;
+			}
+			board.clearLines();
 		}
-		window.display();
+	}
+	if (currentPiecePtr->getIsOnGround(board))
+	{
+		onGroundCount++;
+		if (onGroundCount > 100)
+		{
+			currentPiecePtr->hardDrop(board);
+			currentPiecePtr = &nextPiece();
+			alreadyHold = false;
+			onGroundCount = 0;
+		}
+	}
+}
+
+void Game::render(RenderWindow& window)
+{
+	board.render(window);
+	currentPiecePtr->render(window, board);
+	if (holdPiecePtr != nullptr)
+		holdPiecePtr->render(window, 50, 100);
+	int counter = 0;
+	std::list<Tetromino*>::iterator fifthIt = bag.begin();
+	advance(fifthIt, 5);
+	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
+	{
+		(*it)->render(window, 300, 100 + 50 * counter);
+		counter++;
 	}
 }
 

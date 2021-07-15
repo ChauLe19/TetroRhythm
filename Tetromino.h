@@ -126,6 +126,7 @@ private:
 	Type type;
 	int xPos = 3;
 	int yPos = 0;
+	bool isOnGround = false;
 	Texture cellsTexture;
 	Sprite cellImage;
 	Orientation orientation = Orientation::SPAWN;
@@ -142,6 +143,8 @@ public:
 	bool rotate(Rotational_Direction rDir, Board& board);
 	void hardDrop(Board& board);
 	void setPiece(Board& board);
+	bool checkIsOnGround(Board& board);
+	bool getIsOnGround(Board& board);
 	void softDrop();
 	bool move(Moving_Direction dir, Board& board);
 	bool checkCollision(int xPos, int yPos, array<array<int, 4>, 4> cells, Board& board);
