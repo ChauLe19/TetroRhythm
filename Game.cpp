@@ -240,6 +240,11 @@ ClearType Game::determineClearType(Tetromino clearingPiece, ClearingInfo info, C
 		return ClearType::NONE;
 		break;
 	case 1:
+		if (info.isPC)
+		{
+			cout << "SINGLE_LINE_PC" << endl;
+			return ClearType::SINGLE_LINE_PC;
+		}
 		if (isB2BChainActive)
 		{
 			if (tspinType == 1)
@@ -270,7 +275,11 @@ ClearType Game::determineClearType(Tetromino clearingPiece, ClearingInfo info, C
 		return ClearType::SINGLE;
 		break;
 	case 2:
-		// TODO: if t spin double & prev is b2b chain, return B2B tspin
+		if (info.isPC)
+		{
+			cout << "DOUBLE_LINE_PC" << endl;
+			return ClearType::DOUBLE_LINE_PC;
+		}
 		if (isB2BChainActive)
 		{
 			if (tspinType == 1)
@@ -301,6 +310,11 @@ ClearType Game::determineClearType(Tetromino clearingPiece, ClearingInfo info, C
 		return ClearType::DOUBLE;
 		break;
 	case 3:
+		if (info.isPC)
+		{
+			cout << "TRIPLE_LINE_PC" << endl;
+			return ClearType::TRIPLE_LINE_PC;
+		}
 		if (isB2BChainActive && tspinType > 0)
 		{
 			cout << "B2B_TSPIN_TRIPLE" << endl;
