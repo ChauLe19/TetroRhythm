@@ -28,9 +28,13 @@ int main()
 	{
 
 		Time elapsed = clock.restart();
+		text.setPosition(0, 0);
 		text.setString(to_string(round(1 / elapsed.asSeconds())));
 		game.tick(window);
 		window.clear(Color::Black);
+		window.draw(text);
+		text.setString(to_string(game.getScore()));
+		text.setPosition(100, 0);
 		window.draw(text);
 		game.render(window);
 		window.display();

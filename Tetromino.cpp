@@ -81,11 +81,11 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 	{
 		int xOffset = wallKickData[wallKickGroup][i][0];
 		int yOffset = wallKickData[wallKickGroup][i][1];
-		cout << xOffset << ',' << yOffset << endl;
+		//cout << xOffset << ',' << yOffset << endl;
 		// yOffset is negate cuz positve y means upwards while in our board array positve y moves downward
 		if (checkCollision(xPos + xOffset, yPos - yOffset, tempCells, board))
 		{
-			cout << "working:" << xOffset << ',' << yOffset << endl;
+			//cout << "working:" << xOffset << ',' << yOffset << endl;
 			xPos += xOffset;
 			yPos -= yOffset;
 			cells = tempCells;
@@ -116,6 +116,7 @@ void Tetromino::setPiece(Board& board)
 	}
 }
 
+// TODO: T-Spin is hold on the side
 bool Tetromino::checkIsOnGround(Board& board)
 {
 	bool bottomDetected = false;

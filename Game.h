@@ -16,10 +16,15 @@ using namespace sf;
 
 const int boardX = 100;
 const int boardY = 100;
+
+
+
 class Game
 {
 private:
 	list<Tetromino*> bag;
+	int score = 0;
+	ClearType prevClearType = ClearType::NONE;
 	Board board = Board(boardX, boardY);
 	bool alreadyHold = false;
 	Tetromino* currentPiecePtr;
@@ -34,6 +39,7 @@ public:
 	//Tetromino& nextPiece();
 	void run(RenderWindow& window);
 	void tick(RenderWindow& window);
+	int getScore();
 	void run();
 	void tick();
 	void render(RenderWindow& window);

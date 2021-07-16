@@ -15,7 +15,7 @@ Board::Board()
 {
 	frameTexture.loadFromFile("frame.png");
 	image.setTexture(frameTexture);
-	image.setPosition((float) 0, (float)0);
+	image.setPosition((float)0, (float)0);
 	cellsTexture.loadFromFile("tiles.png");
 	cellImage.setTexture(cellsTexture);
 }
@@ -44,7 +44,32 @@ void Board::render(RenderWindow& window)
 	}
 }
 
-void Board::clearLines()
+bool isB2BChain(ClearType type)
+{
+	switch (type)
+	{
+	case ClearType::TSPIN_MINI_NO:
+	case ClearType::TSPIN_NO:
+	case ClearType::TSPIN_MINI_SINGLE:
+	case ClearType::TSPIN_SINGLE:
+	case ClearType::TSPIN_MINI_DOUBLE:
+	case ClearType::TSPIN_DOUBLE:
+	case ClearType::TSPIN_TRIPLE:
+	case ClearType::TETRIS:
+	case ClearType::B2B_TETRIS:
+	case ClearType::B2B_TSPIN_MINI_SINGLE:
+	case ClearType::B2B_TSPIN_SINGLE:
+	case ClearType::B2B_TSPIN_MINI_DOUBLE:
+	case ClearType::B2B_TSPIN_DOUBLE:
+	case ClearType::B2B_TSPIN_TRIPPLE:
+		return true;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
+ClearType Board::clearLines(ClearType prevType)
 {
 	int linesCleared = 0;
 	bool pc = true;
@@ -64,9 +89,9 @@ void Board::clearLines()
 		}
 
 		// if line is filled, clear
-		linesCleared++;
 		if (lineIsFilled)
 		{
+			linesCleared++;
 			for (int k = i; k > 0; k--)
 			{
 				for (int j = 0; j < boardWidth; j++)
@@ -77,7 +102,43 @@ void Board::clearLines()
 		}
 	}
 
+	bool isB2BChainActive = isB2BChain(prevType);
+	switch (linesCleared)
+	{
+	case 0:
+		cout << "NONE" << endl;
+		return ClearType::NONE;
+		break;
+	case 1:
+		cout << "SINGLE" << endl;
+		return ClearType::SINGLE;
+		break;
+	case 2:
+		// TODO: if t spin double & prev is b2b chain, return B2B tspin
+		cout << "DOUBLE" << endl;
+		return ClearType::DOUBLE;
+		break;
+	case 3:
+		cout << "TRIPLE" << endl;
+		return ClearType::TRIPLE;
+		break;
+	case 4:
+		if (isB2BChainActive)
+		{
+			cout << "B2B TETRIS" << endl;
+			return ClearType::B2B_TETRIS;
+		}
+		cout << "TETRIS" << endl;
+		return ClearType::TETRIS;
+		break;
+	default:
+		cout << "NONE" << endl;
+		return ClearType::NONE;
+		break;
+	}
 }
+
+
 
 // TODO: check if this return a copy or reference
 array<array<int, boardWidth>, boardHeight> Board::getBoard()

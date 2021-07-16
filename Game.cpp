@@ -69,7 +69,10 @@ Tetromino& Game::nextPiece()
 }
 
 
-
+int convertClearTypeToScores(ClearType type)
+{
+	return clearTypeScore[static_cast<int>(type)];
+}
 
 
 void Game::tick(RenderWindow& window)
@@ -105,10 +108,11 @@ void Game::tick(RenderWindow& window)
 				currentPiecePtr->move(Moving_Direction::LEFT_DIR, board);
 				break;
 			case Keyboard::K:
-				currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
+				if(currentPiecePtr->move(Moving_Direction::DOWN_DIR, board)) score+= convertClearTypeToScores(ClearType::SOFTDROP);
 				break;
 			case Keyboard::I:
 				currentPiecePtr->hardDrop(board);
+				score += convertClearTypeToScores(ClearType::HARDDROP);
 				//currentPiece = nextPiece();
 				currentPiecePtr = &nextPiece();
 				currentPiecePtr->checkIsOnGround(board);
@@ -119,7 +123,12 @@ void Game::tick(RenderWindow& window)
 				hold();
 				break;
 			}
-			board.clearLines();
+			ClearType tempScoresType =board.clearLines(prevClearType);
+			if (tempScoresType != ClearType::NONE)
+			{
+				prevClearType = tempScoresType;
+			}
+			score += convertClearTypeToScores(tempScoresType);
 		}
 	}
 	if (currentPiecePtr->getIsOnGround(board))
@@ -128,11 +137,26 @@ void Game::tick(RenderWindow& window)
 		if (onGroundCount > 100)
 		{
 			currentPiecePtr->hardDrop(board);
+			ClearType tempScoresType = board.clearLines(prevClearType);
+			if (tempScoresType != ClearType::NONE)
+			{
+				prevClearType = tempScoresType;
+			}
+			score += convertClearTypeToScores(tempScoresType);
 			currentPiecePtr = &nextPiece();
 			alreadyHold = false;
 			onGroundCount = 0;
 		}
 	}
+}
+
+
+
+
+
+int Game::getScore()
+{
+	return score;
 }
 
 void Game::render(RenderWindow& window)
@@ -156,4 +180,6 @@ Game::~Game()
 	delete currentPiecePtr;
 	delete holdPiecePtr;
 }
+
+
 
