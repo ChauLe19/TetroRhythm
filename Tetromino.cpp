@@ -116,19 +116,15 @@ void Tetromino::setPiece(Board& board)
 	}
 }
 
-// TODO: T-Spin is hold on the side
 bool Tetromino::checkIsOnGround(Board& board)
 {
-	bool bottomDetected = false;
 	for (int i = 3; i >= 0; i--)
 	{
-	
 		for (int j = 0; j < 4; j++)
 		{
 			if (cells[i][j] > 0)
 			{
-				bottomDetected = true;
-				cout << xPos + j << ',' << yPos + i + 1<<endl;
+				//cout << xPos + j << ',' << yPos + i + 1<<endl;
 				if (yPos + i + 1 >= boardHeight || board.getCell(yPos + i + 1, xPos + j) > 0)
 				{
 					isOnGround = true;
@@ -136,13 +132,9 @@ bool Tetromino::checkIsOnGround(Board& board)
 				}
 			}
 		}
-		if (bottomDetected)
-		{
-			isOnGround = false;
-			return isOnGround;
-		}
 	}
-	// probably never reach
+
+	isOnGround = false;
 	return isOnGround;
 }
 
