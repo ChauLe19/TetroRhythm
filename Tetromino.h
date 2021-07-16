@@ -127,6 +127,7 @@ private:
 	int xPos = 3;
 	int yPos = 0;
 	bool isOnGround = false;
+	bool rotateLast = false;
 	Texture cellsTexture;
 	Sprite cellImage;
 	Orientation orientation = Orientation::SPAWN;
@@ -152,6 +153,10 @@ public:
 	void render(RenderWindow& window, int x, int y);
 	void reset();
 	Type getType();
+	int getXPos();
+	int getYPos();
+	Orientation getOrientation();
+	bool getRotateLast();
 };
 
 #endif

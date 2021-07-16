@@ -44,35 +44,11 @@ void Board::render(RenderWindow& window)
 	}
 }
 
-bool isB2BChain(ClearType type)
-{
-	switch (type)
-	{
-	case ClearType::TSPIN_MINI_NO:
-	case ClearType::TSPIN_NO:
-	case ClearType::TSPIN_MINI_SINGLE:
-	case ClearType::TSPIN_SINGLE:
-	case ClearType::TSPIN_MINI_DOUBLE:
-	case ClearType::TSPIN_DOUBLE:
-	case ClearType::TSPIN_TRIPLE:
-	case ClearType::TETRIS:
-	case ClearType::B2B_TETRIS:
-	case ClearType::B2B_TSPIN_MINI_SINGLE:
-	case ClearType::B2B_TSPIN_SINGLE:
-	case ClearType::B2B_TSPIN_MINI_DOUBLE:
-	case ClearType::B2B_TSPIN_DOUBLE:
-	case ClearType::B2B_TSPIN_TRIPPLE:
-		return true;
-		break;
-	default:
-		return false;
-		break;
-	}
-}
-ClearType Board::clearLines(ClearType prevType)
+
+ClearingInfo Board::clearLines()
 {
 	int linesCleared = 0;
-	bool pc = true;
+	bool isPC = true;
 
 	for (int i = 0; i < boardHeight; i++)
 	{
@@ -84,10 +60,15 @@ ClearType Board::clearLines(ClearType prevType)
 			if (board[i][j] == 0)
 			{
 				lineIsFilled = false;
+			}
+
+			// in a line, if tiles switch from filled and empty -> not clearing -> not pc
+			if (j != 0 && board[i][j] != board[i][j - 1] && (board[i][j] == 0 || board[i][j - 1] == 0))
+			{
+				isPC = false;
 				break;
 			}
 		}
-
 		// if line is filled, clear
 		if (lineIsFilled)
 		{
@@ -101,41 +82,10 @@ ClearType Board::clearLines(ClearType prevType)
 			}
 		}
 	}
-
-	bool isB2BChainActive = isB2BChain(prevType);
-	switch (linesCleared)
-	{
-	case 0:
-		cout << "NONE" << endl;
-		return ClearType::NONE;
-		break;
-	case 1:
-		cout << "SINGLE" << endl;
-		return ClearType::SINGLE;
-		break;
-	case 2:
-		// TODO: if t spin double & prev is b2b chain, return B2B tspin
-		cout << "DOUBLE" << endl;
-		return ClearType::DOUBLE;
-		break;
-	case 3:
-		cout << "TRIPLE" << endl;
-		return ClearType::TRIPLE;
-		break;
-	case 4:
-		if (isB2BChainActive)
-		{
-			cout << "B2B TETRIS" << endl;
-			return ClearType::B2B_TETRIS;
-		}
-		cout << "TETRIS" << endl;
-		return ClearType::TETRIS;
-		break;
-	default:
-		cout << "NONE" << endl;
-		return ClearType::NONE;
-		break;
-	}
+	struct ClearingInfo result;
+	result.isPC = isPC;
+	result.linesCleared = linesCleared;
+	return result;
 }
 
 

@@ -38,7 +38,7 @@ enum class ClearType {
 	B2B_TSPIN_SINGLE,
 	B2B_TSPIN_MINI_DOUBLE,
 	B2B_TSPIN_DOUBLE,
-	B2B_TSPIN_TRIPPLE, // t-spin
+	B2B_TSPIN_TRIPLE, // t-spin
 };
 
 static int clearTypeScore[] = { 0,
@@ -68,6 +68,13 @@ static int clearTypeScore[] = { 0,
 1800,
 2400
 };
+
+struct ClearingInfo
+{
+	int linesCleared;
+	bool isPC;
+};
+
 class Board
 {
 private:
@@ -84,8 +91,8 @@ public:
 	~Board();
 	void render(RenderWindow& window);
 	Sprite& sprite();
-	ClearType clearLines();
-	ClearType clearLines(ClearType prevType);
+	ClearingInfo clearLines();
+	ClearingInfo clearLines(ClearType prevType);
 	array<array<int, boardWidth>, boardHeight> getBoard();
 	int getXPos();
 	int getYPos();

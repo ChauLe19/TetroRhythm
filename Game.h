@@ -27,6 +27,7 @@ private:
 	ClearType prevClearType = ClearType::NONE;
 	Board board = Board(boardX, boardY);
 	bool alreadyHold = false;
+	Tetromino* prevPiecePtr;
 	Tetromino* currentPiecePtr;
 	Tetromino* holdPiecePtr;
 	Tetromino& nextPiece();
@@ -39,6 +40,8 @@ public:
 	//Tetromino& nextPiece();
 	void run(RenderWindow& window);
 	void tick(RenderWindow& window);
+	ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType);
+	ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board);
 	int getScore();
 	void run();
 	void tick();

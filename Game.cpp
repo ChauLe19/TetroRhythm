@@ -108,12 +108,13 @@ void Game::tick(RenderWindow& window)
 				currentPiecePtr->move(Moving_Direction::LEFT_DIR, board);
 				break;
 			case Keyboard::K:
-				if(currentPiecePtr->move(Moving_Direction::DOWN_DIR, board)) score+= convertClearTypeToScores(ClearType::SOFTDROP);
+				if (currentPiecePtr->move(Moving_Direction::DOWN_DIR, board)) score += convertClearTypeToScores(ClearType::SOFTDROP);
 				break;
 			case Keyboard::I:
 				currentPiecePtr->hardDrop(board);
 				score += convertClearTypeToScores(ClearType::HARDDROP);
 				//currentPiece = nextPiece();
+				prevPiecePtr = currentPiecePtr;
 				currentPiecePtr = &nextPiece();
 				currentPiecePtr->checkIsOnGround(board);
 				alreadyHold = false;
@@ -123,12 +124,18 @@ void Game::tick(RenderWindow& window)
 				hold();
 				break;
 			}
-			ClearType tempScoresType =board.clearLines(prevClearType);
-			if (tempScoresType != ClearType::NONE)
+			if (prevPiecePtr != nullptr)
 			{
-				prevClearType = tempScoresType;
+				// TODO: copy board before clear, is this optimized???
+				Board tempBoard = board;
+				ClearingInfo tempClearingInfo = board.clearLines();
+				ClearType tempScoresType = determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, board);
+				if (tempScoresType != ClearType::NONE)
+				{
+					prevClearType = tempScoresType;
+				}
+				score += convertClearTypeToScores(tempScoresType);
 			}
-			score += convertClearTypeToScores(tempScoresType);
 		}
 	}
 	if (currentPiecePtr->getIsOnGround(board))
@@ -137,7 +144,12 @@ void Game::tick(RenderWindow& window)
 		if (onGroundCount > 100)
 		{
 			currentPiecePtr->hardDrop(board);
-			ClearType tempScoresType = board.clearLines(prevClearType);
+			// TODO: copy board before clear, is this optimized???
+			Board tempBoard = board;
+			prevPiecePtr = currentPiecePtr;
+			ClearingInfo tempClearingInfo = board.clearLines();
+			ClearType tempScoresType = determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+
 			if (tempScoresType != ClearType::NONE)
 			{
 				prevClearType = tempScoresType;
@@ -149,8 +161,184 @@ void Game::tick(RenderWindow& window)
 		}
 	}
 }
+bool isB2BChain(ClearType type)
+{
+	switch (type)
+	{
+	case ClearType::TSPIN_MINI_NO:
+	case ClearType::TSPIN_NO:
+	case ClearType::TSPIN_MINI_SINGLE:
+	case ClearType::TSPIN_SINGLE:
+	case ClearType::TSPIN_MINI_DOUBLE:
+	case ClearType::TSPIN_DOUBLE:
+	case ClearType::TSPIN_TRIPLE:
+	case ClearType::TETRIS:
+	case ClearType::B2B_TETRIS:
+	case ClearType::B2B_TSPIN_MINI_SINGLE:
+	case ClearType::B2B_TSPIN_SINGLE:
+	case ClearType::B2B_TSPIN_MINI_DOUBLE:
+	case ClearType::B2B_TSPIN_DOUBLE:
+	case ClearType::B2B_TSPIN_TRIPLE:
+		return true;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
 
+// 0: not a t-spin of any kind
+// 1: mini t-spin
+// 2: t-spin double
+int getTSpinType(Tetromino piece, Board& board)
+{
+	if (piece.getType() == Type::T && piece.getRotateLast())
+	{
+		int x = piece.getXPos();
+		int y = piece.getYPos();
+		int ori = static_cast<int> (piece.getOrientation());
+		bool leftFrontCornerFilled = ori / 2 * 2 + y >= boardHeight || (ori + 1) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[ori / 2 * 2 + y][(ori + 1) % 4 / 2 * 2 + x] > 0;
+		bool rightFrontCornerFilled = (ori + 1) % 4 / 2 * 2 + y >= boardHeight || (ori + 2) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 1) % 4 / 2 * 2 + y][(ori + 2) % 4 / 2 * 2 + x] > 0;
+		bool rightBackCornerFilled = (ori + 2) % 4 / 2 * 2 + y >= boardHeight || (ori + 3) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 2) % 4 / 2 * 2 + y][(ori + 3) % 4 / 2 * 2 + x] > 0;
+		bool leftBackCornerFilled = (ori + 3) % 4 / 2 * 2 + y >= boardHeight || ori / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 3) % 4 / 2 * 2 + y][ori / 2 * 2 + x] > 0;
+		// cout << "LF:" << leftFrontCornerFilled << "\tRF:" << rightFrontCornerFilled << "\tLB:" << leftBackCornerFilled << "\tRB:" << rightBackCornerFilled << endl;
+		// cout << "LF:" << ori / 2 * 2 + y << '+' << (ori + 1) % 4 / 2 * 2 + x
+		// 	<< "\tRF:" << (ori + 1) % 4 / 2 * 2 + y << '+' << (ori + 2) % 4 / 2 * 2 + x
+		// 	<< "\tLB:" << (ori + 2) % 4 / 2 * 2 + y << '+' << (ori + 3) % 4 / 2 * 2 + x
+		// 	<< "\tRB:" << (ori + 3) % 4 / 2 * 2 + y << '+' << ori / 2 * 2 + x << endl;
+		if (leftFrontCornerFilled && rightFrontCornerFilled && (rightBackCornerFilled || leftBackCornerFilled))
+		{
+			return 2;
+		}
+		else if (rightBackCornerFilled && leftBackCornerFilled && (leftFrontCornerFilled || rightFrontCornerFilled))
+		{
+			return 1;
+		}
+	}
+	return 0;
+}
 
+ClearType Game::determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board)
+{
+	bool isB2BChainActive = isB2BChain(prevClearType);
+
+	int tspinType = getTSpinType(clearingPiece, board);
+	switch (info.linesCleared)
+	{
+	case 0:
+		if (tspinType == 1)
+		{
+			cout << "TSPIN_MINI_NO" << endl;
+			return ClearType::TSPIN_MINI_NO;
+		}
+		else if (tspinType == 2)
+		{
+			cout << "TSPIN_NO" << endl;
+			return ClearType::TSPIN_NO;
+		}
+		cout << "NONE" << endl;
+		return ClearType::NONE;
+		break;
+	case 1:
+		if (isB2BChainActive)
+		{
+			if (tspinType == 1)
+			{
+				cout << "B2B_TSPIN_MINI_SINGLE" << endl;
+				return ClearType::B2B_TSPIN_MINI_SINGLE;
+			}
+			else if (tspinType == 2)
+			{
+				cout << "B2B_TSPIN_SINGLE" << endl;
+				return ClearType::B2B_TSPIN_SINGLE;
+			}
+		}
+		else
+		{
+			if (tspinType == 1)
+			{
+				cout << "TSPIN_MINI_SINGLE" << endl;
+				return ClearType::TSPIN_MINI_SINGLE;
+			}
+			else if (tspinType == 2)
+			{
+				cout << "TSPIN_SINGLE" << endl;
+				return ClearType::TSPIN_SINGLE;
+			}
+		}
+		cout << "SINGLE" << endl;
+		return ClearType::SINGLE;
+		break;
+	case 2:
+		// TODO: if t spin double & prev is b2b chain, return B2B tspin
+		if (isB2BChainActive)
+		{
+			if (tspinType == 1)
+			{
+				cout << "B2B_TSPIN_MINI_DOUBLE" << endl;
+				return ClearType::B2B_TSPIN_MINI_DOUBLE;
+			}
+			else if (tspinType == 2)
+			{
+				cout << "B2B_TSPIN_DOUBLE" << endl;
+				return ClearType::B2B_TSPIN_DOUBLE;
+			}
+		}
+		else
+		{
+			if (tspinType == 1)
+			{
+				cout << "TSPIN_MINI_DOUBLE" << endl;
+				return ClearType::TSPIN_MINI_DOUBLE;
+			}
+			else if (tspinType == 2)
+			{
+				cout << "TSPIN_DOUBLE" << endl;
+				return ClearType::TSPIN_DOUBLE;
+			}
+		}
+		cout << "DOUBLE" << endl;
+		return ClearType::DOUBLE;
+		break;
+	case 3:
+		if (isB2BChainActive && tspinType > 0)
+		{
+			cout << "B2B_TSPIN_TRIPLE" << endl;
+			return ClearType::B2B_TSPIN_TRIPLE;
+		}
+		else if (tspinType > 0)
+		{
+			cout << "TSPIN_TRIPLE" << endl;
+			return ClearType::TSPIN_TRIPLE;
+		}
+		cout << "TRIPLE" << endl;
+		return ClearType::TRIPLE;
+		break;
+	case 4:
+		if (info.isPC && isB2BChainActive)
+		{
+			cout << "B2B_TETRIS_PC" << endl;
+			return ClearType::B2B_TETRIS_PC;
+		}
+		else if (info.isPC)
+		{
+			cout << "TETRIS_PC" << endl;
+			return ClearType::TETRIS_PC;
+		}
+		else if (isB2BChainActive)
+		{
+			cout << "B2B B2B_TETRIS" << endl;
+			return ClearType::B2B_TETRIS;
+		}
+		cout << "TETRIS" << endl;
+		return ClearType::TETRIS;
+		break;
+	default:
+		cout << "NONE" << endl;
+		return ClearType::NONE;
+		break;
+	}
+}
 
 
 

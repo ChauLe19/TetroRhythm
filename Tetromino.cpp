@@ -90,6 +90,7 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 			yPos -= yOffset;
 			cells = tempCells;
 			orientation = newOrientation;
+			rotateLast = true;
 			return true;
 		}
 	}
@@ -182,6 +183,7 @@ bool Tetromino::move(Moving_Direction dir, Board& board)
 		newYPos++;
 	}
 	bool isPossible = setXY(newXPos, newYPos, board);
+	if (isPossible) rotateLast = false;
 	checkIsOnGround(board);
 	return isPossible;
 }
@@ -251,6 +253,26 @@ void Tetromino::reset()
 Type Tetromino::getType()
 {
 	return type;
+}
+
+int Tetromino::getXPos()
+{
+	return xPos;
+}
+
+int Tetromino::getYPos()
+{
+	return yPos;
+}
+
+Orientation Tetromino::getOrientation()
+{
+	return orientation;
+}
+
+bool Tetromino::getRotateLast()
+{
+	return rotateLast;
 }
 
 bool Tetromino::setXY(int xPos, int yPos, Board& board)
