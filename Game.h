@@ -3,6 +3,7 @@
 
 #include "Board.h"
 #include "Tetromino.h"
+#include "KeyInput.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <iterator>
@@ -33,6 +34,8 @@ private:
 	Tetromino& nextPiece();
 	int frameCount = 0;
 	int onGroundCount = 0;
+
+
 	void hold();
 public:
 	Game();

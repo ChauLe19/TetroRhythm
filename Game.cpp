@@ -84,12 +84,17 @@ void Game::tick(RenderWindow& window)
 		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
 		frameCount = 0;
 	}
+
+	if (KeyInput::Keyboard::isKeyPressed(KeyInput::Keyboard::Enter)) cout << frameCount << endl;
+
 	while (window.pollEvent(event))
 	{
 		if (event.type == Event::Closed)
 			window.close();
+
 		if (event.type == Event::KeyPressed)
 		{
+			cout << "press" << endl;
 			switch (event.key.code)
 			{
 			case Keyboard::F:
@@ -124,6 +129,7 @@ void Game::tick(RenderWindow& window)
 				hold();
 				break;
 			}
+
 			if (prevPiecePtr != nullptr)
 			{
 				// TODO: copy board before clear, is this optimized???
@@ -138,6 +144,12 @@ void Game::tick(RenderWindow& window)
 			}
 		}
 	}
+
+
+
+
+
+
 	if (currentPiecePtr->getIsOnGround(board))
 	{
 		onGroundCount++;

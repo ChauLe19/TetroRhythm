@@ -14,6 +14,7 @@ int main()
 
 	RenderWindow window(sf::VideoMode(1024, 768), "TetroRythm");
 	window.setFramerateLimit(60);
+	window.setKeyRepeatEnabled(false);
 	Font font;
 	Text text;
 	text.setFont(font);
