@@ -32,6 +32,15 @@ void KeyInput::tick(Game& game)
 		}
 		else if (isAutoRepeatActive)
 		{
+			if (autoRepeatRateCount < autoRepeatRate)
+			{
+				autoRepeatRateCount++;
+				return;
+			}
+			else
+			{
+				autoRepeatRateCount = 0;
+			}
 		}
 		else if (isAutoShiftActive)
 		{
@@ -80,42 +89,18 @@ void KeyInput::tick(Game& game)
 		if (currentPiece.move(Moving_Direction::DOWN_DIR, board))
 			game.setScore(game.getScore() + Game::convertClearTypeToScores(ClearType::SOFTDROP));
 		break;
-	case Keyboard::I:
-		currentPiece.hardDrop(board);
-		cout << "input" << endl;
-		board.print();
-		game.setScore(game.getScore() + Game::convertClearTypeToScores(ClearType::HARDDROP));
-
-		game.nextPiece();
-		currentPiece.checkIsOnGround(board);
-		//alreadyHold = false;
-		//onGroundCount = 0;
-		game.resetOnGroundCount();
-		break;
 	case Keyboard::D:
 		game.hold();
 		break;
 	}
 
-	if (game.getPrevPiecePtr() != nullptr)
-	{
-		cout << "Clearing" << endl;
-		// TODO: copy board before clear, is this optimized???
-		Board tempBoard = board;
-		ClearingInfo tempClearingInfo = board.clearLines();
-		ClearType tempScoresType = Game::determineClearType(prevPiece, tempClearingInfo, game.getPrevClearType(), tempBoard);
-		if (tempScoresType != ClearType::NONE)
-		{
-			game.setPrevClearType(tempScoresType);
-		}
-		game.setScore(game.getScore() + Game::convertClearTypeToScores(tempScoresType));
-	}
+
 }
 
 void KeyInput::updateKeyEvent(Keyboard::Key key)
 {
 	// No hold key control (rotation)
-	if (key == Keyboard::F || key == Keyboard::A) return;
+	if (key == Keyboard::F || key == Keyboard::A || key == Keyboard::I) return;
 	currentKey = key;
 	firstPressed = true;
 	isAutoShiftActive = false;
@@ -136,6 +121,31 @@ void KeyInput::noHoldKeyEvent(Keyboard::Key key, Game& game)
 	case Keyboard::R:
 		game.restart();
 		break;
+	case Keyboard::I:
+		currentPiece.hardDrop(board);
+		cout << "input" << endl;
+		board.print();
+		game.setScore(game.getScore() + Game::convertClearTypeToScores(ClearType::HARDDROP));
+
+		game.nextPiece();
+		currentPiece.checkIsOnGround(board);
+		//alreadyHold = false;
+		//onGroundCount = 0;
+		game.resetOnGroundCount();
+		break;
+	}
+	if (game.getPrevPiecePtr() != nullptr)
+	{
+		cout << "Clearing" << endl;
+		// TODO: copy board before clear, is this optimized???
+		Board tempBoard = board;
+		ClearingInfo tempClearingInfo = board.clearLines();
+		ClearType tempScoresType = Game::determineClearType(game.getPrevPiece(), tempClearingInfo, game.getPrevClearType(), tempBoard);
+		if (tempScoresType != ClearType::NONE)
+		{
+			game.setPrevClearType(tempScoresType);
+		}
+		game.setScore(game.getScore() + Game::convertClearTypeToScores(tempScoresType));
 	}
 
 }
