@@ -10,10 +10,34 @@ Tetromino::Tetromino(Type type)
 	this->cells = tetrominos[static_cast<int>(type)];
 }
 
+Tetromino::Tetromino(Type type, bool isGhost)
+{
+	this->type = type;
+	cellsTexture.loadFromFile("tiles.png");
+	cellImage.setTexture(cellsTexture);
+	if (isGhost)
+		cellImage.setColor(Color(255, 255, 255, 100));
+	cellImage.setTextureRect(IntRect(static_cast<int>(type) * 18, 0, 18, 18));
+	// TODO: Check if this copied
+	this->cells = tetrominos[static_cast<int>(type)];
+}
+
 Tetromino::~Tetromino()
 {
 }
 
+Tetromino Tetromino::getGhost(Board& board)
+{
+	Tetromino ghost = *this;
+	ghost.turnToGhostColor();
+	while (ghost.move(Moving_Direction::DOWN_DIR, board));
+	return ghost;
+}
+
+void Tetromino::turnToGhostColor()
+{
+	cellImage.setColor(Color(255, 255, 255, 100));
+}
 bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 {
 	if (rDir == Rotational_Direction::NORO) return true;
@@ -200,7 +224,7 @@ bool Tetromino::checkCollision(int xPos, int yPos, array<array<int, 4>, 4> cells
 			if (cells[i][j] <= 0) continue;
 
 			// else if that location on board hit the wall or a non-empty block => not valid move
-			if (xPos + j < 0 || xPos + j >= boardWidth || yPos + i >= boardHeight || yPos+i < 0 || boardMatrix[yPos + i][xPos + j] > 0)
+			if (xPos + j < 0 || xPos + j >= boardWidth || yPos + i >= boardHeight || yPos + i < 0 || boardMatrix[yPos + i][xPos + j] > 0)
 			{
 				//cout << xPos + j << ',' << yPos + i << endl;
 				return false;

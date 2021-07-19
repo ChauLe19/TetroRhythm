@@ -32,6 +32,7 @@ private:
 	Tetromino* prevPiecePtr;
 	Tetromino* currentPiecePtr;
 	Tetromino* holdPiecePtr;
+	Tetromino* ghostPiece;
 	//int frameCount = 0;
 	int onGroundCount = 0;
 

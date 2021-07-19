@@ -132,15 +132,18 @@ private:
 	Sprite cellImage;
 	Orientation orientation = Orientation::SPAWN;
 	//bool setXY(int xPos, int yPos, Orientation orientation);
-	bool setXY(int xPos, int yPos, Board& board);
 	//bool setXY(int xPos, int yPos, Rotational_Direction rDir);
 	void rotateArray(array<array<int, 4>, 4>& arr, int size, Rotational_Direction rDir);
 
 public:
 	Tetromino(Type type);
+	Tetromino(Type type, bool isGhost);
 	Tetromino();
 	~Tetromino();
 
+	Tetromino getGhost(Board& board);
+	bool setXY(int xPos, int yPos, Board& board);
+	void turnToGhostColor();
 	bool rotate(Rotational_Direction rDir, Board& board);
 	void hardDrop(Board& board);
 	void setPiece(Board& board);

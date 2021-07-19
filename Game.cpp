@@ -23,7 +23,7 @@ Game::Game()
 	}
 
 	currentPiecePtr = &nextPiece();
-
+	
 }
 
 void Game::hold()
@@ -323,6 +323,7 @@ void Game::render(RenderWindow& window)
 {
 	board.render(window);
 	currentPiecePtr->render(window, board);
+	currentPiecePtr->getGhost(board).render(window, board);
 	if (holdPiecePtr != nullptr)
 		holdPiecePtr->render(window, 50, 100);
 	int counter = 0;

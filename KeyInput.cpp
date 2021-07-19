@@ -123,8 +123,8 @@ void KeyInput::noHoldKeyEvent(Keyboard::Key key, Game& game)
 		break;
 	case Keyboard::I:
 		currentPiece.hardDrop(board);
-		cout << "input" << endl;
-		board.print();
+		//cout << "input" << endl;
+		//board.print();
 		game.setScore(game.getScore() + Game::convertClearTypeToScores(ClearType::HARDDROP));
 
 		game.nextPiece();
