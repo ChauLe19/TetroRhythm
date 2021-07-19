@@ -66,6 +66,7 @@ Tetromino& Game::nextPiece()
 			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
 		}
 	}
+	if (!currentPiecePtr->checkCollision(board)) isGameOver = true;
 
 	alreadyHold = false;
 	return *currentPiecePtr;
@@ -85,6 +86,7 @@ int Game::convertClearTypeToScores(ClearType type)
 
 void Game::tick(RenderWindow& window, int & frameCount)
 {
+	if (isGameOver) return;
 	if (frameCount >= 48)
 	{
 		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
@@ -119,6 +121,13 @@ void Game::tick(RenderWindow& window, int & frameCount)
 		}
 	}
 }
+
+
+bool Game::getIsGameOver()
+{
+	return isGameOver;
+}
+
 bool isB2BChain(ClearType type)
 {
 	switch (type)
@@ -403,6 +412,7 @@ void Game::restart()
 	onGroundCount = 0;
 	prevClearType = ClearType::NONE;
 	score = 0;
+	isGameOver = false;
 	alreadyHold = false;
 	bag.clear();
 

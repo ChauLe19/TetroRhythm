@@ -234,6 +234,28 @@ bool Tetromino::checkCollision(int xPos, int yPos, array<array<int, 4>, 4> cells
 	return true;
 }
 
+bool Tetromino::checkCollision(Board& board)
+{
+	array<array<int, boardWidth>, boardHeight> boardMatrix = board.getBoard();
+	//Traverse the cells if it collide with any blocks on the board
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			// if there is no cells here, skip
+			if (cells[i][j] <= 0) continue;
+
+			// else if that location on board hit the wall or a non-empty block => not valid move
+			if (xPos + j < 0 || xPos + j >= boardWidth || yPos + i >= boardHeight || yPos + i < 0 || boardMatrix[yPos + i][xPos + j] > 0)
+			{
+				//cout << xPos + j << ',' << yPos + i << endl;
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 void Tetromino::render(RenderWindow& window, Board& board)
 {
 	for (int i = 0; i < 4; i++)

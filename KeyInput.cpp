@@ -14,6 +14,7 @@ KeyInput::~KeyInput()
 
 void KeyInput::tick(Game& game)
 {
+	if (game.getIsGameOver()) return;
 	// TODO: does this copy or refer?
 	Tetromino& currentPiece = game.getCurrentPiece();
 	Tetromino& prevPiece = game.getCurrentPiece();
@@ -108,6 +109,12 @@ void KeyInput::updateKeyEvent(Keyboard::Key key)
 
 void KeyInput::noHoldKeyEvent(Keyboard::Key key, Game& game)
 {
+	if (game.getIsGameOver())
+	{
+		if (key == Keyboard::R)
+			game.restart();
+		return;
+	}
 	Tetromino& currentPiece = game.getCurrentPiece();
 	Board& board = game.getBoard();
 	switch (key)
@@ -128,6 +135,7 @@ void KeyInput::noHoldKeyEvent(Keyboard::Key key, Game& game)
 		game.setScore(game.getScore() + Game::convertClearTypeToScores(ClearType::HARDDROP));
 
 		game.nextPiece();
+
 		currentPiece.checkIsOnGround(board);
 		//alreadyHold = false;
 		//onGroundCount = 0;

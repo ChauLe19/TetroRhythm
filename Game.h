@@ -35,7 +35,7 @@ private:
 	Tetromino* ghostPiece;
 	//int frameCount = 0;
 	int onGroundCount = 0;
-
+	bool isGameOver = false;
 
 public:
 	Game();
@@ -65,6 +65,7 @@ public:
 	void resetOnGroundCount();
 	void setScore(int score);
 	void restart();
+	bool getIsGameOver();
 	static int convertClearTypeToScores(ClearType type);
 	void tick(RenderWindow& window, int& frameCount);
 };

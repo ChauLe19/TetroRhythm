@@ -152,6 +152,7 @@ public:
 	void softDrop();
 	bool move(Moving_Direction dir, Board& board);
 	bool checkCollision(int xPos, int yPos, array<array<int, 4>, 4> cells, Board& board);
+	bool checkCollision(Board& board);
 	void render(RenderWindow& window, Board& board);
 	void render(RenderWindow& window, int x, int y);
 	void reset();

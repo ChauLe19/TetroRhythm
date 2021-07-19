@@ -51,6 +51,15 @@ void MasterClass::run()
 		text.setString(to_string(game->getScore()));
 		text.setPosition(100, 0);
 		window->draw(text);
+		if (game->getIsGameOver())
+		{
+			text.setString("GAME OVER");
+			text.setPosition(300, 0);
+			window->draw(text);
+			text.setString("Press R to restart");
+			text.setPosition(270, 20);
+			window->draw(text);
+		}
 		render();
 		window->display();
 
