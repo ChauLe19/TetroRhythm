@@ -25,8 +25,9 @@ private:
 	list<Tetromino*> bag;
 	int score = 0;
 	ClearType prevClearType = ClearType::NONE;
-	Board board = Board(boardX, boardY);
-	Board* boardPtr = &board;
+	//Board board = Board(boardX, boardY);
+	Board* boardPtr;
+	Board board;
 	bool alreadyHold = false;
 	Tetromino* prevPiecePtr;
 	Tetromino* currentPiecePtr;
@@ -62,6 +63,7 @@ public:
 	void increaseOnGroundCount();
 	void resetOnGroundCount();
 	void setScore(int score);
+	void restart();
 	static int convertClearTypeToScores(ClearType type);
 	void tick(RenderWindow& window, int& frameCount);
 };

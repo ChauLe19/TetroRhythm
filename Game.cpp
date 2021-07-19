@@ -4,6 +4,8 @@ Game::Game()
 {
 	cout << "Initializing game" << endl;
 	//board = Board(boardX, boardY);
+	boardPtr = new Board(boardX, boardY);
+	board = *boardPtr;
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
 	// add 2 initial 7-bags
@@ -31,7 +33,8 @@ void Game::hold()
 		if (holdPiecePtr == nullptr)
 		{
 			holdPiecePtr = currentPiecePtr;
-			currentPiecePtr = &nextPiece();
+			//currentPiecePtr = &nextPiece();
+			nextPiece();
 		}
 		else
 		{
@@ -373,10 +376,10 @@ Board& Game::getBoard()
 	return board;
 }
 
-Board* Game::getBoardPtr()
-{
-	return boardPtr;
-}
+//Board* Game::getBoardPtr()
+//{
+//	return boardPtr;
+//}
 
 void Game::resetOnGroundCount()
 {
@@ -386,6 +389,38 @@ void Game::resetOnGroundCount()
 void Game::setScore(int score)
 {
 	this->score = score;
+}
+
+void Game::restart()
+{
+	delete boardPtr;
+	boardPtr = new Board(boardX, boardY);
+	board = *boardPtr;
+	currentPiecePtr = nullptr;
+	prevPiecePtr = nullptr;
+	holdPiecePtr = nullptr;
+	onGroundCount = 0;
+	prevClearType = ClearType::NONE;
+	score = 0;
+	alreadyHold = false;
+	bag.clear();
+
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+
+	// add 2 initial 7-bags
+	for (int j = 0; j < 2; j++)
+	{
+		vector<Type> tempTypeVector = allPieces;
+		shuffle(tempTypeVector.begin(), tempTypeVector.end(), default_random_engine(seed));
+
+		while (!tempTypeVector.empty())
+		{
+			Type tempType = tempTypeVector.back();
+			tempTypeVector.pop_back();
+			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
+		}
+	}
+	currentPiecePtr = &nextPiece();
 }
 
 Game::~Game()

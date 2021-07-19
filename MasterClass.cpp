@@ -40,10 +40,10 @@ void MasterClass::run()
 			{
 				cout << "press" << endl;
 				keyInput->updateKeyEvent(event.key.code);
-				keyInput->tick(*game);
+				keyInput->noHoldKeyEvent(event.key.code, *game);
 			}
-
 		}
+		keyInput->tick(*game);
 		tick();
 
 		window->clear(Color::Black);
