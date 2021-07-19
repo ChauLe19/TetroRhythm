@@ -98,6 +98,7 @@ public:
 	int getYPos();
 	void setCell(int x, int y, int value);
 	int getCell(int x, int y);
+	void print();
 };
 #endif
 

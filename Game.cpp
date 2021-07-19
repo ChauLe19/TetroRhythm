@@ -46,6 +46,7 @@ void Game::hold()
 
 Tetromino& Game::nextPiece()
 {
+	prevPiecePtr = currentPiecePtr;
 	currentPiecePtr = bag.front();
 	bag.pop_front();
 
@@ -62,93 +63,34 @@ Tetromino& Game::nextPiece()
 			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
 		}
 	}
-	cout << endl;
 
-
+	alreadyHold = false;
 	return *currentPiecePtr;
 }
 
+void Game::increaseOnGroundCount()
+{
+	onGroundCount++;
+}
 
-int convertClearTypeToScores(ClearType type)
+
+int Game::convertClearTypeToScores(ClearType type)
 {
 	return clearTypeScore[static_cast<int>(type)];
 }
 
 
-void Game::tick(RenderWindow& window)
+void Game::tick(RenderWindow& window, int & frameCount)
 {
-	frameCount++;
-	Event event;
 	if (frameCount >= 48)
 	{
 		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
 		frameCount = 0;
 	}
 
-	if (KeyInput::Keyboard::isKeyPressed(KeyInput::Keyboard::Enter)) cout << frameCount << endl;
 
-	while (window.pollEvent(event))
-	{
-		if (event.type == Event::Closed)
-			window.close();
-
-		if (event.type == Event::KeyPressed)
-		{
-			cout << "press" << endl;
-			switch (event.key.code)
-			{
-			case Keyboard::F:
-				currentPiecePtr->rotate(Rotational_Direction::CW, board);
-				break;
-			case Keyboard::A:
-				currentPiecePtr->rotate(Rotational_Direction::CCW, board);
-				break;
-			case Keyboard::S:
-				currentPiecePtr->rotate(Rotational_Direction::R180, board);
-				break;
-			case Keyboard::L:
-				currentPiecePtr->move(Moving_Direction::RIGHT_DIR, board);
-				break;
-			case Keyboard::J:
-				currentPiecePtr->move(Moving_Direction::LEFT_DIR, board);
-				break;
-			case Keyboard::K:
-				if (currentPiecePtr->move(Moving_Direction::DOWN_DIR, board)) score += convertClearTypeToScores(ClearType::SOFTDROP);
-				break;
-			case Keyboard::I:
-				currentPiecePtr->hardDrop(board);
-				score += convertClearTypeToScores(ClearType::HARDDROP);
-				//currentPiece = nextPiece();
-				prevPiecePtr = currentPiecePtr;
-				currentPiecePtr = &nextPiece();
-				currentPiecePtr->checkIsOnGround(board);
-				alreadyHold = false;
-				onGroundCount = 0;
-				break;
-			case Keyboard::D:
-				hold();
-				break;
-			}
-
-			if (prevPiecePtr != nullptr)
-			{
-				// TODO: copy board before clear, is this optimized???
-				Board tempBoard = board;
-				ClearingInfo tempClearingInfo = board.clearLines();
-				ClearType tempScoresType = determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, board);
-				if (tempScoresType != ClearType::NONE)
-				{
-					prevClearType = tempScoresType;
-				}
-				score += convertClearTypeToScores(tempScoresType);
-			}
-		}
-	}
-
-
-
-
-
+	/*cout << "GAME BOARD" << endl;
+	board.print();*/
 
 	if (currentPiecePtr->getIsOnGround(board))
 	{
@@ -167,7 +109,8 @@ void Game::tick(RenderWindow& window)
 				prevClearType = tempScoresType;
 			}
 			score += convertClearTypeToScores(tempScoresType);
-			currentPiecePtr = &nextPiece();
+			//currentPiecePtr = &nextPiece();
+			nextPiece();
 			alreadyHold = false;
 			onGroundCount = 0;
 		}
@@ -387,6 +330,62 @@ void Game::render(RenderWindow& window)
 		(*it)->render(window, 300, 100 + 50 * counter);
 		counter++;
 	}
+}
+
+Tetromino* Game::getCurrentPiecePtr()
+{
+	return currentPiecePtr;
+}
+
+Tetromino* Game::getPrevPiecePtr()
+{
+	return prevPiecePtr;
+}
+Tetromino& Game::getCurrentPiece()
+{
+	return *currentPiecePtr;
+}
+Tetromino& Game::getPrevPiece()
+{
+	return *prevPiecePtr;
+}
+void Game::setPrevPiecePtr(Tetromino* piece)
+{
+	prevPiecePtr =  piece;
+}
+void Game::setCurrentPiecePtr(Tetromino* piece)
+{
+	currentPiecePtr =  piece;
+}
+
+ClearType Game::getPrevClearType()
+{
+	return prevClearType;
+}
+
+void Game::setPrevClearType(ClearType type)
+{
+	prevClearType = type;
+}
+
+Board& Game::getBoard()
+{
+	return board;
+}
+
+Board* Game::getBoardPtr()
+{
+	return boardPtr;
+}
+
+void Game::resetOnGroundCount()
+{
+	onGroundCount = 0;
+}
+
+void Game::setScore(int score)
+{
+	this->score = score;
 }
 
 Game::~Game()

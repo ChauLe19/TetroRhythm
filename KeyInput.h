@@ -2,6 +2,7 @@
 #define KEY_INPUT_H
 
 #include <SFML/Graphics.hpp>
+#include "Game.h"
 using namespace sf;
 
 class KeyInput : public Keyboard
@@ -15,6 +16,12 @@ private:
 	Keyboard::Key holdKey;
 	bool isAutoShiftActive = false;
 	bool isAutoRepeatActive = false;
+	Keyboard::Key currentKey;
 public:
+	KeyInput();
+	//KeyInput(Game& game);
+	~KeyInput();
+	void tick(Game& game);
+	void updateKeyEvent(Keyboard::Key key);
 };
 #endif

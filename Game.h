@@ -3,7 +3,6 @@
 
 #include "Board.h"
 #include "Tetromino.h"
-#include "KeyInput.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <iterator>
@@ -27,16 +26,15 @@ private:
 	int score = 0;
 	ClearType prevClearType = ClearType::NONE;
 	Board board = Board(boardX, boardY);
+	Board* boardPtr = &board;
 	bool alreadyHold = false;
 	Tetromino* prevPiecePtr;
 	Tetromino* currentPiecePtr;
 	Tetromino* holdPiecePtr;
-	Tetromino& nextPiece();
-	int frameCount = 0;
+	//int frameCount = 0;
 	int onGroundCount = 0;
 
 
-	void hold();
 public:
 	Game();
 	~Game();
@@ -44,11 +42,27 @@ public:
 	void run(RenderWindow& window);
 	void tick(RenderWindow& window);
 	ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType);
-	ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board);
+	static ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board);
 	int getScore();
+	void hold();
 	void run();
-	void tick();
+	//void tick();
 	void render(RenderWindow& window);
-
+	Tetromino* getCurrentPiecePtr();
+	Tetromino* getPrevPiecePtr();
+	Tetromino& getCurrentPiece();
+	Tetromino& getPrevPiece();
+	void setPrevPiecePtr(Tetromino* piece);
+	void setCurrentPiecePtr(Tetromino* piece);
+	ClearType getPrevClearType();
+	void setPrevClearType(ClearType type);
+	Board& getBoard();
+	Board* getBoardPtr();
+	Tetromino& nextPiece();
+	void increaseOnGroundCount();
+	void resetOnGroundCount();
+	void setScore(int score);
+	static int convertClearTypeToScores(ClearType type);
+	void tick(RenderWindow& window, int& frameCount);
 };
 #endif

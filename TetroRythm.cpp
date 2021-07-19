@@ -5,43 +5,25 @@
 #include "Game.h"
 #include "Board.h"
 #include "Tetromino.h"
+#include "MasterClass.h"
 using namespace std;
 using namespace sf;
 
 
 int main()
 {
+	// randomize init
+	srand(time(NULL));
 
 	RenderWindow window(sf::VideoMode(1024, 768), "TetroRythm");
 	window.setFramerateLimit(60);
-	window.setKeyRepeatEnabled(false);
-	Font font;
-	Text text;
-	text.setFont(font);
-	text.setCharacterSize(20);
-	text.setFillColor(Color::White);
-	if (!font.loadFromFile("arial.ttf")) return 1;
-	Board board(100, 100);
-	srand(time(NULL));
-	Clock clock;
-	Game game;
-	while (window.isOpen())
-	{
+	//window.setKeyRepeatEnabled(false);
 
-		Time elapsed = clock.restart();
-		text.setPosition(0, 0);
-		text.setString(to_string(round(1 / elapsed.asSeconds())));
-		game.tick(window);
-		window.clear(Color::Black);
-		window.draw(text);
-		text.setString(to_string(game.getScore()));
-		text.setPosition(100, 0);
-		window.draw(text);
-		game.render(window);
-		window.display();
-	}
+	
+	
 
-
+	MasterClass gameMC(window);
+	gameMC.run();
 	return 0;
 }
 
