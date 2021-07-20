@@ -39,6 +39,7 @@ Game::Game()
 		cerr << "Unable to open file " + musicFile << endl;;
 	}
 	sound.setBuffer(buffer);
+
 	sound.play();
 }
 
@@ -116,7 +117,7 @@ void Game::tick(RenderWindow& window, int & frameCount)
 
 	if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS)
 	{
-		cout << nextBeatTimeMS << endl;
+		//cout << nextBeatTimeMS << endl;
 		// hard drop current piece
 		currentPiecePtr->hardDrop(board);
 		// TODO: copy board before clear, is this optimized???
@@ -486,6 +487,7 @@ void Game::restart()
 		}
 	}
 	currentPiecePtr = &nextPiece();
+	sound.stop();
 	sound.setPlayingOffset(seconds(0));
 	sound.play();
 }

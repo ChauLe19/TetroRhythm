@@ -79,6 +79,9 @@
     <Text Include="Tetris_theme.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Tetris_theme - Hard.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Media Include="Tetris_theme.wav">
