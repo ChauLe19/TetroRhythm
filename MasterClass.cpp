@@ -4,11 +4,12 @@ MasterClass::MasterClass(RenderWindow& window)
 {
 	this->game = new Game();
 	this->keyInput = new KeyInput();
+	this->menu = new Menu();
 	this->window = &window;
+	font.loadFromFile("arial.ttf");
 	text.setFont(font);
 	text.setCharacterSize(20);
 	text.setFillColor(Color::White);
-	font.loadFromFile("arial.ttf");
 }
 
 MasterClass::~MasterClass()
@@ -39,11 +40,11 @@ void MasterClass::run()
 			if (event.type == Event::KeyPressed)
 			{
 				cout << "press" << endl;
-				keyInput->updateKeyEvent(event.key.code);
-				keyInput->noHoldKeyEvent(event.key.code, *game);
+				keyInput->updateKeyEvent(state, event.key.code);
+				keyInput->noHoldKeyEvent(state, event.key.code, *game);
 			}
 		}
-		keyInput->tick(*game);
+		keyInput->tick(state, *game);
 		tick();
 
 		window->clear(Color::Black);
@@ -70,12 +71,28 @@ void MasterClass::run()
 
 void MasterClass::render()
 {
-	game->render(*window);
+	switch (state)
+	{
+	case State::MENU:
+		menu->render(*window);
+		break;
+	case State::GAME:
+		game->render(*window);
+		break;
+	}
 }
 
 void MasterClass::tick()
 {
-	game->tick(*window, frameCount);
+	switch (state)
+	{
+	case State::MENU:
+		menu->tick(*window);
+		break;
+	case State::GAME:
+		game->tick(*window, frameCount);
+		break;
+	}
 }
 
 

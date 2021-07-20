@@ -4,9 +4,14 @@
 #include <SFML/Graphics.hpp>
 #include "KeyInput.h"
 #include "Game.h"
+#include "Menu.h"
+#include "Enums.h"
+
 class MasterClass
 {
 private:
+	State state = State::MENU;
+	Menu* menu;
 	Game* game;
 	KeyInput* keyInput;
 	RenderWindow* window; 

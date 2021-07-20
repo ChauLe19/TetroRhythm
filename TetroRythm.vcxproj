@@ -151,15 +151,17 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="KeyInput.cpp" />
     <ClCompile Include="MasterClass.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Tetromino.cpp" />
     <ClCompile Include="TetroRythm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Enums.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameInput.h" />
     <ClInclude Include="KeyInput.h" />
     <ClInclude Include="MasterClass.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Tetromino.h" />
   </ItemGroup>
   <ItemGroup>

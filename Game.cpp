@@ -39,8 +39,6 @@ Game::Game()
 		cerr << "Unable to open file " + musicFile << endl;;
 	}
 	sound.setBuffer(buffer);
-
-	sound.play();
 }
 
 void Game::hold()
@@ -451,7 +449,15 @@ void Game::setScore(int score)
 	this->score = score;
 }
 
-void Game::restart()
+void Game::pause()
+{
+	sound.pause();
+}
+void Game::start()
+{
+	sound.play();
+}
+void Game::reset()
 {
 	delete boardPtr;
 	boardPtr = new Board(boardX, boardY);
@@ -489,9 +495,12 @@ void Game::restart()
 	currentPiecePtr = &nextPiece();
 	sound.stop();
 	sound.setPlayingOffset(seconds(0));
-	sound.play();
 }
-
+void Game::restart()
+{
+	reset();
+	start();
+}
 Sound& Game::getSound()
 {
 	return sound;

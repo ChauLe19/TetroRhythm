@@ -69,7 +69,10 @@ public:
 	void increaseOnGroundCount();
 	void resetOnGroundCount();
 	void setScore(int score);
+	void pause();
+	void start();
 	void restart();
+	void reset();
 	bool getIsGameOver();
 	static int convertClearTypeToScores(ClearType type);
 	void tick(RenderWindow& window, int& frameCount);
