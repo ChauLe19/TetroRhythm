@@ -90,9 +90,6 @@ void KeyInput::tick(Game& game)
 		if (currentPiece.move(Moving_Direction::DOWN_DIR, board))
 			game.setScore(game.getScore() + Game::convertClearTypeToScores(ClearType::SOFTDROP));
 		break;
-	case Keyboard::D:
-		game.hold();
-		break;
 	}
 
 }
@@ -100,7 +97,7 @@ void KeyInput::tick(Game& game)
 void KeyInput::updateKeyEvent(Keyboard::Key key)
 {
 	// No hold key control (rotation)
-	if (key == Keyboard::F || key == Keyboard::A || key == Keyboard::I) return;
+	if (key == Keyboard::F || key == Keyboard::A || key == Keyboard::I || key == Keyboard::D) return;
 	currentKey = key;
 	firstPressed = true;
 	isAutoShiftActive = false;
@@ -139,6 +136,9 @@ void KeyInput::noHoldKeyEvent(Keyboard::Key key, Game& game)
 		//alreadyHold = false;
 		//onGroundCount = 0;
 		game.resetOnGroundCount();
+		break;
+	case Keyboard::D:
+		game.hold();
 		break;
 	}
 	if (game.getPrevPiecePtr() != nullptr)
