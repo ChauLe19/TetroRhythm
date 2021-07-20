@@ -23,7 +23,9 @@ Game::Game()
 	}
 
 	currentPiecePtr = &nextPiece();
-	
+	buffer.loadFromFile("Tetris_theme.ogg");
+	sound.setBuffer(buffer);
+	sound.play();
 }
 
 void Game::hold()
@@ -92,8 +94,11 @@ void Game::tick(RenderWindow& window, int & frameCount)
 		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
 		frameCount = 0;
 	}
-
-
+	cout << "playing:" << sound.getPlayingOffset().asMilliseconds() << endl;
+	if (sound.getStatus() == SoundSource::Status::Stopped)
+	{
+		isGameOver = true;
+	}
 	/*cout << "GAME BOARD" << endl;
 	board.print();*/
 
@@ -432,6 +437,7 @@ void Game::restart()
 		}
 	}
 	currentPiecePtr = &nextPiece();
+	sound.setPlayingOffset(seconds(0));
 }
 
 Game::~Game()

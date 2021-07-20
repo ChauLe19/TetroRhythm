@@ -95,7 +95,6 @@ void KeyInput::tick(Game& game)
 		break;
 	}
 
-
 }
 
 void KeyInput::updateKeyEvent(Keyboard::Key key)

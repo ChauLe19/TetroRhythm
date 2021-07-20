@@ -4,6 +4,7 @@
 #include "Board.h"
 #include "Tetromino.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <list>
 #include <iterator>
 #include <algorithm>    // std::shuffle
@@ -36,7 +37,8 @@ private:
 	//int frameCount = 0;
 	int onGroundCount = 0;
 	bool isGameOver = false;
-
+	SoundBuffer buffer;
+	Sound sound;
 public:
 	Game();
 	~Game();
