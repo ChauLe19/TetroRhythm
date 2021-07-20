@@ -22,7 +22,7 @@ void KeyInput::tick(Game& game)
 
 	if (Keyboard::isKeyPressed(currentKey))
 	{
-		cout << "DAS count:" << delayAutoShiftCount << endl;
+		//cout << "DAS count:" << delayAutoShiftCount << endl;
 		if (firstPressed)
 		{
 			firstPressed = false;
@@ -105,12 +105,7 @@ void KeyInput::updateKeyEvent(Keyboard::Key key)
 
 void KeyInput::noHoldKeyEvent(Keyboard::Key key, Game& game)
 {
-	if (game.getIsGameOver())
-	{
-		if (key == Keyboard::R)
-			game.restart();
-		return;
-	}
+
 	Tetromino& currentPiece = game.getCurrentPiece();
 	Board& board = game.getBoard();
 	switch (key)
@@ -140,10 +135,13 @@ void KeyInput::noHoldKeyEvent(Keyboard::Key key, Game& game)
 	case Keyboard::D:
 		game.hold();
 		break;
+	case Keyboard::P:
+		cout << "playing:" << game.getSound().getPlayingOffset().asMilliseconds() << endl;
+		break;
 	}
 	if (game.getPrevPiecePtr() != nullptr)
 	{
-		cout << "Clearing" << endl;
+		//cout << "Clearing" << endl;
 		// TODO: copy board before clear, is this optimized???
 		Board tempBoard = board;
 		ClearingInfo tempClearingInfo = board.clearLines();

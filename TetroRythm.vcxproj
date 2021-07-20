@@ -171,6 +171,12 @@
   <ItemGroup>
     <None Include="Tetris_theme.ogg" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Tetris_theme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Tetris_theme.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -12,6 +12,7 @@
 #include <chrono>       // std::chrono::system_clock
 #include <cstdlib>      // std::rand, std::srand
 #include <ctime>        // std::time
+#include <fstream>
 
 using namespace sf;
 
@@ -39,6 +40,8 @@ private:
 	bool isGameOver = false;
 	SoundBuffer buffer;
 	Sound sound;
+	ifstream inFile;
+	int nextBeatTimeMS = 0;
 public:
 	Game();
 	~Game();
@@ -70,5 +73,6 @@ public:
 	bool getIsGameOver();
 	static int convertClearTypeToScores(ClearType type);
 	void tick(RenderWindow& window, int& frameCount);
+	Sound& getSound();
 };
 #endif

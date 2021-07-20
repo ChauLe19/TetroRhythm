@@ -23,7 +23,21 @@ Game::Game()
 	}
 
 	currentPiecePtr = &nextPiece();
-	buffer.loadFromFile("Tetris_theme.ogg");
+	string txtFile = "Tetris_theme.txt";
+	string musicFile = "Tetris_theme.wav";
+	inFile.open(txtFile);
+	if (!inFile)
+	{
+		cerr << "Unable to open file " + txtFile << endl;;
+	}
+	char beat[10];
+	inFile.getline(beat, 10,'\r');
+	nextBeatTimeMS = atoi(beat);
+	cout << "First beat:" << nextBeatTimeMS << endl;
+	if (!buffer.loadFromFile(musicFile))
+	{
+		cerr << "Unable to open file " + musicFile << endl;;
+	}
 	sound.setBuffer(buffer);
 	sound.play();
 }
@@ -94,10 +108,40 @@ void Game::tick(RenderWindow& window, int & frameCount)
 		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
 		frameCount = 0;
 	}
-	cout << "playing:" << sound.getPlayingOffset().asMilliseconds() << endl;
 	if (sound.getStatus() == SoundSource::Status::Stopped)
 	{
 		isGameOver = true;
+	}
+
+
+	if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS)
+	{
+		cout << nextBeatTimeMS << endl;
+		// hard drop current piece
+		currentPiecePtr->hardDrop(board);
+		// TODO: copy board before clear, is this optimized???
+		Board tempBoard = board;
+		prevPiecePtr = currentPiecePtr;
+		ClearingInfo tempClearingInfo = board.clearLines();
+		ClearType tempScoresType = determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+
+		if (tempScoresType != ClearType::NONE)
+		{
+			prevClearType = tempScoresType;
+		}
+		score += convertClearTypeToScores(tempScoresType);
+		//currentPiecePtr = &nextPiece();
+		nextPiece();
+		alreadyHold = false;
+		onGroundCount = 0;
+
+		do
+		{
+		char beat[10];
+		inFile.getline(beat, 10,'\r');
+		nextBeatTimeMS = atoi(beat);
+		} while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS); // if the time is too tight, skip to the next
+		return;
 	}
 	/*cout << "GAME BOARD" << endl;
 	board.print();*/
@@ -419,6 +463,11 @@ void Game::restart()
 	score = 0;
 	isGameOver = false;
 	alreadyHold = false;
+	inFile.clear();
+	inFile.seekg(0); 
+	char beat[10];
+	inFile.getline(beat, 10, '\r');
+	nextBeatTimeMS = atoi(beat);
 	bag.clear();
 
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -438,6 +487,12 @@ void Game::restart()
 	}
 	currentPiecePtr = &nextPiece();
 	sound.setPlayingOffset(seconds(0));
+	sound.play();
+}
+
+Sound& Game::getSound()
+{
+	return sound;
 }
 
 Game::~Game()
