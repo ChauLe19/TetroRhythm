@@ -5,6 +5,7 @@
 #include "KeyInput.h"
 #include "Game.h"
 #include "Menu.h"
+#include "Config.h"
 #include "Enums.h"
 
 class MasterClass
@@ -14,6 +15,7 @@ private:
 	Menu* menu;
 	Game* game;
 	KeyInput* keyInput;
+	Config* config;
 	RenderWindow* window; 
 	Clock clock;
 	Font font;

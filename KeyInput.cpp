@@ -120,7 +120,7 @@ void KeyInput::updateKeyEvent(State& state, Keyboard::Key key)
 {
 	if (state != State::GAME) return;
 	// No hold key control (rotation)
-	if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)] 
+	if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)]
 		|| key == keyMap[static_cast<int> (Controls_Key::ROTATE_CCW)]
 		|| key == keyMap[static_cast<int> (Controls_Key::HARD_DROP)]
 		|| key == keyMap[static_cast<int> (Controls_Key::HOLD)]) return;
@@ -129,7 +129,7 @@ void KeyInput::updateKeyEvent(State& state, Keyboard::Key key)
 	isAutoShiftActive = false;
 }
 
-void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, Game& game)
+void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, Game& game, Config& config)
 {
 	if (state == State::MENU)
 	{
@@ -138,12 +138,34 @@ void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, Game& game)
 		case Key::Enter:
 			game.start();
 			state = State::GAME;
-			return;
+			break;
+		case Key::C:
+			state = State::SETTINGS;
+			break;
 		}
 	}
-	else if (state == State::PAUSE)
+	else if (state == State::SETTINGS)
 	{
-
+		if (config.getIsChanging())
+		{
+			config.changeKey(key, keyMap);
+			return;
+		}
+		switch (key)
+		{
+		case Key::Escape:
+			state = State::MENU;
+			break;
+		case Key::Down:
+			config.setCursor(config.getCursor() + 1);
+			break;
+		case Key::Up:
+			config.setCursor(config.getCursor() - 1);
+			break;
+		case Key::Enter:
+			config.waitForChangingKey();
+			break;
+		}
 	}
 	else if (state == State::GAME)
 	{
@@ -244,4 +266,9 @@ void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, Game& game)
 		}
 	}
 
-}
+	}
+
+	array<Keyboard::Key, 8>& KeyInput::getKeyMap()
+	{
+		return keyMap;
+	}

@@ -3,12 +3,10 @@
 
 #include <SFML/Graphics.hpp>
 #include "Game.h"
+#include "Config.h"
 #include "Enums.h"
 using namespace sf;
-enum class Controls_Key {
-	MOVE_LEFT = 0, MOVE_RIGHT, ROTATE_CCW, ROTATE_CW,
-	ROTATE_180, HOLD, HARD_DROP, SOFT_DROP
-};
+
 class KeyInput : public Keyboard
 {
 private:
@@ -23,7 +21,7 @@ private:
 	bool isAutoRepeatActive = false;
 	bool firstPressed = false;
 	Keyboard::Key moveRightKey = Key::J;
-	Keyboard::Key keyMap[8] = { Key::J, Key::L, Key::A, Key::F,
+	array<Keyboard::Key,8> keyMap = { Key::J, Key::L, Key::A, Key::F,
 		Key::S, Key::D, Key::I, Key::K};
 
 public:
@@ -32,6 +30,7 @@ public:
 	~KeyInput();
 	void tick(State& state, Game& game);
 	void updateKeyEvent(State& state, Keyboard::Key key);
-	void noHoldKeyEvent(State& state, Keyboard::Key key, Game& game);
+	void noHoldKeyEvent(State& state, Keyboard::Key key, Game& game, Config& config);
+	array<Keyboard::Key, 8>& getKeyMap();
 };
 #endif

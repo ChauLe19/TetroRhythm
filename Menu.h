@@ -15,5 +15,5 @@ public:
 	~Menu();
 	void tick(RenderWindow& window);
 	void render(RenderWindow& window);
-#endif
 };
+#endif
