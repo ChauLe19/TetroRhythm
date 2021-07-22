@@ -1,21 +1,21 @@
-#include "Config.h"
+#include "Settings.h"
 
-Config::Config()
+Settings::Settings()
 {
 	font.loadFromFile("arial.ttf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
 }
 
-Config::~Config()
+Settings::~Settings()
 {
 }
 
-void Config::tick(RenderWindow& window)
+void Settings::tick(RenderWindow& window)
 {
 }
 
-void Config::render(RenderWindow& window, array<Keyboard::Key, 8>& keyMap)
+void Settings::render(RenderWindow& window, array<Keyboard::Key, 8>& keyMap, int delayAutoShift, int autoRepeatRate)
 {
 	text.setFillColor(Color::White);
 	text.setPosition(100, 100);
@@ -29,9 +29,13 @@ void Config::render(RenderWindow& window, array<Keyboard::Key, 8>& keyMap)
 		Controls_Key key = static_cast<Controls_Key> (i);
 		drawKeyConfig(fromControlsToString(key), fromKtoS(keyMap[i]), 50, 150 + 50 * i, window, cursor == i, isChanging);
 	}
+
+	drawKeyConfig("DAS", "<  " + to_string(delayAutoShift) + "  >", 50, 150 + 50 * 8, window, cursor == 8, isChanging);
+	drawKeyConfig("ARR", "<  " + to_string(autoRepeatRate) + "  >", 50, 150 + 50 * 9, window, cursor == 9, isChanging);
+
 }
 
-void Config::drawKeyConfig(string name, string key, int x, int y, RenderWindow& window, bool isHighlight, bool changing)
+void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow& window, bool isHighlight, bool changing)
 {
 	if (isHighlight)
 	{
@@ -42,7 +46,7 @@ void Config::drawKeyConfig(string name, string key, int x, int y, RenderWindow& 
 		if (changing)
 		{
 			RectangleShape rect(Vector2f(100, 25));
-			rect.setPosition(x+200, y);
+			rect.setPosition(x + 200, y);
 			rect.setFillColor(Color::Red);
 			window.draw(rect);
 		}
@@ -64,38 +68,77 @@ void Config::drawKeyConfig(string name, string key, int x, int y, RenderWindow& 
 	window.draw(text);
 }
 
-void Config::waitForChangingKey()
+void Settings::waitForChangingKey()
 {
 	isChanging = true;
 }
 
-bool Config::getIsChanging()
+bool Settings::getIsChanging()
 {
 	return isChanging;
 }
 
-bool Config::changeKey(Keyboard::Key key, array<Keyboard::Key, 8>& keyMap)
+bool Settings::changeKey(Keyboard::Key key, array<Keyboard::Key, 8>& keyMap, int& delayAutoShift, int& autoRepeatRate)
 {
 	// dismiss special keys
 	if (key == Keyboard::Key::Escape || key == Keyboard::Key::Unknown || key == Keyboard::Key::R) return false;
+
+	if (cursor == 8)
+	{
+		if (key == Keyboard::Key::Right)
+		{
+			delayAutoShift++;
+			return true;
+		}
+		else if (key == Keyboard::Key::Left)
+		{
+			delayAutoShift--;
+			return true;
+		}
+		else if (key == Keyboard::Key::Enter)
+		{
+			isChanging = false;
+			return true;
+		}
+		return false;
+	}
+	else if (cursor == 9)
+	{
+		if (key == Keyboard::Key::Right)
+		{
+			autoRepeatRate++;
+			return true;
+		}
+		else if (key == Keyboard::Key::Left)
+		{
+			autoRepeatRate--;
+			return true;
+		}
+		else if (key == Keyboard::Key::Enter)
+		{
+			isChanging = false;
+			return true;
+		}
+		return false;
+	}
 
 	keyMap[cursor] = key;
 	isChanging = false;
 	return true;
 }
 
-int Config::getCursor()
+int Settings::getCursor()
 {
 	return cursor;
 }
 
-void Config::setCursor(int cursor)
+void Settings::setCursor(int cursor)
 {
 	// clamping from 0 to 7
-	this->cursor = cursor < 0 ? 0 : cursor >7 ? 7 : cursor;
+	this->cursor = cursor < 0 ? 0 : cursor >9 ? 9 : cursor;
 }
 
-string Config::fromControlsToString(Controls_Key key)
+string Settings::fromControlsToString(Controls_Key key)
 {
 	switch (key)
 	{
@@ -118,7 +161,7 @@ string Config::fromControlsToString(Controls_Key key)
 	}
 }
 
-string Config::fromKtoS(const sf::Keyboard::Key& k) {
+string Settings::fromKtoS(const sf::Keyboard::Key& k) {
 	string ret;
 	switch (k) {
 	case sf::Keyboard::A:

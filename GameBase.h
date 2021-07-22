@@ -1,5 +1,5 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef GAME_BASE_H
+#define GAME_BASE_H
 
 #include "Board.h"
 #include "Tetromino.h"
@@ -21,9 +21,9 @@ const int boardY = 100;
 
 
 
-class Game
+class GameBase
 {
-private:
+protected:
 	list<Tetromino*> bag;
 	int score = 0;
 	ClearType prevClearType = ClearType::NONE;
@@ -43,11 +43,11 @@ private:
 	ifstream inFile;
 	int nextBeatTimeMS = 0;
 public:
-	Game();
-	~Game();
+	GameBase();
+	~GameBase();
 	//Tetromino& nextPiece();
 	void run(RenderWindow& window);
-	void tick(RenderWindow& window);
+	virtual void tick(RenderWindow& window, int& frameCount) = 0;
 	ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType);
 	static ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board);
 	int getScore();
@@ -74,8 +74,9 @@ public:
 	void restart();
 	void reset();
 	bool getIsGameOver();
+	void gameOver();
 	static int convertClearTypeToScores(ClearType type);
-	void tick(RenderWindow& window, int& frameCount);
 	Sound& getSound();
+	virtual void dropOnBeat() = 0 ;
 };
 #endif

@@ -12,7 +12,7 @@ KeyInput::~KeyInput()
 {
 }
 
-void KeyInput::tick(State& state, Game& game)
+void KeyInput::tick(State& state, GameBase& game)
 {
 	if (state != State::GAME) return;
 	if (game.getIsGameOver()) return;
@@ -81,7 +81,7 @@ void KeyInput::tick(State& state, Game& game)
 	else if (currentKey == keyMap[static_cast<int> (Controls_Key::SOFT_DROP)])
 	{
 		if (currentPiece.move(Moving_Direction::DOWN_DIR, board))
-			game.setScore(game.getScore() + Game::convertClearTypeToScores(ClearType::SOFTDROP));
+			game.setScore(game.getScore() + GameBase::convertClearTypeToScores(ClearType::SOFTDROP));
 	}
 
 
@@ -129,14 +129,17 @@ void KeyInput::updateKeyEvent(State& state, Keyboard::Key key)
 	isAutoShiftActive = false;
 }
 
-void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, Game& game, Config& config)
+void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, GameBase& game, Settings& settings)
 {
+	GameBase* gamePointer = &game;
 	if (state == State::MENU)
 	{
 		switch (key)
 		{
 		case Key::Enter:
-			game.start();
+			delete gamePointer;
+			gamePointer = new DropToTheBeatGame();
+			gamePointer->start();
 			state = State::GAME;
 			break;
 		case Key::C:
@@ -146,9 +149,9 @@ void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, Game& game, Confi
 	}
 	else if (state == State::SETTINGS)
 	{
-		if (config.getIsChanging())
+		if (settings.getIsChanging())
 		{
-			config.changeKey(key, keyMap);
+			settings.changeKey(key, keyMap, delayAutoShift, autoRepeatRate);
 			return;
 		}
 		switch (key)
@@ -157,13 +160,13 @@ void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, Game& game, Confi
 			state = State::MENU;
 			break;
 		case Key::Down:
-			config.setCursor(config.getCursor() + 1);
+			settings.setCursor(settings.getCursor() + 1);
 			break;
 		case Key::Up:
-			config.setCursor(config.getCursor() - 1);
+			settings.setCursor(settings.getCursor() - 1);
 			break;
 		case Key::Enter:
-			config.waitForChangingKey();
+			settings.waitForChangingKey();
 			break;
 		}
 	}
@@ -212,17 +215,20 @@ void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, Game& game, Confi
 			game.reset();
 			state = State::MENU;
 		}
-		else if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)])
+		else if (key == Keyboard::R)
+		{
+			game.restart();
+		}
+
+		if (game.getIsGameOver()) return;
+
+		if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)])
 		{
 			currentPiece.rotate(Rotational_Direction::CW, board);
 		}
 		else if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CCW)])
 		{
 			currentPiece.rotate(Rotational_Direction::CCW, board);
-		}
-		else if (key == Keyboard::R)
-		{
-			game.restart();
 		}
 		else if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_180)])
 		{
@@ -233,11 +239,11 @@ void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, Game& game, Confi
 			currentPiece.hardDrop(board);
 			//cout << "input" << endl;
 			//board.print();
-			game.setScore(game.getScore() + Game::convertClearTypeToScores(ClearType::HARDDROP));
+			game.dropOnBeat();
+			game.setScore(game.getScore() + GameBase::convertClearTypeToScores(ClearType::HARDDROP));
 
 			game.nextPiece();
 
-			currentPiece.checkIsOnGround(board);
 			//alreadyHold = false;
 			//onGroundCount = 0;
 			game.resetOnGroundCount();
@@ -246,7 +252,7 @@ void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, Game& game, Confi
 		{
 			game.hold();
 		}
-		else if (key == Keyboard::R)
+		else if (key == Keyboard::P)
 		{
 			cout << "playing:" << game.getSound().getPlayingOffset().asMilliseconds() << endl;
 		}
@@ -257,18 +263,28 @@ void KeyInput::noHoldKeyEvent(State& state, Keyboard::Key key, Game& game, Confi
 			// TODO: copy board before clear, is this optimized???
 			Board tempBoard = board;
 			ClearingInfo tempClearingInfo = board.clearLines();
-			ClearType tempScoresType = Game::determineClearType(game.getPrevPiece(), tempClearingInfo, game.getPrevClearType(), tempBoard);
+			ClearType tempScoresType = GameBase::determineClearType(game.getPrevPiece(), tempClearingInfo, game.getPrevClearType(), tempBoard);
 			if (tempScoresType != ClearType::NONE)
 			{
 				game.setPrevClearType(tempScoresType);
 			}
-			game.setScore(game.getScore() + Game::convertClearTypeToScores(tempScoresType));
+			game.setScore(game.getScore() + GameBase::convertClearTypeToScores(tempScoresType));
 		}
 	}
 
-	}
+}
 
-	array<Keyboard::Key, 8>& KeyInput::getKeyMap()
-	{
-		return keyMap;
-	}
+array<Keyboard::Key, 8>& KeyInput::getKeyMap()
+{
+	return keyMap;
+}
+
+int KeyInput::getDelayAutoShift()
+{
+	return delayAutoShift;
+}
+
+int KeyInput::getAutoRepeatRate()
+{
+	return autoRepeatRate;
+}

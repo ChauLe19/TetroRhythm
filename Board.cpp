@@ -3,20 +3,20 @@ Board::Board(int xPos, int yPos)
 {
 	this->xPos = xPos;
 	this->yPos = yPos;
-	frameTexture.loadFromFile("frame.png");
+	frameTexture.loadFromFile("Images/frame-white.png");
 	image.setTexture(frameTexture);
-	image.setPosition((float)xPos, (float)yPos);
-	cellsTexture.loadFromFile("tiles.png");
+	image.setPosition((float)xPos-70, (float)yPos);
+	cellsTexture.loadFromFile("Images/tiles-dark-2-full-mid.png");
 	cellImage.setTexture(cellsTexture);
 
 }
 
 Board::Board()
 {
-	frameTexture.loadFromFile("frame.png");
+	frameTexture.loadFromFile("Images/frame-white.png");
 	image.setTexture(frameTexture);
 	image.setPosition((float)0, (float)0);
-	cellsTexture.loadFromFile("tiles.png");
+	cellsTexture.loadFromFile("Images/tiles-dark-2-full-mid.png");
 	cellImage.setTexture(cellsTexture);
 }
 Board::~Board()
@@ -24,11 +24,14 @@ Board::~Board()
 }
 void Board::render(RenderWindow& window)
 {
+	window.draw(image);
+	//RectangleShape rect(Vector2f(18 * 10, 18 * 20));
+	/*rect.setFillColor(Color(200,200,200,255));
+	rect.setPosition(xPos, yPos);*/
 
-	RectangleShape rect(Vector2f(18 * 10, 18 * 20));
-	rect.setFillColor(Color::Blue);
-	rect.setPosition(xPos, yPos);
-	window.draw(rect);
+	//rect.setFillColor(Color(25,25,25,255));
+	//rect.setFillColor(Color::White);
+	//window.draw(rect);
 	// Doesn't render the first line
 	for (int i = 1; i < boardHeight; i++)
 	{

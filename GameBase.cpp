@@ -1,6 +1,6 @@
-#include "Game.h"
+#include "GameBase.h"
 
-Game::Game()
+GameBase::GameBase()
 {
 	cout << "Initializing game" << endl;
 	//board = Board(boardX, boardY);
@@ -41,7 +41,7 @@ Game::Game()
 	sound.setBuffer(buffer);
 }
 
-void Game::hold()
+void GameBase::hold()
 {
 	if (!alreadyHold)
 	{
@@ -62,7 +62,7 @@ void Game::hold()
 	}
 }
 
-Tetromino& Game::nextPiece()
+Tetromino& GameBase::nextPiece()
 {
 	prevPiecePtr = currentPiecePtr;
 	currentPiecePtr = bag.front();
@@ -81,97 +81,27 @@ Tetromino& Game::nextPiece()
 			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
 		}
 	}
-	if (!currentPiecePtr->checkCollision(board)) isGameOver = true;
+	if (!currentPiecePtr->checkCollision(board)) gameOver();
 
 	alreadyHold = false;
 	return *currentPiecePtr;
 }
 
-void Game::increaseOnGroundCount()
+void GameBase::increaseOnGroundCount()
 {
 	onGroundCount++;
 }
 
 
-int Game::convertClearTypeToScores(ClearType type)
+int GameBase::convertClearTypeToScores(ClearType type)
 {
 	return clearTypeScore[static_cast<int>(type)];
 }
 
 
-void Game::tick(RenderWindow& window, int & frameCount)
-{
-	if (isGameOver) return;
-	if (frameCount >= 48)
-	{
-		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
-		frameCount = 0;
-	}
-	if (sound.getStatus() == SoundSource::Status::Stopped)
-	{
-		isGameOver = true;
-	}
 
 
-	if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS)
-	{
-		//cout << nextBeatTimeMS << endl;
-		// hard drop current piece
-		currentPiecePtr->hardDrop(board);
-		// TODO: copy board before clear, is this optimized???
-		Board tempBoard = board;
-		prevPiecePtr = currentPiecePtr;
-		ClearingInfo tempClearingInfo = board.clearLines();
-		ClearType tempScoresType = determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-
-		if (tempScoresType != ClearType::NONE)
-		{
-			prevClearType = tempScoresType;
-		}
-		score += convertClearTypeToScores(tempScoresType);
-		//currentPiecePtr = &nextPiece();
-		nextPiece();
-		alreadyHold = false;
-		onGroundCount = 0;
-
-		do
-		{
-		char beat[10];
-		inFile.getline(beat, 10,'\r');
-		nextBeatTimeMS = atoi(beat);
-		} while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS); // if the time is too tight, skip to the next
-		return;
-	}
-	/*cout << "GAME BOARD" << endl;
-	board.print();*/
-
-	if (currentPiecePtr->getIsOnGround(board))
-	{
-		onGroundCount++;
-		if (onGroundCount > 100)
-		{
-			currentPiecePtr->hardDrop(board);
-			// TODO: copy board before clear, is this optimized???
-			Board tempBoard = board;
-			prevPiecePtr = currentPiecePtr;
-			ClearingInfo tempClearingInfo = board.clearLines();
-			ClearType tempScoresType = determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-
-			if (tempScoresType != ClearType::NONE)
-			{
-				prevClearType = tempScoresType;
-			}
-			score += convertClearTypeToScores(tempScoresType);
-			//currentPiecePtr = &nextPiece();
-			nextPiece();
-			alreadyHold = false;
-			onGroundCount = 0;
-		}
-	}
-}
-
-
-bool Game::getIsGameOver()
+bool GameBase::getIsGameOver()
 {
 	return isGameOver;
 }
@@ -233,7 +163,7 @@ int getTSpinType(Tetromino piece, Board& board)
 	return 0;
 }
 
-ClearType Game::determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board)
+ClearType GameBase::determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board)
 {
 	bool isB2BChainActive = isB2BChain(prevClearType);
 
@@ -371,12 +301,12 @@ ClearType Game::determineClearType(Tetromino clearingPiece, ClearingInfo info, C
 
 
 
-int Game::getScore()
+int GameBase::getScore()
 {
 	return score;
 }
 
-void Game::render(RenderWindow& window)
+void GameBase::render(RenderWindow& window)
 {
 	board.render(window);
 	currentPiecePtr->render(window, board);
@@ -393,43 +323,43 @@ void Game::render(RenderWindow& window)
 	}
 }
 
-Tetromino* Game::getCurrentPiecePtr()
+Tetromino* GameBase::getCurrentPiecePtr()
 {
 	return currentPiecePtr;
 }
 
-Tetromino* Game::getPrevPiecePtr()
+Tetromino* GameBase::getPrevPiecePtr()
 {
 	return prevPiecePtr;
 }
-Tetromino& Game::getCurrentPiece()
+Tetromino& GameBase::getCurrentPiece()
 {
 	return *currentPiecePtr;
 }
-Tetromino& Game::getPrevPiece()
+Tetromino& GameBase::getPrevPiece()
 {
 	return *prevPiecePtr;
 }
-void Game::setPrevPiecePtr(Tetromino* piece)
+void GameBase::setPrevPiecePtr(Tetromino* piece)
 {
 	prevPiecePtr =  piece;
 }
-void Game::setCurrentPiecePtr(Tetromino* piece)
+void GameBase::setCurrentPiecePtr(Tetromino* piece)
 {
 	currentPiecePtr =  piece;
 }
 
-ClearType Game::getPrevClearType()
+ClearType GameBase::getPrevClearType()
 {
 	return prevClearType;
 }
 
-void Game::setPrevClearType(ClearType type)
+void GameBase::setPrevClearType(ClearType type)
 {
 	prevClearType = type;
 }
 
-Board& Game::getBoard()
+Board& GameBase::getBoard()
 {
 	return board;
 }
@@ -439,25 +369,25 @@ Board& Game::getBoard()
 //	return boardPtr;
 //}
 
-void Game::resetOnGroundCount()
+void GameBase::resetOnGroundCount()
 {
 	onGroundCount = 0;
 }
 
-void Game::setScore(int score)
+void GameBase::setScore(int score)
 {
 	this->score = score;
 }
 
-void Game::pause()
+void GameBase::pause()
 {
 	sound.pause();
 }
-void Game::start()
+void GameBase::start()
 {
 	sound.play();
 }
-void Game::reset()
+void GameBase::reset()
 {
 	delete boardPtr;
 	boardPtr = new Board(boardX, boardY);
@@ -496,17 +426,24 @@ void Game::reset()
 	sound.stop();
 	sound.setPlayingOffset(seconds(0));
 }
-void Game::restart()
+void GameBase::restart()
 {
 	reset();
 	start();
 }
-Sound& Game::getSound()
+Sound& GameBase::getSound()
 {
 	return sound;
 }
 
-Game::~Game()
+void GameBase::gameOver()
+{
+	isGameOver = true;
+	sound.stop();
+	sound.setPlayingOffset(seconds(0));
+}
+
+GameBase::~GameBase()
 {
 	delete currentPiecePtr;
 	delete holdPiecePtr;

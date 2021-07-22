@@ -3,9 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include "KeyInput.h"
-#include "Game.h"
+#include "GameBase.h"
 #include "Menu.h"
-#include "Config.h"
+#include "Settings.h"
 #include "Enums.h"
 
 class MasterClass
@@ -13,9 +13,9 @@ class MasterClass
 private:
 	State state = State::MENU;
 	Menu* menu;
-	Game* game;
+	GameBase* game;
 	KeyInput* keyInput;
-	Config* config;
+	Settings* settings;
 	RenderWindow* window; 
 	Clock clock;
 	Font font;

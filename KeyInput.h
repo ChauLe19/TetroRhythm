@@ -2,8 +2,10 @@
 #define KEY_INPUT_H
 
 #include <SFML/Graphics.hpp>
-#include "Game.h"
-#include "Config.h"
+#include "GameBase.h"
+#include "DropToTheBeatGame.h"
+#include "AutoDropGame.h"
+#include "Settings.h"
 #include "Enums.h"
 using namespace sf;
 
@@ -28,9 +30,11 @@ public:
 	KeyInput();
 	//KeyInput(Game& game);
 	~KeyInput();
-	void tick(State& state, Game& game);
+	void tick(State& state, GameBase& game);
 	void updateKeyEvent(State& state, Keyboard::Key key);
-	void noHoldKeyEvent(State& state, Keyboard::Key key, Game& game, Config& config);
+	void noHoldKeyEvent(State& state, Keyboard::Key key, GameBase& game, Settings& settings);
 	array<Keyboard::Key, 8>& getKeyMap();
+	int getDelayAutoShift();
+	int getAutoRepeatRate();
 };
 #endif

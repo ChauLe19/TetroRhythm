@@ -2,10 +2,10 @@
 
 MasterClass::MasterClass(RenderWindow& window)
 {
-	this->game = new Game();
+	this->game = new AutoDropGame();
 	this->keyInput = new KeyInput();
 	this->menu = new Menu();
-	this->config = new Config();
+	this->settings = new Settings();
 	this->window = &window;
 	font.loadFromFile("arial.ttf");
 	text.setFont(font);
@@ -42,7 +42,7 @@ void MasterClass::run()
 			{
 				cout << "press" << endl;
 				keyInput->updateKeyEvent(state, event.key.code);
-				keyInput->noHoldKeyEvent(state, event.key.code, *game, *config);
+				keyInput->noHoldKeyEvent(state, event.key.code, *game, *settings);
 			}
 		}
 		keyInput->tick(state, *game);
@@ -81,7 +81,7 @@ void MasterClass::render()
 		game->render(*window);
 		break;
 	case State::SETTINGS:
-		config->render(*window, keyInput->getKeyMap());
+		settings->render(*window, keyInput->getKeyMap(), keyInput->getDelayAutoShift(), keyInput->getAutoRepeatRate());
 		break;
 	}
 }

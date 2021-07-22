@@ -2,7 +2,7 @@
 //
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Game.h"
+#include "GameBase.h"
 #include "Board.h"
 #include "Tetromino.h"
 #include "MasterClass.h"
@@ -18,9 +18,9 @@ int main()
 	RenderWindow window(sf::VideoMode(1024, 768), "TetroRythm");
 	window.setFramerateLimit(60);
 	window.setKeyRepeatEnabled(false);
-
-	
-	
+	Image icon;
+	icon.loadFromFile("Images/logo.png");
+	window.setIcon(32, 32, icon.getPixelsPtr());
 
 	MasterClass gameMC(window);
 	gameMC.run();

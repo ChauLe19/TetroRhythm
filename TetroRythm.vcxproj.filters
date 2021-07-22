@@ -24,7 +24,7 @@
     <ClCompile Include="Board.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
+    <ClCompile Include="GameBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KeyInput.cpp">
@@ -36,7 +36,16 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Config.cpp">
+    <ClCompile Include="Settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoDropGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DropToTheBeatGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,7 +56,7 @@
     <ClInclude Include="Board.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="GameBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KeyInput.h">
@@ -59,10 +68,19 @@
     <ClInclude Include="Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enums.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="Settings.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Config.h">
+    <ClInclude Include="GameOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoDropGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DropToTheBeatGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -79,6 +97,9 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="arial.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
+    <Font Include="times-new-roman-bold.otf">
       <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>

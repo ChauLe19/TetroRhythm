@@ -2,7 +2,7 @@
 
 Menu::Menu()
 {
-	font.loadFromFile("arial.ttf");
+	font.loadFromFile("times-new-roman-bold.otf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
 }
@@ -17,8 +17,8 @@ void Menu::tick(RenderWindow& window)
 
 void Menu::render(RenderWindow& window)
 {
-	text.setPosition(300, 300);
-	text.setCharacterSize(30);
+	text.setPosition(300, 100);
+	text.setCharacterSize(100);
 	text.setString("TetroRythm");
 	window.draw(text);
 
