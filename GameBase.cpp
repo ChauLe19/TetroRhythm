@@ -1,7 +1,7 @@
 #include "GameBase.h"
 
 GameBase::GameBase(Controls_Settings& settings)
-	: settings(settings), keyMap(settings.keyMap), delayAutoShift(settings.delayAutoShift), 
+	: settings(settings), keyMap(settings.keyMap), delayAutoShift(settings.delayAutoShift),
 	autoRepeatRate(settings.autoRepeatRate)
 {
 	cout << "Initializing game" << endl;
@@ -10,7 +10,6 @@ GameBase::GameBase(Controls_Settings& settings)
 	text.setFont(font);
 	text.setFillColor(Color::White);
 
-	//board = Board(boardX, boardY);
 	boardPtr = new Board(boardX, boardY);
 	board = *boardPtr;
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -29,7 +28,7 @@ GameBase::GameBase(Controls_Settings& settings)
 		}
 	}
 
-	currentPiecePtr = &nextPiece();
+	// Load map info
 	string txtFile = "Tetris_theme.txt";
 	string musicFile = "Tetris_theme.wav";
 	inFile.open(txtFile);
@@ -46,6 +45,9 @@ GameBase::GameBase(Controls_Settings& settings)
 		cerr << "Unable to open file " + musicFile << endl;;
 	}
 	sound.setBuffer(buffer);
+
+
+	currentPiecePtr = &nextPiece();
 }
 
 GameBase::~GameBase()
@@ -55,146 +57,22 @@ GameBase::~GameBase()
 	delete holdPiecePtr;
 }
 
-
-void GameBase::hold()
-{
-	if (!alreadyHold)
-	{
-		if (holdPiecePtr == nullptr)
-		{
-			holdPiecePtr = currentPiecePtr;
-			//currentPiecePtr = &nextPiece();
-			nextPiece();
-		}
-		else
-		{
-			Tetromino* tempPiecePtr = holdPiecePtr;
-			holdPiecePtr = currentPiecePtr;
-			currentPiecePtr = tempPiecePtr;
-		}
-		holdPiecePtr->reset();
-		alreadyHold = true;
-	}
-}
-
-Tetromino& GameBase::nextPiece()
-{
-	prevPiecePtr = currentPiecePtr;
-	currentPiecePtr = bag.front();
-	bag.pop_front();
-
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-	if (bag.size() <= 7)
-	{
-		vector<Type> tempTypeVector = allPieces;
-		shuffle(tempTypeVector.begin(), tempTypeVector.end(), default_random_engine(seed));
-
-		while (!tempTypeVector.empty())
-		{
-			Type tempType = tempTypeVector.back();
-			tempTypeVector.pop_back();
-			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
-		}
-	}
-	if (!currentPiecePtr->checkCollision(board)) gameOver();
-
-	alreadyHold = false;
-	return *currentPiecePtr;
-}
-
-void GameBase::increaseOnGroundCount()
-{
-	onGroundCount++;
-}
-
-
-int GameBase::convertClearTypeToScores(ClearType type)
-{
-	return clearTypeScore[static_cast<int>(type)];
-}
-
-
-
-
-bool GameBase::getIsGameOver()
-{
-	return isGameOver;
-}
-
-bool isB2BChain(ClearType type)
-{
-	switch (type)
-	{
-	case ClearType::TSPIN_MINI_NO:
-	case ClearType::TSPIN_NO:
-	case ClearType::TSPIN_MINI_SINGLE:
-	case ClearType::TSPIN_SINGLE:
-	case ClearType::TSPIN_MINI_DOUBLE:
-	case ClearType::TSPIN_DOUBLE:
-	case ClearType::TSPIN_TRIPLE:
-	case ClearType::TETRIS:
-	case ClearType::B2B_TETRIS:
-	case ClearType::B2B_TSPIN_MINI_SINGLE:
-	case ClearType::B2B_TSPIN_SINGLE:
-	case ClearType::B2B_TSPIN_MINI_DOUBLE:
-	case ClearType::B2B_TSPIN_DOUBLE:
-	case ClearType::B2B_TSPIN_TRIPLE:
-		return true;
-		break;
-	default:
-		return false;
-		break;
-	}
-}
-
-// 0: not a t-spin of any kind
-// 1: mini t-spin
-// 2: t-spin double
-int getTSpinType(Tetromino piece, Board& board)
-{
-	if (piece.getType() == Type::T && piece.getRotateLast())
-	{
-		int x = piece.getXPos();
-		int y = piece.getYPos();
-		int ori = static_cast<int> (piece.getOrientation());
-		bool leftFrontCornerFilled = ori / 2 * 2 + y >= boardHeight || (ori + 1) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[ori / 2 * 2 + y][(ori + 1) % 4 / 2 * 2 + x] > 0;
-		bool rightFrontCornerFilled = (ori + 1) % 4 / 2 * 2 + y >= boardHeight || (ori + 2) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 1) % 4 / 2 * 2 + y][(ori + 2) % 4 / 2 * 2 + x] > 0;
-		bool rightBackCornerFilled = (ori + 2) % 4 / 2 * 2 + y >= boardHeight || (ori + 3) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 2) % 4 / 2 * 2 + y][(ori + 3) % 4 / 2 * 2 + x] > 0;
-		bool leftBackCornerFilled = (ori + 3) % 4 / 2 * 2 + y >= boardHeight || ori / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 3) % 4 / 2 * 2 + y][ori / 2 * 2 + x] > 0;
-		// cout << "LF:" << leftFrontCornerFilled << "\tRF:" << rightFrontCornerFilled << "\tLB:" << leftBackCornerFilled << "\tRB:" << rightBackCornerFilled << endl;
-		// cout << "LF:" << ori / 2 * 2 + y << '+' << (ori + 1) % 4 / 2 * 2 + x
-		// 	<< "\tRF:" << (ori + 1) % 4 / 2 * 2 + y << '+' << (ori + 2) % 4 / 2 * 2 + x
-		// 	<< "\tLB:" << (ori + 2) % 4 / 2 * 2 + y << '+' << (ori + 3) % 4 / 2 * 2 + x
-		// 	<< "\tRB:" << (ori + 3) % 4 / 2 * 2 + y << '+' << ori / 2 * 2 + x << endl;
-		if (leftFrontCornerFilled && rightFrontCornerFilled && (rightBackCornerFilled || leftBackCornerFilled))
-		{
-			return 2;
-		}
-		else if (rightBackCornerFilled && leftBackCornerFilled && (leftFrontCornerFilled || rightFrontCornerFilled))
-		{
-			return 1;
-		}
-	}
-	return 0;
-}
-
 void GameBase::tick(RenderWindow& window)
 {
 	if (isGameOver) return;
-	frameCount++;
-	if (frameCount >= 48)
-	{
-		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
-		frameCount = 0;
-	}
+
+	//frameCount++;
+	//if (frameCount >= 48)
+	//{
+	//	currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
+	//	frameCount = 0;
+	//}
+
 	if (sound.getStatus() == SoundSource::Status::Stopped)
 	{
 		gameOver();
 	}
 
-	/*Tetromino& currentPiece = game.getCurrentPiece();
-	Tetromino& prevPiece = game.getCurrentPiece();
-	Board& board = game.getBoard();*/
 
 	if (Keyboard::isKeyPressed(currentKey))
 	{
@@ -206,6 +84,16 @@ void GameBase::tick(RenderWindow& window)
 			isAutoShiftActive = true;
 			delayAutoShiftCount = 0;
 			autoRepeatRateCount = 0;
+		}
+		else if (isAutoShiftActive)
+		{
+			delayAutoShiftCount++;
+			if (delayAutoShiftCount >= delayAutoShift)
+			{
+				isAutoRepeatActive = true;
+				isAutoShiftActive = false;
+			}
+			return;
 		}
 		else if (isAutoRepeatActive)
 		{
@@ -219,15 +107,6 @@ void GameBase::tick(RenderWindow& window)
 				autoRepeatRateCount = 0;
 			}
 		}
-		else if (isAutoShiftActive)
-		{
-			delayAutoShiftCount++;
-			if (delayAutoShiftCount >= delayAutoShift)
-			{
-				isAutoRepeatActive = true;
-			}
-			return;
-		}
 	}
 	else // not holding
 	{
@@ -237,6 +116,7 @@ void GameBase::tick(RenderWindow& window)
 		isAutoShiftActive = false;
 		return;
 	}
+
 
 	if (currentKey == keyMap[static_cast<int> (Controls_Key::MOVE_RIGHT)])
 	{
@@ -257,6 +137,143 @@ void GameBase::tick(RenderWindow& window)
 		if (currentPiecePtr->move(Moving_Direction::DOWN_DIR, board))
 			score += GameBase::convertClearTypeToScores(ClearType::SOFTDROP);
 	}
+
+
+	//if (currentPiecePtr->getIsOnGround(board))
+	//{
+	//	onGroundCount++;
+	//	if (onGroundCount > 100)
+	//	{
+	//		currentPiecePtr->hardDrop(board);
+	//		// TODO: copy board before clear, is this optimized???
+	//		Board tempBoard = board;
+	//		prevPiecePtr = currentPiecePtr;
+	//		ClearingInfo tempClearingInfo = board.clearLines();
+	//		ClearType tempScoresType = determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+
+	//		if (tempScoresType != ClearType::NONE)
+	//		{
+	//			prevClearType = tempScoresType;
+	//		}
+	//		score += convertClearTypeToScores(tempScoresType);
+	//		//currentPiecePtr = &nextPiece();
+	//		nextPiece();
+	//		alreadyHold = false;
+	//		onGroundCount = 0;
+	//	}
+	//}
+}
+
+void GameBase::render(RenderWindow& window)
+{
+	board.render(window);
+	currentPiecePtr->render(window, board);
+	currentPiecePtr->getGhost(board).render(window, board);
+	if (holdPiecePtr != nullptr)
+		holdPiecePtr->render(window, 50, 100);
+
+	// Render 5 preview pieces
+	int counter = 0;
+	std::list<Tetromino*>::iterator fifthIt = bag.begin();
+	advance(fifthIt, 5);
+	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
+	{
+		(*it)->render(window, 300, 100 + 50 * counter);
+		counter++;
+	}
+
+
+	text.setString(to_string(score));
+	text.setPosition(100, 0);
+	window.draw(text);
+
+	if (isGameOver)
+	{
+		text.setString("GAME OVER");
+		text.setPosition(300, 0);
+		window.draw(text);
+		text.setString("Press R to restart");
+		text.setPosition(270, 20);
+		window.draw(text);
+	}
+}
+
+
+void GameBase::keyEvent(State& state, Keyboard::Key key)
+{
+	if (key == Keyboard::Escape)
+	{
+		reset();
+		state = State::MENU;
+	}
+	else if (key == Keyboard::R)
+	{
+		restart();
+	}
+
+	if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)])
+	{
+		currentPiecePtr->rotate(Rotational_Direction::CW, board);
+	}
+	else if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CCW)])
+	{
+		currentPiecePtr->rotate(Rotational_Direction::CCW, board);
+	}
+	else if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_180)])
+	{
+		currentPiecePtr->rotate(Rotational_Direction::R180, board);
+	}
+	else if (key == keyMap[static_cast<int> (Controls_Key::HARD_DROP)])
+	{
+		currentPiecePtr->hardDrop(board);
+		//cout << "input" << endl;
+		//board.print();
+		dropOnBeat();
+		score += GameBase::convertClearTypeToScores(ClearType::HARDDROP);
+
+		nextPiece();
+
+		//alreadyHold = false;
+		onGroundCount = 0;
+	}
+	else if (key == keyMap[static_cast<int> (Controls_Key::HOLD)])
+	{
+		hold();
+	}
+	else if (key == Keyboard::P)
+	{
+		cout << "playing:" << sound.getPlayingOffset().asMilliseconds() << endl;
+	}
+
+	if (prevPiecePtr != nullptr)
+	{
+		//cout << "Clearing" << endl;
+		// TODO: copy board before clear, is this optimized???
+		Board tempBoard = board;
+		ClearingInfo tempClearingInfo = board.clearLines();
+		ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+		if (tempScoresType != ClearType::NONE)
+		{
+			prevClearType = tempScoresType;
+		}
+		score += GameBase::convertClearTypeToScores(tempScoresType);
+	}
+
+	// No hold key control (rotation)
+	if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)]
+		|| key == keyMap[static_cast<int> (Controls_Key::ROTATE_CCW)]
+		|| key == keyMap[static_cast<int> (Controls_Key::HARD_DROP)]
+		|| key == keyMap[static_cast<int> (Controls_Key::HOLD)]) return;
+
+	cout << "reset hold key" << endl;
+	currentKey = key;
+	firstPressed = true;
+	isAutoShiftActive = false;
+}
+
+int GameBase::convertClearTypeToScores(ClearType type)
+{
+	return clearTypeScore[static_cast<int>(type)];
 }
 
 ClearType GameBase::determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board)
@@ -395,117 +412,83 @@ ClearType GameBase::determineClearType(Tetromino clearingPiece, ClearingInfo inf
 	}
 }
 
-
-
-int GameBase::getScore()
+Tetromino& GameBase::nextPiece()
 {
-	return score;
-}
+	// Take out a tetromino from the bag
+	prevPiecePtr = currentPiecePtr;
+	currentPiecePtr = bag.front();
+	bag.pop_front();
 
-void GameBase::render(RenderWindow& window)
-{
-	board.render(window);
-	currentPiecePtr->render(window, board);
-	currentPiecePtr->getGhost(board).render(window, board);
-	if (holdPiecePtr != nullptr)
-		holdPiecePtr->render(window, 50, 100);
-	int counter = 0;
-	std::list<Tetromino*>::iterator fifthIt = bag.begin();
-	advance(fifthIt, 5);
-	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+
+	// If bag has less than or equal to 7,
+	// add in a shuffled bag of all pieces into current bag.
+	if (bag.size() <= 7)
 	{
-		(*it)->render(window, 300, 100 + 50 * counter);
-		counter++;
+		vector<Type> tempTypeVector = allPieces;
+		shuffle(tempTypeVector.begin(), tempTypeVector.end(), default_random_engine(seed));
+
+		while (!tempTypeVector.empty())
+		{
+			Type tempType = tempTypeVector.back();
+			tempTypeVector.pop_back();
+			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
+		}
 	}
-	text.setString(to_string(score));
-	text.setPosition(100, 0);
-	window.draw(text);
 
-	if (isGameOver)
-	{
-		text.setString("GAME OVER");
-		text.setPosition(300, 0);
-		window.draw(text);
-		text.setString("Press R to restart");
-		text.setPosition(270, 20);
-		window.draw(text);
-	}
-}
+	// If piece spawn collide right away, game over
+	if (!currentPiecePtr->checkCollision(board)) gameOver();
 
-Tetromino* GameBase::getCurrentPiecePtr()
-{
-	return currentPiecePtr;
-}
-
-Tetromino* GameBase::getPrevPiecePtr()
-{
-	return prevPiecePtr;
-}
-Tetromino& GameBase::getCurrentPiece()
-{
+	alreadyHold = false;
 	return *currentPiecePtr;
 }
-Tetromino& GameBase::getPrevPiece()
-{
-	return *prevPiecePtr;
-}
-void GameBase::setPrevPiecePtr(Tetromino* piece)
-{
-	prevPiecePtr = piece;
-}
-void GameBase::setCurrentPiecePtr(Tetromino* piece)
-{
-	currentPiecePtr = piece;
-}
 
-ClearType GameBase::getPrevClearType()
-{
-	return prevClearType;
-}
 
-void GameBase::setPrevClearType(ClearType type)
+void GameBase::hold()
 {
-	prevClearType = type;
-}
-
-Board& GameBase::getBoard()
-{
-	return board;
-}
-
-//Board* Game::getBoardPtr()
-//{
-//	return boardPtr;
-//}
-
-void GameBase::resetOnGroundCount()
-{
-	onGroundCount = 0;
-}
-
-void GameBase::setScore(int score)
-{
-	this->score = score;
+	if (!alreadyHold)
+	{
+		if (holdPiecePtr == nullptr)
+		{
+			holdPiecePtr = currentPiecePtr;
+			//currentPiecePtr = &nextPiece();
+			nextPiece();
+		}
+		else
+		{
+			Tetromino* tempPiecePtr = holdPiecePtr;
+			holdPiecePtr = currentPiecePtr;
+			currentPiecePtr = tempPiecePtr;
+		}
+		holdPiecePtr->reset();
+		alreadyHold = true;
+	}
 }
 
 void GameBase::pause()
 {
 	sound.pause();
 }
+
 void GameBase::start()
 {
 	sound.play();
 }
+
 void GameBase::reset()
 {
 	delete boardPtr;
+	delete currentPiecePtr;
+	delete prevPiecePtr;
+	delete holdPiecePtr;
+
 	boardPtr = new Board(boardX, boardY);
 	board = *boardPtr;
 	currentPiecePtr = nullptr;
 	prevPiecePtr = nullptr;
 	holdPiecePtr = nullptr;
-	onGroundCount = 0;
 	prevClearType = ClearType::NONE;
+	onGroundCount = 0;
 	score = 0;
 	isGameOver = false;
 	alreadyHold = false;
@@ -531,91 +514,22 @@ void GameBase::reset()
 			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
 		}
 	}
-	currentPiecePtr = &nextPiece();
+
 	sound.stop();
 	sound.setPlayingOffset(seconds(0));
+
+	currentPiecePtr = &nextPiece();
 }
+
 void GameBase::restart()
 {
 	reset();
 	start();
 }
-Sound& GameBase::getSound()
+
+int GameBase::getScore()
 {
-	return sound;
-}
-
-void GameBase::keyEvent(State& state, Keyboard::Key key)
-{
-	if (key == Keyboard::Escape)
-	{
-		reset();
-		state = State::MENU;
-	}
-	else if (key == Keyboard::R)
-	{
-		restart();
-	}
-
-	if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)])
-	{
-		currentPiecePtr->rotate(Rotational_Direction::CW, board);
-	}
-	else if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CCW)])
-	{
-		currentPiecePtr->rotate(Rotational_Direction::CCW, board);
-	}
-	else if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_180)])
-	{
-		currentPiecePtr->rotate(Rotational_Direction::R180, board);
-	}
-	else if (key == keyMap[static_cast<int> (Controls_Key::HARD_DROP)])
-	{
-		currentPiecePtr->hardDrop(board);
-		//cout << "input" << endl;
-		//board.print();
-		dropOnBeat();
-		score += GameBase::convertClearTypeToScores(ClearType::HARDDROP);
-
-		nextPiece();
-
-		//alreadyHold = false;
-		//onGroundCount = 0;
-		resetOnGroundCount();
-	}
-	else if (key == keyMap[static_cast<int> (Controls_Key::HOLD)])
-	{
-		hold();
-	}
-	else if (key == Keyboard::P)
-	{
-		cout << "playing:" << sound.getPlayingOffset().asMilliseconds() << endl;
-	}
-
-	if (prevPiecePtr != nullptr)
-	{
-		//cout << "Clearing" << endl;
-		// TODO: copy board before clear, is this optimized???
-		Board tempBoard = board;
-		ClearingInfo tempClearingInfo = board.clearLines();
-		ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-		if (tempScoresType != ClearType::NONE)
-		{
-			prevClearType = tempScoresType;
-		}
-		score += GameBase::convertClearTypeToScores(tempScoresType);
-	}
-
-	// No hold key control (rotation)
-	if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)]
-		|| key == keyMap[static_cast<int> (Controls_Key::ROTATE_CCW)]
-		|| key == keyMap[static_cast<int> (Controls_Key::HARD_DROP)]
-		|| key == keyMap[static_cast<int> (Controls_Key::HOLD)]) return;
-
-	cout << "reset hold key" << endl;
-	currentKey = key;
-	firstPressed = true;
-	isAutoShiftActive = false;
+	return score;
 }
 
 void GameBase::gameOver()
@@ -626,4 +540,57 @@ void GameBase::gameOver()
 }
 
 
+bool GameBase::isB2BChain(ClearType type)
+{
+	switch (type)
+	{
+	case ClearType::TSPIN_MINI_NO:
+	case ClearType::TSPIN_NO:
+	case ClearType::TSPIN_MINI_SINGLE:
+	case ClearType::TSPIN_SINGLE:
+	case ClearType::TSPIN_MINI_DOUBLE:
+	case ClearType::TSPIN_DOUBLE:
+	case ClearType::TSPIN_TRIPLE:
+	case ClearType::TETRIS:
+	case ClearType::B2B_TETRIS:
+	case ClearType::B2B_TSPIN_MINI_SINGLE:
+	case ClearType::B2B_TSPIN_SINGLE:
+	case ClearType::B2B_TSPIN_MINI_DOUBLE:
+	case ClearType::B2B_TSPIN_DOUBLE:
+	case ClearType::B2B_TSPIN_TRIPLE:
+		return true;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
+
+
+// 0: not a t-spin of any kind
+// 1: mini t-spin
+// 2: t-spin double
+int GameBase::getTSpinType(Tetromino piece, Board& board)
+{
+	if (piece.getType() == Type::T && piece.getRotateLast())
+	{
+		int x = piece.getXPos();
+		int y = piece.getYPos();
+		int ori = static_cast<int> (piece.getOrientation());
+		bool leftFrontCornerFilled = ori / 2 * 2 + y >= boardHeight || (ori + 1) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[ori / 2 * 2 + y][(ori + 1) % 4 / 2 * 2 + x] > 0;
+		bool rightFrontCornerFilled = (ori + 1) % 4 / 2 * 2 + y >= boardHeight || (ori + 2) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 1) % 4 / 2 * 2 + y][(ori + 2) % 4 / 2 * 2 + x] > 0;
+		bool rightBackCornerFilled = (ori + 2) % 4 / 2 * 2 + y >= boardHeight || (ori + 3) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 2) % 4 / 2 * 2 + y][(ori + 3) % 4 / 2 * 2 + x] > 0;
+		bool leftBackCornerFilled = (ori + 3) % 4 / 2 * 2 + y >= boardHeight || ori / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 3) % 4 / 2 * 2 + y][ori / 2 * 2 + x] > 0;
+
+		if (leftFrontCornerFilled && rightFrontCornerFilled && (rightBackCornerFilled || leftBackCornerFilled))
+		{
+			return 2;
+		}
+		else if (rightBackCornerFilled && leftBackCornerFilled && (leftFrontCornerFilled || rightFrontCornerFilled))
+		{
+			return 1;
+		}
+	}
+	return 0;
+}
 

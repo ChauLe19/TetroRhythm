@@ -19,9 +19,11 @@ Board::Board()
 	cellsTexture.loadFromFile("Images/tiles-dark-2-full-mid.png");
 	cellImage.setTexture(cellsTexture);
 }
+
 Board::~Board()
 {
 }
+
 void Board::render(RenderWindow& window)
 {
 	window.draw(image);
@@ -99,15 +101,6 @@ array<array<int, boardWidth>, boardHeight> Board::getBoard()
 	return board;
 }
 
-int Board::getXPos()
-{
-	return xPos;
-}
-int Board::getYPos()
-{
-	return yPos;
-}
-
 void Board::setCell(int x, int y, int value)
 {
 	board[x][y] = value;
@@ -128,5 +121,15 @@ void Board::print()
 		}
 		cout << endl;
 	}
+}
+
+int Board::getXPos()
+{
+	return xPos;
+}
+
+int Board::getYPos()
+{
+	return yPos;
 }
 

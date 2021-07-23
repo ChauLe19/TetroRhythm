@@ -1,12 +1,5 @@
 #include "Settings.h"
 
-//Settings::Settings()
-//{
-//	font.loadFromFile("arial.ttf");
-//	text.setFont(font);
-//	text.setFillColor(Color::White);
-//}
-
 Settings::Settings(Controls_Settings& settings) : settings(settings)
 {
 	font.loadFromFile("arial.ttf");
@@ -31,13 +24,13 @@ void Settings::keyEvent(State& state, Keyboard::Key key)
 		state = State::MENU;
 		break;
 	case Keyboard::Key::Down:
-		cursor++;
+		setCursor(cursor + 1);
 		break;
 	case Keyboard::Key::Up:
-		cursor--;
+		setCursor(cursor - 1);
 		break;
 	case Keyboard::Key::Enter:
-		waitForChangingKey();
+		isChanging = true;
 		break;
 	}
 }
@@ -62,26 +55,6 @@ void Settings::render(RenderWindow& window)
 
 	drawKeyConfig("DAS", "<  " + to_string(settings.delayAutoShift) + "  >", 50, 150 + 50 * 8, window, cursor == 8, isChanging);
 	drawKeyConfig("ARR", "<  " + to_string(settings.autoRepeatRate) + "  >", 50, 150 + 50 * 9, window, cursor == 9, isChanging);
-}
-
-void Settings::render(RenderWindow& window, array<Keyboard::Key, 8>& keyMap, int delayAutoShift, int autoRepeatRate)
-{
-	text.setFillColor(Color::White);
-	text.setPosition(100, 100);
-	text.setCharacterSize(30);
-	text.setString("Change key config");
-	window.draw(text);
-
-
-	for (int i = 0; i < keyMap.size(); i++)
-	{
-		Controls_Key key = static_cast<Controls_Key> (i);
-		drawKeyConfig(fromControlsToString(key), fromKtoS(keyMap[i]), 50, 150 + 50 * i, window, cursor == i, isChanging);
-	}
-
-	drawKeyConfig("DAS", "<  " + to_string(delayAutoShift) + "  >", 50, 150 + 50 * 8, window, cursor == 8, isChanging);
-	drawKeyConfig("ARR", "<  " + to_string(autoRepeatRate) + "  >", 50, 150 + 50 * 9, window, cursor == 9, isChanging);
-
 }
 
 void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow& window, bool isHighlight, bool changing)
@@ -115,16 +88,6 @@ void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow
 	text.setPosition(x + 225, y);
 	text.setString(key);
 	window.draw(text);
-}
-
-void Settings::waitForChangingKey()
-{
-	isChanging = true;
-}
-
-bool Settings::getIsChanging()
-{
-	return isChanging;
 }
 
 bool Settings::changeKey(Keyboard::Key key)
@@ -176,14 +139,10 @@ bool Settings::changeKey(Keyboard::Key key)
 	return true;
 }
 
-int Settings::getCursor()
-{
-	return cursor;
-}
 
 void Settings::setCursor(int cursor)
 {
-	// clamping from 0 to 7
+	// clamping from 0 to 9
 	this->cursor = cursor < 0 ? 0 : cursor >9 ? 9 : cursor;
 }
 
@@ -207,6 +166,8 @@ string Settings::fromControlsToString(Controls_Key key)
 		return "Hard drop";
 	case Controls_Key::SOFT_DROP:
 		return "Soft drop";
+	default:
+		return "Invalid/unknown key";
 	}
 }
 

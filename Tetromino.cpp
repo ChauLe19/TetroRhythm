@@ -163,11 +163,6 @@ bool Tetromino::checkIsOnGround(Board& board)
 	return isOnGround;
 }
 
-bool Tetromino::getIsOnGround(Board& board)
-{
-	return isOnGround;
-}
-
 // Rotate a square array
 // TODO: Check rotation is correct
 void Tetromino::rotateArray(array<array<int, 4>, 4>& arr, int size, Rotational_Direction rDir)

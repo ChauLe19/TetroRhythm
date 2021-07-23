@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   MasterClass.h
+ * \brief  Control states and rendering
+ * 
+ * \author Chau Le
+ * \date   July 2021
+ *********************************************************************/
+
 #ifndef MASTER_CLASS_H
 #define MASTER_CLASS_H
 
@@ -8,35 +16,59 @@
 #include "Enums.h"
 #include "GameOptions.h"
 
-
+/**
+ * Controls states and rendering.
+ */
 class MasterClass
 {
 private:
 	typedef Settings::Controls_Settings Controls_Settings;
+	Controls_Settings controlsSettings;
+	Clock clock;
+	Font font;
+	Text text;
+
 	State state = State::MENU;
+
+	// All state screens
+	//**************************************************
+
 	Menu* menu;
 	GameBase* game;
 	Settings* settings;
 	RenderWindow* window;
 	GameOptions* gameOptions;
-	Clock clock;
-	Font font;
-	Text text;
-	Controls_Settings controlsSettings;
-	//int delayAutoShift = (int)((float)delayAutoShiftMS / 1000 * 60); // frame // delayAutoShiftMS/1000 * 60  
-	//int autoRepeatRate = 0; // frame
-	//array<Keyboard::Key, 8> keyMap = { Keyboard::Key::J, Keyboard::Key::L, Keyboard::Key::A, Keyboard::Key::F,
-	//Keyboard::Key::S, Keyboard::Key::D, Keyboard::Key::I, Keyboard::Key::K };
+
+
 public:
-	int frameCount = 0;
-	MasterClass();
 	MasterClass(RenderWindow& window);
 	~MasterClass();
-	void render(RenderWindow& window);
-	void tick(RenderWindow& window);
+
+	/**
+	 * .Loop forever until close window
+	 * Tick every frame.  Render state screen.
+	 * 	If there is an event (example: keyboard input), do things accordingly
+	 */
 	void run();
+
+	/**
+	* Render graphics each frame on window screen
+	*/
 	void render();
+
+	/**
+	 * Life cycle function.
+	 * Tick every frame
+	 */
 	void tick();
+
+
+	/**
+	 * Based on the key input and current state, do things accordingly. 
+	 * Distribute keyEvent to the State_Screen's keyEvent
+	 * 
+	 * \param key: input from keyboard
+	 */
 	void keyEvent(Keyboard::Key key);
 };
 

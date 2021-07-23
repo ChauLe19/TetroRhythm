@@ -11,6 +11,13 @@ AutoDropGame::~AutoDropGame()
 void AutoDropGame::tick(RenderWindow& window)
 {
 	GameBase::tick(window);
+	
+	dropOnBeat();
+
+}
+
+void AutoDropGame::dropOnBeat()
+{
 	if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS)
 	{
 		//cout << nextBeatTimeMS << endl;
@@ -40,36 +47,6 @@ void AutoDropGame::tick(RenderWindow& window)
 		} while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS); // if the time is too tight, skip to the next
 		return;
 	}
-	/*cout << "GAME BOARD" << endl;
-	board.print();*/
-
-	if (currentPiecePtr->getIsOnGround(board))
-	{
-		onGroundCount++;
-		if (onGroundCount > 100)
-		{
-			currentPiecePtr->hardDrop(board);
-			// TODO: copy board before clear, is this optimized???
-			Board tempBoard = board;
-			prevPiecePtr = currentPiecePtr;
-			ClearingInfo tempClearingInfo = board.clearLines();
-			ClearType tempScoresType = determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-
-			if (tempScoresType != ClearType::NONE)
-			{
-				prevClearType = tempScoresType;
-			}
-			score += convertClearTypeToScores(tempScoresType);
-			//currentPiecePtr = &nextPiece();
-			nextPiece();
-			alreadyHold = false;
-			onGroundCount = 0;
-		}
-	}
-}
-
-void AutoDropGame::dropOnBeat()
-{
 }
 
 void AutoDropGame::keyEvent(State& state, Keyboard::Key key)

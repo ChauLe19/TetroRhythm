@@ -1,5 +1,4 @@
 #include "MasterClass.h"
-
 MasterClass::MasterClass(RenderWindow& window)
 {
 	controlsSettings.autoRepeatRate = 0;
@@ -26,7 +25,7 @@ void MasterClass::run()
 
 	while (window->isOpen())
 	{
-		// FPS
+		// Calculate FPS
 		Time elapsed = clock.restart();
 		text.setPosition(0, 0);
 		text.setString(to_string(round(1 / elapsed.asSeconds())));
@@ -48,6 +47,8 @@ void MasterClass::run()
 		}
 		tick();
 
+
+		// Render and display
 		window->clear(Color::Black);
 		window->draw(text);
 
@@ -57,7 +58,6 @@ void MasterClass::run()
 	}
 
 }
-
 
 void MasterClass::render()
 {
@@ -78,6 +78,7 @@ void MasterClass::render()
 	}
 }
 
+
 void MasterClass::tick()
 {
 	switch (state)
@@ -90,7 +91,6 @@ void MasterClass::tick()
 		break;
 	}
 }
-
 
 void MasterClass::keyEvent(Keyboard::Key key)
 {

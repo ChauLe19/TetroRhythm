@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   Board.h
+ * \brief  Board representation
+ * 
+ * \author Chau Le
+ * \date   July 2021
+ *********************************************************************/
+
 #ifndef BOARD_H
 #define BOARD_H
 
@@ -7,10 +15,12 @@
 
 using namespace std;
 using namespace sf;
+
 #define boardWidth 10
 #define boardHeight 20
 //#define matrixWidth boardWidth + 2
 //#define matrixHeight boardHeight + 2
+
 
 enum class ClearType {
 	NONE,
@@ -41,6 +51,7 @@ enum class ClearType {
 	B2B_TSPIN_TRIPLE, // t-spin
 };
 
+// Scoring array mapping with the ClearType enums
 static int clearTypeScore[] = { 0,
 100,
 300,
@@ -75,30 +86,68 @@ struct ClearingInfo
 	bool isPC;
 };
 
+
+/**
+ * Controls the board.
+ */
 class Board
 {
 private:
-	array<array<int, boardWidth>, boardHeight> board = { 0 };
-	int xPos = 0;
-	int yPos = 0;
 	Texture frameTexture;
 	Texture cellsTexture;
 	Sprite image;
 	Sprite cellImage;
+
+	array<array<int, boardWidth>, boardHeight> board = { 0 };
+	int xPos = 0;
+	int yPos = 0;
+
 public:
 	Board();
 	Board(int xPos, int yPos);
 	~Board();
+
+	/**
+	 * Draw board.
+	 */
 	void render(RenderWindow& window);
-	Sprite& sprite();
+
+	/**
+	 * Clear all lines that werre filled.
+	 * 
+	 * \return Clearing info of how many lines was cleared and if it results a pc
+	 */
 	ClearingInfo clearLines();
-	ClearingInfo clearLines(ClearType prevType);
+
+	/**
+	 * Get an array representation of the board.
+	 */
 	array<array<int, boardWidth>, boardHeight> getBoard();
+
+	/**
+	 * Set cell with a specific value.
+	 * \param x Row index
+	 * \param y Column index
+	 * \param value Value to be assigned at x and y position
+	 */
+	void setCell(int x, int y, int value);
+
+	/**
+	 * Get cell's value.
+	 * 
+	 * \param x Row index
+	 * \param y Column index
+	 * \return cell's valuea at x any y position in array
+	 */
+	int getCell(int x, int y);
+
+	/**
+	 * Print out array representation of board in the console.
+	 */
+	void print();
+
 	int getXPos();
 	int getYPos();
-	void setCell(int x, int y, int value);
-	int getCell(int x, int y);
-	void print();
 };
 #endif
 

@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   GameBase.h
+ * \brief  Perform and render Tetris type game functionalities. No rulesets included.
+ *
+ * \author Chau Le
+ * \date   July 2021
+ *********************************************************************/
 #ifndef GAME_BASE_H
 #define GAME_BASE_H
 
@@ -5,6 +12,7 @@
 #include "Settings.h"
 #include "Tetromino.h"
 #include "StateScreen.h"
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <list>
@@ -22,78 +30,119 @@ const int boardX = 100;
 const int boardY = 100;
 
 
-
+/**
+ * Class for general Tetris controls and mechanics.
+ */
 class GameBase : public StateScreen
 {
 protected:
-	typedef Settings::Controls_Settings Controls_Settings;
-	Controls_Settings& settings;
 	Text text;
 	Font font;
+	SoundBuffer buffer;
+	Sound sound;
+	ifstream inFile;
+
+	// Objects in game
+	//**************************************
+
 	list<Tetromino*> bag;
-	int score = 0;
-	ClearType prevClearType = ClearType::NONE;
-	//Board board = Board(boardX, boardY);
-	Board* boardPtr;
-	Board board;
-	bool alreadyHold = false;
 	Tetromino* prevPiecePtr;
 	Tetromino* currentPiecePtr;
 	Tetromino* holdPiecePtr;
 	Tetromino* ghostPiece;
-	//int frameCount = 0;
+	ClearType prevClearType = ClearType::NONE;
+	Board* boardPtr;
+	Board board;
+
+	// Game status
+	//*************************************
+
+	int score = 0;
 	int frameCount = 0;
 	int onGroundCount = 0;
 	bool isGameOver = false;
-	SoundBuffer buffer;
-	Sound sound;
-	ifstream inFile;
 	int nextBeatTimeMS = 0;
+
+
+	// Controls related variables
+	//****************************************
+
+	typedef Settings::Controls_Settings Controls_Settings;
+	Controls_Settings& settings;
 	array<Keyboard::Key, 8>& keyMap;
+	Keyboard::Key holdKey;
+	Keyboard::Key currentKey;
 	int& delayAutoShift;
 	int& autoRepeatRate;
 	int delayAutoShiftCount = 0;
 	int autoRepeatRateCount = 0;
-	Keyboard::Key holdKey;
-	Keyboard::Key currentKey;
 	bool isAutoShiftActive = false;
 	bool isAutoRepeatActive = false;
 	bool firstPressed = false;
+	bool alreadyHold = false;
+
+	static bool isB2BChain(ClearType type);
+	static int getTSpinType(Tetromino piece, Board& board);
 public:
 	GameBase(Controls_Settings& settings);
 	~GameBase();
-	//Tetromino& nextPiece();
-	void run(RenderWindow& window);
+
+	// State Screen functions
+	//***************************************************
+
 	virtual void tick(RenderWindow& window);
-	ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType);
-	static ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board);
-	int getScore();
-	void hold();
-	void run();
 	void render(RenderWindow& window);
-	Tetromino* getCurrentPiecePtr();
-	Tetromino* getPrevPiecePtr();
-	Tetromino& getCurrentPiece();
-	Tetromino& getPrevPiece();
-	void setPrevPiecePtr(Tetromino* piece);
-	void setCurrentPiecePtr(Tetromino* piece);
-	ClearType getPrevClearType();
-	void setPrevClearType(ClearType type);
-	Board& getBoard();
-	Board* getBoardPtr();
+	virtual void keyEvent(State& state, Keyboard::Key key);
+
+
+	/**
+	 * Convert the clear type to the appropriate score.
+	 *
+	 * \param type Clearing lines type
+	 * \return The score for the clear type
+	 */
+	static int convertClearTypeToScores(ClearType type);
+
+
+	/**
+	 * Determine clear type based on the piece type
+	 * and how many lines it cleared and the board before clearing.
+	 * And determine whether if it's a B2B clear or not.
+	 *
+	 * \param clearingPiece Piece used for clearing
+	 * \param info Contains how many lines it cleared and if whether was a Perfect Clear
+	 * \param prevClearType Previous clearing type
+	 * \param board Board before clearing
+	 * \return Clear lines type
+	 */
+	static ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board);
+
+	/**
+	 * Discard previous piece and pick a tetromino from the bag.
+	 *
+	 * \return The next Tetromino
+	 */
 	Tetromino& nextPiece();
-	void increaseOnGroundCount();
-	void resetOnGroundCount();
-	void setScore(int score);
+
+
+	/**
+	 * Hold piece functionality. Can't hold twice in a row.
+	 *
+	 */
+	void hold();
+
 	void pause();
 	void start();
-	void restart();
 	void reset();
-	bool getIsGameOver();
+	void restart();
 	void gameOver();
-	static int convertClearTypeToScores(ClearType type);
-	Sound& getSound();
 	virtual void dropOnBeat() = 0;
-	virtual void keyEvent(State& state, Keyboard::Key key);
+
+
+	// Getters and Setters
+	//*******************************************
+
+	int getScore();
+
 };
 #endif
