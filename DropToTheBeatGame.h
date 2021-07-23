@@ -4,7 +4,7 @@ class DropToTheBeatGame :
 	public GameBase
 {
 public:
-	DropToTheBeatGame(array<Keyboard::Key, 8>& keyMap);
+	DropToTheBeatGame(Controls_Settings& settings);
 	~DropToTheBeatGame();
 	void tick(RenderWindow& window);
 	void dropOnBeat();

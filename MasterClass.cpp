@@ -2,9 +2,13 @@
 
 MasterClass::MasterClass(RenderWindow& window)
 {
+	controlsSettings.autoRepeatRate = 0;
+	controlsSettings.delayAutoShift = 6;
+	controlsSettings.keyMap = { Keyboard::Key::J, Keyboard::Key::L, Keyboard::Key::A, Keyboard::Key::F,
+		Keyboard::Key::S, Keyboard::Key::D, Keyboard::Key::I, Keyboard::Key::K };
 	this->menu = new Menu();
-	this->settings = new Settings(keyMap, delayAutoShift, autoRepeatRate);
-	this->gameOptions = new GameOptions(game, keyMap);
+	this->settings = new Settings(controlsSettings);
+	this->gameOptions = new GameOptions(game, controlsSettings);
 	this->window = &window;
 	font.loadFromFile("arial.ttf");
 	text.setFont(font);

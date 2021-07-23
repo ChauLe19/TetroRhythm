@@ -1,6 +1,7 @@
 #include "DropToTheBeatGame.h"
 
-DropToTheBeatGame::DropToTheBeatGame(array<Keyboard::Key, 8>& keyMap) : GameBase(keyMap)
+
+DropToTheBeatGame::DropToTheBeatGame(Controls_Settings& settings) : GameBase(settings)
 {
 }
 

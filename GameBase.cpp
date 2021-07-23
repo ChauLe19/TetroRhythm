@@ -1,7 +1,8 @@
 #include "GameBase.h"
 
-GameBase::GameBase(array<Keyboard::Key, 8>& keyMap)
-	: keyMap(keyMap)
+GameBase::GameBase(Controls_Settings& settings)
+	: settings(settings), keyMap(settings.keyMap), delayAutoShift(settings.delayAutoShift), 
+	autoRepeatRate(settings.autoRepeatRate)
 {
 	cout << "Initializing game" << endl;
 

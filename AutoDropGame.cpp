@@ -1,6 +1,6 @@
 #include "AutoDropGame.h"
 
-AutoDropGame::AutoDropGame(array<Keyboard::Key, 8>& keyMap) : GameBase(keyMap)
+AutoDropGame::AutoDropGame(Controls_Settings& settings) : GameBase(settings)
 {
 }
 

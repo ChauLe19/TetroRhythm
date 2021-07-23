@@ -1,7 +1,7 @@
 #include "GameOptions.h"
 
-GameOptions::GameOptions(GameBase*& gamePtr, array<Keyboard::Key, 8>& keyMap)
-	:gamePtr(gamePtr), keyMap(keyMap)
+GameOptions::GameOptions(GameBase*& gamePtr, Controls_Settings& settings)
+	: gamePtr(gamePtr), settings(settings)
 {
 	cursorX = 0;
 	cursorY = 0;
@@ -49,7 +49,7 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 	case Keyboard::Key::Enter:
 		state = State::GAME;
 		delete gamePtr;
-		gamePtr = new AutoDropGame(keyMap);
+		gamePtr = new AutoDropGame(settings);
 		gamePtr->start();
 		break;
 	}

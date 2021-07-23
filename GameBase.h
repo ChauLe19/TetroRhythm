@@ -2,6 +2,7 @@
 #define GAME_BASE_H
 
 #include "Board.h"
+#include "Settings.h"
 #include "Tetromino.h"
 #include "StateScreen.h"
 #include <SFML/Graphics.hpp>
@@ -25,6 +26,8 @@ const int boardY = 100;
 class GameBase : public StateScreen
 {
 protected:
+	typedef Settings::Controls_Settings Controls_Settings;
+	Controls_Settings& settings;
 	Text text;
 	Font font;
 	list<Tetromino*> bag;
@@ -47,8 +50,8 @@ protected:
 	ifstream inFile;
 	int nextBeatTimeMS = 0;
 	array<Keyboard::Key, 8>& keyMap;
-	int delayAutoShift = 6;
-	int autoRepeatRate = 0;
+	int& delayAutoShift;
+	int& autoRepeatRate;
 	int delayAutoShiftCount = 0;
 	int autoRepeatRateCount = 0;
 	Keyboard::Key holdKey;
@@ -57,7 +60,7 @@ protected:
 	bool isAutoRepeatActive = false;
 	bool firstPressed = false;
 public:
-	GameBase(array<Keyboard::Key, 8>& keyMap);
+	GameBase(Controls_Settings& settings);
 	~GameBase();
 	//Tetromino& nextPiece();
 	void run(RenderWindow& window);

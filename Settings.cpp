@@ -7,8 +7,7 @@
 //	text.setFillColor(Color::White);
 //}
 
-Settings::Settings(array<Keyboard::Key, 8>& keyMap, int& delayAutoShift, int& autoRepeatRate)
-	:keyMap(keyMap), delayAutoShift(delayAutoShift), autoRepeatRate(autoRepeatRate)
+Settings::Settings(Controls_Settings& settings) : settings(settings)
 {
 	font.loadFromFile("arial.ttf");
 	text.setFont(font);
@@ -23,7 +22,7 @@ void Settings::keyEvent(State& state, Keyboard::Key key)
 {
 	if (isChanging)
 	{
-		changeKey(key, keyMap, delayAutoShift, autoRepeatRate);
+		changeKey(key);
 		return;
 	}
 	switch (key)
@@ -55,14 +54,14 @@ void Settings::render(RenderWindow& window)
 	text.setString("Change key config");
 	window.draw(text);
 
-	for (int i = 0; i < keyMap.size(); i++)
+	for (int i = 0; i < settings.keyMap.size(); i++)
 	{
 		Controls_Key key = static_cast<Controls_Key> (i);
-		drawKeyConfig(fromControlsToString(key), fromKtoS(keyMap[i]), 50, 150 + 50 * i, window, cursor == i, isChanging);
+		drawKeyConfig(fromControlsToString(key), fromKtoS(settings.keyMap[i]), 50, 150 + 50 * i, window, cursor == i, isChanging);
 	}
 
-	drawKeyConfig("DAS", "<  " + to_string(delayAutoShift) + "  >", 50, 150 + 50 * 8, window, cursor == 8, isChanging);
-	drawKeyConfig("ARR", "<  " + to_string(autoRepeatRate) + "  >", 50, 150 + 50 * 9, window, cursor == 9, isChanging);
+	drawKeyConfig("DAS", "<  " + to_string(settings.delayAutoShift) + "  >", 50, 150 + 50 * 8, window, cursor == 8, isChanging);
+	drawKeyConfig("ARR", "<  " + to_string(settings.autoRepeatRate) + "  >", 50, 150 + 50 * 9, window, cursor == 9, isChanging);
 }
 
 void Settings::render(RenderWindow& window, array<Keyboard::Key, 8>& keyMap, int delayAutoShift, int autoRepeatRate)
@@ -128,7 +127,7 @@ bool Settings::getIsChanging()
 	return isChanging;
 }
 
-bool Settings::changeKey(Keyboard::Key key, array<Keyboard::Key, 8>& keyMap, int& delayAutoShift, int& autoRepeatRate)
+bool Settings::changeKey(Keyboard::Key key)
 {
 	// dismiss special keys
 	if (key == Keyboard::Key::Escape || key == Keyboard::Key::Unknown || key == Keyboard::Key::R) return false;
@@ -137,12 +136,12 @@ bool Settings::changeKey(Keyboard::Key key, array<Keyboard::Key, 8>& keyMap, int
 	{
 		if (key == Keyboard::Key::Right)
 		{
-			delayAutoShift++;
+			settings.delayAutoShift++;
 			return true;
 		}
 		else if (key == Keyboard::Key::Left)
 		{
-			delayAutoShift--;
+			settings.delayAutoShift--;
 			return true;
 		}
 		else if (key == Keyboard::Key::Enter)
@@ -156,12 +155,12 @@ bool Settings::changeKey(Keyboard::Key key, array<Keyboard::Key, 8>& keyMap, int
 	{
 		if (key == Keyboard::Key::Right)
 		{
-			autoRepeatRate++;
+			settings.autoRepeatRate++;
 			return true;
 		}
 		else if (key == Keyboard::Key::Left)
 		{
-			autoRepeatRate--;
+			settings.autoRepeatRate--;
 			return true;
 		}
 		else if (key == Keyboard::Key::Enter)
@@ -172,7 +171,7 @@ bool Settings::changeKey(Keyboard::Key key, array<Keyboard::Key, 8>& keyMap, int
 		return false;
 	}
 
-	keyMap[cursor] = key;
+	settings.keyMap[cursor] = key;
 	isChanging = false;
 	return true;
 }

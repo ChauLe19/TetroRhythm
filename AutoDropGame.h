@@ -2,12 +2,11 @@
 #define  AUTO_DROP_GAME_H
 
 #include "GameBase.h"
-
 class AutoDropGame :
 	public GameBase
 {
 public:
-	AutoDropGame(array<Keyboard::Key, 8>& keyMap);
+	AutoDropGame(Controls_Settings& settings);
 	~AutoDropGame();
 	void tick(RenderWindow& window);
 	void dropOnBeat();

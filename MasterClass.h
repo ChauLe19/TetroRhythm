@@ -8,9 +8,11 @@
 #include "Enums.h"
 #include "GameOptions.h"
 
+
 class MasterClass
 {
 private:
+	typedef Settings::Controls_Settings Controls_Settings;
 	State state = State::MENU;
 	Menu* menu;
 	GameBase* game;
@@ -20,11 +22,11 @@ private:
 	Clock clock;
 	Font font;
 	Text text;
-	int delayAutoShiftMS = 100; //ms  
-	int delayAutoShift = (int)((float)delayAutoShiftMS / 1000 * 60); // frame // delayAutoShiftMS/1000 * 60  
-	int autoRepeatRate = 0; // frame
-	array<Keyboard::Key, 8> keyMap = { Keyboard::Key::J, Keyboard::Key::L, Keyboard::Key::A, Keyboard::Key::F,
-	Keyboard::Key::S, Keyboard::Key::D, Keyboard::Key::I, Keyboard::Key::K };
+	Controls_Settings controlsSettings;
+	//int delayAutoShift = (int)((float)delayAutoShiftMS / 1000 * 60); // frame // delayAutoShiftMS/1000 * 60  
+	//int autoRepeatRate = 0; // frame
+	//array<Keyboard::Key, 8> keyMap = { Keyboard::Key::J, Keyboard::Key::L, Keyboard::Key::A, Keyboard::Key::F,
+	//Keyboard::Key::S, Keyboard::Key::D, Keyboard::Key::I, Keyboard::Key::K };
 public:
 	int frameCount = 0;
 	MasterClass();
