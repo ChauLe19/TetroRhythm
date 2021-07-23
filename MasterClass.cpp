@@ -2,7 +2,6 @@
 
 MasterClass::MasterClass(RenderWindow& window)
 {
-	this->keyInput = new KeyInput();
 	this->menu = new Menu();
 	this->settings = new Settings(keyMap, delayAutoShift, autoRepeatRate);
 	this->gameOptions = new GameOptions(game, keyMap);
@@ -16,7 +15,6 @@ MasterClass::MasterClass(RenderWindow& window)
 MasterClass::~MasterClass()
 {
 	delete game;
-	delete keyInput;
 }
 
 void MasterClass::run()

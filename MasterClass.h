@@ -2,7 +2,6 @@
 #define MASTER_CLASS_H
 
 #include <SFML/Graphics.hpp>
-#include "KeyInput.h"
 #include "GameBase.h"
 #include "Menu.h"
 #include "Settings.h"
@@ -15,7 +14,6 @@ private:
 	State state = State::MENU;
 	Menu* menu;
 	GameBase* game;
-	KeyInput* keyInput;
 	Settings* settings;
 	RenderWindow* window;
 	GameOptions* gameOptions;
