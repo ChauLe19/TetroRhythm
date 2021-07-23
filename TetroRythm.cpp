@@ -13,7 +13,7 @@ using namespace sf;
 int main()
 {
 	// randomize init
-	srand(time(NULL));
+	srand(static_cast<unsigned int> (time(NULL)));
 
 	RenderWindow window(sf::VideoMode(1024, 768), "TetroRythm");
 	window.setFramerateLimit(60);

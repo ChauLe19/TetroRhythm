@@ -153,9 +153,9 @@
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="GameOptions.cpp" />
-    <ClCompile Include="KeyInput.cpp" />
     <ClCompile Include="MasterClass.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="StateScreen.cpp" />
     <ClCompile Include="Tetromino.cpp" />
     <ClCompile Include="TetroRythm.cpp" />
   </ItemGroup>
@@ -167,9 +167,9 @@
     <ClInclude Include="Enums.h" />
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="GameOptions.h" />
-    <ClInclude Include="KeyInput.h" />
     <ClInclude Include="MasterClass.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="StateScreen.h" />
     <ClInclude Include="Tetromino.h" />
   </ItemGroup>
   <ItemGroup>

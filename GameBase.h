@@ -3,6 +3,7 @@
 
 #include "Board.h"
 #include "Tetromino.h"
+#include "StateScreen.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <list>
@@ -21,9 +22,11 @@ const int boardY = 100;
 
 
 
-class GameBase
+class GameBase : public StateScreen
 {
 protected:
+	Text text;
+	Font font;
 	list<Tetromino*> bag;
 	int score = 0;
 	ClearType prevClearType = ClearType::NONE;
@@ -36,24 +39,34 @@ protected:
 	Tetromino* holdPiecePtr;
 	Tetromino* ghostPiece;
 	//int frameCount = 0;
+	int frameCount = 0;
 	int onGroundCount = 0;
 	bool isGameOver = false;
 	SoundBuffer buffer;
 	Sound sound;
 	ifstream inFile;
 	int nextBeatTimeMS = 0;
+	array<Keyboard::Key, 8>& keyMap;
+	int delayAutoShift = 6;
+	int autoRepeatRate = 0;
+	int delayAutoShiftCount = 0;
+	int autoRepeatRateCount = 0;
+	Keyboard::Key holdKey;
+	Keyboard::Key currentKey;
+	bool isAutoShiftActive = false;
+	bool isAutoRepeatActive = false;
+	bool firstPressed = false;
 public:
-	GameBase();
+	GameBase(array<Keyboard::Key, 8>& keyMap);
 	~GameBase();
 	//Tetromino& nextPiece();
 	void run(RenderWindow& window);
-	virtual void tick(RenderWindow& window, int& frameCount) = 0;
+	virtual void tick(RenderWindow& window);
 	ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType);
 	static ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board);
 	int getScore();
 	void hold();
 	void run();
-	//void tick();
 	void render(RenderWindow& window);
 	Tetromino* getCurrentPiecePtr();
 	Tetromino* getPrevPiecePtr();
@@ -77,6 +90,7 @@ public:
 	void gameOver();
 	static int convertClearTypeToScores(ClearType type);
 	Sound& getSound();
-	virtual void dropOnBeat() = 0 ;
+	virtual void dropOnBeat() = 0;
+	virtual void keyEvent(State& state, Keyboard::Key key);
 };
 #endif

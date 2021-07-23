@@ -1,7 +1,10 @@
 #include "GameOptions.h"
 
-GameOptions::GameOptions()
+GameOptions::GameOptions(GameBase*& gamePtr, array<Keyboard::Key, 8>& keyMap)
+	:gamePtr(gamePtr), keyMap(keyMap)
 {
+	cursorX = 0;
+	cursorY = 0;
 	font.loadFromFile("arial.ttf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
@@ -26,10 +29,28 @@ void GameOptions::render(RenderWindow& window)
 	text.setPosition(50, 200);
 	text.setCharacterSize(20);
 	text.setString("Auto Drop Beat"); // get as many points as you can but a beat will force a hard drop
-	
+	window.draw(text);
+
 	text.setPosition(50, 300);
 	text.setCharacterSize(20);
 	text.setString("Drop on Beat"); // drop blocks on the beat receives bonus
+	window.draw(text);
 
 
+}
+
+void GameOptions::keyEvent(State& state, Keyboard::Key key)
+{
+	switch (key)
+	{
+	case Keyboard::Key::Escape:
+		state = State::MENU;
+		break;
+	case Keyboard::Key::Enter:
+		state = State::GAME;
+		delete gamePtr;
+		gamePtr = new AutoDropGame(keyMap);
+		gamePtr->start();
+		break;
+	}
 }

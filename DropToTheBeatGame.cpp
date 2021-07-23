@@ -1,19 +1,16 @@
 #include "DropToTheBeatGame.h"
 
-void DropToTheBeatGame::tick(RenderWindow& window, int& frameCount)
+DropToTheBeatGame::DropToTheBeatGame(array<Keyboard::Key, 8>& keyMap) : GameBase(keyMap)
 {
-	if (isGameOver) return;
-	if (frameCount >= 48)
-	{
-		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
-		frameCount = 0;
-	}
-	if (sound.getStatus() == SoundSource::Status::Stopped)
-	{
-		gameOver();
-	}
-	
+}
 
+DropToTheBeatGame::~DropToTheBeatGame()
+{
+}
+
+void DropToTheBeatGame::tick(RenderWindow& window)
+{
+	GameBase::tick(window);
 	if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 200)
 	{
 		do
@@ -33,4 +30,10 @@ void DropToTheBeatGame::dropOnBeat()
 	{
 		cout << "On beat" << endl;
 	}
+}
+
+void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
+{
+	GameBase::keyEvent(state, key);
+	std::cout << "Drop to beat keyevent" << endl;
 }

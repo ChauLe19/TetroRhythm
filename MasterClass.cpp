@@ -2,10 +2,10 @@
 
 MasterClass::MasterClass(RenderWindow& window)
 {
-	this->game = new AutoDropGame();
 	this->keyInput = new KeyInput();
 	this->menu = new Menu();
-	this->settings = new Settings();
+	this->settings = new Settings(keyMap, delayAutoShift, autoRepeatRate);
+	this->gameOptions = new GameOptions(game, keyMap);
 	this->window = &window;
 	font.loadFromFile("arial.ttf");
 	text.setFont(font);
@@ -29,7 +29,6 @@ void MasterClass::run()
 		text.setPosition(0, 0);
 		text.setString(to_string(round(1 / elapsed.asSeconds())));
 
-		frameCount++;
 
 		Event event;
 
@@ -41,27 +40,15 @@ void MasterClass::run()
 			if (event.type == Event::KeyPressed)
 			{
 				cout << "press" << endl;
-				keyInput->updateKeyEvent(state, event.key.code);
-				keyInput->noHoldKeyEvent(state, event.key.code, *game, *settings);
+
+				keyEvent(event.key.code);
 			}
 		}
-		keyInput->tick(state, *game);
 		tick();
 
 		window->clear(Color::Black);
 		window->draw(text);
-		text.setString(to_string(game->getScore()));
-		text.setPosition(100, 0);
-		window->draw(text);
-		if (game->getIsGameOver())
-		{
-			text.setString("GAME OVER");
-			text.setPosition(300, 0);
-			window->draw(text);
-			text.setString("Press R to restart");
-			text.setPosition(270, 20);
-			window->draw(text);
-		}
+
 		render();
 		window->display();
 
@@ -80,8 +67,11 @@ void MasterClass::render()
 	case State::GAME:
 		game->render(*window);
 		break;
+	case State::GAME_OPTIONS:
+		gameOptions->render(*window);
+		break;
 	case State::SETTINGS:
-		settings->render(*window, keyInput->getKeyMap(), keyInput->getDelayAutoShift(), keyInput->getAutoRepeatRate());
+		settings->render(*window);
 		break;
 	}
 }
@@ -94,9 +84,27 @@ void MasterClass::tick()
 		menu->tick(*window);
 		break;
 	case State::GAME:
-		game->tick(*window, frameCount);
+		game->tick(*window);
 		break;
 	}
 }
 
 
+void MasterClass::keyEvent(Keyboard::Key key)
+{
+	switch (state)
+	{
+	case State::MENU:
+		menu->keyEvent(state, key);
+		break;
+	case State::GAME_OPTIONS:
+		gameOptions->keyEvent(state, key);
+		break;
+	case State::SETTINGS:
+		settings->keyEvent(state, key);
+		break;
+	case State::GAME:
+		game->keyEvent(state, key);
+		break;
+	}
+}

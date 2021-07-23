@@ -1,8 +1,14 @@
 #include "GameBase.h"
 
-GameBase::GameBase()
+GameBase::GameBase(array<Keyboard::Key, 8>& keyMap)
+	: keyMap(keyMap)
 {
 	cout << "Initializing game" << endl;
+
+	font.loadFromFile("arial.ttf");
+	text.setFont(font);
+	text.setFillColor(Color::White);
+
 	//board = Board(boardX, boardY);
 	boardPtr = new Board(boardX, boardY);
 	board = *boardPtr;
@@ -31,7 +37,7 @@ GameBase::GameBase()
 		cerr << "Unable to open file " + txtFile << endl;;
 	}
 	char beat[10];
-	inFile.getline(beat, 10,'\r');
+	inFile.getline(beat, 10, '\r');
 	nextBeatTimeMS = atoi(beat);
 	cout << "First beat:" << nextBeatTimeMS << endl;
 	if (!buffer.loadFromFile(musicFile))
@@ -40,6 +46,14 @@ GameBase::GameBase()
 	}
 	sound.setBuffer(buffer);
 }
+
+GameBase::~GameBase()
+{
+	delete boardPtr;
+	delete currentPiecePtr;
+	delete holdPiecePtr;
+}
+
 
 void GameBase::hold()
 {
@@ -161,6 +175,87 @@ int getTSpinType(Tetromino piece, Board& board)
 		}
 	}
 	return 0;
+}
+
+void GameBase::tick(RenderWindow& window)
+{
+	if (isGameOver) return;
+	frameCount++;
+	if (frameCount >= 48)
+	{
+		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
+		frameCount = 0;
+	}
+	if (sound.getStatus() == SoundSource::Status::Stopped)
+	{
+		gameOver();
+	}
+
+	/*Tetromino& currentPiece = game.getCurrentPiece();
+	Tetromino& prevPiece = game.getCurrentPiece();
+	Board& board = game.getBoard();*/
+
+	if (Keyboard::isKeyPressed(currentKey))
+	{
+		//cout << "DAS count:" << delayAutoShiftCount << endl;
+		if (firstPressed)
+		{
+			firstPressed = false;
+			isAutoRepeatActive = false;
+			isAutoShiftActive = true;
+			delayAutoShiftCount = 0;
+			autoRepeatRateCount = 0;
+		}
+		else if (isAutoRepeatActive)
+		{
+			if (autoRepeatRateCount < autoRepeatRate)
+			{
+				autoRepeatRateCount++;
+				return;
+			}
+			else
+			{
+				autoRepeatRateCount = 0;
+			}
+		}
+		else if (isAutoShiftActive)
+		{
+			delayAutoShiftCount++;
+			if (delayAutoShiftCount >= delayAutoShift)
+			{
+				isAutoRepeatActive = true;
+			}
+			return;
+		}
+	}
+	else // not holding
+	{
+		delayAutoShiftCount = 0;
+		autoRepeatRateCount = 0;
+		isAutoRepeatActive = false;
+		isAutoShiftActive = false;
+		return;
+	}
+
+	if (currentKey == keyMap[static_cast<int> (Controls_Key::MOVE_RIGHT)])
+	{
+		if (isAutoRepeatActive && autoRepeatRate == 0)
+			while (currentPiecePtr->move(Moving_Direction::RIGHT_DIR, board));
+		else
+			currentPiecePtr->move(Moving_Direction::RIGHT_DIR, board);
+	}
+	else if (currentKey == keyMap[static_cast<int> (Controls_Key::MOVE_LEFT)])
+	{
+		if (isAutoRepeatActive && autoRepeatRate == 0)
+			while (currentPiecePtr->move(Moving_Direction::LEFT_DIR, board));
+		else
+			currentPiecePtr->move(Moving_Direction::LEFT_DIR, board);
+	}
+	else if (currentKey == keyMap[static_cast<int> (Controls_Key::SOFT_DROP)])
+	{
+		if (currentPiecePtr->move(Moving_Direction::DOWN_DIR, board))
+			score += GameBase::convertClearTypeToScores(ClearType::SOFTDROP);
+	}
 }
 
 ClearType GameBase::determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board)
@@ -321,6 +416,19 @@ void GameBase::render(RenderWindow& window)
 		(*it)->render(window, 300, 100 + 50 * counter);
 		counter++;
 	}
+	text.setString(to_string(score));
+	text.setPosition(100, 0);
+	window.draw(text);
+
+	if (isGameOver)
+	{
+		text.setString("GAME OVER");
+		text.setPosition(300, 0);
+		window.draw(text);
+		text.setString("Press R to restart");
+		text.setPosition(270, 20);
+		window.draw(text);
+	}
 }
 
 Tetromino* GameBase::getCurrentPiecePtr()
@@ -342,11 +450,11 @@ Tetromino& GameBase::getPrevPiece()
 }
 void GameBase::setPrevPiecePtr(Tetromino* piece)
 {
-	prevPiecePtr =  piece;
+	prevPiecePtr = piece;
 }
 void GameBase::setCurrentPiecePtr(Tetromino* piece)
 {
-	currentPiecePtr =  piece;
+	currentPiecePtr = piece;
 }
 
 ClearType GameBase::getPrevClearType()
@@ -401,7 +509,7 @@ void GameBase::reset()
 	isGameOver = false;
 	alreadyHold = false;
 	inFile.clear();
-	inFile.seekg(0); 
+	inFile.seekg(0);
 	char beat[10];
 	inFile.getline(beat, 10, '\r');
 	nextBeatTimeMS = atoi(beat);
@@ -436,17 +544,84 @@ Sound& GameBase::getSound()
 	return sound;
 }
 
+void GameBase::keyEvent(State& state, Keyboard::Key key)
+{
+	if (key == Keyboard::Escape)
+	{
+		reset();
+		state = State::MENU;
+	}
+	else if (key == Keyboard::R)
+	{
+		restart();
+	}
+
+	if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)])
+	{
+		currentPiecePtr->rotate(Rotational_Direction::CW, board);
+	}
+	else if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CCW)])
+	{
+		currentPiecePtr->rotate(Rotational_Direction::CCW, board);
+	}
+	else if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_180)])
+	{
+		currentPiecePtr->rotate(Rotational_Direction::R180, board);
+	}
+	else if (key == keyMap[static_cast<int> (Controls_Key::HARD_DROP)])
+	{
+		currentPiecePtr->hardDrop(board);
+		//cout << "input" << endl;
+		//board.print();
+		dropOnBeat();
+		score += GameBase::convertClearTypeToScores(ClearType::HARDDROP);
+
+		nextPiece();
+
+		//alreadyHold = false;
+		//onGroundCount = 0;
+		resetOnGroundCount();
+	}
+	else if (key == keyMap[static_cast<int> (Controls_Key::HOLD)])
+	{
+		hold();
+	}
+	else if (key == Keyboard::P)
+	{
+		cout << "playing:" << sound.getPlayingOffset().asMilliseconds() << endl;
+	}
+
+	if (prevPiecePtr != nullptr)
+	{
+		//cout << "Clearing" << endl;
+		// TODO: copy board before clear, is this optimized???
+		Board tempBoard = board;
+		ClearingInfo tempClearingInfo = board.clearLines();
+		ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+		if (tempScoresType != ClearType::NONE)
+		{
+			prevClearType = tempScoresType;
+		}
+		score += GameBase::convertClearTypeToScores(tempScoresType);
+	}
+
+	// No hold key control (rotation)
+	if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)]
+		|| key == keyMap[static_cast<int> (Controls_Key::ROTATE_CCW)]
+		|| key == keyMap[static_cast<int> (Controls_Key::HARD_DROP)]
+		|| key == keyMap[static_cast<int> (Controls_Key::HOLD)]) return;
+
+	cout << "reset hold key" << endl;
+	currentKey = key;
+	firstPressed = true;
+	isAutoShiftActive = false;
+}
+
 void GameBase::gameOver()
 {
 	isGameOver = true;
 	sound.stop();
 	sound.setPlayingOffset(seconds(0));
-}
-
-GameBase::~GameBase()
-{
-	delete currentPiecePtr;
-	delete holdPiecePtr;
 }
 
 

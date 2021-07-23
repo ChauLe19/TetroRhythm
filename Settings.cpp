@@ -1,6 +1,14 @@
 #include "Settings.h"
 
-Settings::Settings()
+//Settings::Settings()
+//{
+//	font.loadFromFile("arial.ttf");
+//	text.setFont(font);
+//	text.setFillColor(Color::White);
+//}
+
+Settings::Settings(array<Keyboard::Key, 8>& keyMap, int& delayAutoShift, int& autoRepeatRate)
+	:keyMap(keyMap), delayAutoShift(delayAutoShift), autoRepeatRate(autoRepeatRate)
 {
 	font.loadFromFile("arial.ttf");
 	text.setFont(font);
@@ -11,8 +19,50 @@ Settings::~Settings()
 {
 }
 
+void Settings::keyEvent(State& state, Keyboard::Key key)
+{
+	if (isChanging)
+	{
+		changeKey(key, keyMap, delayAutoShift, autoRepeatRate);
+		return;
+	}
+	switch (key)
+	{
+	case Keyboard::Key::Escape:
+		state = State::MENU;
+		break;
+	case Keyboard::Key::Down:
+		cursor++;
+		break;
+	case Keyboard::Key::Up:
+		cursor--;
+		break;
+	case Keyboard::Key::Enter:
+		waitForChangingKey();
+		break;
+	}
+}
+
 void Settings::tick(RenderWindow& window)
 {
+}
+
+void Settings::render(RenderWindow& window)
+{
+	text.setFillColor(Color::White);
+	text.setPosition(100, 100);
+	text.setCharacterSize(30);
+	text.setString("Change key config");
+	window.draw(text);
+
+	for (int i = 0; i < keyMap.size(); i++)
+	{
+		Controls_Key key = static_cast<Controls_Key> (i);
+		drawKeyConfig(fromControlsToString(key), fromKtoS(keyMap[i]), 50, 150 + 50 * i, window, cursor == i, isChanging);
+	}
+
+	drawKeyConfig("DAS", "<  " + to_string(delayAutoShift) + "  >", 50, 150 + 50 * 8, window, cursor == 8, isChanging);
+	drawKeyConfig("ARR", "<  " + to_string(autoRepeatRate) + "  >", 50, 150 + 50 * 9, window, cursor == 9, isChanging);
 }
 
 void Settings::render(RenderWindow& window, array<Keyboard::Key, 8>& keyMap, int delayAutoShift, int autoRepeatRate)

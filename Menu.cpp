@@ -27,3 +27,16 @@ void Menu::render(RenderWindow& window)
 	text.setString("Press Enter to begin");
 	window.draw(text);
 }
+
+void Menu::keyEvent(State& state, Keyboard::Key key)
+{
+	switch (key)
+	{
+	case Keyboard::Key::Enter:
+		state = State::GAME_OPTIONS;
+		break;
+	case Keyboard::Key::C:
+		state = State::SETTINGS;
+		break;
+	}
+}

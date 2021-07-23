@@ -1,19 +1,16 @@
 #include "AutoDropGame.h"
 
-void AutoDropGame::tick(RenderWindow& window, int& frameCount)
+AutoDropGame::AutoDropGame(array<Keyboard::Key, 8>& keyMap) : GameBase(keyMap)
 {
-	if (isGameOver) return;
-	if (frameCount >= 48)
-	{
-		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
-		frameCount = 0;
-	}
-	if (sound.getStatus() == SoundSource::Status::Stopped)
-	{
-		gameOver();
-	}
+}
 
+AutoDropGame::~AutoDropGame()
+{
+}
 
+void AutoDropGame::tick(RenderWindow& window)
+{
+	GameBase::tick(window);
 	if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS)
 	{
 		//cout << nextBeatTimeMS << endl;
@@ -73,4 +70,9 @@ void AutoDropGame::tick(RenderWindow& window, int& frameCount)
 
 void AutoDropGame::dropOnBeat()
 {
+}
+
+void AutoDropGame::keyEvent(State& state, Keyboard::Key key)
+{
+	GameBase::keyEvent(state, key);
 }
