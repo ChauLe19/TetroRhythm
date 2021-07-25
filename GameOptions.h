@@ -32,6 +32,16 @@ private:
 	int cursorY = 0;
 	GameBase*& gamePtr;
 	Controls_Settings& settings;
+	
+	/**
+	 * Return a value of var after clamping between min and max.
+	 * 
+	 * \param var
+	 * \param min
+	 * \param max
+	 * \return Clamped value
+	 */
+	int clamp(int var, int min, int max);
 public:
 	GameOptions(GameBase*& gamePtr, Controls_Settings& settings);
 	~GameOptions();
@@ -41,6 +51,17 @@ public:
 	void tick(RenderWindow& window);
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
+
+	/**
+	 * Draw option out to window. If the cursor is on it, highlight it.
+	 * 
+	 * \param window
+	 * \param gameMode String to be displayed
+	 * \param x
+	 * \param y
+	 * \param isHighlight
+	 */
+	void drawGameModeOption(RenderWindow& window, string gameMode, int x, int y, bool isHighlight);
 };
 
 #endif

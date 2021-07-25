@@ -3,7 +3,7 @@
 Tetromino::Tetromino(Type type)
 {
 	this->type = type;
-	cellsTexture.loadFromFile("Images/tiles-dark-2-full-mid.png");
+	cellsTexture.loadFromFile("Images/tiles-2.png");
 	cellImage.setTexture(cellsTexture);
 	cellImage.setTextureRect(IntRect(static_cast<int>(type) * 18, 0, 18, 18));
 	// TODO: Check if this copied
@@ -13,7 +13,7 @@ Tetromino::Tetromino(Type type)
 Tetromino::Tetromino(Type type, bool isGhost)
 {
 	this->type = type;
-	cellsTexture.loadFromFile("Images/tiles-dark-2-full-mid.png");
+	cellsTexture.loadFromFile("Images/tiles-2.png");
 	cellImage.setTexture(cellsTexture);
 	if (isGhost)
 		cellImage.setColor(Color(255, 255, 255, 100));

@@ -23,6 +23,7 @@
 #include <cstdlib>      // std::rand, std::srand
 #include <ctime>        // std::time
 #include <fstream>
+#include <string>
 
 using namespace sf;
 
@@ -91,7 +92,7 @@ public:
 	//***************************************************
 
 	virtual void tick(RenderWindow& window);
-	void render(RenderWindow& window);
+	virtual void render(RenderWindow& window);
 	virtual void keyEvent(State& state, Keyboard::Key key);
 
 
@@ -136,7 +137,6 @@ public:
 	void reset();
 	void restart();
 	void gameOver();
-	virtual void dropOnBeat() = 0;
 
 
 	// Getters and Setters

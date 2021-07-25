@@ -6,7 +6,7 @@ Board::Board(int xPos, int yPos)
 	frameTexture.loadFromFile("Images/frame-white.png");
 	image.setTexture(frameTexture);
 	image.setPosition((float)xPos-70, (float)yPos);
-	cellsTexture.loadFromFile("Images/tiles-dark-2-full-mid.png");
+	cellsTexture.loadFromFile("Images/tiles-2.png");
 	cellImage.setTexture(cellsTexture);
 
 }
@@ -16,7 +16,7 @@ Board::Board()
 	frameTexture.loadFromFile("Images/frame-white.png");
 	image.setTexture(frameTexture);
 	image.setPosition((float)0, (float)0);
-	cellsTexture.loadFromFile("Images/tiles-dark-2-full-mid.png");
+	cellsTexture.loadFromFile("Images/tiles-2.png");
 	cellImage.setTexture(cellsTexture);
 }
 

@@ -25,7 +25,9 @@ public:
 
 	void tick(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
-	
+	void render(RenderWindow& window);
+
+
 	/**
 	 * If the beat is played, drop the current tetromino.
 	 * 

@@ -39,7 +39,7 @@ GameBase::GameBase(Controls_Settings& settings)
 	char beat[10];
 	inFile.getline(beat, 10, '\r');
 	nextBeatTimeMS = atoi(beat);
-	cout << "First beat:" << nextBeatTimeMS << endl;
+	//cout << "First beat:" << nextBeatTimeMS << endl;
 	if (!buffer.loadFromFile(musicFile))
 	{
 		cerr << "Unable to open file " + musicFile << endl;;
@@ -173,15 +173,46 @@ void GameBase::render(RenderWindow& window)
 		holdPiecePtr->render(window, 50, 100);
 
 	// Render 5 preview pieces
-	int counter = 0;
-	std::list<Tetromino*>::iterator fifthIt = bag.begin();
-	advance(fifthIt, 5);
-	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
-	{
-		(*it)->render(window, 300, 100 + 50 * counter);
-		counter++;
-	}
+	//int counter = 0;
+	//std::list<Tetromino*>::iterator fifthIt = bag.begin();
+	//advance(fifthIt, 5);
+	//for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
+	//{
+	//	(*it)->render(window, 300, 100 + 50 * counter);
+	//	counter++;
+	//}
 
+
+
+	int counter = 0;
+	int endYPos = 100 + 18 * 20;
+	streampos originPos = inFile.tellg();
+	int nowTime = sound.getPlayingOffset().asMilliseconds();
+	std::list<Tetromino*>::iterator it = bag.begin();
+
+	for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && inFile.peek() != EOF; ++it)
+	{
+		char beat[10];
+		inFile.getline(beat, 10, '\r');
+		if (strcmp(beat, "END") == 0) break;
+		int bufferTime = atoi(beat);
+		int distanceFromEnd = (bufferTime - nowTime) / 16;// (1 / 60 second per frame)*1000 milisec per sec
+		int bufferTetrominoYPos = endYPos - distanceFromEnd;
+		if (it == bag.begin())
+		{
+			cout << "dfe:" << distanceFromEnd << "\tnow:" << nowTime << "\tbeat:"<< bufferTime<< endl;
+		}
+		if (it == bag.begin() && bufferTetrominoYPos < board.getYPos()) break;
+		counter++;
+		//(*it)->render(window, 300, 100 + 50 * counter);
+		(*it)->render(window, 300, endYPos - distanceFromEnd);
+	}
+	text.setString("--------------------------------");
+	text.setPosition(300, endYPos);
+	window.draw(text);
+
+
+	inFile.seekg(originPos);
 
 	text.setString(to_string(score));
 	text.setPosition(100, 0);
@@ -228,7 +259,6 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		currentPiecePtr->hardDrop(board);
 		//cout << "input" << endl;
 		//board.print();
-		dropOnBeat();
 		score += GameBase::convertClearTypeToScores(ClearType::HARDDROP);
 
 		nextPiece();
@@ -265,7 +295,6 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		|| key == keyMap[static_cast<int> (Controls_Key::HARD_DROP)]
 		|| key == keyMap[static_cast<int> (Controls_Key::HOLD)]) return;
 
-	cout << "reset hold key" << endl;
 	currentKey = key;
 	firstPressed = true;
 	isAutoShiftActive = false;
@@ -536,7 +565,6 @@ void GameBase::gameOver()
 {
 	isGameOver = true;
 	sound.stop();
-	sound.setPlayingOffset(seconds(0));
 }
 
 
@@ -576,6 +604,8 @@ int GameBase::getTSpinType(Tetromino piece, Board& board)
 	{
 		int x = piece.getXPos();
 		int y = piece.getYPos();
+
+	https://drive.google.com/file/d/1ev8Uo6qXt-oBwEoPyCPXUkOUkB4wh1QA/view?usp=sharing
 		int ori = static_cast<int> (piece.getOrientation());
 		bool leftFrontCornerFilled = ori / 2 * 2 + y >= boardHeight || (ori + 1) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[ori / 2 * 2 + y][(ori + 1) % 4 / 2 * 2 + x] > 0;
 		bool rightFrontCornerFilled = (ori + 1) % 4 / 2 * 2 + y >= boardHeight || (ori + 2) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 1) % 4 / 2 * 2 + y][(ori + 2) % 4 / 2 * 2 + x] > 0;

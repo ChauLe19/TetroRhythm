@@ -26,5 +26,6 @@ public:
 
 	void tick(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
+	void render(RenderWindow& window);
 };
 #endif

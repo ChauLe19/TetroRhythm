@@ -40,7 +40,6 @@ void MasterClass::run()
 
 			if (event.type == Event::KeyPressed)
 			{
-				cout << "press" << endl;
 
 				keyEvent(event.key.code);
 			}

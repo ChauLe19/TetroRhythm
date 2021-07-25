@@ -39,3 +39,8 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 	}
 
 }
+
+void DropToTheBeatGame::render(RenderWindow& window)
+{
+	GameBase::render(window);
+}
