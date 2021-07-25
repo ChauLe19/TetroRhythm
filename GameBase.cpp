@@ -36,10 +36,16 @@ GameBase::GameBase(Controls_Settings& settings)
 	{
 		cerr << "Unable to open file " + txtFile << endl;;
 	}
+
+
 	char beat[10];
-	inFile.getline(beat, 10, '\r');
-	nextBeatTimeMS = atoi(beat);
-	//cout << "First beat:" << nextBeatTimeMS << endl;
+	while (inFile.getline(beat, 10, '\r'))
+	{
+		beatsTime.push_back(atoi(beat));
+	}
+	beatIt = beatsTime.begin();
+	nextBeatTimeMS = *beatIt;
+
 	if (!buffer.loadFromFile(musicFile))
 	{
 		cerr << "Unable to open file " + musicFile << endl;;
@@ -185,34 +191,31 @@ void GameBase::render(RenderWindow& window)
 
 
 	int counter = 0;
-	int endYPos = 100 + 18 * 20;
-	streampos originPos = inFile.tellg();
+	int endYPos = 120;
 	int nowTime = sound.getPlayingOffset().asMilliseconds();
 	std::list<Tetromino*>::iterator it = bag.begin();
-
-	for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && inFile.peek() != EOF; ++it)
+	list<int>::iterator tempBeatIt = beatIt; // copy beatIt to tempBeatsIt
+	Tetromino offsetTetromino = Tetromino(currentPiecePtr->getType()); // buffer slot to force the next piece start with current piece first
+	for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && tempBeatIt != beatsTime.end(); ++it, ++tempBeatIt)
 	{
-		char beat[10];
-		inFile.getline(beat, 10, '\r');
-		if (strcmp(beat, "END") == 0) break;
-		int bufferTime = atoi(beat);
+		int bufferTime = *tempBeatIt;
 		int distanceFromEnd = (bufferTime - nowTime) / 16;// (1 / 60 second per frame)*1000 milisec per sec
-		int bufferTetrominoYPos = endYPos - distanceFromEnd;
+		int bufferTetrominoYPos = endYPos + distanceFromEnd;
 		if (it == bag.begin())
 		{
-			cout << "dfe:" << distanceFromEnd << "\tnow:" << nowTime << "\tbeat:"<< bufferTime<< endl;
+			cout << "dfe:" << distanceFromEnd << "\tnow:" << nowTime << "\tbeat:" << bufferTime << endl;
 		}
 		if (it == bag.begin() && bufferTetrominoYPos < board.getYPos()) break;
 		counter++;
-		//(*it)->render(window, 300, 100 + 50 * counter);
-		(*it)->render(window, 300, endYPos - distanceFromEnd);
+
+		offsetTetromino.render(window, 300, bufferTetrominoYPos);
+		offsetTetromino = **it;
 	}
 	text.setString("--------------------------------");
 	text.setPosition(300, endYPos);
 	window.draw(text);
 
 
-	inFile.seekg(originPos);
 
 	text.setString(to_string(score));
 	text.setPosition(100, 0);
@@ -522,10 +525,9 @@ void GameBase::reset()
 	isGameOver = false;
 	alreadyHold = false;
 	inFile.clear();
-	inFile.seekg(0);
-	char beat[10];
-	inFile.getline(beat, 10, '\r');
-	nextBeatTimeMS = atoi(beat);
+
+	beatIt = beatsTime.begin();
+	nextBeatTimeMS = *beatIt;
 	bag.clear();
 
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();

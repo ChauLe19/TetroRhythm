@@ -14,12 +14,11 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 	GameBase::tick(window);
 	if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 200)
 	{
-		do
+		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS && beatIt != beatsTime.end());
 		{
-			char beat[10];
-			inFile.getline(beat, 10, '\r');
-			nextBeatTimeMS = atoi(beat);
-		} while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS); // if the time is too tight, skip to the next
+			beatIt++;
+			nextBeatTimeMS = *beatIt;
+		}
 		return;
 	}
 }

@@ -47,6 +47,7 @@ protected:
 	//**************************************
 
 	list<Tetromino*> bag;
+	list<int> beatsTime;
 	Tetromino* prevPiecePtr;
 	Tetromino* currentPiecePtr;
 	Tetromino* holdPiecePtr;
@@ -54,6 +55,7 @@ protected:
 	ClearType prevClearType = ClearType::NONE;
 	Board* boardPtr;
 	Board board;
+	list<int>::iterator beatIt;
 
 	// Game status
 	//*************************************
