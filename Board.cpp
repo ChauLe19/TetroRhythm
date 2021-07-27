@@ -26,14 +26,15 @@ Board::~Board()
 
 void Board::render(RenderWindow& window)
 {
-	window.draw(image);
-	//RectangleShape rect(Vector2f(18 * 10, 18 * 20));
-	/*rect.setFillColor(Color(200,200,200,255));
-	rect.setPosition(xPos, yPos);*/
-
+	//window.draw(image);
+	RectangleShape rect(Vector2f(18 * 10, 18 * 20));
+	rect.setFillColor(Color(0,0,0,255));
+	rect.setPosition(xPos, yPos);
+	rect.setOutlineColor(Color::White);
+	rect.setOutlineThickness(5);
 	//rect.setFillColor(Color(25,25,25,255));
 	//rect.setFillColor(Color::White);
-	//window.draw(rect);
+	window.draw(rect);
 	// Doesn't render the first line
 	for (int i = 1; i < boardHeight; i++)
 	{

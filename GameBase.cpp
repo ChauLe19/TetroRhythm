@@ -172,6 +172,9 @@ void GameBase::tick(RenderWindow& window)
 
 void GameBase::render(RenderWindow& window)
 {
+	static vector<Color> rainbow = { Color::Red, Color(255, 165, 0), Color::Yellow, Color::Green, Color::Blue, Color(75,0,130) ,Color(127,0,255) };
+	int tempRainbowIndex = rainbowIndex;
+
 	board.render(window);
 	currentPiecePtr->render(window, board);
 	currentPiecePtr->getGhost(board).render(window, board);
@@ -179,37 +182,39 @@ void GameBase::render(RenderWindow& window)
 		holdPiecePtr->render(window, 50, 100);
 
 	// Render 5 preview pieces
-	//int counter = 0;
-	//std::list<Tetromino*>::iterator fifthIt = bag.begin();
-	//advance(fifthIt, 5);
-	//for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
-	//{
-	//	(*it)->render(window, 300, 100 + 50 * counter);
-	//	counter++;
-	//}
-
-
-
 	int counter = 0;
+	std::list<Tetromino*>::iterator fifthIt = bag.begin();
+	advance(fifthIt, 5);
+	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
+	{
+		(*it)->render(window, 300, 100 + 50 * counter);
+		counter++;
+	}
+
+
+
+	//int endYPos = 100 + 18*20;
 	int endYPos = 120;
+	int maxRectOffset = 50;
 	int nowTime = sound.getPlayingOffset().asMilliseconds();
 	std::list<Tetromino*>::iterator it = bag.begin();
 	list<int>::iterator tempBeatIt = beatIt; // copy beatIt to tempBeatsIt
-	Tetromino offsetTetromino = Tetromino(currentPiecePtr->getType()); // buffer slot to force the next piece start with current piece first
-	for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && tempBeatIt != beatsTime.end(); ++it, ++tempBeatIt)
+	for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && tempBeatIt != beatsTime.end(); ++it, ++tempBeatIt, ++tempRainbowIndex)
 	{
 		int bufferTime = *tempBeatIt;
-		int distanceFromEnd = (bufferTime - nowTime) / 16;// (1 / 60 second per frame)*1000 milisec per sec
-		int bufferTetrominoYPos = endYPos + distanceFromEnd;
-		if (it == bag.begin())
-		{
-			cout << "dfe:" << distanceFromEnd << "\tnow:" << nowTime << "\tbeat:" << bufferTime << endl;
-		}
-		if (it == bag.begin() && bufferTetrominoYPos < board.getYPos()) break;
-		counter++;
+		int distanceFromEnd = (bufferTime - nowTime) / 32;// (1 / 60 second per frame)*1000 milisec per sec
 
-		offsetTetromino.render(window, 300, bufferTetrominoYPos);
-		offsetTetromino = **it;
+		if (distanceFromEnd > maxRectOffset) break;
+
+		//draw outer rect border (beat)
+		sf::RectangleShape rectangle;
+		rectangle.setSize(sf::Vector2f(18 * 10 + distanceFromEnd * 4, 18 * 20 + distanceFromEnd * 4));
+		rectangle.setFillColor(Color(0, 0, 0, 0));
+		rectangle.setOutlineColor(rainbow.at(tempRainbowIndex % 7));
+		rectangle.setOutlineThickness(1);
+		rectangle.setPosition(boardX - distanceFromEnd * 2, boardY - distanceFromEnd * 2);
+		window.draw(rectangle);
+
 	}
 	text.setString("--------------------------------");
 	text.setPosition(300, endYPos);

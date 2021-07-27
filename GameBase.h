@@ -65,7 +65,7 @@ protected:
 	int onGroundCount = 0;
 	bool isGameOver = false;
 	int nextBeatTimeMS = 0;
-
+	int rainbowIndex = 0;
 
 	// Controls related variables
 	//****************************************
