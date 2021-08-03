@@ -74,11 +74,6 @@ void GameBase::tick(RenderWindow& window)
 	//	frameCount = 0;
 	//}
 
-	if (sound.getStatus() == SoundSource::Status::Stopped)
-	{
-		gameOver();
-	}
-
 
 	if (Keyboard::isKeyPressed(currentKey))
 	{
@@ -172,14 +167,13 @@ void GameBase::tick(RenderWindow& window)
 
 void GameBase::render(RenderWindow& window)
 {
-	static vector<Color> rainbow = { Color::Red, Color(255, 165, 0), Color::Yellow, Color::Green, Color::Blue, Color(75,0,130) ,Color(127,0,255) };
-	int tempRainbowIndex = rainbowIndex;
+
 
 	board.render(window);
 	currentPiecePtr->render(window, board);
 	currentPiecePtr->getGhost(board).render(window, board);
 	if (holdPiecePtr != nullptr)
-		holdPiecePtr->render(window, 50, 100);
+		holdPiecePtr->render(window, 20, 100);
 
 	// Render 5 preview pieces
 	int counter = 0;
@@ -192,30 +186,8 @@ void GameBase::render(RenderWindow& window)
 	}
 
 
-
 	//int endYPos = 100 + 18*20;
 	int endYPos = 120;
-	int maxRectOffset = 50;
-	int nowTime = sound.getPlayingOffset().asMilliseconds();
-	std::list<Tetromino*>::iterator it = bag.begin();
-	list<int>::iterator tempBeatIt = beatIt; // copy beatIt to tempBeatsIt
-	for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && tempBeatIt != beatsTime.end(); ++it, ++tempBeatIt, ++tempRainbowIndex)
-	{
-		int bufferTime = *tempBeatIt;
-		int distanceFromEnd = (bufferTime - nowTime) / 32;// (1 / 60 second per frame)*1000 milisec per sec
-
-		if (distanceFromEnd > maxRectOffset) break;
-
-		//draw outer rect border (beat)
-		sf::RectangleShape rectangle;
-		rectangle.setSize(sf::Vector2f(18 * 10 + distanceFromEnd * 4, 18 * 20 + distanceFromEnd * 4));
-		rectangle.setFillColor(Color(0, 0, 0, 0));
-		rectangle.setOutlineColor(rainbow.at(tempRainbowIndex % 7));
-		rectangle.setOutlineThickness(1);
-		rectangle.setPosition(boardX - distanceFromEnd * 2, boardY - distanceFromEnd * 2);
-		window.draw(rectangle);
-
-	}
 	text.setString("--------------------------------");
 	text.setPosition(300, endYPos);
 	window.draw(text);
@@ -306,6 +278,39 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 	currentKey = key;
 	firstPressed = true;
 	isAutoShiftActive = false;
+}
+
+void GameBase::mouseEvent(RenderWindow& window)
+{
+}
+
+void GameBase::renderBeatSignal(RenderWindow& window)
+{
+	static vector<Color> rainbow = { Color::Red, Color(255, 165, 0), Color::Yellow, Color::Green, Color::Blue, Color(75,0,130) ,Color(127,0,255) };
+	int tempRainbowIndex = rainbowIndex;
+
+
+	int maxRectOffset = 50;
+	int nowTime = sound.getPlayingOffset().asMilliseconds();
+	std::list<Tetromino*>::iterator it = bag.begin();
+	list<int>::iterator tempBeatIt = beatIt; // copy beatIt to tempBeatsIt
+	for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && tempBeatIt != beatsTime.end(); ++it, ++tempBeatIt, ++tempRainbowIndex)
+	{
+		int bufferTime = *tempBeatIt;
+		int distanceFromEnd = (bufferTime - nowTime) / 32;// (1 / 60 second per frame)*1000 milisec per sec
+
+		if (distanceFromEnd > maxRectOffset) break;
+
+		//draw outer rect border (beat)
+		sf::RectangleShape rectangle;
+		rectangle.setSize(sf::Vector2f(18 * 10 + distanceFromEnd * 4, 18 * 20 + distanceFromEnd * 4));
+		rectangle.setFillColor(Color(0, 0, 0, 0));
+		rectangle.setOutlineColor(rainbow.at(tempRainbowIndex % 7));
+		rectangle.setOutlineThickness(1);
+		rectangle.setPosition(boardX - distanceFromEnd * 2, boardY - distanceFromEnd * 2);
+		window.draw(rectangle);
+
+	}
 }
 
 int GameBase::convertClearTypeToScores(ClearType type)

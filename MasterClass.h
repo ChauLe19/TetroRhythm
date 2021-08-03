@@ -15,6 +15,8 @@
 #include "Settings.h"
 #include "Enums.h"
 #include "GameOptions.h"
+#include "MapEditorSelect.h"
+#include "BeatMapEditor.h"
 
 /**
  * Controls states and rendering.
@@ -38,6 +40,8 @@ private:
 	Settings* settings;
 	RenderWindow* window;
 	GameOptions* gameOptions;
+	MapEditorSelect* mapEditorSelect;
+	BeatMapEditor* beatMapEditor;
 
 
 public:
@@ -70,6 +74,14 @@ public:
 	 * \param key: input from keyboard
 	 */
 	void keyEvent(Keyboard::Key key);
+	
+	/**
+	 * Based on the key input and current state, do things accordingly. 
+	 * Distribute keyEvent to the State_Screen's keyEvent
+	 * 
+	 * \param key: input from keyboard
+	 */
+	void mouseEvent();
 };
 
 #endif

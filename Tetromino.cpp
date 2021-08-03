@@ -59,7 +59,35 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 		wallKickData = IWallKickData;
 		break;
 	case Type::O:
-		return true;
+		// if rotate CW, can't move to the bottom right corner, do O-spin if possible 
+		if (rDir == Rotational_Direction::CW && !checkCollision(xPos + 1, yPos + 1, cells, board))
+		{
+			if (checkCollision(xPos + 2, yPos + 2, cells, board))
+			{
+			cout << "CW O spin" << endl;
+				xPos += 2;
+				yPos += 2;
+				orientation = newOrientation;
+				rotateLast = true;
+				return true;
+			}
+			return false;
+		}
+		// if rotate CCW, can't move to the bottom left corner, do O-spin if possible 
+		else if (rDir == Rotational_Direction::CCW && !checkCollision(xPos - 1, yPos + 1, cells, board))
+		{
+			if (checkCollision(xPos - 2, yPos + 2, cells, board))
+			{
+			cout << "CCW O spin" << endl;
+				xPos -= 2;
+				yPos += 2;
+				orientation = newOrientation;
+				rotateLast = true;
+				return true;
+			}
+			return false;
+		}
+		return false;
 		break;
 	default: // T, L, J, Z,S
 		rotateArray(tempCells, 3, rDir);

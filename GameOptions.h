@@ -11,6 +11,7 @@
 #include "StateScreen.h"
 #include "GameBase.h"
 #include "DropToTheBeatGame.h"
+#include "EndlessGame.h"
 #include "Settings.h"
 #include "AutoDropGame.h"
 #include "Enums.h"
@@ -32,7 +33,7 @@ private:
 	int cursorY = 0;
 	GameBase*& gamePtr;
 	Controls_Settings& settings;
-	
+	const int modeCount = 3;
 	/**
 	 * Return a value of var after clamping between min and max.
 	 * 
@@ -51,6 +52,7 @@ public:
 	void tick(RenderWindow& window);
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
+	void mouseEvent(RenderWindow& window);
 
 	/**
 	 * Draw option out to window. If the cursor is on it, highlight it.

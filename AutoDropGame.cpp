@@ -11,6 +11,12 @@ AutoDropGame::~AutoDropGame()
 void AutoDropGame::tick(RenderWindow& window)
 {
 	GameBase::tick(window);
+
+	if (sound.getStatus() == SoundSource::Status::Stopped)
+	{
+		gameOver();
+	}
+
 	dropOnBeat();
 
 
@@ -60,4 +66,5 @@ void AutoDropGame::keyEvent(State& state, Keyboard::Key key)
 void AutoDropGame::render(RenderWindow& window)
 {
 	GameBase::render(window);
+	GameBase::renderBeatSignal(window);
 }

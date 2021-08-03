@@ -148,8 +148,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AutoDropGame.cpp" />
+    <ClCompile Include="BeatMapEditor.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="DropToTheBeatGame.cpp" />
+    <ClCompile Include="EndlessGame.cpp" />
+    <ClCompile Include="MapEditorSelect.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="GameOptions.cpp" />
@@ -161,8 +164,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AutoDropGame.h" />
+    <ClInclude Include="BeatMapEditor.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="DropToTheBeatGame.h" />
+    <ClInclude Include="EndlessGame.h" />
+    <ClInclude Include="MapEditorSelect.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="GameBase.h" />
@@ -185,6 +191,7 @@
     <None Include="Tetris_theme.ogg" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="output.txt" />
     <Text Include="Tetris_theme - Hard.txt" />
     <Text Include="Tetris_theme.txt" />
   </ItemGroup>

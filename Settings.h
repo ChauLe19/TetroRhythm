@@ -60,6 +60,7 @@ public:
 	void tick(RenderWindow& window);
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
+	void mouseEvent(RenderWindow& window);
 
 	/**
 	 * Draw option

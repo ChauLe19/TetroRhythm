@@ -38,5 +38,12 @@ void Menu::keyEvent(State& state, Keyboard::Key key)
 	case Keyboard::Key::C:
 		state = State::SETTINGS;
 		break;
+	case Keyboard::Key::E:
+		state = State::MAP_EDITOR_SELECT;
+		break;
 	}
+}
+
+void Menu::mouseEvent(RenderWindow& window)
+{
 }

@@ -140,6 +140,10 @@ bool Settings::changeKey(Keyboard::Key key)
 }
 
 
+void Settings::mouseEvent(RenderWindow& window)
+{
+}
+
 void Settings::setCursor(int cursor)
 {
 	// clamping from 0 to 9

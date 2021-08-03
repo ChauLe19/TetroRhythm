@@ -96,7 +96,9 @@ public:
 	virtual void tick(RenderWindow& window);
 	virtual void render(RenderWindow& window);
 	virtual void keyEvent(State& state, Keyboard::Key key);
+	virtual void mouseEvent(RenderWindow& window);
 
+	void renderBeatSignal(RenderWindow& window);
 
 	/**
 	 * Convert the clear type to the appropriate score.

@@ -41,6 +41,7 @@ void GameOptions::render(RenderWindow& window)
 
 	drawGameModeOption(window, "Auto Drop Beat", 50, 200, cursorY == 0);	// get as many points as you can but a beat will force a hard drop
 	drawGameModeOption(window, "Drop on Beat", 50, 300, cursorY == 1);		// drop blocks on the beat receives bonus
+	drawGameModeOption(window, "Endless", 50, 400, cursorY == 2);		// drop blocks on the beat receives bonus
 
 }
 
@@ -62,16 +63,23 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 		case 1:
 			gamePtr = new DropToTheBeatGame(settings);
 			break;
+		case 2:
+			gamePtr = new EndlessGame(settings);
+			break;
 		}
 		gamePtr->start();
 		break;
 	case Keyboard::Key::Up:
-		cursorY = clamp(cursorY - 1, 0, 1);
+		cursorY = clamp(cursorY - 1, 0, modeCount - 1);
 		break;
 	case Keyboard::Key::Down:
-		cursorY = clamp(cursorY + 1, 0, 1);
+		cursorY = clamp(cursorY + 1, 0,  modeCount - 1);
 		break;
 	}
+}
+
+void GameOptions::mouseEvent(RenderWindow& window)
+{
 }
 
 void GameOptions::drawGameModeOption(RenderWindow& window, string gameMode, int x, int y, bool isHighlight)

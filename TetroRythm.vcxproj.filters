@@ -48,6 +48,15 @@
     <ClCompile Include="StateScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BeatMapEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorSelect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EndlessGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tetromino.h">
@@ -83,6 +92,15 @@
     <ClInclude Include="StateScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BeatMapEditor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EndlessGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="background.png">
@@ -113,6 +131,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="Tetris_theme - Hard.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="output.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

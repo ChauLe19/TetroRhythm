@@ -12,6 +12,12 @@ DropToTheBeatGame::~DropToTheBeatGame()
 void DropToTheBeatGame::tick(RenderWindow& window)
 {
 	GameBase::tick(window);
+
+	if (sound.getStatus() == SoundSource::Status::Stopped)
+	{
+		gameOver();
+	}
+
 	if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 200)
 	{
 		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS && beatIt != beatsTime.end());
@@ -42,4 +48,5 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 void DropToTheBeatGame::render(RenderWindow& window)
 {
 	GameBase::render(window);
+	GameBase::renderBeatSignal(window);
 }

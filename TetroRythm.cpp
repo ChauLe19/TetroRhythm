@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <Windows.h>
 
 #include "GameBase.h"
 #include "MasterClass.h"
@@ -10,13 +11,13 @@
 using namespace std;
 using namespace sf;
 
-
 int main()
 {
 	// randomize init
 	srand(static_cast<unsigned int> (time(NULL)));
 
-	RenderWindow window(sf::VideoMode(1024, 768), "TetroRythm");
+	//RenderWindow window(sf::VideoMode(1024, 768), "TetroRythm");
+	RenderWindow window(sf::VideoMode(800, 600), "TetroRythm");
 	window.setFramerateLimit(60);
 	window.setKeyRepeatEnabled(false);
 
