@@ -37,16 +37,20 @@ private:
 	string audioFilePath;
 	string textFilePath;
 
-	int length = 5000; // 5 sec
-	int cursor = 0;
 	int musicDurationMS = 0;
 	int cursorRelToMusicMS = 0;
 	bool firstPressed = true;
 	bool cursorSelected = false;
+
+	int sliderLength = 2000;
+	int sliderHeight = 100;
 public:
 	BeatMapEditor(string audioFilePath);
 	BeatMapEditor(string audioFilePath, string textFilePath);
 	~BeatMapEditor();
+
+	void save();
+
 	void tick(RenderWindow& window);
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);

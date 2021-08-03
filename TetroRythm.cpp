@@ -13,13 +13,18 @@ using namespace sf;
 
 int main()
 {
+
 	// randomize init
 	srand(static_cast<unsigned int> (time(NULL)));
 
-	//RenderWindow window(sf::VideoMode(1024, 768), "TetroRythm");
-	RenderWindow window(sf::VideoMode(800, 600), "TetroRythm");
+
+
+	RenderWindow window(sf::VideoMode(2048, 1152), "TetroRythm", Style::Fullscreen);
 	window.setFramerateLimit(60);
 	window.setKeyRepeatEnabled(false);
+
+	sf::View view(FloatRect(0.f,0.f, 2048.f, 1152.f));
+	window.setView(view);
 
 	Image icon;
 	icon.loadFromFile("Images/logo.png");
