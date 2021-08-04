@@ -168,7 +168,7 @@ void BeatMapEditor::render(RenderWindow& window)
 
 	CircleShape beatButton;
 	beatButton.setRadius(250);
-	beatButton.setPosition(1024-250, 576-250);
+	beatButton.setPosition(1024 - 250, 576 - 250);
 	beatButton.setOutlineColor(Color::White);
 
 	window.draw(beatButton);
@@ -197,6 +197,10 @@ void BeatMapEditor::keyEvent(State& state, Keyboard::Key key)
 		{
 			sound.pause();
 		}
+		break;
+	case Keyboard::Key::B:
+		addCursorToBeatList();
+		break;
 	}
 }
 
@@ -225,6 +229,30 @@ int clamp(int var, int min, int max)
 	}
 	return var;
 }
+
+void BeatMapEditor::addCursorToBeatList() 
+{
+
+	list<int>::iterator temp = beatsTime.begin();
+	int prev = 0;
+	while (temp != beatsTime.end() && *temp < cursorRelToMusicMS)
+	{
+		prev = *temp;
+		temp++;
+	}
+
+	if (beatsTime.end() == beatsTime.end())
+	{
+		beatsTime.push_back(cursorRelToMusicMS);
+		return;
+	}
+	// reject beat that is too close to already existed
+	if (prev + 100 <= cursorRelToMusicMS && *temp - 100 >= cursorRelToMusicMS)
+	{
+		beatsTime.insert(temp, cursorRelToMusicMS);
+	}
+}
+
 void BeatMapEditor::mouseEvent(RenderWindow& window)
 {
 
@@ -269,24 +297,7 @@ void BeatMapEditor::mouseEvent(RenderWindow& window)
 	{
 		firstPressed = false;
 
-		list<int>::iterator temp = beatsTime.begin();
-		int prev = 0;
-		while (temp != beatsTime.end() && *temp < cursorRelToMusicMS)
-		{
-			prev = *temp;
-			temp++;
-		}
-
-		if (beatsTime.end() == beatsTime.end())
-		{
-			beatsTime.push_back(cursorRelToMusicMS);
-			return;
-		}
-		// reject beat that is too close to already existed
-		if (prev + 100 <= cursorRelToMusicMS && *temp - 100 >= cursorRelToMusicMS)
-		{
-			beatsTime.insert(temp, cursorRelToMusicMS);
-		}
+		addCursorToBeatList();
 	}
 	else if (firstPressed)
 	{

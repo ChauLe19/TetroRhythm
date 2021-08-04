@@ -50,6 +50,7 @@ public:
 	~BeatMapEditor();
 
 	void save();
+	void addCursorToBeatList();
 
 	void tick(RenderWindow& window);
 	void render(RenderWindow& window);
