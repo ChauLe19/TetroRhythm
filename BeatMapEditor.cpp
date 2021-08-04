@@ -163,10 +163,15 @@ void BeatMapEditor::render(RenderWindow& window)
 
 
 		it++;
-
-
 	}
 
+
+	CircleShape beatButton;
+	beatButton.setRadius(250);
+	beatButton.setPosition(1024-250, 576-250);
+	beatButton.setOutlineColor(Color::White);
+
+	window.draw(beatButton);
 }
 
 void BeatMapEditor::keyEvent(State& state, Keyboard::Key key)
@@ -202,6 +207,12 @@ bool mouseInBox(RenderWindow& window, int x, int y, int width, int height)
 	return (mouseViewPos.x >= x && mouseViewPos.x <= x + width
 		&& mouseViewPos.y >= y && mouseViewPos.y <= y + height);
 }
+bool mouseInCircle(RenderWindow& window, int x, int y, int r)
+{
+	Vector2i pixelPos = Mouse::getPosition(window);
+	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
+	return (mouseViewPos.x - x) * (mouseViewPos.x - x) + (mouseViewPos.y - y) * (mouseViewPos.y - y) <= r * r;
+}
 int clamp(int var, int min, int max)
 {
 	if (var < min)
@@ -216,12 +227,34 @@ int clamp(int var, int min, int max)
 }
 void BeatMapEditor::mouseEvent(RenderWindow& window)
 {
+
+	if (Mouse::isButtonPressed(Mouse::Right))
+	{
+		list<int>::iterator it = beatsTime.begin();
+		while (it != beatsTime.end())
+		{
+			// for the part slider only
+			if (cursorRelToMusicMS >= *it - 2500 && cursorRelToMusicMS <= *it + 2500)
+			{
+				// erase beat that mouse if over when right mouse is pressed	
+				if (mouseInBox(window, 24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - *it) / 2500, 50 + sliderHeight / 2, 4, sliderHeight / 2))
+				{
+					beatsTime.erase(it);
+					break;
+				}
+			}
+			it++;
+		}
+	}
+
 	if (!Mouse::isButtonPressed(Mouse::Left))
 	{
 		firstPressed = true;
 		cursorSelected = false;
 		return;
 	}
+
+
 	Vector2i pixelPos = Mouse::getPosition(window);
 	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
 	if (firstPressed && mouseInBox(window, 24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1000, 10, sliderHeight))
@@ -231,6 +264,29 @@ void BeatMapEditor::mouseEvent(RenderWindow& window)
 		cursorRelToMusicMS = (mouseViewPos.x - 24 + 5) * musicDurationMS / sliderLength;
 		cursorRelToMusicMS = clamp(cursorRelToMusicMS, 0, musicDurationMS);
 		sound.setPlayingOffset(milliseconds(cursorRelToMusicMS));
+	}
+	else if (firstPressed && mouseInCircle(window, 1024, 576, 250))
+	{
+		firstPressed = false;
+
+		list<int>::iterator temp = beatsTime.begin();
+		int prev = 0;
+		while (temp != beatsTime.end() && *temp < cursorRelToMusicMS)
+		{
+			prev = *temp;
+			temp++;
+		}
+
+		if (beatsTime.end() == beatsTime.end())
+		{
+			beatsTime.push_back(cursorRelToMusicMS);
+			return;
+		}
+		// reject beat that is too close to already existed
+		if (prev + 100 <= cursorRelToMusicMS && *temp - 100 >= cursorRelToMusicMS)
+		{
+			beatsTime.insert(temp, cursorRelToMusicMS);
+		}
 	}
 	else if (firstPressed)
 	{
