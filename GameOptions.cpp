@@ -64,7 +64,7 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 			gamePtr = new DropToTheBeatGame(settings, importedPath);
 			break;
 		case 2:
-			gamePtr = new EndlessGame(settings);
+			gamePtr = new EndlessGame(settings, importedPath);
 			break;
 		}
 		gamePtr->start();

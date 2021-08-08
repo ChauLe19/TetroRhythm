@@ -15,6 +15,7 @@ class EndlessGame :
 {
 public:
 	EndlessGame(Controls_Settings& settings);
+	EndlessGame(Controls_Settings& settings, string folderPath);
 	~EndlessGame();
 
 	// Game Base functions

@@ -146,13 +146,6 @@ void GameBase::tick(RenderWindow& window)
 {
 	if (isGameOver) return;
 
-	//frameCount++;
-	//if (frameCount >= 48)
-	//{
-	//	currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
-	//	frameCount = 0;
-	//}
-
 
 	if (Keyboard::isKeyPressed(currentKey))
 	{
@@ -218,30 +211,6 @@ void GameBase::tick(RenderWindow& window)
 			score += GameBase::convertClearTypeToScores(ClearType::SOFTDROP);
 	}
 
-
-	//if (currentPiecePtr->getIsOnGround(board))
-	//{
-	//	onGroundCount++;
-	//	if (onGroundCount > 100)
-	//	{
-	//		currentPiecePtr->hardDrop(board);
-	//		// TODO: copy board before clear, is this optimized???
-	//		Board tempBoard = board;
-	//		prevPiecePtr = currentPiecePtr;
-	//		ClearingInfo tempClearingInfo = board.clearLines();
-	//		ClearType tempScoresType = determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-
-	//		if (tempScoresType != ClearType::NONE)
-	//		{
-	//			prevClearType = tempScoresType;
-	//		}
-	//		score += convertClearTypeToScores(tempScoresType);
-	//		//currentPiecePtr = &nextPiece();
-	//		nextPiece();
-	//		alreadyHold = false;
-	//		onGroundCount = 0;
-	//	}
-	//}
 }
 
 void GameBase::render(RenderWindow& window)
