@@ -1,9 +1,27 @@
 #include "BeatMapEditor.h"
 
-BeatMapEditor::BeatMapEditor(string audioFilePath)
+BeatMapEditor::BeatMapEditor(string folderPath)
 {
-	this->audioFilePath = audioFilePath;
-	this->textFilePath = "output.txt"; // change to text file file with audio file path
+	fs::path audioPath = folderPath;
+	audioPath.append(audioPath.filename().string() + ".ogg");
+	cout << "Beat map editor" << endl;
+	if (!fs::exists(audioPath))
+	{
+		audioPath = audioPath.parent_path();
+		audioPath.append(audioPath.filename().string() + ".wav");
+		if (!fs::exists(audioPath))
+			cerr << "Audio file doesn't exist." << endl;
+	}
+
+	fs::path txtPath= folderPath;
+	txtPath.append(txtPath.filename().string() + ".txt");
+
+	if (!fs::exists(txtPath))
+		cerr << "Text file doesn't exist." << endl;
+
+
+	this->audioFilePath = fs::absolute(audioPath).string();
+	this->textFilePath = fs::absolute(txtPath).string(); // change to text file file with audio file path
 	if (!buffer.loadFromFile(audioFilePath))
 	{
 		cerr << "Unable to open file " + audioFilePath << endl;;
@@ -11,6 +29,22 @@ BeatMapEditor::BeatMapEditor(string audioFilePath)
 	sound.setBuffer(buffer);
 
 	musicDurationMS = buffer.getDuration().asMilliseconds();
+
+	inFile.open(textFilePath);
+	if (!inFile)
+	{
+		cerr << "Unable to open file " + textFilePath << endl;;
+	}
+	else
+	{
+		char beat[10];
+		while (inFile.getline(beat, 10, '\r'))
+		{
+			beatsTime.push_back(atoi(beat));
+		}
+	}
+	beatIt = beatsTime.begin();
+
 
 	// must play before setPlayingOffset
 	sound.play();
@@ -180,6 +214,7 @@ void BeatMapEditor::keyEvent(State& state, Keyboard::Key key)
 	{
 	case Keyboard::Key::Escape:
 		save();
+		sound.stop();
 		state = State::MENU;
 		break;
 	case Keyboard::Key::Space:

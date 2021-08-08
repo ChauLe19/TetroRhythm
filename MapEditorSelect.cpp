@@ -28,7 +28,7 @@ void MapEditorSelect::keyEvent(State& state, Keyboard::Key key)
 	switch (key)
 	{
 	case Keyboard::Key::Enter:
-		mapEditor = new BeatMapEditor("Tetris_theme.wav", "output.txt");
+		mapEditor = new BeatMapEditor(importedPath);
 		state = State::MAP_EDITOR;
 		break;
 	case Keyboard::Key::C:
@@ -45,4 +45,10 @@ void MapEditorSelect::keyEvent(State& state, Keyboard::Key key)
 
 void MapEditorSelect::mouseEvent(RenderWindow& window)
 {
+}
+
+void MapEditorSelect::openBeatMapEditor(State& state, string folderPath)
+{
+	mapEditor = new BeatMapEditor(folderPath);
+	state = State::MAP_EDITOR;
 }

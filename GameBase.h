@@ -24,8 +24,10 @@
 #include <ctime>        // std::time
 #include <fstream>
 #include <string>
+#include <filesystem>
 
 using namespace sf;
+namespace fs = std::filesystem;
 
 const int boardX = 100;
 const int boardY = 100;
@@ -88,6 +90,7 @@ protected:
 	static int getTSpinType(Tetromino piece, Board& board);
 public:
 	GameBase(Controls_Settings& settings);
+	GameBase(Controls_Settings& settings, string folderPath);
 	~GameBase();
 
 	// State Screen functions

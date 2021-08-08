@@ -18,6 +18,7 @@ class AutoDropGame :
 {
 public:
 	AutoDropGame(Controls_Settings& settings);
+	AutoDropGame(Controls_Settings& settings, string folderPath);
 	~AutoDropGame();
 	
 	// Game Base functions

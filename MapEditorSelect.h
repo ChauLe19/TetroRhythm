@@ -1,4 +1,5 @@
 #include "StateScreen.h"
+#include "Enums.h"
 #include "BeatMapEditor.h"
 class MapEditorSelect : public StateScreen
 {
@@ -16,5 +17,8 @@ public:
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
 	void mouseEvent(RenderWindow& window);
+
+
+	void openBeatMapEditor(State& state, string folderPath);
 };
 

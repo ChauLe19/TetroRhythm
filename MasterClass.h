@@ -23,6 +23,8 @@
  */
 class MasterClass
 {
+public:
+	static string BeatMapFolderPath;
 private:
 	typedef Settings::Controls_Settings Controls_Settings;
 	Controls_Settings controlsSettings;
@@ -82,6 +84,9 @@ public:
 	 * \param key: input from keyboard
 	 */
 	void mouseEvent();
+
+	void openBeatMapEditor(string folderPath);
+
 };
 
 #endif

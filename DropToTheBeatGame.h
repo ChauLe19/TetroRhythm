@@ -19,6 +19,7 @@ class DropToTheBeatGame :
 {
 public:
 	DropToTheBeatGame(Controls_Settings& settings);
+	DropToTheBeatGame(Controls_Settings& settings, string folderPath);
 	~DropToTheBeatGame();
 
 	// Game Base functions

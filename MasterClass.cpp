@@ -148,3 +148,11 @@ void MasterClass::mouseEvent()
 		break;
 	}
 }
+
+void MasterClass::openBeatMapEditor(string folderPath)
+{
+	if (state == State::MAP_EDITOR_SELECT)
+	{
+		mapEditorSelect->openBeatMapEditor(state, folderPath);
+	}
+}

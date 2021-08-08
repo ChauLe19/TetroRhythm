@@ -58,10 +58,10 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 		switch (cursorY)
 		{
 		case 0:
-			gamePtr = new AutoDropGame(settings);
+			gamePtr = new AutoDropGame(settings, importedPath);
 			break;
 		case 1:
-			gamePtr = new DropToTheBeatGame(settings);
+			gamePtr = new DropToTheBeatGame(settings, importedPath);
 			break;
 		case 2:
 			gamePtr = new EndlessGame(settings);

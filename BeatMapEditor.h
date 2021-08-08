@@ -10,7 +10,7 @@
 #define BEAT_MAP_H
 
 #include "StateScreen.h"
-
+#include "Enums.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -19,9 +19,12 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include <stdlib.h>
+
 
 using namespace std;
 using namespace sf;
+namespace fs = std::filesystem;
 
 class BeatMapEditor : public StateScreen
 {
@@ -45,7 +48,7 @@ private:
 	int sliderLength = 2000;
 	int sliderHeight = 100;
 public:
-	BeatMapEditor(string audioFilePath);
+	BeatMapEditor(string folderPath);
 	BeatMapEditor(string audioFilePath, string textFilePath);
 	~BeatMapEditor();
 

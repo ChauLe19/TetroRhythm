@@ -29,8 +29,87 @@ GameBase::GameBase(Controls_Settings& settings)
 	}
 
 	// Load map info
-	string txtFile = "Tetris_theme.txt";
-	string musicFile = "Tetris_theme.wav";
+	string txtFile = "output.txt";
+	//string txtFile = "Tetris_theme.txt";
+	string musicFile = "Tetris_theme.ogg";
+	inFile.open(txtFile);
+	if (!inFile)
+	{
+		cerr << "Unable to open file " + txtFile << endl;;
+	}
+
+
+	char beat[10];
+	while (inFile.getline(beat, 10, '\r'))
+	{
+		beatsTime.push_back(atoi(beat));
+	}
+	beatIt = beatsTime.begin();
+	nextBeatTimeMS = *beatIt;
+
+	if (!buffer.loadFromFile(musicFile))
+	{
+		cerr << "Unable to open file " + musicFile << endl;;
+	}
+	sound.setBuffer(buffer);
+
+
+	currentPiecePtr = &nextPiece();
+}
+
+GameBase::GameBase(Controls_Settings& settings, string folderPath)
+	: settings(settings), keyMap(settings.keyMap), delayAutoShift(settings.delayAutoShift),
+	autoRepeatRate(settings.autoRepeatRate)
+{
+	cout << "Initializing game" << endl;
+
+	font.loadFromFile("arial.ttf");
+	text.setFont(font);
+	text.setFillColor(Color::White);
+
+	boardPtr = new Board(boardX, boardY);
+	board = *boardPtr;
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+
+	// add 2 initial 7-bags
+	for (int j = 0; j < 2; j++)
+	{
+		vector<Type> tempTypeVector = allPieces;
+		shuffle(tempTypeVector.begin(), tempTypeVector.end(), default_random_engine(seed));
+
+		while (!tempTypeVector.empty())
+		{
+			Type tempType = tempTypeVector.back();
+			tempTypeVector.pop_back();
+			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
+		}
+	}
+
+
+	fs::path audioPath = folderPath;
+	audioPath.append(audioPath.filename().string() + ".ogg");
+	cout << "Beat map editor" << endl;
+	if (!fs::exists(audioPath))
+	{
+		audioPath = audioPath.parent_path();
+		audioPath.append(audioPath.filename().string() + ".wav");
+		if (!fs::exists(audioPath))
+			cerr << "Audio file doesn't exist." << endl;
+	}
+
+	fs::path txtPath = folderPath;
+	txtPath.append(txtPath.filename().string() + ".txt");
+
+	if (!fs::exists(txtPath))
+		cerr << "Text file doesn't exist." << endl;
+
+	// Load map info
+	string txtFile = fs::absolute(txtPath).string();
+	//string txtFile = "Tetris_theme.txt";
+	string musicFile = fs::absolute(audioPath).string();
+
+	cout << txtFile << endl;
+	cout << musicFile << endl;
 	inFile.open(txtFile);
 	if (!inFile)
 	{

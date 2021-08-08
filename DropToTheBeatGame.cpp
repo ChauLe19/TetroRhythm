@@ -4,6 +4,9 @@
 DropToTheBeatGame::DropToTheBeatGame(Controls_Settings& settings) : GameBase(settings)
 {
 }
+DropToTheBeatGame::DropToTheBeatGame(Controls_Settings& settings, string folderPath) : GameBase(settings, folderPath)
+{
+}
 
 DropToTheBeatGame::~DropToTheBeatGame()
 {

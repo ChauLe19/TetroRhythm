@@ -3,6 +3,9 @@
 AutoDropGame::AutoDropGame(Controls_Settings& settings) : GameBase(settings)
 {
 }
+AutoDropGame::AutoDropGame(Controls_Settings& settings, string folderPath) : GameBase(settings, folderPath)
+{
+}
 
 AutoDropGame::~AutoDropGame()
 {
