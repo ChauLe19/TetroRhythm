@@ -1,7 +1,7 @@
 /*****************************************************************//**
  * \file   Board.h
  * \brief  Board representation
- * 
+ *
  * \author Chau Le
  * \date   July 2021
  *********************************************************************/
@@ -93,6 +93,7 @@ struct ClearingInfo
 class Board
 {
 private:
+	static const int squareSize = 36;
 	Texture frameTexture;
 	Texture cellsTexture;
 	Sprite image;
@@ -114,7 +115,7 @@ public:
 
 	/**
 	 * Clear all lines that werre filled.
-	 * 
+	 *
 	 * \return Clearing info of how many lines was cleared and if it results a pc
 	 */
 	ClearingInfo clearLines();
@@ -134,7 +135,7 @@ public:
 
 	/**
 	 * Get cell's value.
-	 * 
+	 *
 	 * \param x Row index
 	 * \param y Column index
 	 * \return cell's valuea at x any y position in array

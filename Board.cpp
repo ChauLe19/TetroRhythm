@@ -27,7 +27,7 @@ Board::~Board()
 void Board::render(RenderWindow& window)
 {
 	//window.draw(image);
-	RectangleShape rect(Vector2f(18 * 10, 18 * 20));
+	RectangleShape rect(Vector2f(squareSize * 10, squareSize * 20));
 	rect.setFillColor(Color(0,0,0,255));
 	rect.setPosition(xPos, yPos);
 	rect.setOutlineColor(Color::White);
@@ -42,8 +42,8 @@ void Board::render(RenderWindow& window)
 		{
 			if (board[i][j] > 0)
 			{
-				cellImage.setTextureRect(IntRect((board[i][j] - 1) * 18, 0, 18, 18));
-				cellImage.setPosition(xPos + 18 * j, yPos + 18 * i);
+				cellImage.setTextureRect(IntRect((board[i][j] - 1) * squareSize, 0, squareSize, squareSize));
+				cellImage.setPosition(xPos + squareSize * j, yPos + squareSize * i);
 				window.draw(cellImage);
 			}
 		}

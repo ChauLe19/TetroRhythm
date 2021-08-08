@@ -221,7 +221,7 @@ void GameBase::render(RenderWindow& window)
 	currentPiecePtr->render(window, board);
 	currentPiecePtr->getGhost(board).render(window, board);
 	if (holdPiecePtr != nullptr)
-		holdPiecePtr->render(window, 20, 100);
+		holdPiecePtr->render(window, 140, 100);
 
 	// Render 5 preview pieces
 	int counter = 0;
@@ -229,16 +229,16 @@ void GameBase::render(RenderWindow& window)
 	advance(fifthIt, 5);
 	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
 	{
-		(*it)->render(window, 300, 100 + 50 * counter);
+		(*it)->render(window, 800, 100 + 100 * counter);
 		counter++;
 	}
 
 
 	//int endYPos = 100 + 18*20;
-	int endYPos = 120;
+	/*int endYPos = 120;
 	text.setString("--------------------------------");
 	text.setPosition(300, endYPos);
-	window.draw(text);
+	window.draw(text);*/
 
 
 
@@ -351,7 +351,7 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 
 		//draw outer rect border (beat)
 		sf::RectangleShape rectangle;
-		rectangle.setSize(sf::Vector2f(18 * 10 + distanceFromEnd * 4, 18 * 20 + distanceFromEnd * 4));
+		rectangle.setSize(sf::Vector2f(36 * 10 + distanceFromEnd * 4, 36 * 20 + distanceFromEnd * 4));
 		rectangle.setFillColor(Color(0, 0, 0, 0));
 		rectangle.setOutlineColor(rainbow.at(tempRainbowIndex % 7));
 		rectangle.setOutlineThickness(1);

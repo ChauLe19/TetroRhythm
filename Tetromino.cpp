@@ -5,7 +5,7 @@ Tetromino::Tetromino(Type type)
 	this->type = type;
 	cellsTexture.loadFromFile("Images/tiles-2.png");
 	cellImage.setTexture(cellsTexture);
-	cellImage.setTextureRect(IntRect(static_cast<int>(type) * 18, 0, 18, 18));
+	cellImage.setTextureRect(IntRect(static_cast<int>(type) * squareSize, 0, squareSize, squareSize));
 	// TODO: Check if this copied
 	this->cells = tetrominos[static_cast<int>(type)];
 }
@@ -17,7 +17,7 @@ Tetromino::Tetromino(Type type, bool isGhost)
 	cellImage.setTexture(cellsTexture);
 	if (isGhost)
 		cellImage.setColor(Color(255, 255, 255, 100));
-	cellImage.setTextureRect(IntRect(static_cast<int>(type) * 18, 0, 18, 18));
+	cellImage.setTextureRect(IntRect(static_cast<int>(type) * squareSize, 0, squareSize, squareSize));
 	// TODO: Check if this copied
 	this->cells = tetrominos[static_cast<int>(type)];
 }
@@ -287,7 +287,7 @@ void Tetromino::render(RenderWindow& window, Board& board)
 		{
 			if (cells[i][j] > 0)
 			{
-				cellImage.setPosition(board.getXPos() + (xPos + j) * 18, board.getYPos() + (yPos + i) * 18);
+				cellImage.setPosition(board.getXPos() + (xPos + j) * squareSize, board.getYPos() + (yPos + i) * squareSize);
 				window.draw(cellImage);
 			}
 		}
@@ -302,7 +302,7 @@ void Tetromino::render(RenderWindow& window, int x, int y)
 		{
 			if (cells[i][j] > 0)
 			{
-				cellImage.setPosition(x + j * 18, y + i * 18);
+				cellImage.setPosition(x + j * squareSize, y + i * squareSize);
 				window.draw(cellImage);
 			}
 		}

@@ -29,7 +29,7 @@
 using namespace sf;
 namespace fs = std::filesystem;
 
-const int boardX = 100;
+const int boardX = 300;
 const int boardY = 100;
 
 
