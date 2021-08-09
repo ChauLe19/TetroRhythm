@@ -221,7 +221,7 @@ void GameBase::render(RenderWindow& window)
 	currentPiecePtr->render(window, board);
 	currentPiecePtr->getGhost(board).render(window, board);
 	if (holdPiecePtr != nullptr)
-		holdPiecePtr->render(window, 140, 100);
+		holdPiecePtr->render(window, 750, 100);
 
 	// Render 5 preview pieces
 	int counter = 0;
@@ -229,7 +229,7 @@ void GameBase::render(RenderWindow& window)
 	advance(fifthIt, 5);
 	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
 	{
-		(*it)->render(window, 800, 100 + 100 * counter);
+		(*it)->render(window, 1230, 100 + 100 * counter);
 		counter++;
 	}
 
