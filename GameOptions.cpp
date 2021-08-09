@@ -63,7 +63,7 @@ void GameOptions::render(RenderWindow& window)
 		i < 3 && tempCursor < size;
 		++tempCursor, ++i)
 	{
-		if (tempCursor != -1)
+		if (tempCursor >= 0)
 		{
 			drawGameModeOption(window, maps[tempCursor].filename().string(), 1100, 300 + i * 200, cursorMap == tempCursor);
 		}

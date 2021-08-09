@@ -7,6 +7,8 @@ private:
 	Text text;
 	Font font;
 	BeatMapEditor*& mapEditor;
+	vector<fs::path> maps;
+	int cursor;
 public:
 	MapEditorSelect(BeatMapEditor*& mapEditor);
 	~MapEditorSelect();
@@ -20,5 +22,6 @@ public:
 
 
 	void openBeatMapEditor(State& state, string folderPath);
+	void drawOptions(RenderWindow& window, string options, int x, int y, bool isHighlight);
 };
 
