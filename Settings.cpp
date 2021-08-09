@@ -42,33 +42,33 @@ void Settings::tick(RenderWindow& window)
 void Settings::render(RenderWindow& window)
 {
 	text.setFillColor(Color::White);
-	text.setPosition(100, 100);
-	text.setCharacterSize(30);
+	text.setPosition(600, 50);
+	text.setCharacterSize(100);
 	text.setString("Change key config");
 	window.draw(text);
 
 	for (int i = 0; i < settings.keyMap.size(); i++)
 	{
 		Controls_Key key = static_cast<Controls_Key> (i);
-		drawKeyConfig(fromControlsToString(key), fromKtoS(settings.keyMap[i]), 50, 150 + 50 * i, window, cursor == i, isChanging);
+		drawKeyConfig(fromControlsToString(key), fromKtoS(settings.keyMap[i]), 500, 170 + 100 * i, window, cursor == i, isChanging);
 	}
 
-	drawKeyConfig("DAS", "<  " + to_string(settings.delayAutoShift) + "  >", 50, 150 + 50 * 8, window, cursor == 8, isChanging);
-	drawKeyConfig("ARR", "<  " + to_string(settings.autoRepeatRate) + "  >", 50, 150 + 50 * 9, window, cursor == 9, isChanging);
+	drawKeyConfig("DAS", "<  " + to_string(settings.delayAutoShift) + "  >", 500, 170 + 100 * 8, window, cursor == 8, isChanging);
+	drawKeyConfig("ARR", "<  " + to_string(settings.autoRepeatRate) + "  >", 500, 170 + 100 * 9, window, cursor == 9, isChanging);
 }
 
 void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow& window, bool isHighlight, bool changing)
 {
 	if (isHighlight)
 	{
-		RectangleShape rect(Vector2f(300, 25));
+		RectangleShape rect(Vector2f(1000, 50));
 		rect.setPosition(x, y);
-		rect.setFillColor(Color::Yellow);
+		rect.setFillColor(Color::White);
 		window.draw(rect);
 		if (changing)
 		{
-			RectangleShape rect(Vector2f(100, 25));
-			rect.setPosition(x + 200, y);
+			RectangleShape rect(Vector2f(300, 50));
+			rect.setPosition(x + 700, y);
 			rect.setFillColor(Color::Red);
 			window.draw(rect);
 		}
@@ -81,11 +81,11 @@ void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow
 		text.setFillColor(Color::White);
 	}
 	text.setPosition(x, y);
-	text.setCharacterSize(20);
+	text.setCharacterSize(40);
 	text.setString(name);
 	window.draw(text);
 
-	text.setPosition(x + 225, y);
+	text.setPosition(x + 825, y);
 	text.setString(key);
 	window.draw(text);
 }
