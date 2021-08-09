@@ -50,7 +50,7 @@ void MapEditorSelect::tick(RenderWindow& window)
 void MapEditorSelect::render(RenderWindow& window)
 {
 	text.setFillColor(Color::White);
-		text.setPosition(100, 50);
+	text.setPosition(100, 50);
 	text.setCharacterSize(20);
 	text.setString("Enter to continue. Esc to exit to menu. Arrow keys to navigate.");
 	window.draw(text);

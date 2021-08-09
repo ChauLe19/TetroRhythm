@@ -2,6 +2,11 @@
 
 BeatMapEditor::BeatMapEditor(string folderPath)
 {
+	font.loadFromFile("arial.ttf");
+	text.setFont(font);
+	text.setFillColor(Color::White);
+
+
 	fs::path audioPath = folderPath;
 	audioPath.append(audioPath.filename().string() + ".ogg");
 	cout << "Beat map editor" << endl;
@@ -13,7 +18,7 @@ BeatMapEditor::BeatMapEditor(string folderPath)
 			cerr << "Audio file doesn't exist." << endl;
 	}
 
-	fs::path txtPath= folderPath;
+	fs::path txtPath = folderPath;
 	txtPath.append(txtPath.filename().string() + ".txt");
 
 	if (!fs::exists(txtPath))
@@ -118,25 +123,31 @@ void BeatMapEditor::tick(RenderWindow& window)
 
 void BeatMapEditor::render(RenderWindow& window)
 {
+	text.setFillColor(Color::White);
+	text.setPosition(20, 20);
+	text.setCharacterSize(20);
+	text.setString("Drag the bottom cursor to navigate along the beats. Hover your mouse over green tick(s) while holding right click to erase them. Press B or right click the center circle to place beat. Spacebar to play/pause.");
+	window.draw(text);
+
 	if (sound.getStatus() != Music::Status::Playing)
 	{
-		CircleShape playButton(20, 3);
+		CircleShape playButton(40, 3);
 		playButton.setFillColor(Color::White);
-		playButton.setPosition(300, 300);
+		playButton.setPosition(1060, 900);
 		playButton.rotate(90);
 		window.draw(playButton);
 	}
 	else
 	{
 		RectangleShape left;
-		left.setSize(Vector2f(10, 40));
+		left.setSize(Vector2f(15, 60));
 		left.setFillColor(Color::White);
-		left.setPosition(300, 300);
+		left.setPosition(1000, 900);
 
 		RectangleShape right;
-		right.setSize(Vector2f(10, 40));
+		right.setSize(Vector2f(15, 60));
 		right.setFillColor(Color::White);
-		right.setPosition(320, 300);
+		right.setPosition(1040, 900);
 
 		window.draw(left);
 		window.draw(right);
@@ -265,7 +276,7 @@ int clamp(int var, int min, int max)
 	return var;
 }
 
-void BeatMapEditor::addCursorToBeatList() 
+void BeatMapEditor::addCursorToBeatList()
 {
 
 	list<int>::iterator temp = beatsTime.begin();

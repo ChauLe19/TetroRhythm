@@ -33,6 +33,8 @@ private:
 	SoundBuffer buffer;
 	ifstream inFile;
 	ofstream outFile;
+	Font font;
+	Text text;
 
 	list<int> beatsTime;
 	list<int>::iterator beatIt;
