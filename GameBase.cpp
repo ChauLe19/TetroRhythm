@@ -221,7 +221,7 @@ void GameBase::render(RenderWindow& window)
 	currentPiecePtr->render(window, board);
 	currentPiecePtr->getGhost(board).render(window, board);
 	if (holdPiecePtr != nullptr)
-		holdPiecePtr->render(window, 750, 100);
+		holdPiecePtr->render(window, 680, 100);
 
 	// Render 5 preview pieces
 	int counter = 0;

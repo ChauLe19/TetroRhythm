@@ -17,6 +17,9 @@
 class DropToTheBeatGame :
 	public GameBase
 {
+private:
+	int combo = 0;
+	bool beatPressed = false;
 public:
 	DropToTheBeatGame(Controls_Settings& settings);
 	DropToTheBeatGame(Controls_Settings& settings, string folderPath);

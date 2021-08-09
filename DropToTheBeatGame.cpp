@@ -23,10 +23,15 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 
 	if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 200)
 	{
-		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS && beatIt != beatsTime.end());
+		if (!beatPressed)
+		{
+			combo = 0;
+		}
+		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS && beatIt != beatsTime.end())
 		{
 			beatIt++;
 			nextBeatTimeMS = *beatIt;
+			beatPressed = false;
 		}
 		return;
 	}
@@ -36,13 +41,17 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 {
 	GameBase::keyEvent(state, key);
 
-	std::cout << "Drop to beat keyevent" << endl;
-
 	if (key == settings.keyMap[static_cast<int> (Controls_Key::HARD_DROP)])
 	{
 		if (abs(sound.getPlayingOffset().asMilliseconds() - nextBeatTimeMS) < 200)
 		{
-			cout << "On beat" << endl;
+			combo++;
+			beatPressed = true;
+		}
+		else
+		{
+			beatPressed = true;
+			combo = 0;
 		}
 	}
 
@@ -52,4 +61,11 @@ void DropToTheBeatGame::render(RenderWindow& window)
 {
 	GameBase::render(window);
 	GameBase::renderBeatSignal(window);
+	text.setCharacterSize(30);
+	text.setPosition(700, 500);
+	text.setString("Combo");
+	window.draw(text);
+	text.setPosition(700, 550);
+	text.setString(to_string(combo));
+	window.draw(text);
 }
