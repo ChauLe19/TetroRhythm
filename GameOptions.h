@@ -29,11 +29,15 @@ private:
 	typedef Settings::Controls_Settings Controls_Settings;
 	Text text;
 	Font font;
-	int cursorX = 0; // a table of game
-	int cursorY = 0;
+	bool choosingMap = false;
+	int cursorMap = 0; // a table of game
+	int cursorMode = 0;
 	GameBase*& gamePtr;
 	Controls_Settings& settings;
 	const int modeCount = 3;
+	vector<fs::path> maps;
+
+
 	/**
 	 * Return a value of var after clamping between min and max.
 	 * 
