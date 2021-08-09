@@ -287,7 +287,7 @@ void BeatMapEditor::addCursorToBeatList()
 		temp++;
 	}
 
-	if (beatsTime.end() == beatsTime.end())
+	if (temp == beatsTime.end())
 	{
 		beatsTime.push_back(cursorRelToMusicMS);
 		return;
