@@ -59,9 +59,7 @@ void GameOptions::render(RenderWindow& window)
 
 	int tempCursor = cursorMap - 1;
 	int size = maps.size();
-	for (int i = 0;
-		i < 3 && tempCursor < size;
-		++tempCursor, ++i)
+	for (int i = 0; i < 3 && tempCursor < size; ++tempCursor, ++i)
 	{
 		if (tempCursor >= 0)
 		{

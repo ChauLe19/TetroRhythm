@@ -2,7 +2,7 @@
 
 Menu::Menu()
 {
-	font.loadFromFile("times-new-roman-bold.otf");
+	font.loadFromFile("arial.ttf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
 }
@@ -17,14 +17,24 @@ void Menu::tick(RenderWindow& window)
 
 void Menu::render(RenderWindow& window)
 {
-	text.setPosition(300, 100);
-	text.setCharacterSize(100);
+	text.setPosition(650, 200);
+	text.setCharacterSize(150);
 	text.setString("TetroRythm");
 	window.draw(text);
 
-	text.setPosition(250, 400);
-	text.setCharacterSize(20);
-	text.setString("Press Enter to begin");
+	text.setPosition(900, 600);
+	text.setCharacterSize(40);
+	text.setString("Enter to begin");
+	window.draw(text);
+
+	text.setPosition(830, 650);
+	text.setCharacterSize(40);
+	text.setString("C to edit configuration");
+	window.draw(text);
+	
+	text.setPosition(850, 700);
+	text.setCharacterSize(40);
+	text.setString("E to edit beat maps");
 	window.draw(text);
 }
 
