@@ -41,7 +41,7 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 {
 	GameBase::keyEvent(state, key);
 
-	if (key == settings.keyMap[static_cast<int> (Controls_Key::HARD_DROP)])
+	if (key == keybinds["HARD_DROP"])
 	{
 		if (abs(sound.getPlayingOffset().asMilliseconds() - nextBeatTimeMS) < 200)
 		{

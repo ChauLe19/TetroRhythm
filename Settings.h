@@ -14,16 +14,17 @@
 
 #include <SFML/Graphics.hpp>
 #include <array>
+#include <fstream>
 
 using namespace sf;
 using namespace std;
 
-
+const string controlsList[8] = { "MOVE_LEFT","MOVE_RIGHT","ROTATE_CCW","ROTATE_CW","ROTATE_180","HOLD","HARD_DROP","SOFT_DROP" };
 class Settings : public StateScreen
 {
 public:
 	struct Controls_Settings {
-		array<Keyboard::Key, 8> keyMap;
+		map<string, Keyboard::Key> keybinds;
 		int delayAutoShift;
 		int autoRepeatRate;
 	};

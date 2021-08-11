@@ -74,7 +74,7 @@ protected:
 
 	typedef Settings::Controls_Settings Controls_Settings;
 	Controls_Settings& settings;
-	array<Keyboard::Key, 8>& keyMap;
+	map<string, Keyboard::Key>& keybinds;
 	Keyboard::Key holdKey;
 	Keyboard::Key currentKey;
 	int& delayAutoShift;

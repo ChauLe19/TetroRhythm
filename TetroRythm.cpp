@@ -59,6 +59,9 @@ LRESULT CALLBACK mycallback(HWND handle, UINT message, WPARAM wParam, LPARAM lPa
 int main()
 {
 
+	HWND hWnd = GetConsoleWindow();
+	ShowWindow(hWnd, SW_SHOW);
+
 	// randomize init
 	srand(static_cast<unsigned int> (time(NULL)));
 

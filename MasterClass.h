@@ -17,7 +17,7 @@
 #include "GameOptions.h"
 #include "MapEditorSelect.h"
 #include "BeatMapEditor.h"
-
+#include <map>
 /**
  * Controls states and rendering.
  */
@@ -49,6 +49,8 @@ private:
 public:
 	MasterClass(RenderWindow& window);
 	~MasterClass();
+
+	void initKeys();
 
 	/**
 	 * .Loop forever until close window

@@ -3,8 +3,9 @@ MasterClass::MasterClass(RenderWindow& window)
 {
 	controlsSettings.autoRepeatRate = 0;
 	controlsSettings.delayAutoShift = 6;
-	controlsSettings.keyMap = { Keyboard::Key::J, Keyboard::Key::L, Keyboard::Key::A, Keyboard::Key::F,
-		Keyboard::Key::S, Keyboard::Key::D, Keyboard::Key::I, Keyboard::Key::K };
+	initKeys();
+	/*controlsSettings.keyMap = { Keyboard::Key::J, Keyboard::Key::L, Keyboard::Key::A, Keyboard::Key::F,
+		Keyboard::Key::S, Keyboard::Key::D, Keyboard::Key::I, Keyboard::Key::K };*/
 	this->menu = new Menu();
 	this->settings = new Settings(controlsSettings);
 	this->gameOptions = new GameOptions(game, controlsSettings);
@@ -20,6 +21,23 @@ MasterClass::~MasterClass()
 {
 	delete game;
 }
+
+void MasterClass::initKeys()
+{
+	ifstream keybindsStream("Config/keybinds.txt");
+
+	if (keybindsStream.is_open())
+	{
+		string key = "";
+		int keyVal = 0;
+		while (keybindsStream >> key >> keyVal)
+		{
+			controlsSettings.keybinds[key] = Keyboard::Key(keyVal);
+		}
+	}
+}
+
+
 
 void MasterClass::run()
 {

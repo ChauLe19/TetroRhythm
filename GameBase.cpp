@@ -1,8 +1,8 @@
 #include "GameBase.h"
 
 GameBase::GameBase(Controls_Settings& settings)
-	: settings(settings), keyMap(settings.keyMap), delayAutoShift(settings.delayAutoShift),
-	autoRepeatRate(settings.autoRepeatRate)
+	: settings(settings), delayAutoShift(settings.delayAutoShift),
+	autoRepeatRate(settings.autoRepeatRate), keybinds(settings.keybinds)
 {
 	cout << "Initializing game" << endl;
 
@@ -58,8 +58,8 @@ GameBase::GameBase(Controls_Settings& settings)
 }
 
 GameBase::GameBase(Controls_Settings& settings, string folderPath)
-	: settings(settings), keyMap(settings.keyMap), delayAutoShift(settings.delayAutoShift),
-	autoRepeatRate(settings.autoRepeatRate)
+	: settings(settings), delayAutoShift(settings.delayAutoShift),
+	autoRepeatRate(settings.autoRepeatRate), keybinds(settings.keybinds)
 {
 	cout << "Initializing game" << endl;
 
@@ -191,21 +191,21 @@ void GameBase::tick(RenderWindow& window)
 	}
 
 
-	if (currentKey == keyMap[static_cast<int> (Controls_Key::MOVE_RIGHT)])
+	if (currentKey == keybinds["MOVE_RIGHT"])
 	{
 		if (isAutoRepeatActive && autoRepeatRate == 0)
 			while (currentPiecePtr->move(Moving_Direction::RIGHT_DIR, board));
 		else
 			currentPiecePtr->move(Moving_Direction::RIGHT_DIR, board);
 	}
-	else if (currentKey == keyMap[static_cast<int> (Controls_Key::MOVE_LEFT)])
+	else if (currentKey == keybinds["MOVE_LEFT"])
 	{
 		if (isAutoRepeatActive && autoRepeatRate == 0)
 			while (currentPiecePtr->move(Moving_Direction::LEFT_DIR, board));
 		else
 			currentPiecePtr->move(Moving_Direction::LEFT_DIR, board);
 	}
-	else if (currentKey == keyMap[static_cast<int> (Controls_Key::SOFT_DROP)])
+	else if (currentKey == keybinds["SOFT_DROP"])
 	{
 		if (currentPiecePtr->move(Moving_Direction::DOWN_DIR, board))
 			score += GameBase::convertClearTypeToScores(ClearType::SOFTDROP);
@@ -270,19 +270,19 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		restart();
 	}
 
-	if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)])
+	if (key == keybinds["ROTATE_CW"])
 	{
 		currentPiecePtr->rotate(Rotational_Direction::CW, board);
 	}
-	else if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CCW)])
+	else if (key == keybinds["ROTATE_CCW"])
 	{
 		currentPiecePtr->rotate(Rotational_Direction::CCW, board);
 	}
-	else if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_180)])
+	else if (key == keybinds["ROTATE_180"])
 	{
 		currentPiecePtr->rotate(Rotational_Direction::R180, board);
 	}
-	else if (key == keyMap[static_cast<int> (Controls_Key::HARD_DROP)])
+	else if (key == keybinds["HARD_DROP"])
 	{
 		currentPiecePtr->hardDrop(board);
 		//cout << "input" << endl;
@@ -294,7 +294,7 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		//alreadyHold = false;
 		onGroundCount = 0;
 	}
-	else if (key == keyMap[static_cast<int> (Controls_Key::HOLD)])
+	else if (key == keybinds["HOLD"])
 	{
 		hold();
 	}
@@ -318,10 +318,10 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 	}
 
 	// No hold key control (rotation)
-	if (key == keyMap[static_cast<int> (Controls_Key::ROTATE_CW)]
-		|| key == keyMap[static_cast<int> (Controls_Key::ROTATE_CCW)]
-		|| key == keyMap[static_cast<int> (Controls_Key::HARD_DROP)]
-		|| key == keyMap[static_cast<int> (Controls_Key::HOLD)]) return;
+	if (key == keybinds["ROTATE_CW"]
+		|| key == keybinds["ROTATE_CCW"]
+		|| key == keybinds["HARD_DROP"]
+		|| key == keybinds["HOLD"]) return;
 
 	currentKey = key;
 	firstPressed = true;

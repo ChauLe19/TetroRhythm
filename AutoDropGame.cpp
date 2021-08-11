@@ -62,7 +62,7 @@ void AutoDropGame::dropOnBeat()
 void AutoDropGame::keyEvent(State& state, Keyboard::Key key)
 {
 	// can't hard drop in this mode
-	if (key == keyMap[static_cast<int> (Controls_Key::HARD_DROP)]) return;
+	if (key == keybinds["HARD_DROP"]) return;
 	GameBase::keyEvent(state, key);
 }
 

@@ -18,9 +18,15 @@ void Settings::keyEvent(State& state, Keyboard::Key key)
 		changeKey(key);
 		return;
 	}
+	ofstream outFile;
 	switch (key)
 	{
 	case Keyboard::Key::Escape:
+		outFile.open("Config/keybinds.txt", ios::out);
+		for (std::map<string, Keyboard::Key>::iterator it = settings.keybinds.begin(); it != settings.keybinds.end(); ++it)
+		{
+			outFile << it->first << ' ' << it->second << endl;
+		}
 		state = State::MENU;
 		break;
 	case Keyboard::Key::Down:
@@ -47,11 +53,12 @@ void Settings::render(RenderWindow& window)
 	text.setString("Change key config");
 	window.draw(text);
 
-	for (int i = 0; i < settings.keyMap.size(); i++)
+	for (int i = 0; i < 8; i++)
 	{
 		Controls_Key key = static_cast<Controls_Key> (i);
-		drawKeyConfig(fromControlsToString(key), fromKtoS(settings.keyMap[i]), 500, 170 + 100 * i, window, cursor == i, isChanging);
+		drawKeyConfig(fromControlsToString(key), fromKtoS(settings.keybinds[controlsList[i]]), 500, 170 + 100 * i, window, cursor == i, isChanging);
 	}
+
 
 	drawKeyConfig("DAS", "<  " + to_string(settings.delayAutoShift) + "  >", 500, 170 + 100 * 8, window, cursor == 8, isChanging);
 	drawKeyConfig("ARR", "<  " + to_string(settings.autoRepeatRate) + "  >", 500, 170 + 100 * 9, window, cursor == 9, isChanging);
@@ -134,7 +141,7 @@ bool Settings::changeKey(Keyboard::Key key)
 		return false;
 	}
 
-	settings.keyMap[cursor] = key;
+	settings.keybinds[controlsList[cursor]] = key;
 	isChanging = false;
 	return true;
 }
