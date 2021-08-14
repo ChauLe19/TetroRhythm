@@ -86,6 +86,16 @@ protected:
 	bool firstPressed = false;
 	bool alreadyHold = false;
 
+	//Softdrop DAS
+	int SDdelayAutoShiftCount = 0;
+	int SDautoRepeatRateCount = 0;
+	bool SDisAutoShiftActive = false;
+	bool SDisAutoRepeatActive = false;
+	bool SDfirstPressed = false;
+	bool SDalreadyHold = false;
+
+
+
 	static bool isB2BChain(ClearType type);
 	static int getTSpinType(Tetromino piece, Board& board);
 public:

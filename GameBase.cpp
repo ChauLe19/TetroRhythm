@@ -147,6 +147,54 @@ void GameBase::tick(RenderWindow& window)
 	if (isGameOver) return;
 
 
+	if (Keyboard::isKeyPressed(keybinds["SOFT_DROP"]))
+	{
+		//cout << "DAS count:" << delayAutoShiftCount << endl;
+		if (SDfirstPressed)
+		{
+			SDfirstPressed = false;
+			SDisAutoRepeatActive = false;
+			SDisAutoShiftActive = true;
+			SDdelayAutoShiftCount = 0;
+			SDautoRepeatRateCount = 0;
+			if (currentPiecePtr->move(Moving_Direction::DOWN_DIR, board))
+				score += GameBase::convertClearTypeToScores(ClearType::SOFTDROP);
+		}
+		else if (isAutoShiftActive)
+		{
+			SDdelayAutoShiftCount++;
+			if (SDdelayAutoShiftCount >= 6)
+			{
+				SDisAutoRepeatActive = true;
+				SDisAutoShiftActive = false;
+			}
+		}
+		else if (isAutoRepeatActive)
+		{
+			//SD arr = 1
+			if (SDautoRepeatRateCount < 1)
+			{
+				SDautoRepeatRateCount++;
+			}
+			else
+			{
+				SDautoRepeatRateCount = 0;
+
+				if (currentPiecePtr->move(Moving_Direction::DOWN_DIR, board))
+					score += GameBase::convertClearTypeToScores(ClearType::SOFTDROP);
+			}
+		}
+	}
+	else // not holding soft drop
+	{
+		SDdelayAutoShiftCount = 0;
+		SDautoRepeatRateCount = 0;
+		SDisAutoRepeatActive = false;
+		SDisAutoShiftActive = false;
+	}
+
+
+	// Left right DAS & ARR
 	if (Keyboard::isKeyPressed(currentKey))
 	{
 		//cout << "DAS count:" << delayAutoShiftCount << endl;
@@ -190,7 +238,6 @@ void GameBase::tick(RenderWindow& window)
 		return;
 	}
 
-
 	if (currentKey == keybinds["MOVE_RIGHT"])
 	{
 		if (isAutoRepeatActive && autoRepeatRate == 0)
@@ -205,11 +252,11 @@ void GameBase::tick(RenderWindow& window)
 		else
 			currentPiecePtr->move(Moving_Direction::LEFT_DIR, board);
 	}
-	else if (currentKey == keybinds["SOFT_DROP"])
-	{
-		if (currentPiecePtr->move(Moving_Direction::DOWN_DIR, board))
-			score += GameBase::convertClearTypeToScores(ClearType::SOFTDROP);
-	}
+
+
+
+	//TODO: separate das & arr for soft drop
+
 
 }
 
