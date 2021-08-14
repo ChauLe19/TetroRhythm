@@ -317,6 +317,8 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		restart();
 	}
 
+	if (isGameOver) return;
+
 	if (key == keybinds["ROTATE_CW"])
 	{
 		currentPiecePtr->rotate(Rotational_Direction::CW, board);

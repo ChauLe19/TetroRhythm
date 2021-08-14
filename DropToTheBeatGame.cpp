@@ -30,7 +30,8 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS && beatIt != beatsTime.end())
 		{
 			beatIt++;
-			nextBeatTimeMS = *beatIt;
+			if (beatIt != beatsTime.end())
+				nextBeatTimeMS = *beatIt;
 			beatPressed = false;
 		}
 		return;
