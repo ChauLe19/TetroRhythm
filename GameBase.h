@@ -32,7 +32,10 @@ namespace fs = std::filesystem;
 const int boardX = 844;
 const int boardY = 100;
 
-
+// frame per cell. how many frame in between dropping 1 cell
+//https://tetris.wiki/Marathon
+//TODO: change to float
+const int levelSpeed[15] = { 60, 58, 37, 28, 21, 16, 11, 8, 6, 4, 3, 2, 1, 1, 1 };
 /**
  * Class for general Tetris controls and mechanics.
  */
@@ -62,12 +65,14 @@ protected:
 	// Game status
 	//*************************************
 
+	int level = 1;
 	int score = 0;
 	int frameCount = 0;
 	int onGroundCount = 0;
 	bool isGameOver = false;
 	int nextBeatTimeMS = 0;
 	int rainbowIndex = 0;
+	int linesCleared = 0;
 
 	// Controls related variables
 	//****************************************

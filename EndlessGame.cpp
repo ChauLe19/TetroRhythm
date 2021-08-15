@@ -1,5 +1,6 @@
 #include "EndlessGame.h"
 
+//TODO: speed depends on the song speed. the song speed up after every round
 EndlessGame::EndlessGame(Controls_Settings& settings) : GameBase(settings)
 {
 }
@@ -20,7 +21,7 @@ void EndlessGame::tick(RenderWindow& window)
 		sound.play();
 	}
 
-	if (frameCount >= 48)
+	if (frameCount >= levelSpeed[level-1])
 	{
 		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
 		frameCount = 0;
@@ -38,6 +39,9 @@ void EndlessGame::tick(RenderWindow& window)
 			Board tempBoard = board;
 			prevPiecePtr = currentPiecePtr;
 			ClearingInfo tempClearingInfo = board.clearLines();
+			linesCleared += tempClearingInfo.linesCleared;
+			level = clamp(linesCleared / 10 + 1, 1, 15);
+
 			ClearType tempScoresType = determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
 
 			if (tempScoresType != ClearType::NONE)
@@ -61,4 +65,8 @@ void EndlessGame::keyEvent(State& state, Keyboard::Key key)
 void EndlessGame::render(RenderWindow& window)
 {
 	GameBase::render(window);
+	
+	text.setString("Level: " + to_string(level));
+	text.setPosition(700, 500);
+	window.draw(text);
 }

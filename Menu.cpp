@@ -22,6 +22,7 @@ void Menu::render(RenderWindow& window)
 	text.setString("TetroRythm");
 	window.draw(text);
 
+
 	text.setPosition(900, 600);
 	text.setCharacterSize(40);
 	text.setString("Enter to begin");

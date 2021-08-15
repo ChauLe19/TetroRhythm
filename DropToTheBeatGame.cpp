@@ -1,6 +1,6 @@
 #include "DropToTheBeatGame.h"
 
-
+//TODO: If miss 1 beat, 1 garbage line
 DropToTheBeatGame::DropToTheBeatGame(Controls_Settings& settings) : GameBase(settings)
 {
 }

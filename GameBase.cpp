@@ -342,6 +342,7 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 
 		//alreadyHold = false;
 		onGroundCount = 0;
+		frameCount = 0;
 	}
 	else if (key == keybinds["HOLD"])
 	{
@@ -358,6 +359,8 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		// TODO: copy board before clear, is this optimized???
 		Board tempBoard = board;
 		ClearingInfo tempClearingInfo = board.clearLines();
+		linesCleared += tempClearingInfo.linesCleared;
+		level = clamp(linesCleared / 10 + 1, 1, 15);
 		ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
 		if (tempScoresType != ClearType::NONE)
 		{
