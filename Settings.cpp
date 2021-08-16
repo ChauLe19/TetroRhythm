@@ -2,7 +2,7 @@
 
 Settings::Settings(Controls_Settings& settings) : settings(settings)
 {
-	font.loadFromFile("arial.ttf");
+	font.loadFromFile("Dense-Regular.otf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
 }
@@ -48,20 +48,20 @@ void Settings::tick(RenderWindow& window)
 void Settings::render(RenderWindow& window)
 {
 	text.setFillColor(Color::White);
-	text.setPosition(600, 50);
-	text.setCharacterSize(100);
+	text.setCharacterSize(120);
 	text.setString("Change key config");
+	text.setPosition(1024 - text.getLocalBounds().width / 2, 50);
 	window.draw(text);
 
 	for (int i = 0; i < 8; i++)
 	{
 		Controls_Key key = static_cast<Controls_Key> (i);
-		drawKeyConfig(fromControlsToString(key), fromKtoS(settings.keybinds[controlsList[i]]), 500, 170 + 100 * i, window, cursor == i, isChanging);
+		drawKeyConfig(fromControlsToString(key), fromKtoS(settings.keybinds[controlsList[i]]), 500, 300 + 80 * i, window, cursor == i, isChanging);
 	}
 
 
-	drawKeyConfig("DAS", "<  " + to_string(settings.delayAutoShift) + "  >", 500, 170 + 100 * 8, window, cursor == 8, isChanging);
-	drawKeyConfig("ARR", "<  " + to_string(settings.autoRepeatRate) + "  >", 500, 170 + 100 * 9, window, cursor == 9, isChanging);
+	drawKeyConfig("DAS", "<  " + to_string(settings.delayAutoShift) + "  >", 500, 300 + 80 * 8, window, cursor == 8, isChanging);
+	drawKeyConfig("ARR", "<  " + to_string(settings.autoRepeatRate) + "  >", 500, 300 + 80 * 9, window, cursor == 9, isChanging);
 }
 
 void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow& window, bool isHighlight, bool changing)
@@ -87,12 +87,12 @@ void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow
 	{
 		text.setFillColor(Color::White);
 	}
-	text.setPosition(x, y);
-	text.setCharacterSize(40);
+	text.setPosition(x, y-15);
+	text.setCharacterSize(60);
 	text.setString(name);
 	window.draw(text);
 
-	text.setPosition(x + 825, y);
+	text.setPosition(x + 825, y-15);
 	text.setString(key);
 	window.draw(text);
 }

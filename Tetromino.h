@@ -139,7 +139,7 @@ const static std::array<std::array<std::array<int, 2>, 5>, 8> IWallKickData = { 
 class Tetromino
 {
 private:
-	static const int squareSize = 36;
+	static const int squareSize = 45;
 	Texture cellsTexture;
 	Sprite cellImage;
 	Orientation orientation = Orientation::SPAWN;

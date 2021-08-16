@@ -2,7 +2,7 @@
 
 MapEditorSelect::MapEditorSelect(BeatMapEditor*& mapEditor) : mapEditor(mapEditor)
 {
-	font.loadFromFile("arial.ttf");
+	font.loadFromFile("Dense-Regular.otf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
 
@@ -36,7 +36,7 @@ void MapEditorSelect::drawOptions(RenderWindow& window, string options, int x, i
 		text.setFillColor(Color::White);
 	}
 	text.setPosition(x, y);
-	text.setCharacterSize(50);
+	text.setCharacterSize(60);
 	text.setString(options);
 	window.draw(text);
 
@@ -51,7 +51,7 @@ void MapEditorSelect::render(RenderWindow& window)
 {
 	text.setFillColor(Color::White);
 	text.setPosition(100, 50);
-	text.setCharacterSize(20);
+	text.setCharacterSize(30);
 	text.setString("Enter to continue. Esc to exit to menu. Arrow keys to navigate.");
 	window.draw(text);
 

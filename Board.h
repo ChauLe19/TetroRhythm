@@ -93,7 +93,7 @@ struct ClearingInfo
 class Board
 {
 private:
-	static const int squareSize = 36;
+	static const int squareSize = 45;
 	Texture frameTexture;
 	Texture cellsTexture;
 	Sprite image;

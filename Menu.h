@@ -13,6 +13,7 @@
 #include <SFML/Graphics.hpp>
 
 using namespace sf;
+using namespace std;
 
 /**
  * Controls menu screen.
@@ -22,6 +23,8 @@ class Menu : public StateScreen
 private:
 	Text text;
 	Font font;
+	Texture buttonTexture;
+	Sprite buttonImage;
 public:
 	Menu();
 	~Menu();

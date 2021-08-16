@@ -6,7 +6,7 @@ GameBase::GameBase(Controls_Settings& settings)
 {
 	cout << "Initializing game" << endl;
 
-	font.loadFromFile("arial.ttf");
+	font.loadFromFile("Dense-Regular.otf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
 
@@ -268,7 +268,18 @@ void GameBase::render(RenderWindow& window)
 	currentPiecePtr->render(window, board);
 	currentPiecePtr->getGhost(board).render(window, board);
 	if (holdPiecePtr != nullptr)
-		holdPiecePtr->render(window, 680, 100);
+	{
+		int extra = squareSize/2;
+		if (holdPiecePtr->getType() == Type::I)
+		{
+			extra = 0;
+		}
+		else if (holdPiecePtr->getType() == Type::O)
+		{
+			extra = 36;
+		}
+		holdPiecePtr->render(window, boardX - (squareSize/2 + 20) - squareSize*4 + extra, boardY + squareSize/2);
+	}
 
 	// Render 5 preview pieces
 	int counter = 0;
@@ -276,7 +287,16 @@ void GameBase::render(RenderWindow& window)
 	advance(fifthIt, 5);
 	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
 	{
-		(*it)->render(window, 1230, 100 + 100 * counter);
+		int extra = squareSize / 2;
+		if ((*it)->getType() == Type::I)
+		{
+			extra = 0;
+		}
+		else if ((*it)->getType() == Type::O)
+		{
+			extra = squareSize;
+		}
+		(*it)->render(window, boardX + (squareSize / 2 + 20) + squareSize*10 + extra, boardY + squareSize + squareSize*3 * counter);
 		counter++;
 	}
 
@@ -403,10 +423,10 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 
 		//draw outer rect border (beat)
 		sf::RectangleShape rectangle;
-		rectangle.setSize(sf::Vector2f(36 * 10 + distanceFromEnd * 4, 36 * 20 + distanceFromEnd * 4));
+		rectangle.setSize(sf::Vector2f(squareSize * 10 + distanceFromEnd * 4, squareSize * 20 + distanceFromEnd * 4));
 		rectangle.setFillColor(Color(0, 0, 0, 0));
 		rectangle.setOutlineColor(rainbow.at(tempRainbowIndex % 7));
-		rectangle.setOutlineThickness(1);
+		rectangle.setOutlineThickness(5);
 		rectangle.setPosition(boardX - distanceFromEnd * 2, boardY - distanceFromEnd * 2);
 		window.draw(rectangle);
 

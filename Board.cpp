@@ -3,9 +3,9 @@ Board::Board(int xPos, int yPos)
 {
 	this->xPos = xPos;
 	this->yPos = yPos;
-	frameTexture.loadFromFile("Images/frame-white.png");
+	frameTexture.loadFromFile("Images/frame flat.png");
 	image.setTexture(frameTexture);
-	image.setPosition((float)xPos-70, (float)yPos);
+	image.setPosition((float)xPos-255, (float)yPos-10);
 	cellsTexture.loadFromFile("Images/tiles-2.png");
 	cellImage.setTexture(cellsTexture);
 
@@ -26,9 +26,11 @@ Board::~Board()
 
 void Board::render(RenderWindow& window)
 {
-	//window.draw(image);
+
+
+	window.draw(image);
 	RectangleShape rect(Vector2f(squareSize * 10, squareSize * 20));
-	rect.setFillColor(Color(0,0,0,255));
+	rect.setFillColor(Color(0,0,0,150));
 	rect.setPosition(xPos, yPos);
 	rect.setOutlineColor(Color::White);
 	rect.setOutlineThickness(5);

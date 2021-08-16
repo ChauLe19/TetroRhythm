@@ -120,6 +120,9 @@
     <Font Include="times-new-roman-bold.otf">
       <Filter>Resource Files</Filter>
     </Font>
+    <Font Include="Dense-Regular.otf">
+      <Filter>Resource Files</Filter>
+    </Font>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tetris_theme.ogg">

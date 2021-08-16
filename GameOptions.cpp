@@ -18,7 +18,7 @@ GameOptions::GameOptions(GameBase*& gamePtr, Controls_Settings& settings)
 {
 	cursorMap = 0;
 	cursorMode = 0;
-	font.loadFromFile("arial.ttf");
+	font.loadFromFile("Dense-Regular.otf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
 
@@ -40,9 +40,9 @@ void GameOptions::tick(RenderWindow& window)
 void GameOptions::render(RenderWindow& window)
 {
 	text.setFillColor(Color::White);
-	text.setPosition(600, 50);
-	text.setCharacterSize(100);
+	text.setCharacterSize(120);
 	text.setString("Game Options");
+	text.setPosition(1024-text.getLocalBounds().width/2, 50);
 	window.draw(text);
 
 	drawGameModeOption(window, "Auto Drop Beat", 50, 300, cursorMode == 0);	// get as many points as you can but a beat will force a hard drop
@@ -141,11 +141,14 @@ void GameOptions::drawGameModeOption(RenderWindow& window, string gameMode, int 
 	if (isHighlight)
 	{
 		RectangleShape rect(Vector2f(500, 100));
+		rect.setPosition(x, y - 15);
+		rect.setFillColor(Color(125,125,125,255));
+		window.draw(rect);
 		rect.setPosition(x, y - 25);
 		rect.setFillColor(Color::White);
 		window.draw(rect);
 
-		text.setFillColor(Color::Black);
+		text.setFillColor(Color(0, 0, 50, 255));
 
 	}
 	else
@@ -153,7 +156,7 @@ void GameOptions::drawGameModeOption(RenderWindow& window, string gameMode, int 
 		text.setFillColor(Color::White);
 	}
 	text.setPosition(x, y);
-	text.setCharacterSize(50);
+	text.setCharacterSize(60);
 	text.setString(gameMode);
 	window.draw(text);
 
