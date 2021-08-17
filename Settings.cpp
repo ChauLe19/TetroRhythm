@@ -22,11 +22,16 @@ void Settings::keyEvent(State& state, Keyboard::Key key)
 	switch (key)
 	{
 	case Keyboard::Key::Escape:
-		outFile.open("Config/keybinds.txt", ios::out);
+		outFile.open("Config/Keybinds.txt", ios::out);
 		for (std::map<string, Keyboard::Key>::iterator it = settings.keybinds.begin(); it != settings.keybinds.end(); ++it)
 		{
 			outFile << it->first << ' ' << it->second << endl;
 		}
+		outFile.close();
+		outFile.open("Config/Config.txt", ios::out);
+		outFile << "DAS " << settings.delayAutoShift << endl;
+		outFile << "ARR " << settings.autoRepeatRate << endl;
+		outFile.close();
 		state = State::MENU;
 		break;
 	case Keyboard::Key::Down:

@@ -269,7 +269,7 @@ void GameBase::render(RenderWindow& window)
 	currentPiecePtr->getGhost(board).render(window, board);
 	if (holdPiecePtr != nullptr)
 	{
-		int extra = squareSize/2;
+		int extra = squareSize / 2;
 		if (holdPiecePtr->getType() == Type::I)
 		{
 			extra = 0;
@@ -278,7 +278,7 @@ void GameBase::render(RenderWindow& window)
 		{
 			extra = 36;
 		}
-		holdPiecePtr->render(window, boardX - (squareSize/2 + 20) - squareSize*4 + extra, boardY + squareSize/2);
+		holdPiecePtr->render(window, boardX - (squareSize / 2 + 20) - squareSize * 4 + extra, boardY + squareSize / 2);
 	}
 
 	// Render 5 preview pieces
@@ -296,7 +296,7 @@ void GameBase::render(RenderWindow& window)
 		{
 			extra = squareSize;
 		}
-		(*it)->render(window, boardX + (squareSize / 2 + 20) + squareSize*10 + extra, boardY + squareSize + squareSize*3 * counter);
+		(*it)->render(window, boardX + (squareSize / 2 + 20) + squareSize * 10 + extra, boardY + squareSize + squareSize * 3 * counter);
 		counter++;
 	}
 
@@ -406,14 +406,49 @@ void GameBase::mouseEvent(RenderWindow& window)
 
 void GameBase::renderBeatSignal(RenderWindow& window)
 {
+	//static vector<Color> rainbow = { Color::Red, Color(255, 165, 0), Color::Yellow, Color::Green, Color::Blue, Color(75,0,130) ,Color(127,0,255) };
+	//int tempRainbowIndex = rainbowIndex;
+
+
+	//int maxRectOffset = 50;
+	//int nowTime = sound.getPlayingOffset().asMilliseconds();
+	//std::list<Tetromino*>::iterator it = bag.begin();
+	//list<int>::iterator tempBeatIt = beatIt; // copy beatIt to tempBeatsIt
+	//for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && tempBeatIt != beatsTime.end(); ++it, ++tempBeatIt, ++tempRainbowIndex)
+	//{
+	//	int bufferTime = *tempBeatIt;
+	//	int distanceFromEnd = (bufferTime - nowTime) / 32;// (1 / 60 second per frame)*1000 milisec per sec
+
+	//	if (distanceFromEnd > maxRectOffset) break;
+
+	//	//draw outer rect border (beat)
+	//	sf::RectangleShape rectangle;
+	//	rectangle.setSize(sf::Vector2f(squareSize * 10 + distanceFromEnd * 4, squareSize * 20 + distanceFromEnd * 4));
+	//	rectangle.setFillColor(Color(0, 0, 0, 0));
+	//	rectangle.setOutlineColor(rainbow.at(tempRainbowIndex % 7));
+	//	rectangle.setOutlineThickness(5);
+	//	rectangle.setPosition(boardX - distanceFromEnd * 2, boardY - distanceFromEnd * 2);
+	//	window.draw(rectangle);
+
+	//}
+
 	static vector<Color> rainbow = { Color::Red, Color(255, 165, 0), Color::Yellow, Color::Green, Color::Blue, Color(75,0,130) ,Color(127,0,255) };
 	int tempRainbowIndex = rainbowIndex;
 
+	const int innerRadius = 75;
+	CircleShape circle;
+	circle.setRadius(innerRadius);
+	circle.setPosition(Vector2f(1024 - innerRadius, 200));
+	circle.setFillColor(Color(75,75,75,150));
+	circle.setOutlineColor(Color(75, 75, 75, 150));
+	circle.setOutlineThickness(5);
+	window.draw(circle);
 
 	int maxRectOffset = 50;
 	int nowTime = sound.getPlayingOffset().asMilliseconds();
 	std::list<Tetromino*>::iterator it = bag.begin();
 	list<int>::iterator tempBeatIt = beatIt; // copy beatIt to tempBeatsIt
+
 	for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && tempBeatIt != beatsTime.end(); ++it, ++tempBeatIt, ++tempRainbowIndex)
 	{
 		int bufferTime = *tempBeatIt;
@@ -421,16 +456,25 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 
 		if (distanceFromEnd > maxRectOffset) break;
 
+		CircleShape circle;
+		circle.setRadius(75 + distanceFromEnd);
+		circle.setPosition(Vector2f(1024 - (innerRadius + distanceFromEnd), 200 - distanceFromEnd));
+		circle.setFillColor(Color::Transparent);
+		circle.setOutlineColor(Color(75, 75, 75, 150));
+		circle.setOutlineThickness(5);
+		window.draw(circle);
+
 		//draw outer rect border (beat)
-		sf::RectangleShape rectangle;
-		rectangle.setSize(sf::Vector2f(squareSize * 10 + distanceFromEnd * 4, squareSize * 20 + distanceFromEnd * 4));
-		rectangle.setFillColor(Color(0, 0, 0, 0));
-		rectangle.setOutlineColor(rainbow.at(tempRainbowIndex % 7));
-		rectangle.setOutlineThickness(5);
-		rectangle.setPosition(boardX - distanceFromEnd * 2, boardY - distanceFromEnd * 2);
-		window.draw(rectangle);
+		//sf::RectangleShape rectangle;
+		//rectangle.setSize(sf::Vector2f(squareSize * 10 + distanceFromEnd * 4, squareSize * 20 + distanceFromEnd * 4));
+		//rectangle.setFillColor(Color(0, 0, 0, 0));
+		//rectangle.setOutlineColor(rainbow.at(tempRainbowIndex % 7));
+		//rectangle.setOutlineThickness(5);
+		//rectangle.setPosition(boardX - distanceFromEnd * 2, boardY - distanceFromEnd * 2);
+		//window.draw(rectangle);
 
 	}
+
 }
 
 int GameBase::convertClearTypeToScores(ClearType type)

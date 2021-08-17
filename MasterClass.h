@@ -51,6 +51,7 @@ public:
 	~MasterClass();
 
 	void initKeys();
+	void initConfig();
 
 	/**
 	 * .Loop forever until close window

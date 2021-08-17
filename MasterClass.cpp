@@ -1,9 +1,8 @@
 #include "MasterClass.h"
 MasterClass::MasterClass(RenderWindow& window)
 {
-	controlsSettings.autoRepeatRate = 0;
-	controlsSettings.delayAutoShift = 6;
 	initKeys();
+	initConfig();
 	/*controlsSettings.keyMap = { Keyboard::Key::J, Keyboard::Key::L, Keyboard::Key::A, Keyboard::Key::F,
 		Keyboard::Key::S, Keyboard::Key::D, Keyboard::Key::I, Keyboard::Key::K };*/
 	this->menu = new Menu();
@@ -24,7 +23,7 @@ MasterClass::~MasterClass()
 
 void MasterClass::initKeys()
 {
-	ifstream keybindsStream("Config/keybinds.txt");
+	ifstream keybindsStream("Config/Keybinds.txt");
 
 	if (keybindsStream.is_open())
 	{
@@ -33,6 +32,28 @@ void MasterClass::initKeys()
 		while (keybindsStream >> key >> keyVal)
 		{
 			controlsSettings.keybinds[key] = Keyboard::Key(keyVal);
+		}
+	}
+}
+
+void MasterClass::initConfig()
+{
+	ifstream configStream("Config/Config.txt");
+
+	if (configStream.is_open())
+	{
+		string key = "";
+		int keyVal = 0;
+		while (configStream >> key >> keyVal)
+		{
+			if (key == "DAS")
+			{
+				controlsSettings.delayAutoShift = keyVal;
+			}
+			else if (key == "ARR")
+			{
+				controlsSettings.autoRepeatRate = keyVal;
+			}
 		}
 	}
 }

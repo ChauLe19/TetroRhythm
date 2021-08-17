@@ -29,7 +29,7 @@
 using namespace sf;
 namespace fs = std::filesystem;
 
-const int boardX = 844;
+const int boardX = 1024- 45*5;
 const int boardY = 100;
 
 // frame per cell. how many frame in between dropping 1 cell
