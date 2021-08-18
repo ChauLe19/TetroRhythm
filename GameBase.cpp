@@ -309,6 +309,17 @@ void GameBase::render(RenderWindow& window)
 
 
 
+	if (clearTypeCounter > 0)
+	{
+		clearTypeCounter--;
+		text.setString(clearTypeToString(prevClearType));
+		text.setPosition(700, 400);
+		window.draw(text);
+		text.setString(to_string(convertClearTypeToScores(prevClearType)));
+		text.setPosition(700, 450);
+		window.draw(text);
+	}
+
 	text.setString(to_string(score));
 	text.setPosition(100, 0);
 	window.draw(text);
@@ -363,6 +374,27 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		//alreadyHold = false;
 		onGroundCount = 0;
 		frameCount = 0;
+
+		if (prevPiecePtr != nullptr)
+		{
+			//cout << "Clearing" << endl;
+			// TODO: copy board before clear, is this optimized???
+			Board tempBoard = board;
+			ClearingInfo tempClearingInfo = board.clearLines();
+			linesCleared += tempClearingInfo.linesCleared;
+			level = clamp(linesCleared / 10 + 1, 1, 15);
+			ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+
+			// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
+			if (tempScoresType != ClearType::NONE)
+			{
+				prevClearType = tempScoresType;
+				clearTypeCounter = 60; // 1 second display
+			}
+			score += GameBase::convertClearTypeToScores(tempScoresType);
+		}
+
+
 	}
 	else if (key == keybinds["HOLD"])
 	{
@@ -373,22 +405,7 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		cout << "playing:" << sound.getPlayingOffset().asMilliseconds() << endl;
 	}
 
-	if (prevPiecePtr != nullptr)
-	{
-		//cout << "Clearing" << endl;
-		// TODO: copy board before clear, is this optimized???
-		Board tempBoard = board;
-		ClearingInfo tempClearingInfo = board.clearLines();
-		linesCleared += tempClearingInfo.linesCleared;
-		level = clamp(linesCleared / 10 + 1, 1, 15);
-		ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-		if (tempScoresType != ClearType::NONE)
-		{
-			prevClearType = tempScoresType;
-		}
-		score += GameBase::convertClearTypeToScores(tempScoresType);
-	}
-
+	
 	// No hold key control (rotation)
 	if (key == keybinds["ROTATE_CW"]
 		|| key == keybinds["ROTATE_CCW"]
@@ -614,6 +631,91 @@ ClearType GameBase::determineClearType(Tetromino clearingPiece, ClearingInfo inf
 	default:
 		cout << "NONE" << endl;
 		return ClearType::NONE;
+		break;
+	}
+}
+
+string GameBase::clearTypeToString(ClearType clearType)
+{
+	switch (clearType)
+	{
+	case ClearType::NONE:
+		return "None";
+		break;
+	case ClearType::SINGLE:
+		return "Single";
+		break;
+	case ClearType::DOUBLE:
+		return "Double";
+		break;
+	case ClearType::TRIPLE:
+		return "Triple";
+		break;
+	case ClearType::TETRIS:
+		return "Tetris";
+		break;
+	case ClearType::TSPIN_MINI_NO:
+		return "T-Spin Mini";
+		break;
+	case ClearType::TSPIN_MINI_SINGLE:
+		return "T-Spin Mini Single";
+		break;
+	case ClearType::TSPIN_SINGLE:
+		return "T-Spin Single";
+		break;
+	case ClearType::TSPIN_MINI_DOUBLE:
+		return "T-Spin Mini Double";
+		break;
+	case ClearType::TSPIN_DOUBLE:
+		return "T-Spin Double";
+		break;
+	case ClearType::TSPIN_TRIPLE:
+		return "T-Spin Triple";
+		break;
+	case ClearType::COMBO:
+		return "Combo";
+		break;
+	case ClearType::SOFTDROP:
+		return "Soft Drop";
+		break;
+	case ClearType::HARDDROP:
+		return "Hard Drop";
+		break;
+	case ClearType::SINGLE_LINE_PC:
+		return "Single-Line PC";
+		break;
+	case ClearType::DOUBLE_LINE_PC:
+		return "Double-Line PC";
+		break;
+	case ClearType::TRIPLE_LINE_PC:
+		return "Triple-Line PC";
+		break;
+	case ClearType::TETRIS_PC:
+		return "Tetris PC";
+		break;
+	case ClearType::B2B_TETRIS_PC:
+		return "B2B Tetris PC";
+		break;
+	case ClearType::B2B_TETRIS:
+		return "B2B Tetris";
+		break;
+	case ClearType::B2B_TSPIN_MINI_SINGLE:
+		return "B2B T-Spin Mini Single";
+		break;
+	case ClearType::B2B_TSPIN_SINGLE:
+		return "B2B T-Spin Single";
+		break;
+	case ClearType::B2B_TSPIN_MINI_DOUBLE:
+		return "B2B T-Spin Mini Double";
+		break;
+	case ClearType::B2B_TSPIN_DOUBLE:
+		return "B2B T-Spin Double";
+		break;
+	case ClearType::B2B_TSPIN_TRIPLE:
+		return "B2B T-Spin Triple";
+		break;
+	default:
+		return "INVALID";
 		break;
 	}
 }

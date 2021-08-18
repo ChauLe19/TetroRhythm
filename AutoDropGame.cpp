@@ -42,6 +42,7 @@ void AutoDropGame::dropOnBeat()
 		if (tempScoresType != ClearType::NONE)
 		{
 			prevClearType = tempScoresType;
+			clearTypeCounter = 60; // 1 second display
 		}
 		score += convertClearTypeToScores(tempScoresType);
 		//currentPiecePtr = &nextPiece();

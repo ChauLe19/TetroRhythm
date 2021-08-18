@@ -74,6 +74,7 @@ protected:
 	int nextBeatTimeMS = 0;
 	int rainbowIndex = 0;
 	int linesCleared = 0;
+	int clearTypeCounter = 0;
 
 	// Controls related variables
 	//****************************************
@@ -140,6 +141,9 @@ public:
 	 * \return Clear lines type
 	 */
 	static ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board);
+
+	string clearTypeToString(ClearType clearType);
+
 
 	/**
 	 * Discard previous piece and pick a tetromino from the bag.
