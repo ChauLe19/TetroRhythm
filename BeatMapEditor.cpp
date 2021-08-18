@@ -293,7 +293,7 @@ void BeatMapEditor::addCursorToBeatList()
 		return;
 	}
 	// reject beat that is too close to already existed
-	if (prev + 100 <= cursorRelToMusicMS && *temp - 100 >= cursorRelToMusicMS)
+	if (prev + 250 <= cursorRelToMusicMS && *temp - 250 >= cursorRelToMusicMS)
 	{
 		beatsTime.insert(temp, cursorRelToMusicMS);
 	}

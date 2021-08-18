@@ -20,10 +20,16 @@ class DropToTheBeatGame :
 private:
 	int combo = 0;
 	bool beatPressed = false;
+	int health = 100; // 0 <= health <= 100
+	int healthCounter = 0; // if reaches 60, health +=1 (every second, health +=1_
 public:
 	DropToTheBeatGame(Controls_Settings& settings);
 	DropToTheBeatGame(Controls_Settings& settings, string folderPath);
 	~DropToTheBeatGame();
+
+
+	string comboString="";
+	int hitType = 0; // miss=0, almost=1, hit=2,
 
 	// Game Base functions
 	//*****************************************************
