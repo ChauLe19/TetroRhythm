@@ -33,12 +33,20 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 	{
 		gameOver();
 	}
+
+
+	// if pressed in 400ms window, doesn't get "TOO LATE"
+	// TOO LATE	-> health -= 10
+	// MISS		-> health -= 1
+	// ALMOST	-> health += 1
+	// HIT		-> health += 2
 	if (beatPressed)
 	{
 		beatPressed = false;
 		if (hitType == 0)
 		{
 			comboString = "MISS";
+			health = clamp(health - 1, 0, 100);
 		}
 		else if (hitType == 1)
 		{
@@ -59,9 +67,9 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 		} 
 
 	}
-	else
+	else // too late, move to next beat
 	{
-		if (sound.getPlayingOffset().asMilliseconds() >= nextBeatTimeMS + 100 && beatIt != beatsTime.end())
+		if (sound.getPlayingOffset().asMilliseconds() >= nextBeatTimeMS + 200 && beatIt != beatsTime.end())
 		{
 			combo = 0;
 			comboString = "TOO LATE";
@@ -102,8 +110,6 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 			hitType = 0;
 			beatPressed = true;
 			combo = 0;
-			health = clamp(health - 10, 0, 100);
-
 		}
 	}
 
