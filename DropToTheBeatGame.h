@@ -22,6 +22,7 @@ private:
 	bool beatPressed = false;
 	int health = 100; // 0 <= health <= 100
 	int healthCounter = 0; // if reaches 60, health +=1 (every second, health +=1_
+	int bonus = 0;
 public:
 	DropToTheBeatGame(Controls_Settings& settings);
 	DropToTheBeatGame(Controls_Settings& settings, string folderPath);

@@ -111,6 +111,13 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 			beatPressed = true;
 			combo = 0;
 		}
+
+		// already added clear type in GameBase, now add bonus to it
+		// if combo <=1, no combo added
+		// if combo >1, bonus = (combo - 1)/100 * (clear score)
+		// combo is capped at 100	-> which means max bonus = clear score
+		bonus = clamp(combo - 1, 0, 100) * convertClearTypeToScores(prevClearType) / 100;
+		score += bonus;
 	}
 
 	// reset on top of the gamebase's reset
@@ -128,17 +135,23 @@ void DropToTheBeatGame::render(RenderWindow& window)
 	GameBase::render(window);
 	GameBase::renderBeatSignal(window);
 	text.setCharacterSize(30);
-	text.setPosition(680, 500);
+	text.setPosition(680, 600);
 	text.setString("Combo");
 	window.draw(text);
-	text.setPosition(680, 550);
+	text.setPosition(680, 650);
 	text.setString(to_string(combo));
 	window.draw(text);
 	
-	text.setPosition(680, 600);
+	text.setPosition(680, 700);
 	text.setString(comboString);
 	window.draw(text);
-
+	
+	if (bonus != 0 && clearTypeCounter > 0)
+	{
+		text.setPosition(700, 500);
+		text.setString("+" + to_string(bonus));
+		window.draw(text);
+	}
 
 	RectangleShape healthRect;
 	healthRect.setPosition(20, 40);
