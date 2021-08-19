@@ -21,7 +21,8 @@ public:
 	// Game Base functions
 	//************************************************
 
-	void tick(RenderWindow& window);
+	void tick(State& state, RenderWindow& window);
+	void tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr);
 	void keyEvent(State& state, Keyboard::Key key);
 	void render(RenderWindow& window);
 

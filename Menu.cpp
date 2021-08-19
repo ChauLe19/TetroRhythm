@@ -14,7 +14,7 @@ Menu::~Menu()
 {
 }
 
-void Menu::tick(RenderWindow& window)
+void Menu::tick(State& state, RenderWindow& window)
 {
 }
 
@@ -125,6 +125,6 @@ void Menu::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-void Menu::mouseEvent(RenderWindow& window)
+void Menu::mouseEvent(State& state, RenderWindow& window)
 {
 }

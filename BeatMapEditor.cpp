@@ -110,7 +110,7 @@ void BeatMapEditor::save()
 	outFile.close();
 }
 
-void BeatMapEditor::tick(RenderWindow& window)
+void BeatMapEditor::tick(State& state, RenderWindow& window)
 {
 	if (sound.getStatus() == Music::Status::Stopped)
 	{
@@ -299,7 +299,7 @@ void BeatMapEditor::addCursorToBeatList()
 	}
 }
 
-void BeatMapEditor::mouseEvent(RenderWindow& window)
+void BeatMapEditor::mouseEvent(State& state, RenderWindow& window)
 {
 
 	if (Mouse::isButtonPressed(Mouse::Right))

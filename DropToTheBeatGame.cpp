@@ -13,25 +13,30 @@ DropToTheBeatGame::~DropToTheBeatGame()
 }
 
 //TODO: if TSD or TST, health += 10 || 15
-void DropToTheBeatGame::tick(RenderWindow& window)
+void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 {
 	if (isGameOver) return;
-	GameBase::tick(window);
+	GameBase::tick(state, window);
 
 	if (sound.getStatus() == SoundSource::Status::Stopped)
 	{
 		gameOver();
+		state = State::GAMEOVER;
 		return;
 	}
-	healthCounter++;
+
+	// every secon passed, health + 1
+	/*healthCounter++;
 	if (healthCounter >= 60)
 	{
 		health = clamp(health  + 1, 0, 100);
 		healthCounter = 0;
-	}
+	}*/
+
 	if (health <= 0)
 	{
 		gameOver();
+		return;
 	}
 
 
@@ -43,10 +48,20 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 	if (beatPressed)
 	{
 		beatPressed = false;
+
+		if (hitType != 0 && (recentClearType == ClearType::TSPIN_DOUBLE || recentClearType == ClearType::TSPIN_MINI_DOUBLE
+			|| recentClearType == ClearType::B2B_TSPIN_DOUBLE || recentClearType == ClearType::B2B_TSPIN_MINI_DOUBLE
+			|| recentClearType == ClearType::TSPIN_SINGLE || recentClearType == ClearType::TSPIN_MINI_SINGLE
+			|| recentClearType == ClearType::B2B_TSPIN_SINGLE || recentClearType == ClearType::B2B_TSPIN_SINGLE
+			|| recentClearType == ClearType::TSPIN_TRIPLE || recentClearType == ClearType::B2B_TSPIN_TRIPLE))
+		{
+			health = clamp(health + 10, 0, 100);
+		}
+
 		if (hitType == 0)
 		{
 			comboString = "MISS";
-			health = clamp(health - 1, 0, 100);
+			health = clamp(health - 10, 0, 100);
 		}
 		else if (hitType == 1)
 		{
@@ -58,22 +73,25 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 			comboString = "HIT";
 			health = clamp(health + 2, 0, 100);
 		}
-		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS-100 && beatIt != beatsTime.end())
+		prevBeatTimeMS = nextBeatTimeMS;
+		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS - 200 && beatIt != beatsTime.end())
 		{
 			beatIt++;
 			if (beatIt != beatsTime.end())
 				nextBeatTimeMS = *beatIt;
 			beatPressed = false;
-		} 
+		}
 
 	}
 	else // too late, move to next beat
 	{
-		if (sound.getPlayingOffset().asMilliseconds() >= nextBeatTimeMS + 200 && beatIt != beatsTime.end())
+		if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 200 && beatIt != beatsTime.end())
 		{
 			combo = 0;
 			comboString = "TOO LATE";
+			beatAccuracyCount[0]++;
 			health = clamp(health - 10, 0, 100);
+			prevBeatTimeMS = nextBeatTimeMS;
 			while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS && beatIt != beatsTime.end())
 			{
 				beatIt++;
@@ -85,6 +103,18 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 	}
 }
 
+void DropToTheBeatGame::tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr)
+{
+	tick(state, window);
+	if (sound.getStatus() == SoundSource::Status::Stopped)
+	{
+		gameOver();
+		state = State::GAMEOVER;
+		resultScreenPtr = new ResultScreen(beatAccuracyCount, score, maxCombo);
+		return;
+	}
+}
+
 void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 {
 	GameBase::keyEvent(state, key);
@@ -92,13 +122,13 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 	//if (key == keybinds["HARD_DROP"] || key == keybinds["ROTATE_CW"] || key == keybinds["ROTATE_CCW"])
 	if (key == keybinds["HARD_DROP"])
 	{
-		if (abs(sound.getPlayingOffset().asMilliseconds() - nextBeatTimeMS) <= 50)
+		if (abs(sound.getPlayingOffset().asMilliseconds() - nextBeatTimeMS) <= 100) // HIT
 		{
 			combo++;
 			hitType = 2;
 			beatPressed = true;
 		}
-		else if (abs(sound.getPlayingOffset().asMilliseconds() - nextBeatTimeMS) <= 100)
+		else if (abs(sound.getPlayingOffset().asMilliseconds() - nextBeatTimeMS) <= 200) // ALMOST
 		{
 			combo++;
 			hitType = 1;
@@ -112,12 +142,19 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 			combo = 0;
 		}
 
+		beatAccuracyCount[hitType]++;
+
 		// already added clear type in GameBase, now add bonus to it
 		// if combo <=1, no combo added
 		// if combo >1, bonus = (combo - 1)/100 * (clear score)
 		// combo is capped at 100	-> which means max bonus = clear score
 		bonus = clamp(combo - 1, 0, 100) * convertClearTypeToScores(prevClearType) / 100;
 		score += bonus;
+
+		if (combo > maxCombo)
+		{
+			maxCombo = combo;
+		}
 	}
 
 	// reset on top of the gamebase's reset
@@ -127,6 +164,9 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 		healthCounter = 0;
 		combo = 0;
 		beatPressed = false;
+		beatAccuracyCount[0] = 0;
+		beatAccuracyCount[1] = 0;
+		beatAccuracyCount[2] = 0;
 	}
 }
 
@@ -141,21 +181,21 @@ void DropToTheBeatGame::render(RenderWindow& window)
 	text.setPosition(680, 650);
 	text.setString(to_string(combo));
 	window.draw(text);
-	
+
 	text.setPosition(680, 700);
 	text.setString(comboString);
 	window.draw(text);
-	
+
 	if (bonus != 0 && clearTypeCounter > 0)
 	{
-		text.setPosition(700, 500);
+		text.setPosition(700, 400);
 		text.setString("+" + to_string(bonus));
 		window.draw(text);
 	}
 
 	RectangleShape healthRect;
 	healthRect.setPosition(20, 40);
-	healthRect.setSize(Vector2f(health * 5,20));
+	healthRect.setSize(Vector2f(health * 5, 20));
 	healthRect.setFillColor(Color::Yellow);
 	healthRect.setOutlineColor(Color::Yellow);
 	healthRect.setOutlineThickness(5);

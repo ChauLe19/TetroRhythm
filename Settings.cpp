@@ -46,7 +46,7 @@ void Settings::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-void Settings::tick(RenderWindow& window)
+void Settings::tick(State& state, RenderWindow& window)
 {
 }
 
@@ -152,7 +152,7 @@ bool Settings::changeKey(Keyboard::Key key)
 }
 
 
-void Settings::mouseEvent(RenderWindow& window)
+void Settings::mouseEvent(State& state, RenderWindow& window)
 {
 }
 

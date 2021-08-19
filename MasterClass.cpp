@@ -9,6 +9,8 @@ MasterClass::MasterClass(RenderWindow& window)
 	this->settings = new Settings(controlsSettings);
 	this->gameOptions = new GameOptions(game, controlsSettings);
 	this->mapEditorSelect = new MapEditorSelect(beatMapEditor);
+	int a[3] = {0,0,0};
+	this->resultScreen = new ResultScreen(a, 0, 0);
 	this->window = &window;
 	font.loadFromFile("arial.ttf");
 	text.setFont(font);
@@ -121,6 +123,9 @@ void MasterClass::render()
 	case State::MAP_EDITOR:
 		beatMapEditor->render(*window);
 		break;
+	case State::GAMEOVER:
+		resultScreen->render(*window);
+		break;
 	}
 }
 
@@ -130,13 +135,16 @@ void MasterClass::tick()
 	switch (state)
 	{
 	case State::MENU:
-		menu->tick(*window);
+		menu->tick(state, *window);
 		break;
 	case State::GAME:
-		game->tick(*window);
+		game->tick(state, *window, resultScreen);
 		break;
 	case State::MAP_EDITOR:
-		beatMapEditor->tick(*window);
+		beatMapEditor->tick(state, *window);
+		break;
+	case State::GAMEOVER:
+		resultScreen->tick(state, *window);
 		break;
 	}
 }
@@ -163,6 +171,9 @@ void MasterClass::keyEvent(Keyboard::Key key)
 	case State::MAP_EDITOR:
 		beatMapEditor->keyEvent(state, key);
 		break;
+	case State::GAMEOVER:
+		resultScreen->keyEvent(state, key);
+		break;
 	}
 }
 
@@ -171,10 +182,10 @@ void MasterClass::mouseEvent()
 	switch (state)
 	{
 	case State::MENU:
-		menu->mouseEvent(*window);
+		menu->mouseEvent(state, *window);
 		break;
 	case State::GAME_OPTIONS:
-		gameOptions->mouseEvent(*window);
+		gameOptions->mouseEvent(state, *window);
 		break;
 	case State::SETTINGS:
 		break;
@@ -183,7 +194,10 @@ void MasterClass::mouseEvent()
 	case State::MAP_EDITOR_SELECT:
 		break;
 	case State::MAP_EDITOR:
-		beatMapEditor->mouseEvent(*window);
+		beatMapEditor->mouseEvent(state, *window);
+		break;
+	case State::GAMEOVER:
+		resultScreen->mouseEvent(state, *window);
 		break;
 	}
 }

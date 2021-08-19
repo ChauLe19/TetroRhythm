@@ -11,9 +11,9 @@ AutoDropGame::~AutoDropGame()
 {
 }
 
-void AutoDropGame::tick(RenderWindow& window)
+void AutoDropGame::tick(State& state, RenderWindow& window)
 {
-	GameBase::tick(window);
+	GameBase::tick(state, window);
 
 	if (sound.getStatus() == SoundSource::Status::Stopped)
 	{
@@ -23,6 +23,11 @@ void AutoDropGame::tick(RenderWindow& window)
 	dropOnBeat();
 
 
+}
+
+void AutoDropGame::tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr)
+{
+	tick(state, window);
 }
 
 void AutoDropGame::dropOnBeat()

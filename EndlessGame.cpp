@@ -12,7 +12,7 @@ EndlessGame::~EndlessGame()
 {
 }
 
-void EndlessGame::tick(RenderWindow& window)
+void EndlessGame::tick(State& state, RenderWindow& window)
 {
 	if (isGameOver) return;
 	frameCount++;
@@ -22,13 +22,13 @@ void EndlessGame::tick(RenderWindow& window)
 		sound.play();
 	}
 
-	if (frameCount >= levelSpeed[level-1])
+	if (frameCount >= levelSpeed[level - 1])
 	{
 		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
 		frameCount = 0;
 	}
 
-	GameBase::tick(window);
+	GameBase::tick(state, window);
 
 	if (currentPiecePtr->checkIsOnGround(board))
 	{
@@ -59,6 +59,11 @@ void EndlessGame::tick(RenderWindow& window)
 	}
 }
 
+void EndlessGame::tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr)
+{
+	tick(state, window);
+}
+
 void EndlessGame::keyEvent(State& state, Keyboard::Key key)
 {
 	GameBase::keyEvent(state, key);
@@ -67,7 +72,7 @@ void EndlessGame::keyEvent(State& state, Keyboard::Key key)
 void EndlessGame::render(RenderWindow& window)
 {
 	GameBase::render(window);
-	
+
 	text.setString("Level: " + to_string(level));
 	text.setPosition(700, 500);
 	window.draw(text);

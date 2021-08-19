@@ -155,6 +155,7 @@
     <ClCompile Include="DropToTheBeatGame.cpp" />
     <ClCompile Include="EndlessGame.cpp" />
     <ClCompile Include="MapEditorSelect.cpp" />
+    <ClCompile Include="ResultScreen.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="GameOptions.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="DropToTheBeatGame.h" />
     <ClInclude Include="EndlessGame.h" />
     <ClInclude Include="MapEditorSelect.h" />
+    <ClInclude Include="ResultScreen.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="GameBase.h" />

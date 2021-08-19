@@ -43,7 +43,7 @@ void MapEditorSelect::drawOptions(RenderWindow& window, string options, int x, i
 }
 
 
-void MapEditorSelect::tick(RenderWindow& window)
+void MapEditorSelect::tick(State& state, RenderWindow& window)
 {
 }
 
@@ -93,7 +93,7 @@ void MapEditorSelect::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-void MapEditorSelect::mouseEvent(RenderWindow& window)
+void MapEditorSelect::mouseEvent(State& state, RenderWindow& window)
 {
 }
 

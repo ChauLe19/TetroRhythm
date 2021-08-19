@@ -12,6 +12,7 @@
 #include "Settings.h"
 #include "Tetromino.h"
 #include "StateScreen.h"
+#include "ResultScreen.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -58,7 +59,8 @@ protected:
 	Tetromino* currentPiecePtr;
 	Tetromino* holdPiecePtr;
 	Tetromino* ghostPiece;
-	ClearType prevClearType = ClearType::NONE;
+	ClearType prevClearType = ClearType::NONE; // only records the clear type when the player actually clear line(s)
+	ClearType recentClearType = ClearType::NONE; // records the clear type even when player didn't clear any lines
 	Board* boardPtr;
 	Board board;
 	list<int>::iterator beatIt;
@@ -72,6 +74,7 @@ protected:
 	int onGroundCount = 0;
 	bool isGameOver = false;
 	int nextBeatTimeMS = 0;
+	int prevBeatTimeMS = 0;
 	int rainbowIndex = 0;
 	int linesCleared = 0;
 	int clearTypeCounter = 0;
@@ -113,10 +116,11 @@ public:
 	// State Screen functions
 	//***************************************************
 
-	virtual void tick(RenderWindow& window);
+	virtual void tick(State& state, RenderWindow& window);
+	virtual void tick(State& state, RenderWindow& window, ResultScreen*& resultScrenPtr) = 0;
 	virtual void render(RenderWindow& window);
 	virtual void keyEvent(State& state, Keyboard::Key key);
-	virtual void mouseEvent(RenderWindow& window);
+	virtual void mouseEvent(State& state, RenderWindow& window);
 
 	void renderBeatSignal(RenderWindow& window);
 

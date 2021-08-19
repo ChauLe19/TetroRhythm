@@ -15,10 +15,10 @@ public:
 
 	// StateScreen functions
 	//****************************************************
-	void tick(RenderWindow& window);
+	void tick(State& state, RenderWindow& window);
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(RenderWindow& window);
+	void mouseEvent(State& state, RenderWindow& window);
 
 
 	void openBeatMapEditor(State& state, string folderPath);

@@ -17,6 +17,7 @@
 #include "GameOptions.h"
 #include "MapEditorSelect.h"
 #include "BeatMapEditor.h"
+#include "ResultScreen.h"
 #include <map>
 /**
  * Controls states and rendering.
@@ -44,6 +45,7 @@ private:
 	GameOptions* gameOptions;
 	MapEditorSelect* mapEditorSelect;
 	BeatMapEditor* beatMapEditor;
+	ResultScreen* resultScreen;
 
 
 public:

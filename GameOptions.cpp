@@ -33,7 +33,7 @@ GameOptions::~GameOptions()
 {
 }
 
-void GameOptions::tick(RenderWindow& window)
+void GameOptions::tick(State& state, RenderWindow& window)
 {
 }
 
@@ -132,7 +132,7 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-void GameOptions::mouseEvent(RenderWindow& window)
+void GameOptions::mouseEvent(State& state, RenderWindow& window)
 {
 }
 

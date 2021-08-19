@@ -23,7 +23,7 @@ public:
 	 *
 	 * \param window Rendering window
 	 */
-	virtual void tick(RenderWindow& window) = 0;
+	virtual void tick(State& state, RenderWindow& window) = 0;
 
 	/**
 	 * Function for drawing the screen.
@@ -45,7 +45,7 @@ public:
 	 * Function run when a mouse event is detected.
 	 *
 	 */
-	virtual void mouseEvent(RenderWindow& window) = 0;
+	virtual void mouseEvent(State& state, RenderWindow& window) = 0;
 };
 
 #endif

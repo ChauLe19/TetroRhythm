@@ -14,6 +14,7 @@
 #include "EndlessGame.h"
 #include "Settings.h"
 #include "AutoDropGame.h"
+#include "ResultScreen.h"
 #include "Enums.h"
 
 #include <SFML/Graphics.hpp>
@@ -53,10 +54,10 @@ public:
 
 	// StateScreen functions
 	//****************************************************
-	void tick(RenderWindow& window);
+	void tick(State& state, RenderWindow& window);
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(RenderWindow& window);
+	void mouseEvent(State& state, RenderWindow& window);
 
 	/**
 	 * Draw option out to window. If the cursor is on it, highlight it.

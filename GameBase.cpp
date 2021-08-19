@@ -63,7 +63,7 @@ GameBase::GameBase(Controls_Settings& settings, string folderPath)
 {
 	cout << "Initializing game" << endl;
 
-	font.loadFromFile("arial.ttf");
+	font.loadFromFile("Dense-Regular.otf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
 
@@ -142,7 +142,7 @@ GameBase::~GameBase()
 	delete holdPiecePtr;
 }
 
-void GameBase::tick(RenderWindow& window)
+void GameBase::tick(State& state, RenderWindow& window)
 {
 	if (isGameOver) return;
 
@@ -313,10 +313,10 @@ void GameBase::render(RenderWindow& window)
 	{
 		clearTypeCounter--;
 		text.setString(clearTypeToString(prevClearType));
-		text.setPosition(700, 400);
+		text.setPosition(700, 300);
 		window.draw(text);
 		text.setString(to_string(convertClearTypeToScores(prevClearType)));
-		text.setPosition(700, 450);
+		text.setPosition(700, 350);
 		window.draw(text);
 	}
 
@@ -385,6 +385,10 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 			level = clamp(linesCleared / 10 + 1, 1, 15);
 			ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
 
+			//update clear type everytime the play drop a piece
+			recentClearType = tempScoresType;
+
+			//update clear type only when the dropped piece clear lines
 			// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
 			if (tempScoresType != ClearType::NONE)
 			{
@@ -417,7 +421,7 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 	isAutoShiftActive = false;
 }
 
-void GameBase::mouseEvent(RenderWindow& window)
+void GameBase::mouseEvent(State& state, RenderWindow& window)
 {
 }
 
@@ -456,12 +460,12 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 	CircleShape circle;
 	circle.setRadius(innerRadius);
 	circle.setPosition(Vector2f(1024 - innerRadius, 200));
-	circle.setFillColor(Color(75,75,75,150));
-	circle.setOutlineColor(Color(75, 75, 75, 150));
+	circle.setFillColor(Color(100, 100, 100,150));
+	circle.setOutlineColor(Color(200, 200, 200, 150));
 	circle.setOutlineThickness(5);
 	window.draw(circle);
 
-	int maxRectOffset = 50;
+	int maxOffsetMS = 2000;
 	int nowTime = sound.getPlayingOffset().asMilliseconds();
 	std::list<Tetromino*>::iterator it = bag.begin();
 	list<int>::iterator tempBeatIt = beatIt; // copy beatIt to tempBeatsIt
@@ -469,15 +473,16 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 	for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && tempBeatIt != beatsTime.end(); ++it, ++tempBeatIt, ++tempRainbowIndex)
 	{
 		int bufferTime = *tempBeatIt;
-		int distanceFromEnd = (bufferTime - nowTime) / 32;// (1 / 60 second per frame)*1000 milisec per sec
+		int timeOffset = bufferTime - nowTime;// (1 / 60 second per frame)*1000 milisec per sec
 
-		if (distanceFromEnd > maxRectOffset) break;
-
+		if (timeOffset > maxOffsetMS) break;
+		if (prevBeatTimeMS >= bufferTime) continue;
+		int distanceFromEnd = timeOffset / 20;
 		CircleShape circle;
 		circle.setRadius(75 + distanceFromEnd);
 		circle.setPosition(Vector2f(1024 - (innerRadius + distanceFromEnd), 200 - distanceFromEnd));
 		circle.setFillColor(Color::Transparent);
-		circle.setOutlineColor(Color(75, 75, 75, 150));
+		circle.setOutlineColor(Color(200, 200, 200, 200));
 		circle.setOutlineThickness(5);
 		window.draw(circle);
 
@@ -804,6 +809,7 @@ void GameBase::reset()
 
 	beatIt = beatsTime.begin();
 	nextBeatTimeMS = *beatIt;
+	prevBeatTimeMS = 0;
 	bag.clear();
 
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
