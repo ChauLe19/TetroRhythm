@@ -13,6 +13,7 @@
 #include "Tetromino.h"
 #include "StateScreen.h"
 #include "ResultScreen.h"
+#include "Utils.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -29,6 +30,8 @@
 
 using namespace sf;
 namespace fs = std::filesystem;
+
+class ResultScreen;
 
 const int boardX = 1024- 45*5;
 const int boardY = 100;
@@ -78,6 +81,7 @@ protected:
 	int rainbowIndex = 0;
 	int linesCleared = 0;
 	int clearTypeCounter = 0;
+	bool finished = false;
 
 	// Controls related variables
 	//****************************************
@@ -95,6 +99,7 @@ protected:
 	bool isAutoRepeatActive = false;
 	bool firstPressed = false;
 	bool alreadyHold = false;
+	bool firstClicked = false;
 
 	//Softdrop DAS
 	int SDdelayAutoShiftCount = 0;
@@ -123,6 +128,7 @@ public:
 	virtual void mouseEvent(State& state, RenderWindow& window);
 
 	void renderBeatSignal(RenderWindow& window);
+	void renderGameOver(RenderWindow& window);
 
 	/**
 	 * Convert the clear type to the appropriate score.
@@ -166,7 +172,7 @@ public:
 	void pause();
 	void start();
 	void reset();
-	void restart();
+	virtual void restart();
 	void gameOver();
 
 

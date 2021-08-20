@@ -39,15 +39,6 @@ private:
 	vector<fs::path> maps;
 
 
-	/**
-	 * Return a value of var after clamping between min and max.
-	 * 
-	 * \param var
-	 * \param min
-	 * \param max
-	 * \return Clamped value
-	 */
-	int clamp(int var, int min, int max);
 public:
 	GameOptions(GameBase*& gamePtr, Controls_Settings& settings);
 	~GameOptions();

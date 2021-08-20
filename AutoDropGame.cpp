@@ -13,12 +13,15 @@ AutoDropGame::~AutoDropGame()
 
 void AutoDropGame::tick(State& state, RenderWindow& window)
 {
-	GameBase::tick(state, window);
-
+	if (isGameOver) return;
 	if (sound.getStatus() == SoundSource::Status::Stopped)
 	{
 		gameOver();
+		finished = true;
+		return;
 	}
+	GameBase::tick(state, window);
+
 
 	dropOnBeat();
 
@@ -72,8 +75,30 @@ void AutoDropGame::keyEvent(State& state, Keyboard::Key key)
 	GameBase::keyEvent(state, key);
 }
 
+void AutoDropGame::mouseEvent(State& state, RenderWindow& window)
+{
+	if (!isGameOver) return;
+	GameBase::mouseEvent(state, window);
+}
+
 void AutoDropGame::render(RenderWindow& window)
 {
 	GameBase::render(window);
 	GameBase::renderBeatSignal(window);
+	if (isGameOver)
+	{
+		GameBase::renderGameOver(window);
+
+		text.setCharacterSize(120);
+		text.setFillColor(finished ? Color::Green : Color::Red);
+		text.setString(finished ? "Completed" : "Failed");
+		text.setPosition(1024 - text.getLocalBounds().width / 2, 576 - 400);
+		window.draw(text);
+
+		text.setCharacterSize(80);
+		text.setFillColor(Color::White);
+		text.setString(to_string(score));
+		text.setPosition(1024 - text.getLocalBounds().width / 2, 576 - 250);
+		window.draw(text);
+	}
 }

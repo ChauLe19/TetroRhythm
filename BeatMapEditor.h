@@ -11,6 +11,7 @@
 
 #include "StateScreen.h"
 #include "Enums.h"
+#include "Utils.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>

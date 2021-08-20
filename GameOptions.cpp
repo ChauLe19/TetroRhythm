@@ -1,18 +1,5 @@
 #include "GameOptions.h"
 
-int GameOptions::clamp(int var, int min, int max)
-{
-	if (var < min)
-	{
-		return min;
-	}
-	else if (var > max)
-	{
-		return max;
-	}
-	return var;
-}
-
 GameOptions::GameOptions(GameBase*& gamePtr, Controls_Settings& settings)
 	: gamePtr(gamePtr), settings(settings)
 {
@@ -101,7 +88,7 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 	case Keyboard::Key::Up:
 		if (choosingMap)
 		{
-			cursorMap = clamp(cursorMap - 1, 0, maps.size() - 1);
+			cursorMap = clamp(cursorMap - 1, 0, (int)maps.size() - 1);
 		}
 		else
 		{
@@ -111,7 +98,7 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 	case Keyboard::Key::Down:
 		if (choosingMap)
 		{
-			cursorMap = clamp(cursorMap + 1, 0, maps.size() - 1);
+			cursorMap = clamp(cursorMap + 1, 0, (int)maps.size() - 1);
 		}
 		else
 		{

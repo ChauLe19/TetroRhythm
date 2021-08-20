@@ -69,11 +69,28 @@ void EndlessGame::keyEvent(State& state, Keyboard::Key key)
 	GameBase::keyEvent(state, key);
 }
 
+void EndlessGame::mouseEvent(State& state, RenderWindow& window)
+{
+	if (!isGameOver) return;
+	GameBase::mouseEvent(state, window);
+}
+
 void EndlessGame::render(RenderWindow& window)
 {
 	GameBase::render(window);
 
 	text.setString("Level: " + to_string(level));
-	text.setPosition(700, 500);
+	text.setPosition(650, 500);
 	window.draw(text);
+
+	if (isGameOver)
+	{
+		GameBase::renderGameOver(window);
+
+		text.setCharacterSize(80);
+		text.setFillColor(Color::White);
+		text.setString(to_string(score));
+		text.setPosition(1024 - text.getLocalBounds().width / 2, 576 - 250);
+		window.draw(text);
+	}
 }

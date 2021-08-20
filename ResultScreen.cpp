@@ -1,4 +1,5 @@
 #include "ResultScreen.h"
+#include "GameBase.h"
 
 ResultScreen::ResultScreen(int accuracyBeatCount[3], int rawScore, int combo)
 {
@@ -95,7 +96,17 @@ void ResultScreen::keyEvent(State& state, Keyboard::Key key)
 		break;
 	case Keyboard::Key::R:
 		state = State::GAME;
-		//this->game->restart();
+		break;
+	}
+}
+void ResultScreen::keyEvent(State& state, Keyboard::Key key, GameBase*& game)
+{
+	keyEvent(state, key);
+	switch (key)
+	{
+	case Keyboard::Key::R:
+		state = State::GAME;
+		game->restart();
 		break;
 	}
 }

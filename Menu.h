@@ -9,6 +9,7 @@
 #define MENU_H
 
 #include "StateScreen.h"
+#include "Utils.h"
 
 #include <SFML/Graphics.hpp>
 
@@ -25,6 +26,7 @@ private:
 	Font font;
 	Texture buttonTexture;
 	Sprite buttonImage;
+	bool firstPressed = false;
 public:
 	Menu();
 	~Menu();

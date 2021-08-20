@@ -40,8 +40,8 @@ const static std::array<std::array<std::array<int, 4>, 4>, 7> tetrominos = { {
 												{0, 0, 0, 0}
 											}},
 											{{  //O block
-												{3, 3, 0, 0},
-												{3, 3, 0, 0},
+												{0, 3, 3, 0},
+												{0, 3, 3, 0},
 												{0, 0, 0, 0},
 												{0, 0, 0, 0}
 											}},
@@ -206,9 +206,10 @@ public:
 	/**
 	 * Hard drop the tetromino on the board.
 	 *
+	 * \return number of cells dropped
 	 * \param board To be placed on
 	 */
-	void hardDrop(Board& board);
+	int hardDrop(Board& board);
 
 	/**
 	 * Set the tetromino on the board.

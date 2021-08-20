@@ -151,10 +151,15 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 }
 
 
-void Tetromino::hardDrop(Board& board)
+int Tetromino::hardDrop(Board& board)
 {
-	while (move(Moving_Direction::DOWN_DIR, board));
+	int cellsDropped = 0;
+	while (move(Moving_Direction::DOWN_DIR, board))
+	{
+		cellsDropped++;
+	}
 	setPiece(board);
+	return cellsDropped;
 }
 
 void Tetromino::setPiece(Board& board)

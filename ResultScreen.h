@@ -12,11 +12,8 @@
 #include "StateScreen.h"
 
 using namespace std;
-//class GameBase
-//{
-//public:
-//	void restart();
-//};
+class GameBase;
+class DropToTheBeatGame;
 class ResultScreen :
 	public StateScreen
 {
@@ -40,6 +37,7 @@ public:
 	void tick(State& state, RenderWindow& window);
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
+	void keyEvent(State& state, Keyboard::Key key, GameBase*& game);
 	void mouseEvent(State& state, RenderWindow& window);
 
 };

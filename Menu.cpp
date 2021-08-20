@@ -18,28 +18,6 @@ void Menu::tick(State& state, RenderWindow& window)
 {
 }
 
-void createButton(RenderWindow& window,Text &text, Color textColor, Color boxColor, string textString, int width, int height, int x, int y)
-{
-	RectangleShape rect;
-	rect.setSize(Vector2f(width, height));
-	rect.setFillColor(Color(boxColor.r-100, boxColor.g-100, boxColor.b-100, 255));
-	rect.setPosition(Vector2f(x,y+10));
-	window.draw(rect);
-
-	rect.setFillColor(boxColor);
-	rect.setSize(Vector2f(width, height));
-	rect.setPosition(Vector2f(x,y));
-	window.draw(rect);
-
-
-	text.setFillColor(textColor);
-	//text.setPosition(1024-60, 595);
-	text.setCharacterSize(60);
-	text.setString(textString);
-	text.setPosition(1024 - text.getLocalBounds().width / 2, y-10);
-	window.draw(text);
-}
-
 void Menu::render(RenderWindow& window)
 {
 	text.setFillColor(Color::White);
@@ -127,4 +105,23 @@ void Menu::keyEvent(State& state, Keyboard::Key key)
 
 void Menu::mouseEvent(State& state, RenderWindow& window)
 {
+	if (!Mouse::isButtonPressed(Mouse::Left))
+	{
+		firstPressed = true;
+		return;
+	}
+	if (firstPressed && mouseInBox(window, 1024 - 200, 600, 400, 60)) // BEGIN button
+	{
+		state = State::GAME_OPTIONS;
+	}
+	else if (firstPressed && mouseInBox(window, 1024 - 200, 700, 400, 60)) //SETTINGS button
+	{
+		state = State::SETTINGS;
+	}
+	else if (firstPressed && mouseInBox(window, 1024 - 200, 800, 400, 60)) // EDIT BEAT MAPS button
+	{
+		state = State::MAP_EDITOR_SELECT;
+	}
+	firstPressed = false;
+
 }

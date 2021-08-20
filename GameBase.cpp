@@ -1,4 +1,5 @@
 #include "GameBase.h"
+#include "ResultScreen.h"
 
 GameBase::GameBase(Controls_Settings& settings)
 	: settings(settings), delayAutoShift(settings.delayAutoShift),
@@ -263,20 +264,16 @@ void GameBase::tick(State& state, RenderWindow& window)
 void GameBase::render(RenderWindow& window)
 {
 
-
+	text.setFillColor(Color::White);
 	board.render(window);
 	currentPiecePtr->render(window, board);
 	currentPiecePtr->getGhost(board).render(window, board);
 	if (holdPiecePtr != nullptr)
 	{
 		int extra = squareSize / 2;
-		if (holdPiecePtr->getType() == Type::I)
+		if (holdPiecePtr->getType() == Type::I || holdPiecePtr->getType() == Type::O)
 		{
 			extra = 0;
-		}
-		else if (holdPiecePtr->getType() == Type::O)
-		{
-			extra = 36;
 		}
 		holdPiecePtr->render(window, boardX - (squareSize / 2 + 20) - squareSize * 4 + extra, boardY + squareSize / 2);
 	}
@@ -288,13 +285,9 @@ void GameBase::render(RenderWindow& window)
 	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
 	{
 		int extra = squareSize / 2;
-		if ((*it)->getType() == Type::I)
+		if ((*it)->getType() == Type::I || (*it)->getType() == Type::O)
 		{
 			extra = 0;
-		}
-		else if ((*it)->getType() == Type::O)
-		{
-			extra = squareSize;
 		}
 		(*it)->render(window, boardX + (squareSize / 2 + 20) + squareSize * 10 + extra, boardY + squareSize + squareSize * 3 * counter);
 		counter++;
@@ -313,26 +306,22 @@ void GameBase::render(RenderWindow& window)
 	{
 		clearTypeCounter--;
 		text.setString(clearTypeToString(prevClearType));
-		text.setPosition(700, 300);
+		text.setPosition(1024 - squareSize * 5 - 20 - text.getLocalBounds().width, 300);
 		window.draw(text);
-		text.setString(to_string(convertClearTypeToScores(prevClearType)));
+		/*text.setString(to_string(convertClearTypeToScores(prevClearType)));
 		text.setPosition(700, 350);
-		window.draw(text);
+		window.draw(text);*/
 	}
 
+	text.setCharacterSize(50);
+	text.setString("SCORE");
+	text.setPosition(1024 + squareSize * 5 + 20, boardY + squareSize * 15 + 50);
+	window.draw(text);
+	text.setCharacterSize(60);
 	text.setString(to_string(score));
-	text.setPosition(100, 0);
+	text.setPosition(1024 + squareSize * 5 + 20, boardY + squareSize * 15 + 100);
 	window.draw(text);
 
-	if (isGameOver)
-	{
-		text.setString("GAME OVER");
-		text.setPosition(300, 0);
-		window.draw(text);
-		text.setString("Press R to restart");
-		text.setPosition(270, 20);
-		window.draw(text);
-	}
 }
 
 
@@ -364,10 +353,10 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 	}
 	else if (key == keybinds["HARD_DROP"])
 	{
-		currentPiecePtr->hardDrop(board);
+		int cellsDropped = currentPiecePtr->hardDrop(board);
 		//cout << "input" << endl;
 		//board.print();
-		score += GameBase::convertClearTypeToScores(ClearType::HARDDROP);
+		score += cellsDropped * GameBase::convertClearTypeToScores(ClearType::HARDDROP);
 
 		nextPiece();
 
@@ -409,7 +398,7 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		cout << "playing:" << sound.getPlayingOffset().asMilliseconds() << endl;
 	}
 
-	
+
 	// No hold key control (rotation)
 	if (key == keybinds["ROTATE_CW"]
 		|| key == keybinds["ROTATE_CCW"]
@@ -423,6 +412,22 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 
 void GameBase::mouseEvent(State& state, RenderWindow& window)
 {
+	if (!Mouse::isButtonPressed(Mouse::Left))
+	{
+		firstClicked = true;
+		return;
+	}
+
+	if (firstClicked && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // RESTART button
+	{
+		restart();
+	}
+	else if (firstClicked && mouseInBox(window, 1024 - 150, 576 + 20, 300, 60)) //MENU button
+	{
+		reset();
+		state = State::MENU;
+	}
+	firstClicked = false;
 }
 
 void GameBase::renderBeatSignal(RenderWindow& window)
@@ -459,8 +464,8 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 	const int innerRadius = 75;
 	CircleShape circle;
 	circle.setRadius(innerRadius);
-	circle.setPosition(Vector2f(1024 - innerRadius, 200));
-	circle.setFillColor(Color(100, 100, 100,150));
+	circle.setPosition(Vector2f(1024 - innerRadius, boardY + squareSize * 5));
+	circle.setFillColor(Color(100, 100, 100, 125));
 	circle.setOutlineColor(Color(200, 200, 200, 150));
 	circle.setOutlineThickness(5);
 	window.draw(circle);
@@ -480,7 +485,7 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 		int distanceFromEnd = timeOffset / 20;
 		CircleShape circle;
 		circle.setRadius(75 + distanceFromEnd);
-		circle.setPosition(Vector2f(1024 - (innerRadius + distanceFromEnd), 200 - distanceFromEnd));
+		circle.setPosition(Vector2f(1024 - (innerRadius + distanceFromEnd), boardY + squareSize * 5 - distanceFromEnd));
 		circle.setFillColor(Color::Transparent);
 		circle.setOutlineColor(Color(200, 200, 200, 200));
 		circle.setOutlineThickness(5);
@@ -496,6 +501,27 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 		//window.draw(rectangle);
 
 	}
+
+}
+
+void GameBase::renderGameOver(RenderWindow& window)
+{
+	RectangleShape blurScreen;
+	blurScreen.setPosition(0, 0);
+	blurScreen.setSize(Vector2f(window.getSize()));
+	blurScreen.setFillColor(Color(0, 0, 0, 220));
+	window.draw(blurScreen);
+
+	/*RectangleShape gameoverBox;
+	gameoverBox.setPosition(1024 - 200, 576 - 150);
+	gameoverBox.setSize(Vector2f(400, 300));
+	gameoverBox.setFillColor(Color::Black);
+	gameoverBox.setOutlineColor(Color::White);
+	gameoverBox.setOutlineThickness(5);
+	window.draw(gameoverBox);*/
+
+	createButton(window, text, Color(0, 0, 50, 255), Color::White, "Restart", 300, 60, 1024 - 150, 576 - 60 - 20 );
+	createButton(window, text, Color(0, 0, 50, 255), Color::White, "Menu", 300, 60, 1024 - 150, 576 + 20);
 
 }
 

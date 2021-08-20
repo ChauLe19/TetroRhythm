@@ -250,32 +250,6 @@ void BeatMapEditor::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-bool mouseInBox(RenderWindow& window, int x, int y, int width, int height)
-{
-	Vector2i pixelPos = Mouse::getPosition(window);
-	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
-	return (mouseViewPos.x >= x && mouseViewPos.x <= x + width
-		&& mouseViewPos.y >= y && mouseViewPos.y <= y + height);
-}
-bool mouseInCircle(RenderWindow& window, int x, int y, int r)
-{
-	Vector2i pixelPos = Mouse::getPosition(window);
-	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
-	return (mouseViewPos.x - x) * (mouseViewPos.x - x) + (mouseViewPos.y - y) * (mouseViewPos.y - y) <= r * r;
-}
-int clamp(int var, int min, int max)
-{
-	if (var < min)
-	{
-		return min;
-	}
-	else if (var > max)
-	{
-		return max;
-	}
-	return var;
-}
-
 void BeatMapEditor::addCursorToBeatList()
 {
 

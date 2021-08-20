@@ -25,6 +25,8 @@ private:
 	int healthCounter = 0; // if reaches 60, health +=1 (every second, health +=1_
 	int bonus = 0;
 	int beatAccuracyCount[3] = {0,0,0}; // miss || too late, almost, hit  
+	int accuracyTimer = 0; 
+
 public:
 	DropToTheBeatGame(Controls_Settings& settings);
 	DropToTheBeatGame(Controls_Settings& settings, string folderPath);
@@ -40,6 +42,8 @@ public:
 	void tick(State& state, RenderWindow& window);
 	void tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr);
 	void keyEvent(State& state, Keyboard::Key key);
+	void mouseEvent(State& state, RenderWindow& window);
+	void restart();
 	void render(RenderWindow& window);
 };
 #endif

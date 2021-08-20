@@ -172,7 +172,7 @@ void MasterClass::keyEvent(Keyboard::Key key)
 		beatMapEditor->keyEvent(state, key);
 		break;
 	case State::GAMEOVER:
-		resultScreen->keyEvent(state, key);
+		resultScreen->keyEvent(state, key, game);
 		break;
 	}
 }
@@ -190,6 +190,7 @@ void MasterClass::mouseEvent()
 	case State::SETTINGS:
 		break;
 	case State::GAME:
+		game->mouseEvent(state, *window);
 		break;
 	case State::MAP_EDITOR_SELECT:
 		break;
