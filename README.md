@@ -1,5 +1,4 @@
-# TetroRythm
-Modern tetris game style with a twist of music
+ Rythm + puzzle block game that requires you to stack blocks in sync with the beat.
 
 2 music modes:
 + Auto Drop Beat
