@@ -58,13 +58,10 @@ void AutoDropGame::dropOnBeat()
 		alreadyHold = false;
 		onGroundCount = 0;
 
-		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS)
-		{
-			++beatIt;
-			if (beatIt == beatsTime.end()) break;
-			nextBeatTimeMS = *beatIt;
-		}
+		++beatIt;
 		rainbowIndex = (rainbowIndex + 1) % 7;
+		if (beatIt == beatsTime.end()) return;
+		nextBeatTimeMS = *beatIt;
 	}
 }
 

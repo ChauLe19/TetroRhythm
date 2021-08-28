@@ -472,10 +472,10 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 
 	int maxOffsetMS = 2000;
 	int nowTime = sound.getPlayingOffset().asMilliseconds();
-	std::list<Tetromino*>::iterator it = bag.begin();
-	list<int>::iterator tempBeatIt = beatIt; // copy beatIt to tempBeatsIt
+	//std::list<Tetromino*>::iterator it = bag.begin();
+	//list<int>::iterator tempBeatIt = beatIt; // copy beatIt to tempBeatsIt
 
-	for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && tempBeatIt != beatsTime.end(); ++it, ++tempBeatIt, ++tempRainbowIndex)
+	for (list<int>::iterator tempBeatIt = beatIt; tempBeatIt != beatsTime.end(); ++tempBeatIt, ++tempRainbowIndex)
 	{
 		int bufferTime = *tempBeatIt;
 		int timeOffset = bufferTime - nowTime;// (1 / 60 second per frame)*1000 milisec per sec
@@ -820,12 +820,14 @@ void GameBase::reset()
 	delete currentPiecePtr;
 	delete prevPiecePtr;
 	delete holdPiecePtr;
+	delete ghostPiece;
 
 	boardPtr = new Board(boardX, boardY);
 	board = *boardPtr;
 	currentPiecePtr = nullptr;
 	prevPiecePtr = nullptr;
 	holdPiecePtr = nullptr;
+	ghostPiece = nullptr;
 	prevClearType = ClearType::NONE;
 	onGroundCount = 0;
 	score = 0;

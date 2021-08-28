@@ -41,6 +41,7 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 		return;
 	}
 
+	int tempTime = sound.getPlayingOffset().asMilliseconds();
 
 	// if pressed in 400ms window, doesn't get "TOO LATE"
 	// TOO LATE	-> health -= 10
@@ -75,32 +76,28 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 			comboString = "HIT";
 			health = clamp(health + 2, 0, 100);
 		}
-		prevBeatTimeMS = nextBeatTimeMS;
-		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS - 200 && beatIt != beatsTime.end())
+
+		// early 200ms, that beat is gone
+		if (tempTime >= nextBeatTimeMS - 200 && beatIt != beatsTime.end())
 		{
+			prevBeatTimeMS = nextBeatTimeMS;
 			beatIt++;
-			if (beatIt != beatsTime.end())
-				nextBeatTimeMS = *beatIt;
-			beatPressed = false;
+			nextBeatTimeMS = *beatIt;
 		}
 		accuracyTimer = 60;
 	}
 	else // too late, move to next beat
 	{
-		if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 200 && beatIt != beatsTime.end())
+		if (tempTime > nextBeatTimeMS + 200 && beatIt != beatsTime.end())
 		{
 			combo = 0;
 			comboString = "LATE";
 			beatAccuracyCount[0]++;
 			health = clamp(health - 10, 0, 100);
 			prevBeatTimeMS = nextBeatTimeMS;
-			while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS && beatIt != beatsTime.end())
-			{
-				beatIt++;
-				if (beatIt != beatsTime.end())
-					nextBeatTimeMS = *beatIt;
-				beatPressed = false;
-			}
+			beatIt++;
+
+			nextBeatTimeMS = *beatIt;
 			accuracyTimer = 60;
 		}
 	}
@@ -120,17 +117,17 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window, ResultScreen*& 
 void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 {
 	GameBase::keyEvent(state, key);
-
+	int tempTime = sound.getPlayingOffset().asMilliseconds();
 	//if (key == keybinds["HARD_DROP"] || key == keybinds["ROTATE_CW"] || key == keybinds["ROTATE_CCW"])
 	if (key == keybinds["HARD_DROP"])
 	{
-		if (abs(sound.getPlayingOffset().asMilliseconds() - nextBeatTimeMS) <= 100) // HIT
+		if (abs(tempTime - nextBeatTimeMS) <= 100) // HIT
 		{
 			combo++;
 			hitType = 2;
 			beatPressed = true;
 		}
-		else if (abs(sound.getPlayingOffset().asMilliseconds() - nextBeatTimeMS) <= 200) // ALMOST
+		else if (abs(tempTime - nextBeatTimeMS) <= 200) // ALMOST
 		{
 			combo++;
 			hitType = 1;
@@ -174,7 +171,7 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 
 void DropToTheBeatGame::mouseEvent(State& state, RenderWindow& window)
 {
-	if (!isGameOver || finished ) return;
+	if (!isGameOver || finished) return;
 	GameBase::mouseEvent(state, window);
 }
 
