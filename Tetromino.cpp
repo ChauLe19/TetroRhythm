@@ -234,6 +234,10 @@ bool Tetromino::move(Moving_Direction dir, Board& board)
 	{
 		newYPos++;
 	}
+	else if (dir == Moving_Direction::UP_DIR)
+	{
+		newYPos--;
+	}
 	bool isPossible = setXY(newXPos, newYPos, board);
 	if (isPossible) rotateLast = false;
 	checkIsOnGround(board);

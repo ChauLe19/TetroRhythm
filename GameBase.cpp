@@ -879,6 +879,17 @@ void GameBase::gameOver()
 	sound.stop();
 }
 
+bool GameBase::createGarbageLine(int holePos)
+{
+	bool res =  board.createGarbageLine(holePos);
+	if (!currentPiecePtr->checkCollision(board))
+	{
+		currentPiecePtr->move(Moving_Direction::UP_DIR, board);
+
+	}
+	return res;
+}
+
 
 bool GameBase::isB2BChain(ClearType type)
 {

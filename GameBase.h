@@ -174,6 +174,7 @@ public:
 	void reset();
 	virtual void restart();
 	void gameOver();
+	bool createGarbageLine(int holePos);
 
 
 	// Getters and Setters

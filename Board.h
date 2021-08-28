@@ -120,6 +120,9 @@ public:
 	 */
 	ClearingInfo clearLines();
 
+	bool createGarbageLine(int holePos);
+
+
 	/**
 	 * Get an array representation of the board.
 	 */

@@ -5,7 +5,7 @@ Board::Board(int xPos, int yPos)
 	this->yPos = yPos;
 	frameTexture.loadFromFile("Images/frame flat.png");
 	image.setTexture(frameTexture);
-	image.setPosition((float)xPos-255, (float)yPos-10);
+	image.setPosition((float)xPos - 255, (float)yPos - 10);
 	cellsTexture.loadFromFile("Images/tiles-2.png");
 	cellImage.setTexture(cellsTexture);
 
@@ -30,7 +30,7 @@ void Board::render(RenderWindow& window)
 
 	window.draw(image);
 	RectangleShape rect(Vector2f(squareSize * 10, squareSize * 20));
-	rect.setFillColor(Color(0,0,0,150));
+	rect.setFillColor(Color(0, 0, 0, 150));
 	rect.setPosition(xPos, yPos);
 	rect.setOutlineColor(Color::White);
 	rect.setOutlineThickness(5);
@@ -112,6 +112,42 @@ void Board::setCell(int x, int y, int value)
 int Board::getCell(int x, int y)
 {
 	return board[x][y];
+}
+
+bool Board::createGarbageLine(int holePos)
+{
+	// move up the board
+	for (int i = 0; i < boardHeight - 1; i++)
+	{
+		for (int k = 0; k < boardWidth; k++)
+		{
+			// if the top has block, can't create a garbage line
+			if (i == 0 && board[i][k] != 0)
+			{
+				return false;
+			}
+			else if (i==0)
+			{
+				continue;
+			}
+
+			board[i][k] = board[i + 1][k];
+		}
+	}
+
+	// create garbage line
+	for (int k = 0; k < boardWidth; k++)
+	{
+		if (k == holePos)
+		{
+			board[boardHeight - 1][k] = 0;
+		}
+		else
+		{
+			board[boardHeight - 1][k] = 8;
+		}
+	}
+	return true;
 }
 
 void Board::print()

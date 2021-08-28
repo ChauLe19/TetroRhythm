@@ -21,8 +21,6 @@ private:
 	int combo = 0;
 	int maxCombo = 0;
 	bool beatPressed = false;
-	int health = 100; // 0 <= health <= 100
-	int healthCounter = 0; // if reaches 60, health +=1 (every second, health +=1_
 	int bonus = 0;
 	int beatAccuracyCount[3] = {0,0,0}; // miss || too late, almost, hit  
 	int accuracyTimer = 0; 
