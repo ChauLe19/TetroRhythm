@@ -17,7 +17,7 @@ using namespace std;
 using namespace sf;
 
 #define boardWidth 10
-#define boardHeight 20
+#define boardHeight 22
 //#define matrixWidth boardWidth + 2
 //#define matrixHeight boardHeight + 2
 

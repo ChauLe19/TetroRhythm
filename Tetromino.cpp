@@ -296,7 +296,7 @@ void Tetromino::render(RenderWindow& window, Board& board)
 		{
 			if (cells[i][j] > 0)
 			{
-				cellImage.setPosition(board.getXPos() + (xPos + j) * squareSize, board.getYPos() + (yPos + i) * squareSize);
+				cellImage.setPosition(board.getXPos() + (xPos + j) * squareSize, board.getYPos() + (yPos + i - 2) * squareSize);
 				window.draw(cellImage);
 			}
 		}
@@ -321,7 +321,7 @@ void Tetromino::render(RenderWindow& window, int x, int y)
 void Tetromino::reset()
 {
 	xPos = 3;
-	yPos = 0;
+	yPos = 1;
 	orientation = Orientation::SPAWN;
 	cells = tetrominos[static_cast<int>(type)];
 	isOnGround = false;

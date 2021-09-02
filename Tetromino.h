@@ -151,7 +151,7 @@ private:
 	//*****************************************
 
 	int xPos = 3;
-	int yPos = 0;
+	int yPos = 1;
 
 	bool isOnGround = false;
 	bool rotateLast = false;

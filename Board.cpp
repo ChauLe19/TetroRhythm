@@ -37,15 +37,15 @@ void Board::render(RenderWindow& window)
 	//rect.setFillColor(Color(25,25,25,255));
 	//rect.setFillColor(Color::White);
 	window.draw(rect);
-	// Doesn't render the first line
-	for (int i = 1; i < boardHeight; i++)
+	// Doesn't render the first 2 lines
+	for (int i = 2; i < boardHeight; i++)
 	{
 		for (int j = 0; j < boardWidth; j++)
 		{
 			if (board[i][j] > 0)
 			{
 				cellImage.setTextureRect(IntRect((board[i][j] - 1) * squareSize, 0, squareSize, squareSize));
-				cellImage.setPosition(xPos + squareSize * j, yPos + squareSize * i);
+				cellImage.setPosition(xPos + squareSize * j, yPos + squareSize * (i - 2));
 				window.draw(cellImage);
 			}
 		}
