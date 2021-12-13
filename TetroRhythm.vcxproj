@@ -24,6 +24,7 @@
     <ProjectGuid>{4a39d4b3-f4e4-499b-bdb9-7fa3964b4b62}</ProjectGuid>
     <RootNamespace>TetroRythm</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>TetroRhythm</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -152,9 +153,11 @@
     <ClCompile Include="AutoDropGame.cpp" />
     <ClCompile Include="BeatMapEditor.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="DropToTheBeatGame.cpp" />
     <ClCompile Include="EndlessGame.cpp" />
     <ClCompile Include="MapEditorSelect.cpp" />
+    <ClCompile Include="MiniBpm.cpp" />
     <ClCompile Include="ResultScreen.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="GameBase.cpp" />
@@ -163,16 +166,18 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="StateScreen.cpp" />
     <ClCompile Include="Tetromino.cpp" />
-    <ClCompile Include="TetroRythm.cpp" />
+    <ClCompile Include="TetroRhythm.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AutoDropGame.h" />
     <ClInclude Include="BeatMapEditor.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="DropToTheBeatGame.h" />
     <ClInclude Include="EndlessGame.h" />
     <ClInclude Include="MapEditorSelect.h" />
+    <ClInclude Include="MiniBpm.h" />
     <ClInclude Include="ResultScreen.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Enums.h" />
