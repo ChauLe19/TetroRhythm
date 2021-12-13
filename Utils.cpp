@@ -15,7 +15,7 @@ bool mouseInCircle(RenderWindow& window, int x, int y, int r)
 	return (mouseViewPos.x - x) * (mouseViewPos.x - x) + (mouseViewPos.y - y) * (mouseViewPos.y - y) <= r * r;
 }
 
-void createButton(RenderWindow& window, Text& text, Color textColor, Color boxColor, string textString, int width, int height, int x, int y)
+void createButton(RenderWindow& window, Text& text,  Color textColor, int textSize, Color boxColor, string textString, int width, int height, int x, int y)
 {
 	RectangleShape rect;
 	rect.setSize(Vector2f(width, height));
@@ -28,11 +28,10 @@ void createButton(RenderWindow& window, Text& text, Color textColor, Color boxCo
 	rect.setPosition(Vector2f(x, y));
 	window.draw(rect);
 
-
 	text.setFillColor(textColor);
-	//text.setPosition(1024-60, 595);
-	text.setCharacterSize(60);
+	text.setCharacterSize(textSize);
 	text.setString(textString);
 	text.setPosition(x + width / 2 - text.getLocalBounds().width / 2, y - 10);
 	window.draw(text);
 }
+

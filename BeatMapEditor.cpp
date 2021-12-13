@@ -5,6 +5,9 @@ BeatMapEditor::BeatMapEditor(string folderPath)
 	font.loadFromFile("arial.ttf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
+	speedButton025 = new Button(Color::Black, 20, Color::White, "x0.25", 1200, 400, 80, 20, Keyboard::Key::Num2);
+	speedButton050 = new Button(Color::Black, 20, Color::White, "x0.50", 1100, 400, 80, 20, Keyboard::Key::Num5);
+	speedButton100 = new Button(Color::Black, 20, Color::White, "x1", 1000, 400, 80, 20, Keyboard::Key::Num7);
 
 
 	fs::path audioPath = folderPath;
@@ -33,6 +36,8 @@ BeatMapEditor::BeatMapEditor(string folderPath)
 	}
 	sound.setBuffer(buffer);
 
+
+
 	musicDurationMS = buffer.getDuration().asMilliseconds();
 
 	inFile.open(textFilePath);
@@ -43,6 +48,33 @@ BeatMapEditor::BeatMapEditor(string folderPath)
 	else
 	{
 		char beat[10];
+		if (inFile.getline(beat, 10, '\r')) // read bpm
+		{
+			char temp[6] = { 0 };
+
+			std::copy(beat + 10 - 6, beat + 10, temp);
+
+			bpm = atoi(temp);
+			mspb = std::round(60 * 1000 / bpm);
+			std::cout << bpm << std::endl;
+		}
+		else
+		{
+			breakfastquay::MiniBPM bpmDetector(buffer.getSampleRate());
+
+			int sampleCount = buffer.getSampleCount();
+			auto samples = buffer.getSamples();
+			float* fSamples = new float[buffer.getSampleCount()];
+			for (int i = 0; i < sampleCount; i++)
+			{
+				fSamples[i] = static_cast<float>(samples[i]);
+			}
+			bpm = std::round(bpmDetector.estimateTempoOfSamples(fSamples, buffer.getSampleCount()));
+			mspb = 60 * 1000 / bpm;
+			std::cout << bpm << std::endl;
+
+		}
+
 		while (inFile.getline(beat, 10, '\r'))
 		{
 			beatsTime.push_back(atoi(beat));
@@ -66,7 +98,9 @@ BeatMapEditor::BeatMapEditor(string audioFilePath, string textFilePath)
 	{
 		cerr << "Unable to open file " + audioFilePath << endl;;
 	}
+
 	sound.setBuffer(buffer);
+
 
 	musicDurationMS = buffer.getDuration().asMilliseconds();
 
@@ -95,11 +129,15 @@ BeatMapEditor::BeatMapEditor(string audioFilePath, string textFilePath)
 
 BeatMapEditor::~BeatMapEditor()
 {
+	delete speedButton025;
+	delete speedButton050;
+	delete speedButton100;
 }
 
 void BeatMapEditor::save()
 {
 	outFile.open(textFilePath, ios::out);
+	outFile << "bpm " << bpm << '\r';
 	list<int>::iterator it = beatsTime.begin();
 
 	while (it != beatsTime.end())
@@ -129,7 +167,11 @@ void BeatMapEditor::render(RenderWindow& window)
 	text.setString("Drag the bottom cursor to navigate along the beats. Hover your mouse over green tick(s) while holding right click to erase them. Press B or right click the center circle to place beat. Spacebar to play/pause.");
 	window.draw(text);
 
-	if (sound.getStatus() != Music::Status::Playing)
+	speedButton025->render(window, text);
+	speedButton050->render(window, text);
+	speedButton100->render(window, text);
+
+	if (sound.getStatus() != Music::Status::Playing) // draw playing status
 	{
 		CircleShape playButton(40, 3);
 		playButton.setFillColor(Color::White);
@@ -187,7 +229,7 @@ void BeatMapEditor::render(RenderWindow& window)
 	window.draw(partAudioCursor);
 
 
-	list<int>::iterator it = beatsTime.begin();
+	list<int>::iterator it = beatsTime.begin(); // draw beats
 	while (it != beatsTime.end())
 	{
 		RectangleShape beat;
@@ -200,15 +242,39 @@ void BeatMapEditor::render(RenderWindow& window)
 		if (cursorRelToMusicMS >= *it - 2500 && cursorRelToMusicMS <= *it + 2500)
 		{
 			RectangleShape beatInPartSlider;
-			beatInPartSlider.setSize(Vector2f(4, sliderHeight / 2));
+			beatInPartSlider.setSize(Vector2f(10, sliderHeight * 2 / 3));
 			beatInPartSlider.setFillColor(Color::Green);
-			beatInPartSlider.setPosition(24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - *it) / 2500, 50 + sliderHeight / 2);
+			beatInPartSlider.setPosition(24 - 10 / 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - *it) / 2500, 50 + sliderHeight / 3);
 			window.draw(beatInPartSlider);
 		}
 
 
 		it++;
 	}
+
+
+	// render minor notes
+	for (int i = std::ceil((float)(cursorRelToMusicMS - 2500) / ((float)mspb / 4)); i <= std::floor((float)(cursorRelToMusicMS + 2500) / ((float)mspb / 4)); i++)
+	{
+		RectangleShape beatInPartSlider;
+		beatInPartSlider.setSize(Vector2f(4, sliderHeight / 4));
+		beatInPartSlider.setFillColor(Color::Blue);
+		int t = i * (float)mspb / 4;
+		beatInPartSlider.setPosition(24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - t) / 2500, 50 + sliderHeight * 3 / 8);
+		window.draw(beatInPartSlider);
+	}
+
+	//render major notes
+	for (int i = std::ceil((float)(cursorRelToMusicMS - 2500) / (mspb)); i <= std::floor((float)(cursorRelToMusicMS + 2500) / (mspb)); i++)
+	{
+		RectangleShape beatInPartSlider;
+		beatInPartSlider.setSize(Vector2f(4, sliderHeight / 4));
+		beatInPartSlider.setFillColor(Color(211, 211, 211));
+		int t = i * mspb;
+		beatInPartSlider.setPosition(24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - t) / 2500, 50 + sliderHeight * 3 / 8);
+		window.draw(beatInPartSlider);
+	}
+
 
 
 	CircleShape beatButton;
@@ -227,6 +293,15 @@ void BeatMapEditor::keyEvent(State& state, Keyboard::Key key)
 		save();
 		sound.stop();
 		state = State::MENU;
+	break; 
+	case Keyboard::Key::Num2:
+		sound.setPitch(0.25);
+		break;
+	case Keyboard::Key::Num5:
+		sound.setPitch(0.5);
+		break;
+	case Keyboard::Key::Num1:
+		sound.setPitch(1);
 		break;
 	case Keyboard::Key::Space:
 		if (sound.getPlayingOffset().asMilliseconds() == musicDurationMS)
@@ -252,10 +327,11 @@ void BeatMapEditor::keyEvent(State& state, Keyboard::Key key)
 
 void BeatMapEditor::addCursorToBeatList()
 {
-
+	int nearestBeat = std::round((float)(cursorRelToMusicMS) / ((float)mspb / 4));
+	nearestBeat = nearestBeat * ((float)mspb / 4);
 	list<int>::iterator temp = beatsTime.begin();
 	int prev = 0;
-	while (temp != beatsTime.end() && *temp < cursorRelToMusicMS)
+	while (temp != beatsTime.end() && *temp < nearestBeat)
 	{
 		prev = *temp;
 		temp++;
@@ -263,13 +339,13 @@ void BeatMapEditor::addCursorToBeatList()
 
 	if (temp == beatsTime.end())
 	{
-		beatsTime.push_back(cursorRelToMusicMS);
+		beatsTime.push_back(nearestBeat);
 		return;
 	}
-	// reject beat that is too close to already existed
-	if (prev + 250 <= cursorRelToMusicMS && *temp - 250 >= cursorRelToMusicMS)
+	// reject beat that already exists
+	if (nearestBeat != *temp)
 	{
-		beatsTime.insert(temp, cursorRelToMusicMS);
+		beatsTime.insert(temp, nearestBeat);
 	}
 }
 

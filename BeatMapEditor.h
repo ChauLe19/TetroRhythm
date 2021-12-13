@@ -12,6 +12,8 @@
 #include "StateScreen.h"
 #include "Enums.h"
 #include "Utils.h"
+#include "Button.h"
+#include "MiniBpm.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -36,6 +38,9 @@ private:
 	ofstream outFile;
 	Font font;
 	Text text;
+	Button* speedButton025;
+	Button* speedButton050;
+	Button* speedButton100;
 
 	list<int> beatsTime;
 	list<int>::iterator beatIt;
@@ -44,6 +49,8 @@ private:
 	string textFilePath;
 
 	int musicDurationMS = 0;
+	int bpm = 0;
+	int mspb = 0; // ms per beat
 	int cursorRelToMusicMS = 0;
 	bool firstPressed = true;
 	bool cursorSelected = false;

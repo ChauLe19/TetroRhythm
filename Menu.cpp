@@ -23,13 +23,13 @@ void Menu::render(RenderWindow& window)
 	text.setFillColor(Color::White);
 	text.setCharacterSize(200);
 	text.setString("TetroRythm");
-	text.setPosition(1024-text.getLocalBounds().width/2, 200);
+	text.setPosition(1024 - text.getLocalBounds().width / 2, 200);
 	window.draw(text);
 
 
-	createButton(window, text, Color(0, 0, 50, 255), Color::White, "BEGIN", 400, 60, 1024 - 200, 600);
-	createButton(window, text, Color(0, 0, 50, 255), Color::White, "SETTINGS", 400, 60, 1024 - 200, 700);
-	createButton(window, text, Color(0, 0, 50, 255), Color::White, "EDIT BEAT MAPS", 400, 60, 1024 - 200, 800);
+	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "BEGIN", 400, 60, 1024 - 200, 600);
+	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "SETTINGS", 400, 60, 1024 - 200, 700);
+	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "EDIT BEAT MAPS", 400, 60, 1024 - 200, 800);
 
 	//RectangleShape rect;
 	//rect.setSize(Vector2f(400, 60));

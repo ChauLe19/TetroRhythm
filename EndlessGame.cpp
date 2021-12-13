@@ -15,6 +15,7 @@ EndlessGame::~EndlessGame()
 void EndlessGame::tick(State& state, RenderWindow& window)
 {
 	if (isGameOver) return;
+	GameBase::tick(state, window);
 	frameCount++;
 	// restart song if not game over
 	if (!isGameOver && sound.getStatus() == SoundSource::Status::Stopped)
@@ -28,7 +29,6 @@ void EndlessGame::tick(State& state, RenderWindow& window)
 		frameCount = 0;
 	}
 
-	GameBase::tick(state, window);
 
 	if (currentPiecePtr->checkIsOnGround(board))
 	{

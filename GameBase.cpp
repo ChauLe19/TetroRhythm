@@ -41,6 +41,7 @@ GameBase::GameBase(Controls_Settings& settings)
 
 
 	char beat[10];
+	inFile.getline(beat, 10, '\r');
 	while (inFile.getline(beat, 10, '\r'))
 	{
 		beatsTime.push_back(atoi(beat));
@@ -119,6 +120,7 @@ GameBase::GameBase(Controls_Settings& settings, string folderPath)
 
 
 	char beat[10];
+	inFile.getline(beat, 10, '\r');
 	while (inFile.getline(beat, 10, '\r'))
 	{
 		beatsTime.push_back(atoi(beat));
@@ -173,7 +175,7 @@ void GameBase::tick(State& state, RenderWindow& window)
 		else if (isAutoRepeatActive)
 		{
 			//SD arr = 1
-			if (SDautoRepeatRateCount < 1)
+			if (SDautoRepeatRateCount < 1 - 1)
 			{
 				SDautoRepeatRateCount++;
 			}
@@ -192,6 +194,7 @@ void GameBase::tick(State& state, RenderWindow& window)
 		SDautoRepeatRateCount = 0;
 		SDisAutoRepeatActive = false;
 		SDisAutoShiftActive = false;
+		SDfirstPressed = true;
 	}
 
 
@@ -232,6 +235,7 @@ void GameBase::tick(State& state, RenderWindow& window)
 	}
 	else // not holding
 	{
+		firstPressed = true;
 		delayAutoShiftCount = 0;
 		autoRepeatRateCount = 0;
 		isAutoRepeatActive = false;
@@ -520,8 +524,8 @@ void GameBase::renderGameOver(RenderWindow& window)
 	gameoverBox.setOutlineThickness(5);
 	window.draw(gameoverBox);*/
 
-	createButton(window, text, Color(0, 0, 50, 255), Color::White, "Restart", 300, 60, 1024 - 150, 576 - 60 - 20 );
-	createButton(window, text, Color(0, 0, 50, 255), Color::White, "Menu", 300, 60, 1024 - 150, 576 + 20);
+	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "Restart", 300, 60, 1024 - 150, 576 - 60 - 20);
+	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "Menu", 300, 60, 1024 - 150, 576 + 20);
 
 }
 
@@ -881,7 +885,7 @@ void GameBase::gameOver()
 
 bool GameBase::createGarbageLine(int holePos)
 {
-	bool res =  board.createGarbageLine(holePos);
+	bool res = board.createGarbageLine(holePos);
 	if (!currentPiecePtr->checkCollision(board))
 	{
 		currentPiecePtr->move(Moving_Direction::UP_DIR, board);
