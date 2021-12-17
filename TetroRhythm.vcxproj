@@ -190,7 +190,6 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="background.png" />
     <Image Include="frame.png" />
     <Image Include="tiles.png" />
   </ItemGroup>

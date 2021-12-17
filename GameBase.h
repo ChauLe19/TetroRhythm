@@ -33,7 +33,8 @@ namespace fs = std::filesystem;
 
 class ResultScreen;
 
-const int boardX = 1024- 45*5;
+//const int boardX = 1024- 45*5;
+const int boardX = 1024- 90*5;
 const int boardY = 100;
 
 // frame per cell. how many frame in between dropping 1 cell
@@ -46,7 +47,7 @@ const int levelSpeed[15] = { 60, 58, 37, 28, 21, 16, 11, 8, 6, 4, 3, 2, 1, 1, 1 
 class GameBase : public StateScreen
 {
 protected:
-	static const int squareSize = 45;
+	static const int squareSize = 90;
 	Text text;
 	Font font;
 	SoundBuffer buffer;
@@ -61,7 +62,7 @@ protected:
 	Tetromino* prevPiecePtr;
 	Tetromino* currentPiecePtr;
 	Tetromino* holdPiecePtr;
-	Tetromino* ghostPiece;
+	Tetromino ghostPiece = Tetromino(Type::I);
 	ClearType prevClearType = ClearType::NONE; // only records the clear type when the player actually clear line(s)
 	ClearType recentClearType = ClearType::NONE; // records the clear type even when player didn't clear any lines
 	Board* boardPtr;
@@ -82,6 +83,9 @@ protected:
 	int linesCleared = 0;
 	int clearTypeCounter = 0;
 	bool finished = false;
+
+	int lastX = 0;
+	int lastY = 0;
 
 	// Controls related variables
 	//****************************************

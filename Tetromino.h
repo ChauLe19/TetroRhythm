@@ -59,7 +59,7 @@ const static std::array<std::array<std::array<int, 4>, 4>, 7> tetrominos = { {
 											}},
 											{{  //J block
 												{6, 0, 0, 0},
-												{6, 6, 6, 0},
+												{6, 14, 6, 0},
 												{0, 0, 0, 0},
 												{0, 0, 0, 0}
 											}},
@@ -139,7 +139,7 @@ const static std::array<std::array<std::array<int, 2>, 5>, 8> IWallKickData = { 
 class Tetromino
 {
 private:
-	static const int squareSize = 45;
+	static const int squareSize = 90;
 	Texture cellsTexture;
 	Sprite cellImage;
 	Orientation orientation = Orientation::SPAWN;
@@ -151,7 +151,7 @@ private:
 	//*****************************************
 
 	int xPos = 3;
-	int yPos = 1;
+	int yPos = 0;
 
 	bool isOnGround = false;
 	bool rotateLast = false;
@@ -202,6 +202,7 @@ public:
 	 * \return true if succeed, false otherwise
 	 */
 	bool setXY(int xPos, int yPos, Board& board);
+	void setXY(int xPos, int yPos);
 
 	/**
 	 * Hard drop the tetromino on the board.
@@ -257,6 +258,8 @@ public:
 	 */
 	bool checkCollision(Board& board);
 
+	std::array<int, 3>  firstPossibleMove(Board& board);
+
 	/**
 	 * Render tetromino with the board position.
 	 *
@@ -302,6 +305,13 @@ public:
 	 * \return rotateLast
 	 */
 	bool getRotateLast();
+
+
+	int getMinX();
+	int getMinY();
+	int getMaxX();
+	int getMaxY();
+
 };
 
 #endif

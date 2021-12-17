@@ -361,7 +361,7 @@ void BeatMapEditor::mouseEvent(State& state, RenderWindow& window)
 			if (cursorRelToMusicMS >= *it - 2500 && cursorRelToMusicMS <= *it + 2500)
 			{
 				// erase beat that mouse if over when right mouse is pressed	
-				if (mouseInBox(window, 24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - *it) / 2500, 50 + sliderHeight / 2, 4, sliderHeight / 2))
+				if (mouseInBox(window, 24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - *it) / 2500, 50 + sliderHeight / 2, 10, sliderHeight / 2))
 				{
 					beatsTime.erase(it);
 					break;

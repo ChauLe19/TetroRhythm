@@ -147,131 +147,34 @@ GameBase::~GameBase()
 
 void GameBase::tick(State& state, RenderWindow& window)
 {
+	// TODO: update piece to mouse
+	Vector2i pixelPos = Mouse::getPosition(window);
+	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
+	// x - 1, y - 1 to offset to center of the piece
+	int x = std::clamp((int)std::floor((mouseViewPos.x - boardX) / squareSize) - 1, -currentPiecePtr->getMinX(), 9 - currentPiecePtr->getMaxX());
+	int y = std::clamp((int)std::floor((mouseViewPos.y - boardY) / squareSize) - 1, -currentPiecePtr->getMinY(), 9 - currentPiecePtr->getMaxY());
+	std::cout << x << "," << y << std::endl;
+
+	ghostPiece.setXY(x, y);
+	if (ghostPiece.setXY(x, y, board))
+	{
+		lastX = x;
+		lastY = y;
+		currentPiecePtr->setXY(x, y, board);
+	}
+
+
 	if (isGameOver) return;
-
-
-	if (Keyboard::isKeyPressed(keybinds["SOFT_DROP"]))
-	{
-		//cout << "DAS count:" << delayAutoShiftCount << endl;
-		if (SDfirstPressed)
-		{
-			SDfirstPressed = false;
-			SDisAutoRepeatActive = false;
-			SDisAutoShiftActive = true;
-			SDdelayAutoShiftCount = 0;
-			SDautoRepeatRateCount = 0;
-			if (currentPiecePtr->move(Moving_Direction::DOWN_DIR, board))
-				score += GameBase::convertClearTypeToScores(ClearType::SOFTDROP);
-		}
-		else if (isAutoShiftActive)
-		{
-			SDdelayAutoShiftCount++;
-			if (SDdelayAutoShiftCount >= 6)
-			{
-				SDisAutoRepeatActive = true;
-				SDisAutoShiftActive = false;
-			}
-		}
-		else if (isAutoRepeatActive)
-		{
-			//SD arr = 1
-			if (SDautoRepeatRateCount < 1 - 1)
-			{
-				SDautoRepeatRateCount++;
-			}
-			else
-			{
-				SDautoRepeatRateCount = 0;
-
-				if (currentPiecePtr->move(Moving_Direction::DOWN_DIR, board))
-					score += GameBase::convertClearTypeToScores(ClearType::SOFTDROP);
-			}
-		}
-	}
-	else // not holding soft drop
-	{
-		SDdelayAutoShiftCount = 0;
-		SDautoRepeatRateCount = 0;
-		SDisAutoRepeatActive = false;
-		SDisAutoShiftActive = false;
-		SDfirstPressed = true;
-	}
-
-
-	// Left right DAS & ARR
-	if (Keyboard::isKeyPressed(currentKey))
-	{
-		//cout << "DAS count:" << delayAutoShiftCount << endl;
-		if (firstPressed)
-		{
-			firstPressed = false;
-			isAutoRepeatActive = false;
-			isAutoShiftActive = true;
-			delayAutoShiftCount = 0;
-			autoRepeatRateCount = 0;
-		}
-		else if (isAutoShiftActive)
-		{
-			delayAutoShiftCount++;
-			if (delayAutoShiftCount >= delayAutoShift)
-			{
-				isAutoRepeatActive = true;
-				isAutoShiftActive = false;
-			}
-			return;
-		}
-		else if (isAutoRepeatActive)
-		{
-			if (autoRepeatRateCount < autoRepeatRate)
-			{
-				autoRepeatRateCount++;
-				return;
-			}
-			else
-			{
-				autoRepeatRateCount = 0;
-			}
-		}
-	}
-	else // not holding
-	{
-		firstPressed = true;
-		delayAutoShiftCount = 0;
-		autoRepeatRateCount = 0;
-		isAutoRepeatActive = false;
-		isAutoShiftActive = false;
-		return;
-	}
-
-	if (currentKey == keybinds["MOVE_RIGHT"])
-	{
-		if (isAutoRepeatActive && autoRepeatRate == 0)
-			while (currentPiecePtr->move(Moving_Direction::RIGHT_DIR, board));
-		else
-			currentPiecePtr->move(Moving_Direction::RIGHT_DIR, board);
-	}
-	else if (currentKey == keybinds["MOVE_LEFT"])
-	{
-		if (isAutoRepeatActive && autoRepeatRate == 0)
-			while (currentPiecePtr->move(Moving_Direction::LEFT_DIR, board));
-		else
-			currentPiecePtr->move(Moving_Direction::LEFT_DIR, board);
-	}
-
-
-
-	//TODO: separate das & arr for soft drop
 
 
 }
 
 void GameBase::render(RenderWindow& window)
 {
-
 	text.setFillColor(Color::White);
 	board.render(window);
 	currentPiecePtr->render(window, board);
-	currentPiecePtr->getGhost(board).render(window, board);
+	ghostPiece.render(window, board);
 	if (holdPiecePtr != nullptr)
 	{
 		int extra = squareSize / 2;
@@ -282,10 +185,10 @@ void GameBase::render(RenderWindow& window)
 		holdPiecePtr->render(window, boardX - (squareSize / 2 + 20) - squareSize * 4 + extra, boardY + squareSize / 2);
 	}
 
-	// Render 5 preview pieces
+	// Render 2 preview pieces
 	int counter = 0;
 	std::list<Tetromino*>::iterator fifthIt = bag.begin();
-	advance(fifthIt, 5);
+	advance(fifthIt, 2);
 	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
 	{
 		int extra = squareSize / 2;
@@ -345,24 +248,24 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 
 	if (key == keybinds["ROTATE_CW"])
 	{
-		currentPiecePtr->rotate(Rotational_Direction::CW, board);
+		//currentPiecePtr->rotate(Rotational_Direction::CW, board);
 	}
 	else if (key == keybinds["ROTATE_CCW"])
 	{
-		currentPiecePtr->rotate(Rotational_Direction::CCW, board);
+		//currentPiecePtr->rotate(Rotational_Direction::CCW, board);
 	}
 	else if (key == keybinds["ROTATE_180"])
 	{
-		currentPiecePtr->rotate(Rotational_Direction::R180, board);
+		//currentPiecePtr->rotate(Rotational_Direction::R180, board);
 	}
 	else if (key == keybinds["HARD_DROP"])
 	{
-		int cellsDropped = currentPiecePtr->hardDrop(board);
+		//int cellsDropped = currentPiecePtr->hardDrop(board);
 		//cout << "input" << endl;
 		//board.print();
-		score += cellsDropped * GameBase::convertClearTypeToScores(ClearType::HARDDROP);
+		//score += cellsDropped * GameBase::convertClearTypeToScores(ClearType::HARDDROP);
 
-		nextPiece();
+		currentPiecePtr->setPiece(board);
 
 		//alreadyHold = false;
 		onGroundCount = 0;
@@ -391,6 +294,7 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 			score += GameBase::convertClearTypeToScores(tempScoresType);
 		}
 
+		nextPiece();
 
 	}
 	else if (key == keybinds["HOLD"])
@@ -779,10 +683,26 @@ Tetromino& GameBase::nextPiece()
 		}
 	}
 
-	// If piece spawn collide right away, game over
-	if (!currentPiecePtr->checkCollision(board)) gameOver();
-
+	ghostPiece = currentPiecePtr->getGhost(board);
 	alreadyHold = false;
+	// If pieces have no possible move, game over
+	std::array <int, 3> possibleMovesCurrent = currentPiecePtr->firstPossibleMove(board);
+	std::array <int, 3> possibleMovesHold = holdPiecePtr != nullptr ? holdPiecePtr->firstPossibleMove(board) : bag.front()->firstPossibleMove(board);
+	if (possibleMovesCurrent[2] == 1)
+	{
+		lastX = possibleMovesCurrent[0];
+		lastY = possibleMovesCurrent[1];
+		currentPiecePtr->setXY(lastX, lastY, board);
+	}
+	else if (possibleMovesHold[2] == 1)
+	{
+		hold();
+	}
+	else
+	{
+		gameOver();
+	}
+
 	return *currentPiecePtr;
 }
 
@@ -794,6 +714,7 @@ void GameBase::hold()
 		if (holdPiecePtr == nullptr)
 		{
 			holdPiecePtr = currentPiecePtr;
+			ghostPiece = currentPiecePtr->getGhost(board);
 			//currentPiecePtr = &nextPiece();
 			nextPiece();
 		}
@@ -802,8 +723,10 @@ void GameBase::hold()
 			Tetromino* tempPiecePtr = holdPiecePtr;
 			holdPiecePtr = currentPiecePtr;
 			currentPiecePtr = tempPiecePtr;
+			ghostPiece = currentPiecePtr->getGhost(board);
+
 		}
-		holdPiecePtr->reset();
+		//holdPiecePtr->reset();
 		alreadyHold = true;
 	}
 }
@@ -824,14 +747,12 @@ void GameBase::reset()
 	delete currentPiecePtr;
 	delete prevPiecePtr;
 	delete holdPiecePtr;
-	delete ghostPiece;
 
 	boardPtr = new Board(boardX, boardY);
 	board = *boardPtr;
 	currentPiecePtr = nullptr;
 	prevPiecePtr = nullptr;
 	holdPiecePtr = nullptr;
-	ghostPiece = nullptr;
 	prevClearType = ClearType::NONE;
 	onGroundCount = 0;
 	score = 0;

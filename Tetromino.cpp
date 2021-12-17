@@ -5,9 +5,25 @@ Tetromino::Tetromino(Type type)
 	this->type = type;
 	cellsTexture.loadFromFile("Images/tiles-2.png");
 	cellImage.setTexture(cellsTexture);
-	cellImage.setTextureRect(IntRect(static_cast<int>(type) * squareSize, 0, squareSize, squareSize));
+	cellImage.setTextureRect(IntRect(static_cast<int>(type) * 45, 0, 45, 45));
 	// TODO: Check if this copied
 	this->cells = tetrominos[static_cast<int>(type)];
+	// center always [1,1]
+	switch (type)
+	{
+	case Type::I: // can be in spawn state or state after CCW
+		rotateArray(this->cells, 4, static_cast<Rotational_Direction>((std::rand() % 2) * 3));
+		break;
+	case Type::S: // can be in spawn state or state after CW
+	case Type::Z:
+		rotateArray(this->cells, 3, static_cast<Rotational_Direction>(std::rand() % 2));
+		break;
+	case Type::O: // only 1 state
+		break;
+	default: // T, L, J
+		rotateArray(this->cells, 3, static_cast<Rotational_Direction>(std::rand() % 4));
+		break;
+	}
 }
 
 Tetromino::Tetromino(Type type, bool isGhost)
@@ -17,9 +33,10 @@ Tetromino::Tetromino(Type type, bool isGhost)
 	cellImage.setTexture(cellsTexture);
 	if (isGhost)
 		cellImage.setColor(Color(255, 255, 255, 100));
-	cellImage.setTextureRect(IntRect(static_cast<int>(type) * squareSize, 0, squareSize, squareSize));
+	cellImage.setTextureRect(IntRect(static_cast<int>(type) * 45, 0, 45, 45));
 	// TODO: Check if this copied
 	this->cells = tetrominos[static_cast<int>(type)];
+
 }
 
 Tetromino::~Tetromino()
@@ -30,7 +47,7 @@ Tetromino Tetromino::getGhost(Board& board)
 {
 	Tetromino ghost = *this;
 	ghost.turnToGhostColor();
-	while (ghost.move(Moving_Direction::DOWN_DIR, board));
+	//while (ghost.move(Moving_Direction::DOWN_DIR, board));
 	return ghost;
 }
 
@@ -64,7 +81,7 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 		{
 			if (checkCollision(xPos + 2, yPos + 2, cells, board))
 			{
-			cout << "CW O spin" << endl;
+				cout << "CW O spin" << endl;
 				xPos += 2;
 				yPos += 2;
 				orientation = newOrientation;
@@ -78,7 +95,7 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 		{
 			if (checkCollision(xPos - 2, yPos + 2, cells, board))
 			{
-			cout << "CCW O spin" << endl;
+				cout << "CCW O spin" << endl;
 				xPos -= 2;
 				yPos += 2;
 				orientation = newOrientation;
@@ -288,6 +305,20 @@ bool Tetromino::checkCollision(Board& board)
 	return true;
 }
 
+std::array<int, 3> Tetromino::firstPossibleMove(Board& board)
+{
+	array<array<int, boardWidth>, boardHeight> boardMatrix = board.getBoard();
+	//Traverse the cells if it collide with any blocks on the board
+	for (int i = -getMinX(); i <= 9 - getMaxX(); i++)
+	{
+		for (int j = -getMinY(); j <= 9 - getMaxY(); j++)
+		{
+			if (checkCollision(i, j, cells, board))return { i,j,1 };
+		}
+	}
+	return { -1,-1,0 };
+}
+
 void Tetromino::render(RenderWindow& window, Board& board)
 {
 	for (int i = 0; i < 4; i++)
@@ -296,7 +327,8 @@ void Tetromino::render(RenderWindow& window, Board& board)
 		{
 			if (cells[i][j] > 0)
 			{
-				cellImage.setPosition(board.getXPos() + (xPos + j) * squareSize, board.getYPos() + (yPos + i - 2) * squareSize);
+				cellImage.setPosition(board.getXPos() + (xPos + j) * squareSize, board.getYPos() + (yPos + i) * squareSize);
+				cellImage.setScale(Vector2f(2, 2));
 				window.draw(cellImage);
 			}
 		}
@@ -312,6 +344,7 @@ void Tetromino::render(RenderWindow& window, int x, int y)
 			if (cells[i][j] > 0)
 			{
 				cellImage.setPosition(x + j * squareSize, y + i * squareSize);
+				cellImage.setScale(Vector2f(2, 2));
 				window.draw(cellImage);
 			}
 		}
@@ -365,6 +398,11 @@ bool Tetromino::setXY(int xPos, int yPos, Board& board)
 	return possible;
 }
 
+void Tetromino::setXY(int xPos, int yPos)
+{
+	this->xPos = xPos;
+	this->yPos = yPos;
+}
 
 
 //bool Tetromino::setXY(int xPos, int yPos, Rotational_Direction rDir)
@@ -377,3 +415,69 @@ bool Tetromino::setXY(int xPos, int yPos, Board& board)
 //	}
 //	return possible;
 //}
+
+
+int Tetromino::getMinX()
+{
+	if (cells[0][0] != 0 || cells[1][0] != 0)
+	{
+		return 0;
+	}
+	else if (cells[1][1] != 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return 2;
+	}
+}
+
+int Tetromino::getMinY()
+{
+	if (cells[0][0] != 0 || cells[0][1] != 0 || cells[0][2] != 0)
+	{
+		return 0;
+	}
+	else if (cells[1][1] != 0)
+	{
+		return 1;
+	}
+	else
+	{
+		return 2;
+	}
+}
+
+int Tetromino::getMaxX()
+{
+	if (cells[0][3] != 0 || cells[1][3] != 0)
+	{
+		return 3;
+	}
+	else if (cells[0][2] != 0 || cells[1][2] != 0 || cells[2][2] != 0)
+	{
+		return 2;
+	}
+	else
+	{
+		return 1;
+	}
+}
+
+int Tetromino::getMaxY()
+{
+	if (cells[3][1] != 0 || cells[3][2] != 0)
+	{
+		return 3;
+	}
+	else if (cells[2][0] != 0 || cells[2][1] != 0 || cells[2][2] != 0)
+	{
+		return 2;
+	}
+	else
+	{
+		return 1;
+	}
+}
+

@@ -28,26 +28,33 @@ void Board::render(RenderWindow& window)
 {
 
 
-	window.draw(image);
+	/*window.draw(image);
 	RectangleShape rect(Vector2f(squareSize * 10, squareSize * 20));
 	rect.setFillColor(Color(0, 0, 0, 150));
 	rect.setPosition(xPos, yPos);
 	rect.setOutlineColor(Color::White);
-	rect.setOutlineThickness(5);
+	rect.setOutlineThickness(5);*/
 	//rect.setFillColor(Color(25,25,25,255));
 	//rect.setFillColor(Color::White);
-	window.draw(rect);
-	// Doesn't render the first 2 lines
-	for (int i = 2; i < boardHeight; i++)
+	//window.draw(rect);
+	for (int i = 0; i < boardHeight; i++)
 	{
 		for (int j = 0; j < boardWidth; j++)
 		{
-			if (board[i][j] > 0)
+			RectangleShape rect(Vector2f(squareSize, squareSize));
+			rect.setFillColor(Color(0, 0, 0, 150));
+			rect.setPosition(xPos + squareSize * j, yPos + squareSize * i);
+			rect.setOutlineColor(Color::White);
+			rect.setOutlineThickness(5);
+			window.draw(rect);
+			if (board[i][j] % 8 !=0 )
 			{
-				cellImage.setTextureRect(IntRect((board[i][j] - 1) * squareSize, 0, squareSize, squareSize));
-				cellImage.setPosition(xPos + squareSize * j, yPos + squareSize * (i - 2));
+				cellImage.setTextureRect(IntRect((board[i][j]%8 - 1) * 45, 0, 45, 45));
+				cellImage.setScale(Vector2f(2, 2));
+				cellImage.setPosition(xPos + squareSize * j, yPos + squareSize * i );
 				window.draw(cellImage);
 			}
+			
 		}
 	}
 }
@@ -87,6 +94,10 @@ ClearingInfo Board::clearLines()
 				{
 					board[k][j] = board[k - 1][j];
 				}
+			}
+			for (int j = 0; j < boardWidth; j++)
+			{
+				board[0][j] = 0;
 			}
 		}
 	}
