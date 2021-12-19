@@ -12,7 +12,7 @@ Tetromino::Tetromino(Type type)
 	switch (type)
 	{
 	case Type::I: // can be in spawn state or state after CCW
-		rotateArray(this->cells, 4, static_cast<Rotational_Direction>((std::rand() % 2) * 3));
+		rotateArray(this->cells, 4, static_cast<Rotational_Direction>((std::rand() % 2) - 1));
 		break;
 	case Type::S: // can be in spawn state or state after CW
 	case Type::Z:
@@ -21,7 +21,7 @@ Tetromino::Tetromino(Type type)
 	case Type::O: // only 1 state
 		break;
 	default: // T, L, J
-		rotateArray(this->cells, 3, static_cast<Rotational_Direction>(std::rand() % 4));
+		rotateArray(this->cells, 3, static_cast<Rotational_Direction>((std::rand() % 4) - 1));
 		break;
 	}
 }
@@ -53,8 +53,9 @@ Tetromino Tetromino::getGhost(Board& board)
 
 void Tetromino::turnToGhostColor()
 {
-	cellImage.setColor(Color(255, 255, 255, 100));
+	cellImage.setColor(Color(255, 255, 255, 50));
 }
+
 bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 {
 	if (rDir == Rotational_Direction::NORO) return true;
@@ -335,6 +336,31 @@ void Tetromino::render(RenderWindow& window, Board& board)
 	}
 }
 
+
+void Tetromino::setTransparency(sf::Uint8 transparency)
+{
+	cellImage.setColor(Color(255, 255, 255, transparency));
+}
+
+void Tetromino::renderBorder(RenderWindow& window, Board& board, Color color)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (cells[i][j] > 0)
+			{
+				RectangleShape rect(Vector2f(squareSize - 10, squareSize - 10));
+				rect.setFillColor(Color(255,255,255,50));
+				rect.setOutlineColor(color);
+				rect.setOutlineThickness(10);
+				rect.setPosition(board.getXPos() + (xPos + j) * squareSize + 5, board.getYPos() + (yPos + i) * squareSize + 5);
+				window.draw(rect);
+			}
+		}
+	}
+}
+
 void Tetromino::render(RenderWindow& window, int x, int y)
 {
 	for (int i = 0; i < 4; i++)
@@ -419,7 +445,7 @@ void Tetromino::setXY(int xPos, int yPos)
 
 int Tetromino::getMinX()
 {
-	if (cells[0][0] != 0 || cells[1][0] != 0)
+	if (cells[0][0] != 0 || cells[1][0] != 0 || cells[2][0] != 0)
 	{
 		return 0;
 	}

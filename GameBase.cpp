@@ -175,6 +175,7 @@ void GameBase::render(RenderWindow& window)
 	board.render(window);
 	currentPiecePtr->render(window, board);
 	ghostPiece.render(window, board);
+	ghostPiece.renderBorder(window, board, Color::Red);
 	if (holdPiecePtr != nullptr)
 	{
 		int extra = squareSize / 2;
@@ -684,6 +685,7 @@ Tetromino& GameBase::nextPiece()
 	}
 
 	ghostPiece = currentPiecePtr->getGhost(board);
+	currentPiecePtr->setTransparency(150);
 	alreadyHold = false;
 	// If pieces have no possible move, game over
 	std::array <int, 3> possibleMovesCurrent = currentPiecePtr->firstPossibleMove(board);

@@ -40,7 +40,7 @@ void AutoDropGame::dropOnBeat()
 	if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS && beatIt != beatsTime.end())
 	{
 
-		currentPiecePtr->hardDrop(board);
+		currentPiecePtr->setPiece(board);
 		// TODO: copy board before clear, is this optimized???
 		Board tempBoard = board;
 		prevPiecePtr = currentPiecePtr;

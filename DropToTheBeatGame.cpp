@@ -36,7 +36,6 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 		if (hitType == 0)
 		{
 			comboString = "MISS";
-			if (!createGarbageLine(rand() % boardWidth)) gameOver();
 
 		}
 		else if (hitType == 1)
@@ -70,7 +69,6 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 			if (beatIt != beatsTime.end())
 				nextBeatTimeMS = *beatIt;
 			accuracyTimer = 60;
-			if (!createGarbageLine(rand() % boardWidth)) gameOver();
 		}
 	}
 }
