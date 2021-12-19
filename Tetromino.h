@@ -267,6 +267,8 @@ public:
 	 * \param board
 	 */
 	void render(RenderWindow& window, Board& board);
+	void setTransparency(sf::Uint8 transparency);
+	void renderBorder(RenderWindow& window, Board& board, Color color);
 
 	/**
 	 * Render tetromino with a definite x and y on the window.
