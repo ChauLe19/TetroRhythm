@@ -78,9 +78,9 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 		break;
 	case Type::O:
 		// if rotate CW, can't move to the bottom right corner, do O-spin if possible 
-		if (rDir == Rotational_Direction::CW && !checkCollision(xPos + 1, yPos + 1, cells, board))
+		if (rDir == Rotational_Direction::CW && !checkCollision(xPos + 1, yPos + 1, board))
 		{
-			if (checkCollision(xPos + 2, yPos + 2, cells, board))
+			if (checkCollision(xPos + 2, yPos + 2, board))
 			{
 				cout << "CW O spin" << endl;
 				xPos += 2;
@@ -92,9 +92,9 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 			return false;
 		}
 		// if rotate CCW, can't move to the bottom left corner, do O-spin if possible 
-		else if (rDir == Rotational_Direction::CCW && !checkCollision(xPos - 1, yPos + 1, cells, board))
+		else if (rDir == Rotational_Direction::CCW && !checkCollision(xPos - 1, yPos + 1, board))
 		{
-			if (checkCollision(xPos - 2, yPos + 2, cells, board))
+			if (checkCollision(xPos - 2, yPos + 2, board))
 			{
 				cout << "CCW O spin" << endl;
 				xPos -= 2;
@@ -153,7 +153,7 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 		int yOffset = wallKickData[wallKickGroup][i][1];
 		//cout << xOffset << ',' << yOffset << endl;
 		// yOffset is negate cuz positve y means upwards while in our board array positve y moves downward
-		if (checkCollision(xPos + xOffset, yPos - yOffset, tempCells, board))
+		if (checkCollision(xPos + xOffset, yPos - yOffset, board))
 		{
 			//cout << "working:" << xOffset << ',' << yOffset << endl;
 			xPos += xOffset;
@@ -262,7 +262,7 @@ bool Tetromino::move(Moving_Direction dir, Board& board)
 	return isPossible;
 }
 
-bool Tetromino::checkCollision(int xPos, int yPos, array<array<int, 4>, 4> cells, Board& board)
+bool Tetromino::checkCollision(int xPos, int yPos, Board& board)
 {
 	array<array<int, boardWidth>, boardHeight> boardMatrix = board.getBoard();
 	//Traverse the cells if it collide with any blocks on the board
@@ -314,7 +314,7 @@ std::array<int, 3> Tetromino::firstPossibleMove(Board& board)
 	{
 		for (int j = -getMinY(); j <= 9 - getMaxY(); j++)
 		{
-			if (checkCollision(i, j, cells, board))return { i,j,1 };
+			if (checkCollision(i, j, board))return { i,j,1 };
 		}
 	}
 	return { -1,-1,0 };
@@ -414,7 +414,7 @@ bool Tetromino::getRotateLast()
 
 bool Tetromino::setXY(int xPos, int yPos, Board& board)
 {
-	bool possible = checkCollision(xPos, yPos, this->cells, board);
+	bool possible = checkCollision(xPos, yPos, board);
 
 	if (possible)
 	{

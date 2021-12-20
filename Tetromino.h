@@ -248,7 +248,7 @@ public:
 	 * \param board
 	 * \return true if there's no collision, false if it is
 	 */
-	bool checkCollision(int xPos, int yPos, array<array<int, 4>, 4> cells, Board& board);
+	bool checkCollision(int xPos, int yPos, Board& board);
 
 	/**
 	 * Check if there is a collision between tetromino and board.

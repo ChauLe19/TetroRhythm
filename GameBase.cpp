@@ -147,22 +147,22 @@ GameBase::~GameBase()
 
 void GameBase::tick(State& state, RenderWindow& window)
 {
-	// TODO: update piece to mouse
-	Vector2i pixelPos = Mouse::getPosition(window);
-	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
-	// x - 1, y - 1 to offset to center of the piece
-	int x = std::clamp((int)std::floor((mouseViewPos.x - boardX) / squareSize) - 1, -currentPiecePtr->getMinX(), 9 - currentPiecePtr->getMaxX());
-	int y = std::clamp((int)std::floor((mouseViewPos.y - boardY) / squareSize) - 1, -currentPiecePtr->getMinY(), 9 - currentPiecePtr->getMaxY());
-	std::cout << x << "," << y << std::endl;
+	std::array <int, 2> res = findNearestPossiblePlacement(window, *currentPiecePtr, board);
+	int nearestX = res[0];
+	int nearestY = res[1];
+	ghostPiece.setXY(nearestX, nearestY);
+	currentPiecePtr->setXY(nearestX, nearestY, board);
 
-	ghostPiece.setXY(x, y);
-	if (ghostPiece.setXY(x, y, board))
+	int tempTime = sound.getPlayingOffset().asMilliseconds();
+
+	if (sound.getVolume() != 100 && abs(tempTime - nextBeatTimeMS) <= 100)
 	{
-		lastX = x;
-		lastY = y;
-		currentPiecePtr->setXY(x, y, board);
+		sound.setVolume(100);
 	}
-
+	else if (sound.getVolume() != 60 && abs(tempTime - nextBeatTimeMS) > 100)
+	{
+		sound.setVolume(60);
+	}
 
 	if (isGameOver) return;
 
@@ -745,11 +745,6 @@ void GameBase::start()
 
 void GameBase::reset()
 {
-	delete boardPtr;
-	delete currentPiecePtr;
-	delete prevPiecePtr;
-	delete holdPiecePtr;
-
 	boardPtr = new Board(boardX, boardY);
 	board = *boardPtr;
 	currentPiecePtr = nullptr;
@@ -798,6 +793,38 @@ void GameBase::restart()
 int GameBase::getScore()
 {
 	return score;
+}
+
+std::array<int, 2> GameBase::findNearestPossiblePlacement(RenderWindow& window, Tetromino& piece, Board& board)
+{
+	Vector2i pixelPos = Mouse::getPosition(window);
+	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
+	int minX = -currentPiecePtr->getMinX();
+	int minY = -currentPiecePtr->getMinY();
+	int maxX = 9 - currentPiecePtr->getMaxX();
+	int maxY = 9 - currentPiecePtr->getMaxY();
+	// x - 1, y - 1 to offset to center of the piece
+	int x = std::clamp((int)std::floor((mouseViewPos.x - boardX) / squareSize) - 1, -currentPiecePtr->getMinX(), 9 - currentPiecePtr->getMaxX());
+	int y = std::clamp((int)std::floor((mouseViewPos.y - boardY) / squareSize) - 1, -currentPiecePtr->getMinY(), 9 - currentPiecePtr->getMaxY());
+
+	int minDistance = INT_MAX;
+	int mouseMinDistance = INT_MAX;
+	std::array<int, 2> res = { 0,0 };
+	for (int i = minX; i <= maxX; i++)
+	{
+		for (int j = minY; j <= maxY; j++)
+		{
+			int distance = std::pow(i - x, 2) + std::pow(j - y, 2);
+			int mouseDistance = std::pow(mouseViewPos.x - (i * squareSize) + squareSize / 2, 2) + std::pow(mouseViewPos.y - (j * squareSize) + squareSize / 2, 2);
+			if (distance < minDistance && mouseDistance < mouseMinDistance && piece.checkCollision(i, j, board))
+			{
+				minDistance = distance;
+				mouseMinDistance = mouseDistance;
+				res = { i, j };
+			}
+		}
+	}
+	return res;
 }
 
 void GameBase::gameOver()

@@ -179,12 +179,14 @@ public:
 	virtual void restart();
 	void gameOver();
 	bool createGarbageLine(int holePos);
-
+		
 
 	// Getters and Setters
 	//*******************************************
 
 	int getScore();
 
+	private:
+		std::array<int, 2> findNearestPossiblePlacement(RenderWindow& window, Tetromino& piece, Board& board);
 };
 #endif
