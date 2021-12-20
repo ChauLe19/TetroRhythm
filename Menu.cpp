@@ -22,7 +22,7 @@ void Menu::render(RenderWindow& window)
 {
 	text.setFillColor(Color::White);
 	text.setCharacterSize(200);
-	text.setString("TetroRythm");
+	text.setString("TetroRhythm");
 	text.setPosition(1024 - text.getLocalBounds().width / 2, 200);
 	window.draw(text);
 
