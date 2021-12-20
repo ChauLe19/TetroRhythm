@@ -66,7 +66,7 @@ int main()
 	srand(static_cast<unsigned int> (time(NULL)));
 
 
-	RenderWindow window(sf::VideoMode(1536, 864), "TetroRythm", Style::Default);
+	RenderWindow window(sf::VideoMode(1536, 864), "TetroRhythm", Style::Default);
 	window.setFramerateLimit(60);
 	window.setKeyRepeatEnabled(false);
 
