@@ -370,10 +370,10 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 	static vector<Color> rainbow = { Color::Red, Color(255, 165, 0), Color::Yellow, Color::Green, Color::Blue, Color(75,0,130) ,Color(127,0,255) };
 	int tempRainbowIndex = rainbowIndex;
 
-	const int innerRadius = 75;
+	const int innerRadius = 150;
 	CircleShape circle;
 	circle.setRadius(innerRadius);
-	circle.setPosition(Vector2f(1024 - innerRadius, boardY + squareSize * 5));
+	circle.setPosition(Vector2f(1024 - innerRadius, boardY + squareSize * 5 - innerRadius));
 	circle.setFillColor(Color(100, 100, 100, 125));
 	circle.setOutlineColor(Color(200, 200, 200, 150));
 	circle.setOutlineThickness(5);
@@ -391,10 +391,10 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 
 		if (timeOffset > maxOffsetMS) break;
 		if (prevBeatTimeMS >= bufferTime) continue;
-		int distanceFromEnd = timeOffset / 20;
+		int distanceFromEnd = timeOffset / 10;
 		CircleShape circle;
-		circle.setRadius(75 + distanceFromEnd);
-		circle.setPosition(Vector2f(1024 - (innerRadius + distanceFromEnd), boardY + squareSize * 5 - distanceFromEnd));
+		circle.setRadius(innerRadius + distanceFromEnd);
+		circle.setPosition(Vector2f(1024 - (innerRadius + distanceFromEnd), boardY + squareSize * 5 - distanceFromEnd - innerRadius));
 		circle.setFillColor(Color::Transparent);
 		circle.setOutlineColor(Color(200, 200, 200, 200));
 		circle.setOutlineThickness(5);

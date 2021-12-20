@@ -25,26 +25,54 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 		state = State::GAMEOVER;
 		return;
 	}
+	// every secon passed, health + 1
+		/*healthCounter++;
+		if (healthCounter >= 60)
+		{
+			health = clamp(health  + 1, 0, 100);
+			healthCounter = 0;
+		}*/
+
+	if (health <= 0)
+	{
+		gameOver();
+		return;
+	}
 
 	int tempTime = sound.getPlayingOffset().asMilliseconds();
 
 	// if pressed in 400ms window, doesn't get "TOO LATE"
+	// TOO LATE	-> health -= 10
+	// MISS		-> health -= 1
+	// ALMOST	-> health += 1
+	// HIT		-> health += 2
 	if (beatPressed)
 	{
 		beatPressed = false;
 
+		if (hitType != 0 && (recentClearType == ClearType::TSPIN_DOUBLE || recentClearType == ClearType::TSPIN_MINI_DOUBLE
+			|| recentClearType == ClearType::B2B_TSPIN_DOUBLE || recentClearType == ClearType::B2B_TSPIN_MINI_DOUBLE
+			|| recentClearType == ClearType::TSPIN_SINGLE || recentClearType == ClearType::TSPIN_MINI_SINGLE
+			|| recentClearType == ClearType::B2B_TSPIN_SINGLE || recentClearType == ClearType::B2B_TSPIN_SINGLE
+			|| recentClearType == ClearType::TSPIN_TRIPLE || recentClearType == ClearType::B2B_TSPIN_TRIPLE))
+		{
+			health = clamp(health + 10, 0, 100);
+		}
+
 		if (hitType == 0)
 		{
 			comboString = "MISS";
-
+			health = clamp(health - 15, 0, 100);
 		}
 		else if (hitType == 1)
 		{
 			comboString = "ALMOST";
+			health = clamp(health + 1, 0, 100);
 		}
 		else if (hitType == 2)
 		{
 			comboString = "HIT";
+			health = clamp(health + 2, 0, 100);
 		}
 
 		// early 200ms, that beat is gone
@@ -52,8 +80,7 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 		{
 			prevBeatTimeMS = nextBeatTimeMS;
 			beatIt++;
-			if (beatIt != beatsTime.end())
-				nextBeatTimeMS = *beatIt;
+			nextBeatTimeMS = *beatIt;
 		}
 		accuracyTimer = 60;
 	}
@@ -64,10 +91,11 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 			combo = 0;
 			comboString = "LATE";
 			beatAccuracyCount[0]++;
+			health = clamp(health - 15, 0, 100);
 			prevBeatTimeMS = nextBeatTimeMS;
 			beatIt++;
-			if (beatIt != beatsTime.end())
-				nextBeatTimeMS = *beatIt;
+
+			nextBeatTimeMS = *beatIt;
 			accuracyTimer = 60;
 		}
 	}
@@ -81,6 +109,58 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window, ResultScreen*& 
 		state = State::GAMEOVER;
 		resultScreenPtr = new ResultScreen(beatAccuracyCount, score, maxCombo);
 		return;
+	}
+	healthCounter++;
+	if (healthCounter >= 60)
+	{
+		health = clamp(health + 1, 0, 100);
+		healthCounter = 0;
+	}
+	if (health <= 0)
+	{
+		gameOver();
+	}
+	if (beatPressed)
+	{
+		beatPressed = false;
+		if (hitType == 0)
+		{
+			comboString = "MISS";
+		}
+		else if (hitType == 1)
+		{
+			comboString = "ALMOST";
+			health = std::clamp(health + 1, 0, 100);
+		}
+		else if (hitType == 2)
+		{
+			comboString = "HIT";
+			health = std::clamp(health + 2, 0, 100);
+		}
+		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS - 100 && beatIt != beatsTime.end())
+		{
+			beatIt++;
+			if (beatIt != beatsTime.end())
+				nextBeatTimeMS = *beatIt;
+			beatPressed = false;
+		}
+
+	}
+	else
+	{
+		if (sound.getPlayingOffset().asMilliseconds() >= nextBeatTimeMS + 100 && beatIt != beatsTime.end())
+		{
+			combo = 0;
+			comboString = "TOO LATE";
+			health = std::clamp(health - 10, 0, 100);
+			while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS && beatIt != beatsTime.end())
+			{
+				beatIt++;
+				if (beatIt != beatsTime.end())
+					nextBeatTimeMS = *beatIt;
+				beatPressed = false;
+			}
+		}
 	}
 }
 
@@ -129,11 +209,7 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 	// reset on top of the gamebase's reset
 	if (key == Keyboard::Key::R)
 	{
-		combo = 0;
-		beatPressed = false;
-		beatAccuracyCount[0] = 0;
-		beatAccuracyCount[1] = 0;
-		beatAccuracyCount[2] = 0;
+		restart();
 	}
 }
 
@@ -146,6 +222,8 @@ void DropToTheBeatGame::mouseEvent(State& state, RenderWindow& window)
 void DropToTheBeatGame::restart()
 {
 	GameBase::restart();
+	health = 100;
+	healthCounter = 0;
 	combo = 0;
 	maxCombo = 0;
 	beatPressed = false;
@@ -160,11 +238,28 @@ void DropToTheBeatGame::render(RenderWindow& window)
 	GameBase::render(window);
 	GameBase::renderBeatSignal(window);
 
+
+	RectangleShape healthRect;
+	healthRect.setPosition(20, 40);
+	healthRect.setSize(Vector2f(health * 5, 20));
+	healthRect.setFillColor(Color::Yellow);
+	healthRect.setOutlineColor(Color::Yellow);
+	healthRect.setOutlineThickness(5);
+	window.draw(healthRect);
+
+	RectangleShape healthBar;
+	healthBar.setPosition(20, 40);
+	healthBar.setSize(Vector2f(500, 20));
+	healthBar.setFillColor(Color::Transparent);
+	healthBar.setOutlineColor(Color::White);
+	healthBar.setOutlineThickness(5);
+	window.draw(healthBar);
+
 	text.setCharacterSize(50);
-	text.setPosition(680, 600);
+	text.setPosition(300, 600);
 	text.setString("Combo");
 	window.draw(text);
-	text.setPosition(680, 650);
+	text.setPosition(300, 650);
 	text.setString(to_string(combo));
 	window.draw(text);
 

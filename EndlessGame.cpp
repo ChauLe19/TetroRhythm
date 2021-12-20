@@ -79,8 +79,8 @@ void EndlessGame::render(RenderWindow& window)
 {
 	GameBase::render(window);
 
-	text.setString("Level: " + to_string(level));
-	text.setPosition(650, 500);
+	text.setString("Score: " + to_string(score));
+	text.setPosition(200, 500);
 	window.draw(text);
 
 	if (isGameOver)

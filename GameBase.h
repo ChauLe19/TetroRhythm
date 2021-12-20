@@ -34,8 +34,8 @@ namespace fs = std::filesystem;
 class ResultScreen;
 
 //const int boardX = 1024- 45*5;
-const int boardX = 1024- 90*5;
-const int boardY = 100;
+const int boardX = 1024 - 90 * 5;
+const int boardY = 576 - 90 * 5;
 
 // frame per cell. how many frame in between dropping 1 cell
 //https://tetris.wiki/Marathon
@@ -179,14 +179,14 @@ public:
 	virtual void restart();
 	void gameOver();
 	bool createGarbageLine(int holePos);
-		
+
 
 	// Getters and Setters
 	//*******************************************
 
 	int getScore();
 
-	private:
-		std::array<int, 2> findNearestPossiblePlacement(RenderWindow& window, Tetromino& piece, Board& board);
+private:
+	std::array<int, 2> findNearestPossiblePlacement(RenderWindow& window, Tetromino& piece, Board& board);
 };
 #endif
