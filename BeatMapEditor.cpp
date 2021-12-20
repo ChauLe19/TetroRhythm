@@ -5,10 +5,9 @@ BeatMapEditor::BeatMapEditor(string folderPath)
 	font.loadFromFile("arial.ttf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
-	speedButton025 = new Button(Color::Black, 20, Color::White, "x0.25", 1200, 400, 80, 20, Keyboard::Key::Num2);
-	speedButton050 = new Button(Color::Black, 20, Color::White, "x0.50", 1100, 400, 80, 20, Keyboard::Key::Num5);
-	speedButton100 = new Button(Color::Black, 20, Color::White, "x1", 1000, 400, 80, 20, Keyboard::Key::Num7);
-
+	speedButton025 = new Button(Color::Black, 35, Color::White, "x0.25\n(Press 2)", 1500, 300, 100, 70, Keyboard::Key::Num2);
+	speedButton050 = new Button(Color::Black, 35, Color::White, "x0.50\n(Press 5)", 1650, 300, 100, 70, Keyboard::Key::Num5);
+	speedButton100 = new Button(Color::Black, 35, Color::White, "x1\n(Press 1)", 1800, 300, 100, 70, Keyboard::Key::Num1);
 
 	fs::path audioPath = folderPath;
 	audioPath.append(audioPath.filename().string() + ".ogg");
