@@ -71,7 +71,6 @@ void EndlessGame::keyEvent(State& state, Keyboard::Key key)
 
 void EndlessGame::mouseEvent(State& state, RenderWindow& window)
 {
-	if (!isGameOver) return;
 	GameBase::mouseEvent(state, window);
 }
 
@@ -79,10 +78,10 @@ void EndlessGame::render(RenderWindow& window)
 {
 	GameBase::render(window);
 
+
 	text.setString("Score: " + to_string(score));
 	text.setPosition(200, 500);
 	window.draw(text);
-
 	if (isGameOver)
 	{
 		GameBase::renderGameOver(window);

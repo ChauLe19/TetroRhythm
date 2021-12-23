@@ -46,6 +46,12 @@ public:
 	 *
 	 */
 	virtual void mouseEvent(State& state, RenderWindow& window) = 0;
+	
+	/**
+	 * Function run when a mouse scroll event is detected.
+	 *
+	 */
+	virtual void mouseScrollEvent(Event event) {};
 };
 
 #endif

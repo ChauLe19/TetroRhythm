@@ -156,6 +156,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="DropToTheBeatGame.cpp" />
     <ClCompile Include="EndlessGame.cpp" />
+    <ClCompile Include="LimitedTimeGame.cpp" />
     <ClCompile Include="MapEditorSelect.cpp" />
     <ClCompile Include="MiniBpm.cpp" />
     <ClCompile Include="ResultScreen.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="DropToTheBeatGame.h" />
     <ClInclude Include="EndlessGame.h" />
+    <ClInclude Include="LimitedTimeGame.h" />
     <ClInclude Include="MapEditorSelect.h" />
     <ClInclude Include="MiniBpm.h" />
     <ClInclude Include="ResultScreen.h" />

@@ -174,8 +174,10 @@ void GameBase::render(RenderWindow& window)
 	text.setFillColor(Color::White);
 	board.render(window);
 	currentPiecePtr->render(window, board);
-	ghostPiece.render(window, board);
-	ghostPiece.renderBorder(window, board, Color::Red);
+	Tetromino ghost = currentPiecePtr->getGhost(board);
+	ghost.render(window, board);
+	ghost.renderBorder(window, board, Color::Red);
+
 	if (holdPiecePtr != nullptr)
 	{
 		int extra = squareSize / 2;
@@ -249,15 +251,15 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 
 	if (key == keybinds["ROTATE_CW"])
 	{
-		//currentPiecePtr->rotate(Rotational_Direction::CW, board);
+		currentPiecePtr->rotate(Rotational_Direction::CW, board);
 	}
 	else if (key == keybinds["ROTATE_CCW"])
 	{
-		//currentPiecePtr->rotate(Rotational_Direction::CCW, board);
+		currentPiecePtr->rotate(Rotational_Direction::CCW, board);
 	}
 	else if (key == keybinds["ROTATE_180"])
 	{
-		//currentPiecePtr->rotate(Rotational_Direction::R180, board);
+		currentPiecePtr->rotate(Rotational_Direction::R180, board);
 	}
 	else if (key == keybinds["HARD_DROP"])
 	{
@@ -269,7 +271,7 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		currentPiecePtr->setPiece(board);
 
 		//alreadyHold = false;
-		onGroundCount = 0;
+		//onGroundCount = 0;
 		frameCount = 0;
 
 		if (prevPiecePtr != nullptr)
@@ -319,22 +321,66 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 	isAutoShiftActive = false;
 }
 
+void GameBase::mouseScrollEvent(Event event)
+{
+	if (event.mouseWheel.delta < 0)
+	{
+		currentPiecePtr->rotate(Rotational_Direction::CCW, board);
+	}
+	else if (event.mouseWheel.delta > 0)
+	{
+		currentPiecePtr->rotate(Rotational_Direction::CW, board);
+	}
+}
+
 void GameBase::mouseEvent(State& state, RenderWindow& window)
 {
-	if (!Mouse::isButtonPressed(Mouse::Left))
+	if (!Mouse::isButtonPressed(Mouse::Left) && !Mouse::isButtonPressed(Mouse::Right))
 	{
 		firstClicked = true;
 		return;
 	}
 
-	if (firstClicked && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // RESTART button
+	if (isGameOver && firstClicked && Mouse::isButtonPressed(Mouse::Left) && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // RESTART button
 	{
 		restart();
 	}
-	else if (firstClicked && mouseInBox(window, 1024 - 150, 576 + 20, 300, 60)) //MENU button
+	else if (isGameOver && firstClicked && Mouse::isButtonPressed(Mouse::Left) && mouseInBox(window, 1024 - 150, 576 + 20, 300, 60)) //MENU button
 	{
 		reset();
 		state = State::MENU;
+	}
+	else if(firstClicked && Mouse::isButtonPressed(Mouse::Left))
+	{
+		hold();
+	}
+	else if (firstClicked && Mouse::isButtonPressed(Mouse::Right))
+	{
+		currentPiecePtr->setPiece(board);
+		if (prevPiecePtr != nullptr)
+		{
+			//cout << "Clearing" << endl;
+			// TODO: copy board before clear, is this optimized???
+			Board tempBoard = board;
+			ClearingInfo tempClearingInfo = board.clearLines();
+			linesCleared += tempClearingInfo.linesCleared;
+			level = clamp(linesCleared / 10 + 1, 1, 15);
+			ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+
+			//update clear type everytime the play drop a piece
+			recentClearType = tempScoresType;
+
+			//update clear type only when the dropped piece clear lines
+			// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
+			if (tempScoresType != ClearType::NONE)
+			{
+				prevClearType = tempScoresType;
+				clearTypeCounter = 60; // 1 second display
+			}
+			score += GameBase::convertClearTypeToScores(tempScoresType);
+		}
+
+		nextPiece();
 	}
 	firstClicked = false;
 }
@@ -728,7 +774,7 @@ void GameBase::hold()
 			ghostPiece = currentPiecePtr->getGhost(board);
 
 		}
-		//holdPiecePtr->reset();
+		holdPiecePtr->reset();
 		alreadyHold = true;
 	}
 }

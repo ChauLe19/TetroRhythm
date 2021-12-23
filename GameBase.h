@@ -130,6 +130,7 @@ public:
 	virtual void render(RenderWindow& window);
 	virtual void keyEvent(State& state, Keyboard::Key key);
 	virtual void mouseEvent(State& state, RenderWindow& window);
+	virtual void mouseScrollEvent(Event event);
 
 	void renderBeatSignal(RenderWindow& window);
 	void renderGameOver(RenderWindow& window);

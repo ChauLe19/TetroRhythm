@@ -29,12 +29,13 @@ void GameOptions::render(RenderWindow& window)
 	text.setFillColor(Color::White);
 	text.setCharacterSize(120);
 	text.setString("Game Options");
-	text.setPosition(1024-text.getLocalBounds().width/2, 50);
+	text.setPosition(1024 - text.getLocalBounds().width / 2, 50);
 	window.draw(text);
 
 	drawGameModeOption(window, "Auto Drop Beat", 50, 300, cursorMode == 0);	// get as many points as you can but a beat will force a hard drop
 	drawGameModeOption(window, "Drop on Beat", 50, 500, cursorMode == 1);		// drop blocks on the beat receives bonus
-	drawGameModeOption(window, "Endless", 50, 700, cursorMode == 2);		// drop blocks on the beat receives bonus
+	drawGameModeOption(window, "Limited Time", 50, 700, cursorMode == 2);		// get the highest score in 2 min
+	drawGameModeOption(window, "Endless", 50, 900, cursorMode == 3);		// just play
 
 	CircleShape triangle(60, 3);
 	triangle.setScale(0.5, 0.5);
@@ -80,6 +81,9 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 			gamePtr = new DropToTheBeatGame(settings, fs::absolute(maps[cursorMap]).string());
 			break;
 		case 2:
+			gamePtr = new LimitedTimeGame(settings, fs::absolute(maps[cursorMap]).string());
+			break;
+		case 3:
 			gamePtr = new EndlessGame(settings, fs::absolute(maps[cursorMap]).string());
 			break;
 		}
@@ -129,7 +133,7 @@ void GameOptions::drawGameModeOption(RenderWindow& window, string gameMode, int 
 	{
 		RectangleShape rect(Vector2f(500, 100));
 		rect.setPosition(x, y - 15);
-		rect.setFillColor(Color(125,125,125,255));
+		rect.setFillColor(Color(125, 125, 125, 255));
 		window.draw(rect);
 		rect.setPosition(x, y - 25);
 		rect.setFillColor(Color::White);

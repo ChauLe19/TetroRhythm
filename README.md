@@ -4,5 +4,14 @@
 + Auto Drop Beat
 + Drop On Beat
 
-And an Endless mode
+Other modes:
++ Endless mode 
++ Limited Time mode
 
+
+HOW TO PLAY with mouse:
+--------------------
+Move piece: move mouse
+Rotate CW/CCW: scroll up/down
+Place piece: right click
+Hold: left click

@@ -5,19 +5,19 @@
  * \author Chau Le
  * \date   August 2021
  *********************************************************************/
-#ifndef ENDLESS_GAME_H
-#define ENDLESS_GAME_H
+#ifndef LIMITED_TIME_GAME_H
+#define LIMITED_TIME_GAME_H
 
 #include "GameBase.h"
 
-class EndlessGame :
+class LimitedTimeGame :
 	public GameBase
 {
 public:
-	EndlessGame(Controls_Settings& settings);
-	EndlessGame(Controls_Settings& settings, string folderPath);
-	~EndlessGame();
-	//sf::Clock clock;
+	LimitedTimeGame(Controls_Settings& settings);
+	LimitedTimeGame(Controls_Settings& settings, string folderPath);
+	~LimitedTimeGame();
+	sf::Clock clock;
 	// Game Base functions
 	//************************************************
 

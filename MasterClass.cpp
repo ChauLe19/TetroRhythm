@@ -9,7 +9,7 @@ MasterClass::MasterClass(RenderWindow& window)
 	this->settings = new Settings(controlsSettings);
 	this->gameOptions = new GameOptions(game, controlsSettings);
 	this->mapEditorSelect = new MapEditorSelect(beatMapEditor);
-	int a[3] = {0,0,0};
+	int a[3] = { 0,0,0 };
 	this->resultScreen = new ResultScreen(a, 0, 0);
 	this->window = &window;
 	font.loadFromFile("arial.ttf");
@@ -74,7 +74,7 @@ void MasterClass::run()
 
 
 		Event event;
-
+		bool scrollEntered = false;
 		while (window->pollEvent(event))
 		{
 			if (event.type == Event::Closed)
@@ -82,10 +82,20 @@ void MasterClass::run()
 
 			if (event.type == Event::KeyPressed)
 			{
-
 				keyEvent(event.key.code);
 			}
+			else if (event.type == Event::MouseWheelMoved)
+			{
+				scrollEntered = true;
+				if (state == State::GAME && firstScroll)
+				{
+					firstScroll = false;
+					game->mouseScrollEvent(event);
+				}
+			}
+
 		}
+		if (scrollEntered == false) { firstScroll = true; }
 		mouseEvent();
 		tick();
 

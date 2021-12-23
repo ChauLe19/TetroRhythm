@@ -47,7 +47,7 @@ private:
 	BeatMapEditor* beatMapEditor;
 	ResultScreen* resultScreen;
 
-
+	bool firstScroll = true;
 public:
 	MasterClass(RenderWindow& window);
 	~MasterClass();

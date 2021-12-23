@@ -215,7 +215,7 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 
 void DropToTheBeatGame::mouseEvent(State& state, RenderWindow& window)
 {
-	if (!isGameOver || finished) return;
+	if (finished) return;
 	GameBase::mouseEvent(state, window);
 }
 

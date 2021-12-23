@@ -74,7 +74,6 @@ void AutoDropGame::keyEvent(State& state, Keyboard::Key key)
 
 void AutoDropGame::mouseEvent(State& state, RenderWindow& window)
 {
-	if (!isGameOver) return;
 	GameBase::mouseEvent(state, window);
 }
 

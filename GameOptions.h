@@ -12,6 +12,7 @@
 #include "GameBase.h"
 #include "DropToTheBeatGame.h"
 #include "EndlessGame.h"
+#include "LimitedTimeGame.h"
 #include "Settings.h"
 #include "AutoDropGame.h"
 #include "ResultScreen.h"
@@ -35,7 +36,7 @@ private:
 	int cursorMode = 0;
 	GameBase*& gamePtr;
 	Controls_Settings& settings;
-	const int modeCount = 3;
+	const int modeCount = 4;
 	vector<fs::path> maps;
 
 

@@ -89,16 +89,9 @@ ClearingInfo Board::clearLines()
 		if (horizontalLineIsFilled)
 		{
 			linesCleared++;
-			for (int k = i; k > 0; k--)
-			{
-				for (int j = 0; j < boardWidth; j++)
-				{
-					board[k][j] = board[k - 1][j];
-				}
-			}
 			for (int j = 0; j < boardWidth; j++)
 			{
-				board[0][j] = 0;
+				board[i][j] = 0;
 			}
 		}
 	}
@@ -126,16 +119,9 @@ ClearingInfo Board::clearLines()
 		if (verticalLineIsFilled)
 		{
 			linesCleared++;
-			for (int k = j; k > 0; k--)
+			for (int k = 0; k < boardHeight; k++)
 			{
-				for (int i = 0; i < boardHeight; i++)
-				{
-					board[i][k] = board[i][k - 1];
-				}
-			}
-			for (int i = 0; i < boardHeight; i++)
-			{
-				board[i][0] = 0;
+				board[k][j] = 0;
 			}
 		}
 	}

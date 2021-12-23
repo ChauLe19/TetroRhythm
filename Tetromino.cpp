@@ -8,22 +8,6 @@ Tetromino::Tetromino(Type type)
 	cellImage.setTextureRect(IntRect(static_cast<int>(type) * 45, 0, 45, 45));
 	// TODO: Check if this copied
 	this->cells = tetrominos[static_cast<int>(type)];
-	// center always [1,1]
-	switch (type)
-	{
-	case Type::I: // can be in spawn state or state after CCW
-		rotateArray(this->cells, 4, static_cast<Rotational_Direction>((std::rand() % 2) - 1));
-		break;
-	case Type::S: // can be in spawn state or state after CW
-	case Type::Z:
-		rotateArray(this->cells, 3, static_cast<Rotational_Direction>(std::rand() % 2));
-		break;
-	case Type::O: // only 1 state
-		break;
-	default: // T, L, J
-		rotateArray(this->cells, 3, static_cast<Rotational_Direction>((std::rand() % 4) - 1));
-		break;
-	}
 }
 
 Tetromino::Tetromino(Type type, bool isGhost)
@@ -66,106 +50,35 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 	int wallKickGroup = 0;
 	// might not be copy
 	// TODO: check if this copied
-	array<array<int, 4>, 4> tempCells;
-	tempCells = cells;
+	array<array<int, 4>, 4> tempCells = cells;
 
 
 	switch (type)
 	{
 	case Type::I:
-		rotateArray(tempCells, 4, rDir);
-		wallKickData = IWallKickData;
+		rotateArray(cells, 4, rDir);
 		break;
 	case Type::O:
-		// if rotate CW, can't move to the bottom right corner, do O-spin if possible 
-		if (rDir == Rotational_Direction::CW && !checkCollision(xPos + 1, yPos + 1, board))
-		{
-			if (checkCollision(xPos + 2, yPos + 2, board))
-			{
-				cout << "CW O spin" << endl;
-				xPos += 2;
-				yPos += 2;
-				orientation = newOrientation;
-				rotateLast = true;
-				return true;
-			}
-			return false;
-		}
-		// if rotate CCW, can't move to the bottom left corner, do O-spin if possible 
-		else if (rDir == Rotational_Direction::CCW && !checkCollision(xPos - 1, yPos + 1, board))
-		{
-			if (checkCollision(xPos - 2, yPos + 2, board))
-			{
-				cout << "CCW O spin" << endl;
-				xPos -= 2;
-				yPos += 2;
-				orientation = newOrientation;
-				rotateLast = true;
-				return true;
-			}
-			return false;
-		}
 		return false;
 		break;
 	default: // T, L, J, Z,S
-		rotateArray(tempCells, 3, rDir);
-		wallKickData = JLSTZWallKickData;
+		rotateArray(cells, 3, rDir);
 		break;
 	}
 
-	if (orientation == Orientation::SPAWN && newOrientation == Orientation::RIGHT)
-	{
-		wallKickGroup = 0;
-	}
-	else if (orientation == Orientation::RIGHT && newOrientation == Orientation::SPAWN)
-	{
-		wallKickGroup = 1;
-	}
-	else if (orientation == Orientation::RIGHT && newOrientation == Orientation::FLIP)
-	{
-		wallKickGroup = 2;
-	}
-	else if (orientation == Orientation::FLIP && newOrientation == Orientation::RIGHT)
-	{
-		wallKickGroup = 3;
-	}
-	else if (orientation == Orientation::FLIP && newOrientation == Orientation::LEFT)
-	{
-		wallKickGroup = 4;
-	}
-	else if (orientation == Orientation::LEFT && newOrientation == Orientation::FLIP)
-	{
-		wallKickGroup = 5;
-	}
-	else if (orientation == Orientation::LEFT && newOrientation == Orientation::SPAWN)
-	{
-		wallKickGroup = 6;
-	}
-	else if (orientation == Orientation::SPAWN && newOrientation == Orientation::LEFT)
-	{
-		wallKickGroup = 7;
-	}
 
 	// TODO: check collision here, wall kick
-	for (int i = 0; i < 5; i++)
-	{
-		int xOffset = wallKickData[wallKickGroup][i][0];
-		int yOffset = wallKickData[wallKickGroup][i][1];
 		//cout << xOffset << ',' << yOffset << endl;
 		// yOffset is negate cuz positve y means upwards while in our board array positve y moves downward
-		if (checkCollision(xPos + xOffset, yPos - yOffset, board))
-		{
-			//cout << "working:" << xOffset << ',' << yOffset << endl;
-			xPos += xOffset;
-			yPos -= yOffset;
-			cells = tempCells;
-			orientation = newOrientation;
-			rotateLast = true;
-			return true;
-		}
+	
+	std::array<int, 3> move =  firstPossibleMove(board);
+	// if no possible move, reset to original orientation
+	if (move[2] == 0)
+	{
+		cells = tempCells;
+		return false;
 	}
-
-	return false;
+	return true;
 }
 
 
@@ -351,7 +264,7 @@ void Tetromino::renderBorder(RenderWindow& window, Board& board, Color color)
 			if (cells[i][j] > 0)
 			{
 				RectangleShape rect(Vector2f(squareSize - 10, squareSize - 10));
-				rect.setFillColor(Color(255,255,255,50));
+				rect.setFillColor(Color(255, 255, 255, 50));
 				rect.setOutlineColor(color);
 				rect.setOutlineThickness(10);
 				rect.setPosition(board.getXPos() + (xPos + j) * squareSize + 5, board.getYPos() + (yPos + i) * squareSize + 5);
