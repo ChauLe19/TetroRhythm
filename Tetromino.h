@@ -258,7 +258,8 @@ public:
 	 */
 	bool checkCollision(Board& board);
 
-	std::array<int, 3>  firstPossibleMove(Board& board);
+	std::array<int, 3>  firstPossibleMoveNoRo(Board& board);
+	std::array<int, 4>  firstPossibleMove(Board& board);
 
 	/**
 	 * Render tetromino with the board position.

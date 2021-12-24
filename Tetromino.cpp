@@ -42,11 +42,9 @@ void Tetromino::turnToGhostColor()
 
 bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 {
-	if (rDir == Rotational_Direction::NORO) return true;
+	//if (rDir == Rotational_Direction::NORO) return true;
 	int newOrientationInt = ((static_cast<int>(orientation) + static_cast<int>(rDir)) + 4) % 4;
 	Orientation newOrientation = static_cast<Orientation> (newOrientationInt);
-	array<array<array<int, 2>, 5>, 8>* wallKickDataPtr = new array<array<array<int, 2>, 5>, 8>();
-	array<array<array<int, 2>, 5>, 8> wallKickData = *wallKickDataPtr;
 	int wallKickGroup = 0;
 	// might not be copy
 	// TODO: check if this copied
@@ -59,7 +57,6 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 		rotateArray(cells, 4, rDir);
 		break;
 	case Type::O:
-		return false;
 		break;
 	default: // T, L, J, Z,S
 		rotateArray(cells, 3, rDir);
@@ -70,8 +67,8 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 	// TODO: check collision here, wall kick
 		//cout << xOffset << ',' << yOffset << endl;
 		// yOffset is negate cuz positve y means upwards while in our board array positve y moves downward
-	
-	std::array<int, 3> move =  firstPossibleMove(board);
+
+	std::array<int, 3> move = firstPossibleMoveNoRo(board);
 	// if no possible move, reset to original orientation
 	if (move[2] == 0)
 	{
@@ -219,9 +216,8 @@ bool Tetromino::checkCollision(Board& board)
 	return true;
 }
 
-std::array<int, 3> Tetromino::firstPossibleMove(Board& board)
+std::array<int, 3> Tetromino::firstPossibleMoveNoRo(Board& board)
 {
-	array<array<int, boardWidth>, boardHeight> boardMatrix = board.getBoard();
 	//Traverse the cells if it collide with any blocks on the board
 	for (int i = -getMinX(); i <= 9 - getMaxX(); i++)
 	{
@@ -231,6 +227,39 @@ std::array<int, 3> Tetromino::firstPossibleMove(Board& board)
 		}
 	}
 	return { -1,-1,0 };
+}
+
+std::array<int, 4> Tetromino::firstPossibleMove(Board& board)
+{
+	Tetromino temp = *this;
+	bool valid = false;
+	for (int o = 0; o < 4; o++)
+	{
+		temp.reset();
+		switch (o)
+		{
+		case 0:
+			valid = temp.rotate(Rotational_Direction::NORO,board);
+			break;
+		case 1:
+			valid = temp.rotate(Rotational_Direction::CW,board);
+			break;
+		case 2:
+			valid = temp.rotate(Rotational_Direction::R180,board);
+			break;
+		case 3:
+			valid = temp.rotate(Rotational_Direction::CCW,board);
+			break;
+		default:
+			break;
+		};
+		if (valid)
+		{
+			std::array<int, 3> res = temp.firstPossibleMoveNoRo(board);
+			return { res[0], res[1],o, 1 };
+		}
+	}
+	return { -1,-1,-1,0 };
 }
 
 void Tetromino::render(RenderWindow& window, Board& board)

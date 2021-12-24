@@ -659,6 +659,9 @@ string GameBase::clearTypeToString(ClearType clearType)
 	case ClearType::TSPIN_MINI_NO:
 		return "T-Spin Mini";
 		break;
+	case ClearType::TSPIN_NO:
+		return "T-Spin";
+		break;
 	case ClearType::TSPIN_MINI_SINGLE:
 		return "T-Spin Mini Single";
 		break;
@@ -764,15 +767,29 @@ Tetromino& GameBase::nextPiece()
 	currentPiecePtr->setTransparency(150);
 	alreadyHold = false;
 	// If pieces have no possible move, game over
-	std::array <int, 3> possibleMovesCurrent = currentPiecePtr->firstPossibleMove(board);
-	std::array <int, 3> possibleMovesHold = holdPiecePtr != nullptr ? holdPiecePtr->firstPossibleMove(board) : bag.front()->firstPossibleMove(board);
-	if (possibleMovesCurrent[2] == 1)
+	std::array <int, 4> possibleMovesCurrent = currentPiecePtr->firstPossibleMove(board);
+	std::array <int, 4> possibleMovesHold = holdPiecePtr != nullptr ? holdPiecePtr->firstPossibleMove(board) : bag.front()->firstPossibleMove(board);
+	if (possibleMovesCurrent[3] == 1)
 	{
 		lastX = possibleMovesCurrent[0];
 		lastY = possibleMovesCurrent[1];
+		switch (possibleMovesCurrent[2])
+		{
+		case 1:
+			currentPiecePtr->rotate(Rotational_Direction::CW, board);
+			break;
+		case 2:
+			currentPiecePtr->rotate(Rotational_Direction::R180, board);
+			break;
+		case 3:
+			currentPiecePtr->rotate(Rotational_Direction::CCW, board);
+			break;
+		default:
+			break;
+		};
 		currentPiecePtr->setXY(lastX, lastY, board);
 	}
-	else if (possibleMovesHold[2] == 1)
+	else if (possibleMovesHold[3] == 1)
 	{
 		hold();
 	}
