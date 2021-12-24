@@ -274,28 +274,25 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		//onGroundCount = 0;
 		frameCount = 0;
 
-		if (prevPiecePtr != nullptr)
+		//cout << "Clearing" << endl;
+		// TODO: copy board before clear, is this optimized???
+		Board tempBoard = board;
+		ClearingInfo tempClearingInfo = board.clearLines();
+		linesCleared += tempClearingInfo.linesCleared;
+		level = clamp(linesCleared / 10 + 1, 1, 15);
+		ClearType tempScoresType = GameBase::determineClearType(*currentPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+
+		//update clear type everytime the play drop a piece
+		recentClearType = tempScoresType;
+
+		//update clear type only when the dropped piece clear lines
+		// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
+		if (tempScoresType != ClearType::NONE)
 		{
-			//cout << "Clearing" << endl;
-			// TODO: copy board before clear, is this optimized???
-			Board tempBoard = board;
-			ClearingInfo tempClearingInfo = board.clearLines();
-			linesCleared += tempClearingInfo.linesCleared;
-			level = clamp(linesCleared / 10 + 1, 1, 15);
-			ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-
-			//update clear type everytime the play drop a piece
-			recentClearType = tempScoresType;
-
-			//update clear type only when the dropped piece clear lines
-			// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
-			if (tempScoresType != ClearType::NONE)
-			{
-				prevClearType = tempScoresType;
-				clearTypeCounter = 60; // 1 second display
-			}
-			score += GameBase::convertClearTypeToScores(tempScoresType);
+			prevClearType = tempScoresType;
+			clearTypeCounter = 60; // 1 second display
 		}
+		score += GameBase::convertClearTypeToScores(tempScoresType);
 
 		nextPiece();
 
@@ -350,11 +347,11 @@ void GameBase::mouseEvent(State& state, RenderWindow& window)
 		reset();
 		state = State::MENU;
 	}
-	else if(firstClicked && Mouse::isButtonPressed(Mouse::Left))
+	else if (!isGameOver & firstClicked && Mouse::isButtonPressed(Mouse::Left))
 	{
 		hold();
 	}
-	else if (firstClicked && Mouse::isButtonPressed(Mouse::Right))
+	else if (!isGameOver & firstClicked && Mouse::isButtonPressed(Mouse::Right))
 	{
 		currentPiecePtr->setPiece(board);
 		if (prevPiecePtr != nullptr)
@@ -608,11 +605,30 @@ ClearType GameBase::determineClearType(Tetromino clearingPiece, ClearingInfo inf
 		}
 		else if (isB2BChainActive)
 		{
-			cout << "B2B B2B_TETRIS" << endl;
+			cout << "B2B_TETRIS" << endl;
 			return ClearType::B2B_TETRIS;
 		}
 		cout << "TETRIS" << endl;
 		return ClearType::TETRIS;
+		break;
+	case 5:
+		if (info.isPC && isB2BChainActive)
+		{
+			cout << "B2B_PENTRIS_PC" << endl;
+			return ClearType::B2B_PENTRIS_PC;
+		}
+		else if (info.isPC)
+		{
+			cout << "TETRIS_PC" << endl;
+			return ClearType::PENTRIS_PC;
+		}
+		else if (isB2BChainActive)
+		{
+			cout << "B2B_PENTRIS" << endl;
+			return ClearType::B2B_PENTRIS;
+		}
+		cout << "PENTRIS" << endl;
+		return ClearType::PENTRIS;
 		break;
 	default:
 		cout << "NONE" << endl;
@@ -700,6 +716,20 @@ string GameBase::clearTypeToString(ClearType clearType)
 	case ClearType::B2B_TSPIN_TRIPLE:
 		return "B2B T-Spin Triple";
 		break;
+	case ClearType::B2B_PENTRIS_PC:
+		return "B2B Pentris PC";
+		break;
+	case ClearType::B2B_PENTRIS:
+		return "B2B Pentris";
+		break;
+	case ClearType::PENTRIS_PC:
+		return "Pentris PC";
+		break;
+	case ClearType::PENTRIS:
+		return "Pentris";
+		break;
+
+
 	default:
 		return "INVALID";
 		break;
@@ -923,17 +953,17 @@ bool GameBase::isB2BChain(ClearType type)
 // 2: t-spin double
 int GameBase::getTSpinType(Tetromino piece, Board& board)
 {
-	if (piece.getType() == Type::T && piece.getRotateLast())
+	if (piece.getType() == Type::T)
 	{
 		int x = piece.getXPos();
 		int y = piece.getYPos();
 
 	https://drive.google.com/file/d/1ev8Uo6qXt-oBwEoPyCPXUkOUkB4wh1QA/view?usp=sharing
 		int ori = static_cast<int> (piece.getOrientation());
-		bool leftFrontCornerFilled = ori / 2 * 2 + y >= boardHeight || (ori + 1) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[ori / 2 * 2 + y][(ori + 1) % 4 / 2 * 2 + x] > 0;
-		bool rightFrontCornerFilled = (ori + 1) % 4 / 2 * 2 + y >= boardHeight || (ori + 2) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 1) % 4 / 2 * 2 + y][(ori + 2) % 4 / 2 * 2 + x] > 0;
-		bool rightBackCornerFilled = (ori + 2) % 4 / 2 * 2 + y >= boardHeight || (ori + 3) % 4 / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 2) % 4 / 2 * 2 + y][(ori + 3) % 4 / 2 * 2 + x] > 0;
-		bool leftBackCornerFilled = (ori + 3) % 4 / 2 * 2 + y >= boardHeight || ori / 2 * 2 + x >= boardWidth || board.getBoard()[(ori + 3) % 4 / 2 * 2 + y][ori / 2 * 2 + x] > 0;
+		bool leftFrontCornerFilled = ori / 2 * 2 + y >= boardHeight || (ori + 1) % 4 / 2 * 2 + x >= boardWidth || ori / 2 * 2 + y < 0 || (ori + 1) % 4 / 2 * 2 + x < 0 || board.getBoard()[ori / 2 * 2 + y][(ori + 1) % 4 / 2 * 2 + x] > 0;
+		bool rightFrontCornerFilled = (ori + 1) % 4 / 2 * 2 + y >= boardHeight || (ori + 2) % 4 / 2 * 2 + x >= boardWidth || (ori + 1) % 4 / 2 * 2 + y < 0 || (ori + 2) % 4 / 2 * 2 + x < 0 || board.getBoard()[(ori + 1) % 4 / 2 * 2 + y][(ori + 2) % 4 / 2 * 2 + x] > 0;
+		bool rightBackCornerFilled = (ori + 2) % 4 / 2 * 2 + y >= boardHeight || (ori + 3) % 4 / 2 * 2 + x >= boardWidth || (ori + 2) % 4 / 2 * 2 + y < 0 || (ori + 3) % 4 / 2 * 2 + x < 0 || board.getBoard()[(ori + 2) % 4 / 2 * 2 + y][(ori + 3) % 4 / 2 * 2 + x] > 0;
+		bool leftBackCornerFilled = (ori + 3) % 4 / 2 * 2 + y >= boardHeight || ori / 2 * 2 + x >= boardWidth || (ori + 3) % 4 / 2 * 2 + y < 0 || ori / 2 * 2 + x < 0 || board.getBoard()[(ori + 3) % 4 / 2 * 2 + y][ori / 2 * 2 + x] > 0;
 
 		if (leftFrontCornerFilled && rightFrontCornerFilled && (rightBackCornerFilled || leftBackCornerFilled))
 		{

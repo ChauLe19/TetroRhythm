@@ -69,7 +69,6 @@ ClearingInfo Board::clearLines()
 	for (int i = 0; i < boardHeight; i++)
 	{
 		bool horizontalLineIsFilled = true;
-		bool linePC = true;
 		// check if line is filled
 		for (int j = 0; j < boardWidth; j++)
 		{
@@ -78,12 +77,6 @@ ClearingInfo Board::clearLines()
 				horizontalLineIsFilled = false;
 			}
 
-			// in a line, if tiles switch from filled and empty -> not clearing -> not pc
-			if (j != 0 && tempBoard[i][j] != tempBoard[i][j - 1] && (tempBoard[i][j] == 0 || tempBoard[i][j - 1] == 0))
-			{
-				isPC = false;
-				break;
-			}
 		}
 		// if line is filled, clear
 		if (horizontalLineIsFilled)
@@ -99,7 +92,6 @@ ClearingInfo Board::clearLines()
 	for (int j = 0; j < boardWidth; j++)
 	{
 		bool verticalLineIsFilled = true;
-		bool linePC = true;
 		// check if line is filled
 		for (int i = 0; i < boardHeight; i++)
 		{
@@ -108,12 +100,6 @@ ClearingInfo Board::clearLines()
 				verticalLineIsFilled = false;
 			}
 
-			// in a line, if tiles switch from filled and empty -> not clearing -> not pc
-			if (i != 0 && tempBoard[i][j] != tempBoard[i - 1][j] && (tempBoard[i][j] == 0 || tempBoard[i - 1][j] == 0))
-			{
-				isPC = false;
-				break;
-			}
 		}
 		// if line is filled, clear
 		if (verticalLineIsFilled)
@@ -123,6 +109,19 @@ ClearingInfo Board::clearLines()
 			{
 				board[k][j] = 0;
 			}
+		}
+	}
+
+	for (int j = 0; j < boardWidth; j++)
+	{
+		// check if line is filled
+		for (int i = 0; i < boardHeight; i++)
+		{
+			if (board[i][j] != 0)
+			{
+				isPC = false;
+			}
+
 		}
 	}
 

@@ -49,6 +49,10 @@ enum class ClearType {
 	B2B_TSPIN_MINI_DOUBLE,
 	B2B_TSPIN_DOUBLE,
 	B2B_TSPIN_TRIPLE, // t-spin
+	B2B_PENTRIS_PC,
+	B2B_PENTRIS,
+	PENTRIS_PC,
+	PENTRIS
 };
 
 // Scoring array mapping with the ClearType enums
@@ -77,6 +81,10 @@ static int clearTypeScore[] = { 0,
 1200,
 600,
 1800,
+2400,
+5000,
+3000,
+3000,
 2400
 };
 
