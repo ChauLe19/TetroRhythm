@@ -806,19 +806,19 @@ void GameBase::hold()
 {
 	if (!alreadyHold)
 	{
-		if (holdPiecePtr == nullptr)
-		{
-			holdPiecePtr = currentPiecePtr;
-			ghostPiece = currentPiecePtr->getGhost(board);
-			//currentPiecePtr = &nextPiece();
-			nextPiece();
-		}
-		else
+		if (holdPiecePtr != nullptr && holdPiecePtr->firstPossibleMove(board)[3] == 1)
 		{
 			Tetromino* tempPiecePtr = holdPiecePtr;
 			holdPiecePtr = currentPiecePtr;
 			currentPiecePtr = tempPiecePtr;
 			ghostPiece = currentPiecePtr->getGhost(board);
+		}
+		else if (bag.front()->firstPossibleMove(board)[3] == 1)
+		{
+			holdPiecePtr = currentPiecePtr;
+			ghostPiece = currentPiecePtr->getGhost(board);
+			//currentPiecePtr = &nextPiece();
+			nextPiece();
 
 		}
 		holdPiecePtr->reset();

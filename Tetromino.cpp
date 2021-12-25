@@ -54,9 +54,21 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 	switch (type)
 	{
 	case Type::I:
-		rotateArray(cells, 4, rDir);
+		cells = tetrominos[static_cast<int>(type)];
+		if (newOrientation == Orientation::RIGHT || newOrientation == Orientation::LEFT)
+		{
+			rotateArray(cells, 4, Rotational_Direction::CCW);
+		}
 		break;
 	case Type::O:
+		break;
+	case Type::Z:
+	case Type::S:
+		cells = tetrominos[static_cast<int>(type)];
+		if (newOrientation == Orientation::RIGHT || newOrientation == Orientation::LEFT)
+		{
+			rotateArray(cells, 3, Rotational_Direction::CCW);
+		}
 		break;
 	default: // T, L, J, Z,S
 		rotateArray(cells, 3, rDir);
@@ -75,6 +87,7 @@ bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 		cells = tempCells;
 		return false;
 	}
+	orientation = newOrientation;
 	return true;
 }
 
@@ -239,16 +252,16 @@ std::array<int, 4> Tetromino::firstPossibleMove(Board& board)
 		switch (o)
 		{
 		case 0:
-			valid = temp.rotate(Rotational_Direction::NORO,board);
+			valid = temp.rotate(Rotational_Direction::NORO, board);
 			break;
 		case 1:
-			valid = temp.rotate(Rotational_Direction::CW,board);
+			valid = temp.rotate(Rotational_Direction::CW, board);
 			break;
 		case 2:
-			valid = temp.rotate(Rotational_Direction::R180,board);
+			valid = temp.rotate(Rotational_Direction::R180, board);
 			break;
 		case 3:
-			valid = temp.rotate(Rotational_Direction::CCW,board);
+			valid = temp.rotate(Rotational_Direction::CCW, board);
 			break;
 		default:
 			break;

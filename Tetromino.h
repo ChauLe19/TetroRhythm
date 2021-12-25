@@ -59,7 +59,7 @@ const static std::array<std::array<std::array<int, 4>, 4>, 7> tetrominos = { {
 											}},
 											{{  //J block
 												{6, 0, 0, 0},
-												{6, 14, 6, 0},
+												{6, 6, 6, 0},
 												{0, 0, 0, 0},
 												{0, 0, 0, 0}
 											}},

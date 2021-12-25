@@ -27,64 +27,10 @@ void Menu::render(RenderWindow& window)
 	window.draw(text);
 
 
-	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "BEGIN", 400, 60, 1024 - 200, 600);
-	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "SETTINGS", 400, 60, 1024 - 200, 700);
-	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "EDIT BEAT MAPS", 400, 60, 1024 - 200, 800);
+	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "BEGIN (Enter)", 400, 60, 1024 - 200, 600);
+	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "SETTINGS (C)", 400, 60, 1024 - 200, 700);
+	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "EDIT BEAT MAPS (E)", 400, 60, 1024 - 200, 800);
 
-	//RectangleShape rect;
-	//rect.setSize(Vector2f(400, 60));
-	//rect.setFillColor(Color(150, 150, 150, 255));
-	//rect.setPosition(Vector2f(1024 - 200, 600));
-	//window.draw(rect);
-
-	//rect.setFillColor(Color::White);
-	//rect.setSize(Vector2f(400,60));
-	//rect.setPosition(Vector2f(1024-200, 590));
-	//window.draw(rect);
-	//
-
-	//text.setFillColor(Color::Black);
-	////text.setPosition(1024-60, 595);
-	//text.setCharacterSize(40);
-	//text.setString("BEGIN");
-	//text.setPosition(1024 - text.getLocalBounds().width / 2, 595);
-	//window.draw(text);
-
-
-	//rect.setSize(Vector2f(400, 60));
-	//rect.setFillColor(Color(150, 150, 150, 255));
-	//rect.setPosition(Vector2f(1024 - 200, 700));
-	//window.draw(rect);
-
-	//rect.setFillColor(Color::White);
-	//rect.setSize(Vector2f(400, 60));
-	//rect.setPosition(Vector2f(1024 - 200, 690));
-	//window.draw(rect);
-
-	//text.setFillColor(Color::Black);
-	////text.setPosition(930, 695);
-	//text.setCharacterSize(40);
-	//text.setString("SETTINGS");
-	//text.setPosition(1024 - text.getLocalBounds().width / 2, 695);
-	//text.getLocalBounds().width;
-	//window.draw(text);
-	//
-
-	//rect.setSize(Vector2f(400, 60));
-	//rect.setFillColor(Color(150, 150, 150, 255));
-	//rect.setPosition(Vector2f(1024 - 200, 800));
-	//window.draw(rect);
-
-	//rect.setFillColor(Color::White);
-	//rect.setSize(Vector2f(400, 60));
-	//rect.setPosition(Vector2f(1024 - 200, 790));
-	//window.draw(rect);
-
-	////text.setPosition(860, 795);
-	//text.setCharacterSize(40);
-	//text.setString("EDIT BEAT MAPS");
-	//text.setPosition(1024 - text.getLocalBounds().width / 2, 795);
-	//window.draw(text);
 }
 
 void Menu::keyEvent(State& state, Keyboard::Key key)
