@@ -60,7 +60,7 @@ int main()
 {
 
 	HWND hWnd = GetConsoleWindow();
-	ShowWindow(hWnd, SW_SHOW);
+	ShowWindow(hWnd, SW_HIDE);
 
 	// randomize init
 	srand(static_cast<unsigned int> (time(NULL)));
