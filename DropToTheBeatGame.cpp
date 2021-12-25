@@ -75,84 +75,24 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 			health = clamp(health + 2, 0, 100);
 		}
 
-		// early 200ms, that beat is gone
-		if (tempTime >= nextBeatTimeMS - 200 && beatIt != beatsTime.end())
-		{
-			prevBeatTimeMS = nextBeatTimeMS;
-			beatIt++;
-			nextBeatTimeMS = *beatIt;
-		}
-		accuracyTimer = 60;
-	}
-	else // too late, move to next beat
-	{
-		if (tempTime > nextBeatTimeMS + 200 && beatIt != beatsTime.end())
-		{
-			combo = 0;
-			comboString = "LATE";
-			beatAccuracyCount[0]++;
-			health = clamp(health - 15, 0, 100);
-			prevBeatTimeMS = nextBeatTimeMS;
-			beatIt++;
-
-			nextBeatTimeMS = *beatIt;
-			accuracyTimer = 60;
-		}
-	}
-}
-
-void DropToTheBeatGame::tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr)
-{
-	tick(state, window);
-	if (finished)
-	{
-		state = State::GAMEOVER;
-		resultScreenPtr = new ResultScreen(beatAccuracyCount, score, maxCombo);
-		return;
-	}
-	healthCounter++;
-	if (healthCounter >= 60)
-	{
-		health = clamp(health + 1, 0, 100);
-		healthCounter = 0;
-	}
-	if (health <= 0)
-	{
-		gameOver();
-	}
-	if (beatPressed)
-	{
-		beatPressed = false;
-		if (hitType == 0)
-		{
-			comboString = "MISS";
-		}
-		else if (hitType == 1)
-		{
-			comboString = "ALMOST";
-			health = std::clamp(health + 1, 0, 100);
-		}
-		else if (hitType == 2)
-		{
-			comboString = "HIT";
-			health = std::clamp(health + 2, 0, 100);
-		}
-		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS - 100 && beatIt != beatsTime.end())
+		prevBeatTimeMS = nextBeatTimeMS;
+		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS - 200 && beatIt != beatsTime.end())
 		{
 			beatIt++;
 			if (beatIt != beatsTime.end())
 				nextBeatTimeMS = *beatIt;
 			beatPressed = false;
 		}
-
 	}
-	else
+	else // too late, move to next beat
 	{
-		if (sound.getPlayingOffset().asMilliseconds() >= nextBeatTimeMS + 100 && beatIt != beatsTime.end())
+		if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 200 && beatIt != beatsTime.end())
 		{
 			combo = 0;
 			comboString = "TOO LATE";
-			health = std::clamp(health - 10, 0, 100);
+			beatAccuracyCount[0]++;
+			health = clamp(health - 10, 0, 100);
+			prevBeatTimeMS = nextBeatTimeMS;
 			while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS && beatIt != beatsTime.end())
 			{
 				beatIt++;
@@ -161,6 +101,18 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window, ResultScreen*& 
 				beatPressed = false;
 			}
 		}
+	}
+}
+
+void DropToTheBeatGame::tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr)
+{
+	tick(state, window);
+	if (sound.getStatus() == SoundSource::Status::Stopped)
+	{
+		gameOver();
+		state = State::GAMEOVER;
+		resultScreenPtr = new ResultScreen(beatAccuracyCount, score, maxCombo);
+		return;
 	}
 }
 
