@@ -45,5 +45,7 @@ public:
 	void mouseEvent(State& state, RenderWindow& window);
 	void restart();
 	void render(RenderWindow& window);
+private:
+	void checkDropOnBeat();
 };
 #endif

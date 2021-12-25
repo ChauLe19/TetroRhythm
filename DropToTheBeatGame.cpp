@@ -119,43 +119,10 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window, ResultScreen*& 
 void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 {
 	GameBase::keyEvent(state, key);
-	int tempTime = sound.getPlayingOffset().asMilliseconds();
 	//if (key == keybinds["HARD_DROP"] || key == keybinds["ROTATE_CW"] || key == keybinds["ROTATE_CCW"])
 	if (key == keybinds["HARD_DROP"])
 	{
-		if (abs(tempTime - nextBeatTimeMS) <= 100) // HIT
-		{
-			combo++;
-			hitType = 2;
-			beatPressed = true;
-		}
-		else if (abs(tempTime - nextBeatTimeMS) <= 200) // ALMOST
-		{
-			combo++;
-			hitType = 1;
-			beatPressed = true;
-
-		}
-		else // MISS
-		{
-			hitType = 0;
-			beatPressed = true;
-			combo = 0;
-		}
-
-		beatAccuracyCount[hitType]++;
-
-		// already added clear type in GameBase, now add bonus to it
-		// if combo < 1, no combo added
-		// if combo >=1, bonus = (combo)/100 * (clear score + hard drop score)
-		// combo is capped at 100	-> which means max bonus = clear score
-		bonus = clamp(combo, 0, 100) * convertClearTypeToScores(recentClearType) / 100;
-		score += bonus;
-
-		if (combo > maxCombo)
-		{
-			maxCombo = combo;
-		}
+		checkDropOnBeat();
 	}
 
 	// reset on top of the gamebase's reset
@@ -165,9 +132,50 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
+void DropToTheBeatGame::checkDropOnBeat()
+{
+	int tempTime = sound.getPlayingOffset().asMilliseconds();
+	if (abs(tempTime - nextBeatTimeMS) <= 100) // HIT
+	{
+		combo++;
+		hitType = 2;
+		beatPressed = true;
+	}
+	else if (abs(tempTime - nextBeatTimeMS) <= 200) // ALMOST
+	{
+		combo++;
+		hitType = 1;
+		beatPressed = true;
+
+	}
+	else // MISS
+	{
+		hitType = 0;
+		beatPressed = true;
+		combo = 0;
+	}
+
+	beatAccuracyCount[hitType]++;
+
+	// already added clear type in GameBase, now add bonus to it
+	// if combo < 1, no combo added
+	// if combo >=1, bonus = (combo)/100 * (clear score + hard drop score)
+	// combo is capped at 100	-> which means max bonus = clear score
+	bonus = clamp(combo, 0, 100) * convertClearTypeToScores(recentClearType) / 100;
+	score += bonus;
+
+	if (combo > maxCombo)
+	{
+		maxCombo = combo;
+	}
+}
 void DropToTheBeatGame::mouseEvent(State& state, RenderWindow& window)
 {
 	if (finished) return;
+	if (!isGameOver && firstClicked && Mouse::isButtonPressed(Mouse::Right))
+	{
+		checkDropOnBeat();
+	}
 	GameBase::mouseEvent(state, window);
 }
 
