@@ -17,7 +17,7 @@ string importedPath = "BeatMaps/Tetris_theme";
 
 LONG_PTR originalsfmlcallback = 0x0;
 
-LRESULT CALLBACK mycallback(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK dragdropfileCallback(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	if (message == WM_DROPFILES)
 	{
@@ -79,7 +79,7 @@ int main()
 
 	HWND handle = window.getSystemHandle();
 	DragAcceptFiles(handle, TRUE);
-	originalsfmlcallback = SetWindowLongPtrW(handle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(mycallback));
+	originalsfmlcallback = SetWindowLongPtrW(handle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(dragdropfileCallback));
 
 
 	MasterClass gameMC(window);

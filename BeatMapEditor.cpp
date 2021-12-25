@@ -2,7 +2,7 @@
 
 BeatMapEditor::BeatMapEditor(string folderPath)
 {
-	font.loadFromFile("arial.ttf");
+	font.loadFromFile("Dense-Regular.otf");
 	text.setFont(font);
 	text.setFillColor(Color::White);
 	speedButton025 = new Button(Color::Black, 35, Color::White, "x0.25\n(Press 2)", 1500, 300, 100, 70, Keyboard::Key::Num2);
@@ -161,8 +161,8 @@ void BeatMapEditor::tick(State& state, RenderWindow& window)
 void BeatMapEditor::render(RenderWindow& window)
 {
 	text.setFillColor(Color::White);
-	text.setPosition(20, 20);
-	text.setCharacterSize(20);
+	text.setPosition(20, 10);
+	text.setCharacterSize(30);
 	text.setString("Drag the bottom cursor to navigate along the beats. Hover your mouse over green tick(s) while holding right click to erase them. Press B or right click the center circle to place beat. Spacebar to play/pause.");
 	window.draw(text);
 
