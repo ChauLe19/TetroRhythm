@@ -48,8 +48,8 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 			comboString = "HIT";
 		}
 
-		// early 200ms, that beat is gone
-		if (tempTime >= nextBeatTimeMS - 200 && beatIt != beatsTime.end())
+		// if next beat is in 200ms window, skip it or clear it
+		if (tempTime <= nextBeatTimeMS + 200 && beatIt != beatsTime.end())
 		{
 			prevBeatTimeMS = nextBeatTimeMS;
 			beatIt++;
