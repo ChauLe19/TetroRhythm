@@ -155,6 +155,7 @@ void GameBase::tick(State& state, RenderWindow& window)
 
 	int tempTime = sound.getPlayingOffset().asMilliseconds();
 
+	/* supposed to highlight the beat, but yeah it ruined me entire music experience
 	if (sound.getVolume() != 100 && abs(tempTime - nextBeatTimeMS) <= 100)
 	{
 		sound.setVolume(100);
@@ -163,7 +164,7 @@ void GameBase::tick(State& state, RenderWindow& window)
 	{
 		sound.setVolume(60);
 	}
-
+	*/
 	if (isGameOver) return;
 
 

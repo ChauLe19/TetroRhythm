@@ -62,7 +62,7 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 		if (hitType == 0)
 		{
 			comboString = "MISS";
-			health = clamp(health - 15, 0, 100);
+			health = clamp(health - 10, 0, 100);
 		}
 		else if (hitType == 1)
 		{
@@ -75,13 +75,13 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 			health = clamp(health + 2, 0, 100);
 		}
 
-		prevBeatTimeMS = nextBeatTimeMS;
-		while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS - 200 && beatIt != beatsTime.end())
+		// if next beat is in 200ms window, skip it or clear it
+		if (sound.getPlayingOffset().asMilliseconds() <= nextBeatTimeMS + 200 && beatIt != beatsTime.end())
 		{
+			prevBeatTimeMS = nextBeatTimeMS;
 			beatIt++;
 			if (beatIt != beatsTime.end())
 				nextBeatTimeMS = *beatIt;
-			beatPressed = false;
 		}
 	}
 	else // too late, move to next beat
@@ -93,13 +93,10 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 			beatAccuracyCount[0]++;
 			health = clamp(health - 10, 0, 100);
 			prevBeatTimeMS = nextBeatTimeMS;
-			while (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS && beatIt != beatsTime.end())
-			{
-				beatIt++;
-				if (beatIt != beatsTime.end())
-					nextBeatTimeMS = *beatIt;
-				beatPressed = false;
-			}
+			beatIt++;
+			nextBeatTimeMS = *beatIt;
+			if (beatIt != beatsTime.end())
+				nextBeatTimeMS = *beatIt;
 		}
 	}
 }
