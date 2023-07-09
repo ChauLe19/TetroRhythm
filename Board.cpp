@@ -13,7 +13,7 @@ Board::Board(int xPos, int yPos)
 
 Board::Board()
 {
-	frameTexture.loadFromFile("Images/frame-white.png");
+	frameTexture.loadFromFile("Images/frame flat.png");
 	image.setTexture(frameTexture);
 	image.setPosition((float)0, (float)0);
 	cellsTexture.loadFromFile("Images/tiles-2.png");
@@ -62,73 +62,53 @@ void Board::render(RenderWindow& window)
 
 ClearingInfo Board::clearLines()
 {
-	array<array<int, boardWidth>, boardHeight> tempBoard = board;
 	int linesCleared = 0;
 	bool isPC = true;
 
 	for (int i = 0; i < boardHeight; i++)
 	{
-		bool horizontalLineIsFilled = true;
+		bool lineIsFilled = true;
+		bool linePC = true;
 		// check if line is filled
 		for (int j = 0; j < boardWidth; j++)
 		{
-			if (tempBoard[i][j] == 0)
+			if (board[i][j] == 0)
 			{
-				horizontalLineIsFilled = false;
+				lineIsFilled = false;
 			}
 
-		}
-		// if line is filled, clear
-		if (horizontalLineIsFilled)
-		{
-			linesCleared++;
-			for (int j = 0; j < boardWidth; j++)
-			{
-				board[i][j] = 0;
-			}
-		}
-	}
-
-	for (int j = 0; j < boardWidth; j++)
-	{
-		bool verticalLineIsFilled = true;
-		// check if line is filled
-		for (int i = 0; i < boardHeight; i++)
-		{
-			if (tempBoard[i][j] == 0)
-			{
-				verticalLineIsFilled = false;
-			}
-
-		}
-		// if line is filled, clear
-		if (verticalLineIsFilled)
-		{
-			linesCleared++;
-			for (int k = 0; k < boardHeight; k++)
-			{
-				board[k][j] = 0;
-			}
-		}
-	}
-
-	for (int j = 0; j < boardWidth; j++)
-	{
-		// check if line is filled
-		for (int i = 0; i < boardHeight; i++)
-		{
-			if (board[i][j] != 0)
+			// in a line, if tiles switch from filled and empty -> not clearing -> not pc
+			if (j != 0 && board[i][j] != board[i][j - 1] && (board[i][j] == 0 || board[i][j - 1] == 0))
 			{
 				isPC = false;
+				break;
 			}
-
+		}
+		// if line is filled, clear
+		if (lineIsFilled)
+		{
+			linesCleared++;
+			for (int k = i; k >= 0; k--)
+			{
+				for (int j = 0; j < boardWidth; j++)
+				{
+					if (k == 0)
+					{
+						board[k][j] = 0;
+					}
+					else
+					{
+						board[k][j] = board[k - 1][j];
+					}
+				}
+			}
 		}
 	}
-
 	struct ClearingInfo result;
 	result.isPC = isPC;
 	result.linesCleared = linesCleared;
 	return result;
+
 }
 
 

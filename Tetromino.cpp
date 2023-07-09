@@ -31,7 +31,7 @@ Tetromino Tetromino::getGhost(Board& board)
 {
 	Tetromino ghost = *this;
 	ghost.turnToGhostColor();
-	//while (ghost.move(Moving_Direction::DOWN_DIR, board));
+	while (ghost.move(Moving_Direction::DOWN_DIR, board));
 	return ghost;
 }
 

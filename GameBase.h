@@ -113,7 +113,7 @@ protected:
 	bool SDfirstPressed = false;
 	bool SDalreadyHold = false;
 
-
+	bool hardDropOnTick = false;
 
 	static bool isB2BChain(ClearType type);
 	static int getTSpinType(Tetromino piece, Board& board);
@@ -129,6 +129,7 @@ public:
 	virtual void tick(State& state, RenderWindow& window, ResultScreen*& resultScrenPtr) = 0;
 	virtual void render(RenderWindow& window);
 	virtual void keyEvent(State& state, Keyboard::Key key);
+	void hardDropPiece();
 	virtual void mouseEvent(State& state, RenderWindow& window);
 	virtual void mouseScrollEvent(Event event);
 

@@ -59,8 +59,10 @@ LRESULT CALLBACK dragdropfileCallback(HWND handle, UINT message, WPARAM wParam, 
 int main()
 {
 
-	HWND hWnd = GetConsoleWindow();
-	ShowWindow(hWnd, SW_HIDE);
+	#ifdef NDEBUG
+		HWND hWnd = GetConsoleWindow();
+		ShowWindow(hWnd, SW_HIDE);
+	#endif
 
 	// randomize init
 	srand(static_cast<unsigned int> (time(NULL)));

@@ -153,6 +153,12 @@ void GameBase::tick(State& state, RenderWindow& window)
 	ghostPiece.setXY(nearestX, nearestY);
 	currentPiecePtr->setXY(nearestX, nearestY, board);
 
+	if (hardDropOnTick)
+	{
+		hardDropPiece();
+		hardDropOnTick = false;
+	}
+
 	int tempTime = sound.getPlayingOffset().asMilliseconds();
 
 	/* supposed to highlight the beat, but yeah it ruined me entire music experience
@@ -174,7 +180,7 @@ void GameBase::render(RenderWindow& window)
 {
 	text.setFillColor(Color::White);
 	board.render(window);
-	currentPiecePtr->render(window, board);
+	// currentPiecePtr->render(window, board);
 	Tetromino ghost = currentPiecePtr->getGhost(board);
 	ghost.render(window, board);
 	ghost.renderBorder(window, board, Color::Red);
@@ -253,23 +259,51 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 	if (key == keybinds["ROTATE_CW"])
 	{
 		currentPiecePtr->rotate(Rotational_Direction::CW, board);
+		hardDropOnTick = true;
 	}
 	else if (key == keybinds["ROTATE_CCW"])
 	{
 		currentPiecePtr->rotate(Rotational_Direction::CCW, board);
+		hardDropOnTick = true;
 	}
 	else if (key == keybinds["ROTATE_180"])
 	{
 		currentPiecePtr->rotate(Rotational_Direction::R180, board);
+		hardDropOnTick = true;
 	}
 	else if (key == keybinds["HARD_DROP"])
 	{
-		//int cellsDropped = currentPiecePtr->hardDrop(board);
+		hardDropPiece();
+	}
+	else if (key == keybinds["HOLD"])
+	{
+		hold();
+	}
+	else if (key == Keyboard::P)
+	{
+		cout << "playing:" << sound.getPlayingOffset().asMilliseconds() << endl;
+	}
+
+
+	// No hold key control (rotation)
+	if (key == keybinds["ROTATE_CW"]
+		|| key == keybinds["ROTATE_CCW"]
+		|| key == keybinds["HARD_DROP"]
+		|| key == keybinds["HOLD"]) return;
+
+	currentKey = key;
+	firstPressed = true;
+	isAutoShiftActive = false;
+}
+
+void GameBase::hardDropPiece()
+{
+		int cellsDropped = currentPiecePtr->hardDrop(board);
 		//cout << "input" << endl;
 		//board.print();
 		//score += cellsDropped * GameBase::convertClearTypeToScores(ClearType::HARDDROP);
 
-		currentPiecePtr->setPiece(board);
+		// currentPiecePtr->setPiece(board);
 
 		//alreadyHold = false;
 		//onGroundCount = 0;
@@ -296,27 +330,6 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 		score += GameBase::convertClearTypeToScores(tempScoresType);
 
 		nextPiece();
-
-	}
-	else if (key == keybinds["HOLD"])
-	{
-		hold();
-	}
-	else if (key == Keyboard::P)
-	{
-		cout << "playing:" << sound.getPlayingOffset().asMilliseconds() << endl;
-	}
-
-
-	// No hold key control (rotation)
-	if (key == keybinds["ROTATE_CW"]
-		|| key == keybinds["ROTATE_CCW"]
-		|| key == keybinds["HARD_DROP"]
-		|| key == keybinds["HOLD"]) return;
-
-	currentKey = key;
-	firstPressed = true;
-	isAutoShiftActive = false;
 }
 
 void GameBase::mouseScrollEvent(Event event)
@@ -324,10 +337,12 @@ void GameBase::mouseScrollEvent(Event event)
 	if (event.mouseWheel.delta < 0)
 	{
 		currentPiecePtr->rotate(Rotational_Direction::CCW, board);
+		hardDropOnTick = true;
 	}
 	else if (event.mouseWheel.delta > 0)
 	{
 		currentPiecePtr->rotate(Rotational_Direction::CW, board);
+		hardDropOnTick = true;
 	}
 }
 
@@ -350,35 +365,12 @@ void GameBase::mouseEvent(State& state, RenderWindow& window)
 	}
 	else if (!isGameOver & firstClicked && Mouse::isButtonPressed(Mouse::Left))
 	{
-		hold();
+		// hold();
+		hardDropPiece();
 	}
 	else if (!isGameOver & firstClicked && Mouse::isButtonPressed(Mouse::Right))
 	{
-		currentPiecePtr->setPiece(board);
-		if (prevPiecePtr != nullptr)
-		{
-			//cout << "Clearing" << endl;
-			// TODO: copy board before clear, is this optimized???
-			Board tempBoard = board;
-			ClearingInfo tempClearingInfo = board.clearLines();
-			linesCleared += tempClearingInfo.linesCleared;
-			level = clamp(linesCleared / 10 + 1, 1, 15);
-			ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-
-			//update clear type everytime the play drop a piece
-			recentClearType = tempScoresType;
-
-			//update clear type only when the dropped piece clear lines
-			// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
-			if (tempScoresType != ClearType::NONE)
-			{
-				prevClearType = tempScoresType;
-				clearTypeCounter = 60; // 1 second display
-			}
-			score += GameBase::convertClearTypeToScores(tempScoresType);
-		}
-
-		nextPiece();
+		hardDropPiece();
 	}
 	firstClicked = false;
 }
@@ -903,7 +895,8 @@ std::array<int, 2> GameBase::findNearestPossiblePlacement(RenderWindow& window, 
 
 	int minDistance = INT_MAX;
 	int mouseMinDistance = INT_MAX;
-	std::array<int, 2> res = { 0,0 };
+	std::array<int, 2> res = { 0, 0 };
+
 	for (int i = minX; i <= maxX; i++)
 	{
 		for (int j = minY; j <= maxY; j++)
