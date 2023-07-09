@@ -44,13 +44,13 @@ void LimitedTimeGame::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-void LimitedTimeGame::mouseEvent(State& state, RenderWindow& window)
+void LimitedTimeGame::mouseEvent(State& state, RenderWindow& window, Event event)
 {
-	if (isGameOver && firstClicked && Mouse::isButtonPressed(Mouse::Left) && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // RESTART button
+	if (isGameOver && Mouse::isButtonPressed(Mouse::Left) && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // RESTART button
 	{
 		clock = Clock();
 	}
-	GameBase::mouseEvent(state, window);
+	GameBase::mouseEvent(state, window, event);
 }
 
 void LimitedTimeGame::render(RenderWindow& window)

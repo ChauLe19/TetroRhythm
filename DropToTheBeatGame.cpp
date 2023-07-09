@@ -166,14 +166,14 @@ void DropToTheBeatGame::checkDropOnBeat()
 		maxCombo = combo;
 	}
 }
-void DropToTheBeatGame::mouseEvent(State& state, RenderWindow& window)
+void DropToTheBeatGame::mouseEvent(State& state, RenderWindow& window, Event event)
 {
 	if (finished) return;
-	if (!isGameOver && firstClicked && Mouse::isButtonPressed(Mouse::Right))
+	if (!isGameOver && Mouse::isButtonPressed(Mouse::Right))
 	{
 		checkDropOnBeat();
 	}
-	GameBase::mouseEvent(state, window);
+	GameBase::mouseEvent(state, window, event);
 }
 
 void DropToTheBeatGame::restart()

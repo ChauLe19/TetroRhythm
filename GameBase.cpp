@@ -346,63 +346,34 @@ void GameBase::mouseScrollEvent(Event event)
 	}
 }
 
-void GameBase::mouseEvent(State& state, RenderWindow& window)
+void GameBase::mouseEvent(State& state, RenderWindow& window, Event event)
 {
-	if (!Mouse::isButtonPressed(Mouse::Left) && !Mouse::isButtonPressed(Mouse::Right))
+	static bool lockClick = false;
+
+	if (isGameOver)
 	{
-		firstClicked = true;
-		return;
+		if (event.type == Event::MouseButtonPressed && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // Restart button
+		{
+			restart();
+		}
+		else if (event.type == Event::MouseButtonPressed && mouseInBox(window, 1024 - 150, 576 + 20, 300, 60)) // Menu button
+		{
+			reset();
+			state = State::MENU;
+		}
+	}
+	else // game is still going
+	{
+		if (event.type == Event::MouseButtonPressed)
+		{
+			hardDropPiece();
+		}
 	}
 
-	if (isGameOver && firstClicked && Mouse::isButtonPressed(Mouse::Left) && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // RESTART button
-	{
-		restart();
-	}
-	else if (isGameOver && firstClicked && Mouse::isButtonPressed(Mouse::Left) && mouseInBox(window, 1024 - 150, 576 + 20, 300, 60)) //MENU button
-	{
-		reset();
-		state = State::MENU;
-	}
-	else if (!isGameOver & firstClicked && Mouse::isButtonPressed(Mouse::Left))
-	{
-		// hold();
-		hardDropPiece();
-	}
-	else if (!isGameOver & firstClicked && Mouse::isButtonPressed(Mouse::Right))
-	{
-		hardDropPiece();
-	}
-	firstClicked = false;
 }
 
 void GameBase::renderBeatSignal(RenderWindow& window)
 {
-	//static vector<Color> rainbow = { Color::Red, Color(255, 165, 0), Color::Yellow, Color::Green, Color::Blue, Color(75,0,130) ,Color(127,0,255) };
-	//int tempRainbowIndex = rainbowIndex;
-
-
-	//int maxRectOffset = 50;
-	//int nowTime = sound.getPlayingOffset().asMilliseconds();
-	//std::list<Tetromino*>::iterator it = bag.begin();
-	//list<int>::iterator tempBeatIt = beatIt; // copy beatIt to tempBeatsIt
-	//for (std::list<Tetromino*>::iterator it = bag.begin(); it != bag.end() && tempBeatIt != beatsTime.end(); ++it, ++tempBeatIt, ++tempRainbowIndex)
-	//{
-	//	int bufferTime = *tempBeatIt;
-	//	int distanceFromEnd = (bufferTime - nowTime) / 32;// (1 / 60 second per frame)*1000 milisec per sec
-
-	//	if (distanceFromEnd > maxRectOffset) break;
-
-	//	//draw outer rect border (beat)
-	//	sf::RectangleShape rectangle;
-	//	rectangle.setSize(sf::Vector2f(squareSize * 10 + distanceFromEnd * 4, squareSize * 20 + distanceFromEnd * 4));
-	//	rectangle.setFillColor(Color(0, 0, 0, 0));
-	//	rectangle.setOutlineColor(rainbow.at(tempRainbowIndex % 7));
-	//	rectangle.setOutlineThickness(5);
-	//	rectangle.setPosition(boardX - distanceFromEnd * 2, boardY - distanceFromEnd * 2);
-	//	window.draw(rectangle);
-
-	//}
-
 	static vector<Color> rainbow = { Color::Red, Color(255, 165, 0), Color::Yellow, Color::Green, Color::Blue, Color(75,0,130) ,Color(127,0,255) };
 	int tempRainbowIndex = rainbowIndex;
 

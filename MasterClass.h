@@ -88,7 +88,7 @@ public:
 	 * 
 	 * \param key: input from keyboard
 	 */
-	void mouseEvent();
+	void mouseEvent(Event event);
 
 	void openBeatMapEditor(string folderPath);
 

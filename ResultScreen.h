@@ -38,7 +38,7 @@ public:
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
 	void keyEvent(State& state, Keyboard::Key key, GameBase*& game);
-	void mouseEvent(State& state, RenderWindow& window);
+	void mouseEvent(State& state, RenderWindow& window, Event event);
 
 };
 #endif

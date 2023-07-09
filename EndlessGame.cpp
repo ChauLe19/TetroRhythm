@@ -69,9 +69,9 @@ void EndlessGame::keyEvent(State& state, Keyboard::Key key)
 	GameBase::keyEvent(state, key);
 }
 
-void EndlessGame::mouseEvent(State& state, RenderWindow& window)
+void EndlessGame::mouseEvent(State& state, RenderWindow& window, Event event)
 {
-	GameBase::mouseEvent(state, window);
+	GameBase::mouseEvent(state, window, event);
 }
 
 void EndlessGame::render(RenderWindow& window)

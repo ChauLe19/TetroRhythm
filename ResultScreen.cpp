@@ -111,6 +111,6 @@ void ResultScreen::keyEvent(State& state, Keyboard::Key key, GameBase*& game)
 	}
 }
 
-void ResultScreen::mouseEvent(State& state, RenderWindow& window)
+void ResultScreen::mouseEvent(State& state, RenderWindow& window, Event event)
 {
 }

@@ -26,7 +26,7 @@ private:
 	Font font;
 	Texture buttonTexture;
 	Sprite buttonImage;
-	bool firstPressed = false;
+
 public:
 	Menu();
 	~Menu();
@@ -37,6 +37,6 @@ public:
 	void tick(State& state, RenderWindow& window);
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(State& state, RenderWindow& window);
+	void mouseEvent(State& state, RenderWindow& window, Event event);
 };
 #endif

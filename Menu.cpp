@@ -49,25 +49,21 @@ void Menu::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-void Menu::mouseEvent(State& state, RenderWindow& window)
+void Menu::mouseEvent(State& state, RenderWindow& window, Event event)
 {
-	if (!Mouse::isButtonPressed(Mouse::Left))
+	if (event.type == Event::MouseButtonPressed)
 	{
-		firstPressed = true;
-		return;
+		if (mouseInBox(window, 1024 - 200, 600, 400, 60)) // BEGIN button
+		{
+			state = State::GAME_OPTIONS;
+		}
+		else if ( mouseInBox(window, 1024 - 200, 700, 400, 60)) //SETTINGS button
+		{
+			state = State::SETTINGS;
+		}
+		else if (mouseInBox(window, 1024 - 200, 800, 400, 60)) // EDIT BEAT MAPS button
+		{
+			state = State::MAP_EDITOR_SELECT;
+		}
 	}
-	if (firstPressed && mouseInBox(window, 1024 - 200, 600, 400, 60)) // BEGIN button
-	{
-		state = State::GAME_OPTIONS;
-	}
-	else if (firstPressed && mouseInBox(window, 1024 - 200, 700, 400, 60)) //SETTINGS button
-	{
-		state = State::SETTINGS;
-	}
-	else if (firstPressed && mouseInBox(window, 1024 - 200, 800, 400, 60)) // EDIT BEAT MAPS button
-	{
-		state = State::MAP_EDITOR_SELECT;
-	}
-	firstPressed = false;
-
 }

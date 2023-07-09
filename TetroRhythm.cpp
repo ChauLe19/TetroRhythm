@@ -70,7 +70,7 @@ int main()
 
 	RenderWindow window(sf::VideoMode(1536, 864), "TetroRhythm", Style::Default);
 	window.setFramerateLimit(60);
-	window.setKeyRepeatEnabled(false);
+	window.setKeyRepeatEnabled(true);
 
 	sf::View view(FloatRect(0.f, 0.f, 2048.f, 1152.f));
 	window.setView(view);

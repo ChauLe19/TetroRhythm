@@ -349,10 +349,21 @@ void BeatMapEditor::addCursorToBeatList()
 	}
 }
 
-void BeatMapEditor::mouseEvent(State& state, RenderWindow& window)
+void BeatMapEditor::mouseEvent(State& state, RenderWindow& window, Event event)
 {
 
-	if (Mouse::isButtonPressed(Mouse::Right))
+	if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)
+	{
+		cursorSelected = false;
+	}
+	else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
+	{
+		if (mouseInCircle(window, 1024, 576, 250))
+		{
+			addCursorToBeatList();
+		}
+	}
+	else if (Mouse::isButtonPressed(Mouse::Right))
 	{
 		list<int>::iterator it = beatsTime.begin();
 		while (it != beatsTime.end())
@@ -370,44 +381,23 @@ void BeatMapEditor::mouseEvent(State& state, RenderWindow& window)
 			it++;
 		}
 	}
-
-	if (!Mouse::isButtonPressed(Mouse::Left))
-	{
-		firstPressed = true;
-		cursorSelected = false;
-		return;
-	}
-
+	
 
 	Vector2i pixelPos = Mouse::getPosition(window);
 	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
-	if (firstPressed && mouseInBox(window, 24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1000, 10, sliderHeight))
+	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1000, 10, sliderHeight))
 	{
-		firstPressed = false;
 		cursorSelected = true;
 		cursorRelToMusicMS = (mouseViewPos.x - 24 + 5) * musicDurationMS / sliderLength;
 		cursorRelToMusicMS = clamp(cursorRelToMusicMS, 0, musicDurationMS);
 		sound.setPlayingOffset(milliseconds(cursorRelToMusicMS));
 	}
-	else if (firstPressed && mouseInCircle(window, 1024, 576, 250))
-	{
-		firstPressed = false;
-
-		addCursorToBeatList();
-	}
-	else if (firstPressed)
-	{
-		firstPressed = false;
-		cursorSelected = false;
-	}
-	else if (!firstPressed && cursorSelected)
+	if (Mouse::isButtonPressed(Mouse::Left) && cursorSelected)
 	{
 		cursorRelToMusicMS = (mouseViewPos.x - 24 + 5) * musicDurationMS / sliderLength;
 		cursorRelToMusicMS = clamp(cursorRelToMusicMS, 0, musicDurationMS);
 		sound.setPlayingOffset(milliseconds(cursorRelToMusicMS));
 	}
-	//cout << "x:" << 24 - 10 + sliderLength * cursorRelToMusicMS / musicDurationMS << endl;
-	//cout << "mouse x: " << mouseViewPos.x << endl;
 }
 
 

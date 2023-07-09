@@ -123,7 +123,7 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-void GameOptions::mouseEvent(State& state, RenderWindow& window)
+void GameOptions::mouseEvent(State& state, RenderWindow& window, Event event)
 {
 }
 

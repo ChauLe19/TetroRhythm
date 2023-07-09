@@ -52,7 +52,6 @@ private:
 	int bpm = 0;
 	int mspb = 0; // ms per beat
 	int cursorRelToMusicMS = 0;
-	bool firstPressed = true;
 	bool cursorSelected = false;
 
 	int sliderLength = 2000;
@@ -68,7 +67,7 @@ public:
 	void tick(State& state, RenderWindow& window);
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(State& state, RenderWindow& window);
+	void mouseEvent(State& state, RenderWindow& window, Event event);
 };
 
 #endif

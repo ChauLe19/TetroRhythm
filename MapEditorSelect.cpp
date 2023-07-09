@@ -93,7 +93,7 @@ void MapEditorSelect::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-void MapEditorSelect::mouseEvent(State& state, RenderWindow& window)
+void MapEditorSelect::mouseEvent(State& state, RenderWindow& window, Event event)
 {
 }
 

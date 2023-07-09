@@ -93,10 +93,18 @@ void MasterClass::run()
 					game->mouseScrollEvent(event);
 				}
 			}
+			else if (event.type == Event::MouseButtonPressed || event.type == Event::MouseButtonReleased)
+			{
+				mouseEvent(event);
+			}
 
 		}
 		if (scrollEntered == false) { firstScroll = true; }
-		mouseEvent();
+
+		// change event type to anything other then button pressed. This is for hold functionality
+		event.type = Event::Closed;
+		mouseEvent(event);
+
 		tick();
 
 
@@ -187,28 +195,28 @@ void MasterClass::keyEvent(Keyboard::Key key)
 	}
 }
 
-void MasterClass::mouseEvent()
+void MasterClass::mouseEvent(Event event)
 {
 	switch (state)
 	{
 	case State::MENU:
-		menu->mouseEvent(state, *window);
+		menu->mouseEvent(state, *window, event);
 		break;
 	case State::GAME_OPTIONS:
-		gameOptions->mouseEvent(state, *window);
+		gameOptions->mouseEvent(state, *window, event);
 		break;
 	case State::SETTINGS:
 		break;
 	case State::GAME:
-		game->mouseEvent(state, *window);
+		game->mouseEvent(state, *window, event);
 		break;
 	case State::MAP_EDITOR_SELECT:
 		break;
 	case State::MAP_EDITOR:
-		beatMapEditor->mouseEvent(state, *window);
+		beatMapEditor->mouseEvent(state, *window, event);
 		break;
 	case State::GAMEOVER:
-		resultScreen->mouseEvent(state, *window);
+		resultScreen->mouseEvent(state, *window, event);
 		break;
 	}
 }

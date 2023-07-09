@@ -152,7 +152,7 @@ bool Settings::changeKey(Keyboard::Key key)
 }
 
 
-void Settings::mouseEvent(State& state, RenderWindow& window)
+void Settings::mouseEvent(State& state, RenderWindow& window, Event event)
 {
 }
 

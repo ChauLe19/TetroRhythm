@@ -61,7 +61,7 @@ public:
 	void tick(State& state, RenderWindow& window);
 	void render(RenderWindow& window);
 	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(State& state, RenderWindow& window);
+	void mouseEvent(State& state, RenderWindow& window, Event event);
 
 	/**
 	 * Draw option

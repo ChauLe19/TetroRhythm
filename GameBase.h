@@ -103,7 +103,7 @@ protected:
 	bool isAutoRepeatActive = false;
 	bool firstPressed = false;
 	bool alreadyHold = false;
-	bool firstClicked = false;
+	// bool firstClicked = false;
 
 	//Softdrop DAS
 	int SDdelayAutoShiftCount = 0;
@@ -130,7 +130,7 @@ public:
 	virtual void render(RenderWindow& window);
 	virtual void keyEvent(State& state, Keyboard::Key key);
 	void hardDropPiece();
-	virtual void mouseEvent(State& state, RenderWindow& window);
+	virtual void mouseEvent(State& state, RenderWindow& window, Event event);
 	virtual void mouseScrollEvent(Event event);
 
 	void renderBeatSignal(RenderWindow& window);
