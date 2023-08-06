@@ -28,6 +28,8 @@
 #include <string>
 #include <filesystem>
 
+#define inputThickness 5
+
 using namespace sf;
 namespace fs = std::filesystem;
 
@@ -47,7 +49,6 @@ const int levelSpeed[15] = { 60, 58, 37, 28, 21, 16, 11, 8, 6, 4, 3, 2, 1, 1, 1 
 class GameBase : public StateScreen
 {
 protected:
-	static const int squareSize = 90;
 	Text text;
 	Font font;
 	SoundBuffer buffer;
@@ -103,7 +104,9 @@ protected:
 	bool isAutoRepeatActive = false;
 	bool firstPressed = false;
 	bool alreadyHold = false;
-	// bool firstClicked = false;
+	bool locked = false;
+	VertexArray inputVertex = VertexArray(PrimitiveType::Quads);
+	Vector2i lastMousePos = Vector2i(0,0);
 
 	//Softdrop DAS
 	int SDdelayAutoShiftCount = 0;
@@ -129,7 +132,6 @@ public:
 	virtual void tick(State& state, RenderWindow& window, ResultScreen*& resultScrenPtr) = 0;
 	virtual void render(RenderWindow& window);
 	virtual void keyEvent(State& state, Keyboard::Key key);
-	void hardDropPiece();
 	virtual void mouseEvent(State& state, RenderWindow& window, Event event);
 	virtual void mouseScrollEvent(Event event);
 

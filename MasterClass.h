@@ -19,6 +19,9 @@
 #include "BeatMapEditor.h"
 #include "ResultScreen.h"
 #include <map>
+
+#define backgroundImagePath "images/background.png"
+
 /**
  * Controls states and rendering.
  */
@@ -32,6 +35,8 @@ private:
 	Clock clock;
 	Font font;
 	Text text;
+	sf::Texture backgroundTexture;
+	sf::Sprite backgroundSprite;
 
 	State state = State::MENU;
 

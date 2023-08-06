@@ -68,12 +68,9 @@ int main()
 	srand(static_cast<unsigned int> (time(NULL)));
 
 
-	RenderWindow window(sf::VideoMode(1536, 864), "TetroRhythm", Style::Default);
+	RenderWindow window(sf::VideoMode(2048, 1152), "TetroRhythm", Style::Default);
 	window.setFramerateLimit(60);
 	window.setKeyRepeatEnabled(true);
-
-	sf::View view(FloatRect(0.f, 0.f, 2048.f, 1152.f));
-	window.setView(view);
 
 	Image icon;
 	icon.loadFromFile("Images/logo.png");

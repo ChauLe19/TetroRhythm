@@ -5,7 +5,8 @@ Tetromino::Tetromino(Type type)
 	this->type = type;
 	cellsTexture.loadFromFile("Images/tiles-2.png");
 	cellImage.setTexture(cellsTexture);
-	cellImage.setTextureRect(IntRect(static_cast<int>(type) * 45, 0, 45, 45));
+	int halfSquareSize = squareSize / 2;
+	cellImage.setTextureRect(IntRect(static_cast<int>(type) * halfSquareSize, 0, halfSquareSize, halfSquareSize));
 	// TODO: Check if this copied
 	this->cells = tetrominos[static_cast<int>(type)];
 }
@@ -17,7 +18,8 @@ Tetromino::Tetromino(Type type, bool isGhost)
 	cellImage.setTexture(cellsTexture);
 	if (isGhost)
 		cellImage.setColor(Color(255, 255, 255, 100));
-	cellImage.setTextureRect(IntRect(static_cast<int>(type) * 45, 0, 45, 45));
+	int halfSquareSize = squareSize / 2;
+	cellImage.setTextureRect(IntRect(static_cast<int>(type) * halfSquareSize, 0, halfSquareSize, halfSquareSize));
 	// TODO: Check if this copied
 	this->cells = tetrominos[static_cast<int>(type)];
 
@@ -40,14 +42,55 @@ void Tetromino::turnToGhostColor()
 	cellImage.setColor(Color(255, 255, 255, 50));
 }
 
+// moving direction is the mouse direction in this method
+bool Tetromino::setPiece(int x, int y, Moving_Direction mDir, Board& board)
+{
+	Orientation newOrientation = orientationFromMouse[static_cast<int>(type)][static_cast<int>(mDir)];
+	Rotational_Direction rDir = static_cast<Rotational_Direction> ((static_cast<int>(newOrientation) - static_cast<int> (orientation) + 5) % 4 - 1);
+	array<array<int, 4>, 4> tempCells = cells;
+
+	switch (type)
+	{
+	case Type::I:
+		rotateArray(cells, 4, rDir);
+		break;
+	case Type::O:
+		break;
+	default: // T, L, J, Z,S
+		rotateArray(cells, 3, rDir);
+		break;
+	}
+
+	int shiftPosX = shiftPos[static_cast<int>(type)][static_cast<int>(newOrientation)][0];
+	int shiftPosY = shiftPos[static_cast<int>(type)][static_cast<int>(newOrientation)][1];
+	bool possible = checkCollision(x + shiftPosX, y + shiftPosY, board);
+	x = x + shiftPosX;
+	y = y + shiftPosY;
+	std::cout << "x:" << x << "\t" << y<< std::endl;
+
+	if (possible)
+	{
+		this->xPos = x;
+		this->yPos = y;
+		orientation = newOrientation;
+		hardDrop(board);
+	}
+	else // not possible. discard
+	{
+		cells = tempCells;
+	}
+
+
+	return possible;
+}
+
+
+
 bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 {
-	//if (rDir == Rotational_Direction::NORO) return true;
 	int newOrientationInt = ((static_cast<int>(orientation) + static_cast<int>(rDir)) + 4) % 4;
 	Orientation newOrientation = static_cast<Orientation> (newOrientationInt);
 	int wallKickGroup = 0;
-	// might not be copy
-	// TODO: check if this copied
 	array<array<int, 4>, 4> tempCells = cells;
 
 
@@ -283,7 +326,7 @@ void Tetromino::render(RenderWindow& window, Board& board)
 		{
 			if (cells[i][j] > 0)
 			{
-				cellImage.setPosition(board.getXPos() + (xPos + j) * squareSize, board.getYPos() + (yPos + i) * squareSize);
+				cellImage.setPosition(board.getXPos() + (xPos + j) * boardSquareSize, board.getYPos() + (yPos + i) * boardSquareSize);
 				cellImage.setScale(Vector2f(2, 2));
 				window.draw(cellImage);
 			}
@@ -291,6 +334,22 @@ void Tetromino::render(RenderWindow& window, Board& board)
 	}
 }
 
+void Tetromino::render(RenderWindow& window, int x, int y, int scale)
+{
+	int blockSize = squareSize * (float)scale / 2;
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (cells[i][j] > 0)
+			{
+				cellImage.setPosition(x + j * blockSize, y + i * blockSize);
+				cellImage.setScale(Vector2f(scale, scale));
+				window.draw(cellImage);
+			}
+		}
+	}
+}
 
 void Tetromino::setTransparency(sf::Uint8 transparency)
 {
@@ -311,22 +370,6 @@ void Tetromino::renderBorder(RenderWindow& window, Board& board, Color color)
 				rect.setOutlineThickness(10);
 				rect.setPosition(board.getXPos() + (xPos + j) * squareSize + 5, board.getYPos() + (yPos + i) * squareSize + 5);
 				window.draw(rect);
-			}
-		}
-	}
-}
-
-void Tetromino::render(RenderWindow& window, int x, int y)
-{
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			if (cells[i][j] > 0)
-			{
-				cellImage.setPosition(x + j * squareSize, y + i * squareSize);
-				cellImage.setScale(Vector2f(2, 2));
-				window.draw(cellImage);
 			}
 		}
 	}
@@ -460,5 +503,15 @@ int Tetromino::getMaxY()
 	{
 		return 1;
 	}
+}
+
+int Tetromino::getSquareCountX()
+{
+	return getMaxX() - getMinX() + 1;
+}
+
+int Tetromino::getSquareCountY()
+{
+	return getMaxY() - getMinY() + 1;
 }
 

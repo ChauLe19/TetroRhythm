@@ -26,32 +26,21 @@ Board::~Board()
 
 void Board::render(RenderWindow& window)
 {
-
-
-	/*window.draw(image);
-	RectangleShape rect(Vector2f(squareSize * 10, squareSize * 20));
-	rect.setFillColor(Color(0, 0, 0, 150));
-	rect.setPosition(xPos, yPos);
-	rect.setOutlineColor(Color::White);
-	rect.setOutlineThickness(5);*/
-	//rect.setFillColor(Color(25,25,25,255));
-	//rect.setFillColor(Color::White);
-	//window.draw(rect);
 	for (int i = 0; i < boardHeight; i++)
 	{
 		for (int j = 0; j < boardWidth; j++)
 		{
-			RectangleShape rect(Vector2f(squareSize, squareSize));
+			RectangleShape rect(Vector2f(boardSquareSize, boardSquareSize));
 			rect.setFillColor(Color(0, 0, 0, 150));
-			rect.setPosition(xPos + squareSize * j, yPos + squareSize * i);
+			rect.setPosition(xPos + boardSquareSize * j, yPos + boardSquareSize * i);
 			rect.setOutlineColor(Color(255, 255, 255, 100));
 			rect.setOutlineThickness(5);
 			window.draw(rect);
 			if (board[i][j] % 8 != 0)
 			{
 				cellImage.setTextureRect(IntRect((board[i][j] % 8 - 1) * 45, 0, 45, 45));
-				cellImage.setScale(Vector2f(2, 2));
-				cellImage.setPosition(xPos + squareSize * j, yPos + squareSize * i);
+				cellImage.setScale(Vector2f(3, 3));
+				cellImage.setPosition(xPos + boardSquareSize * j, yPos + boardSquareSize * i);
 				window.draw(cellImage);
 			}
 

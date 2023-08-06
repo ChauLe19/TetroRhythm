@@ -36,7 +36,7 @@ private:
 	int cursorMode = 0;
 	GameBase*& gamePtr;
 	Controls_Settings& settings;
-	const int modeCount = 4;
+	const int modeCount = 3;
 	vector<fs::path> maps;
 
 

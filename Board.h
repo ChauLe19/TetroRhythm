@@ -16,8 +16,9 @@
 using namespace std;
 using namespace sf;
 
-#define boardWidth 10
-#define boardHeight 10
+#define boardWidth 6
+#define boardHeight 6
+#define boardSquareSize 135 // px
 //#define matrixWidth boardWidth + 2
 //#define matrixHeight boardHeight + 2
 
@@ -101,7 +102,6 @@ struct ClearingInfo
 class Board
 {
 private:
-	static const int squareSize = 90;
 	Texture frameTexture;
 	Texture cellsTexture;
 	Sprite image;

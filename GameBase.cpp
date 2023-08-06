@@ -147,52 +147,25 @@ GameBase::~GameBase()
 
 void GameBase::tick(State& state, RenderWindow& window)
 {
-	std::array <int, 2> res = findNearestPossiblePlacement(window, *currentPiecePtr, board);
-	int nearestX = res[0];
-	int nearestY = res[1];
-	ghostPiece.setXY(nearestX, nearestY);
-	currentPiecePtr->setXY(nearestX, nearestY, board);
-
-	if (hardDropOnTick)
-	{
-		hardDropPiece();
-		hardDropOnTick = false;
-	}
-
-	int tempTime = sound.getPlayingOffset().asMilliseconds();
-
-	/* supposed to highlight the beat, but yeah it ruined me entire music experience
-	if (sound.getVolume() != 100 && abs(tempTime - nextBeatTimeMS) <= 100)
-	{
-		sound.setVolume(100);
-	}
-	else if (sound.getVolume() != 60 && abs(tempTime - nextBeatTimeMS) > 100)
-	{
-		sound.setVolume(60);
-	}
-	*/
 	if (isGameOver) return;
-
-
+	std::array <int, 2> res = findNearestPossiblePlacement(window, *currentPiecePtr, board);
 }
 
 void GameBase::render(RenderWindow& window)
 {
 	text.setFillColor(Color::White);
 	board.render(window);
-	// currentPiecePtr->render(window, board);
-	Tetromino ghost = currentPiecePtr->getGhost(board);
-	ghost.render(window, board);
-	ghost.renderBorder(window, board, Color::Red);
+
+	holdPiecePtr = currentPiecePtr;
 
 	if (holdPiecePtr != nullptr)
 	{
-		int extra = squareSize / 2;
+		int extra = boardSquareSize/ 2;
 		if (holdPiecePtr->getType() == Type::I || holdPiecePtr->getType() == Type::O)
 		{
 			extra = 0;
 		}
-		holdPiecePtr->render(window, boardX - (squareSize / 2 + 20) - squareSize * 4 + extra, boardY + squareSize / 2);
+		holdPiecePtr->render(window, boardX - (boardSquareSize/ 2 + 20) - boardSquareSize* 4 + extra, boardY + boardSquareSize/ 2);
 	}
 
 	// Render 2 preview pieces
@@ -201,44 +174,37 @@ void GameBase::render(RenderWindow& window)
 	advance(fifthIt, 2);
 	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
 	{
-		int extra = squareSize / 2;
+		int extra = boardSquareSize/ 2;
 		if ((*it)->getType() == Type::I || (*it)->getType() == Type::O)
 		{
 			extra = 0;
 		}
-		(*it)->render(window, boardX + (squareSize / 2 + 20) + squareSize * 10 + extra, boardY + squareSize + squareSize * 3 * counter);
+		(*it)->render(window, boardX + (boardSquareSize/ 2) + boardSquareSize* boardWidth + extra, boardY + boardSquareSize+ boardSquareSize* 3 * counter);
 		counter++;
 	}
-
-
-	//int endYPos = 100 + 18*20;
-	/*int endYPos = 120;
-	text.setString("--------------------------------");
-	text.setPosition(300, endYPos);
-	window.draw(text);*/
-
 
 
 	if (clearTypeCounter > 0)
 	{
 		clearTypeCounter--;
 		text.setString(clearTypeToString(prevClearType));
-		text.setPosition(1024 - squareSize * 5 - 20 - text.getLocalBounds().width, 300);
+		text.setPosition(1024 - boardSquareSize* 5 - 20 - text.getLocalBounds().width, 300);
 		window.draw(text);
-		/*text.setString(to_string(convertClearTypeToScores(prevClearType)));
-		text.setPosition(700, 350);
-		window.draw(text);*/
 	}
 
 	text.setCharacterSize(50);
 	text.setString("SCORE");
-	text.setPosition(1024 + squareSize * 5 + 20, boardY + squareSize * 15 + 50);
+	text.setPosition(1024 + boardSquareSize* 5 + 20, boardY + boardSquareSize* 15 + 50);
 	window.draw(text);
 	text.setCharacterSize(60);
 	text.setString(to_string(score));
-	text.setPosition(1024 + squareSize * 5 + 20, boardY + squareSize * 15 + 100);
+	text.setPosition(1024 + boardSquareSize* 5 + 20, boardY + boardSquareSize* 15 + 100);
 	window.draw(text);
 
+
+	// render input
+
+	window.draw(inputVertex);
 }
 
 
@@ -256,35 +222,6 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 
 	if (isGameOver) return;
 
-	if (key == keybinds["ROTATE_CW"])
-	{
-		currentPiecePtr->rotate(Rotational_Direction::CW, board);
-		hardDropOnTick = true;
-	}
-	else if (key == keybinds["ROTATE_CCW"])
-	{
-		currentPiecePtr->rotate(Rotational_Direction::CCW, board);
-		hardDropOnTick = true;
-	}
-	else if (key == keybinds["ROTATE_180"])
-	{
-		currentPiecePtr->rotate(Rotational_Direction::R180, board);
-		hardDropOnTick = true;
-	}
-	else if (key == keybinds["HARD_DROP"])
-	{
-		hardDropPiece();
-	}
-	else if (key == keybinds["HOLD"])
-	{
-		hold();
-	}
-	else if (key == Keyboard::P)
-	{
-		cout << "playing:" << sound.getPlayingOffset().asMilliseconds() << endl;
-	}
-
-
 	// No hold key control (rotation)
 	if (key == keybinds["ROTATE_CW"]
 		|| key == keybinds["ROTATE_CCW"]
@@ -294,42 +231,6 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 	currentKey = key;
 	firstPressed = true;
 	isAutoShiftActive = false;
-}
-
-void GameBase::hardDropPiece()
-{
-		int cellsDropped = currentPiecePtr->hardDrop(board);
-		//cout << "input" << endl;
-		//board.print();
-		//score += cellsDropped * GameBase::convertClearTypeToScores(ClearType::HARDDROP);
-
-		// currentPiecePtr->setPiece(board);
-
-		//alreadyHold = false;
-		//onGroundCount = 0;
-		frameCount = 0;
-
-		//cout << "Clearing" << endl;
-		// TODO: copy board before clear, is this optimized???
-		Board tempBoard = board;
-		ClearingInfo tempClearingInfo = board.clearLines();
-		linesCleared += tempClearingInfo.linesCleared;
-		level = clamp(linesCleared / 10 + 1, 1, 15);
-		ClearType tempScoresType = GameBase::determineClearType(*currentPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-
-		//update clear type everytime the play drop a piece
-		recentClearType = tempScoresType;
-
-		//update clear type only when the dropped piece clear lines
-		// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
-		if (tempScoresType != ClearType::NONE)
-		{
-			prevClearType = tempScoresType;
-			clearTypeCounter = 60; // 1 second display
-		}
-		score += GameBase::convertClearTypeToScores(tempScoresType);
-
-		nextPiece();
 }
 
 void GameBase::mouseScrollEvent(Event event)
@@ -348,8 +249,6 @@ void GameBase::mouseScrollEvent(Event event)
 
 void GameBase::mouseEvent(State& state, RenderWindow& window, Event event)
 {
-	static bool lockClick = false;
-
 	if (isGameOver)
 	{
 		if (event.type == Event::MouseButtonPressed && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // Restart button
@@ -364,12 +263,114 @@ void GameBase::mouseEvent(State& state, RenderWindow& window, Event event)
 	}
 	else // game is still going
 	{
-		if (event.type == Event::MouseButtonPressed)
+		if (event.type == sf::Event::MouseButtonPressed)
 		{
-			hardDropPiece();
+			locked = true;
+			lastMousePos = (Mouse::getPosition(window));
 		}
-	}
 
+		if (event.type == sf::Event::MouseButtonReleased)
+		{
+			locked = false; // Reset
+			Vertex firstPoint = inputVertex[0];
+			Vertex lastPoint = inputVertex[inputVertex.getVertexCount() - 1];
+			int xDir = lastPoint.position.x - firstPoint.position.x;
+			int yDir = lastPoint.position.y - firstPoint.position.y;
+			Moving_Direction mouseDirection = Moving_Direction::UP_DIR;
+			
+			int XorYdir = max(abs(xDir), abs(yDir));
+			if (XorYdir >= 40) // only register input if it's long enough
+			{
+				if (XorYdir == abs(xDir))// favor x direction
+				{
+					if (xDir > 0) // mouse move right
+					{
+						mouseDirection= Moving_Direction::RIGHT_DIR;
+					}
+					else if (xDir < 0)
+					{
+						mouseDirection= Moving_Direction::LEFT_DIR;
+					}
+				}
+				else // favor y direction
+				{
+					if (yDir > 0)
+					{
+						mouseDirection= Moving_Direction::DOWN_DIR;
+					}
+					else if (yDir < 0)
+					{
+						mouseDirection= Moving_Direction::UP_DIR;
+					}
+				}
+			}
+
+			int minX = -currentPiecePtr->getMinX();
+			int minY = -currentPiecePtr->getMinY();
+			int maxX = 9 - currentPiecePtr->getMaxX();
+			int maxY = 9 - currentPiecePtr->getMaxY();
+			// x - 1, y - 1 to offset to center of the piece
+			int x = std::floor((firstPoint.position.x - boardX) / boardSquareSize);
+			int y = std::floor((firstPoint.position.y - boardY) / boardSquareSize);
+
+			std::cout << x << ":" << y << "=" << static_cast<int> (mouseDirection) << std::endl;
+
+			bool possible = currentPiecePtr->setPiece(x, y, mouseDirection, board);
+
+			if (possible) // if set piece sucessfully, move to next piece
+			{
+				if (prevPiecePtr != nullptr)
+				{
+					//cout << "Clearing" << endl;
+					// TODO: copy board before clear, is this optimized???
+					Board tempBoard = board;
+					ClearingInfo tempClearingInfo = board.clearLines();
+					linesCleared += tempClearingInfo.linesCleared;
+					level = clamp(linesCleared / 10 + 1, 1, 15);
+					ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+
+					//update clear type everytime the play drop a piece
+					recentClearType = tempScoresType;
+
+					//update clear type only when the dropped piece clear lines
+					// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
+					if (tempScoresType != ClearType::NONE)
+					{
+						prevClearType = tempScoresType;
+						clearTypeCounter = 60; // 1 second display
+					}
+					score += GameBase::convertClearTypeToScores(tempScoresType);
+				}
+
+				nextPiece();
+			}
+			inputVertex.clear();
+		}
+		
+		if (locked)
+        {
+            if (lastMousePos != sf::Mouse::getPosition(window)) // When the Mouse hasn't moved don't add any new Vertex (save memory)
+            {
+				Vector2f prevMouseViewPos = window.mapPixelToCoords(lastMousePos);
+				Vector2i currentMousePos = Mouse::getPosition(window);
+				Vector2f mouseViewPos = window.mapPixelToCoords(currentMousePos);
+
+				sf::Vector2f direction = mouseViewPos - prevMouseViewPos;
+				sf::Vector2f unitDirection = direction / std::sqrt(direction.x * direction.x + direction.y * direction.y);
+				sf::Vector2f unitPerpendicular(-unitDirection.y, unitDirection.x);
+
+				sf::Vector2f offset = (inputThickness / 2.f) * unitPerpendicular;
+
+				inputVertex.append(prevMouseViewPos + offset);
+				inputVertex.append(mouseViewPos + offset);
+				inputVertex.append(mouseViewPos - offset);
+				inputVertex.append(prevMouseViewPos - offset);
+
+				lastMousePos = currentMousePos;
+            }
+        }
+
+	}
 }
 
 void GameBase::renderBeatSignal(RenderWindow& window)
@@ -378,18 +379,24 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 	int tempRainbowIndex = rainbowIndex;
 
 	const int innerRadius = 150;
-	CircleShape circle;
-	circle.setRadius(innerRadius);
-	circle.setPosition(Vector2f(1024 - innerRadius, boardY + squareSize * 5 - innerRadius));
-	circle.setFillColor(Color(100, 100, 100, 125));
-	circle.setOutlineColor(Color(200, 200, 200, 150));
-	circle.setOutlineThickness(5);
-	window.draw(circle);
 
-	int maxOffsetMS = 2000;
+	int maxOffsetMS = 3000;
 	int nowTime = sound.getPlayingOffset().asMilliseconds();
-	//std::list<Tetromino*>::iterator it = bag.begin();
-	//list<int>::iterator tempBeatIt = beatIt; // copy beatIt to tempBeatsIt
+
+	int boardWidthPx = boardWidth * boardSquareSize;
+	RectangleShape beatBar(Vector2f(boardWidthPx, 50));
+	beatBar.setPosition(boardX, boardY - 100);
+	beatBar.setOutlineColor(Color::White);
+	beatBar.setOutlineThickness(5);
+	beatBar.setFillColor(Color::Transparent);
+	window.draw(beatBar);
+
+	RectangleShape midBar(Vector2f(10, 50));
+	midBar.setPosition(boardX + boardWidthPx/2, boardY - 100);
+	midBar.setFillColor(Color::Red);
+	window.draw(midBar);
+
+
 
 	for (list<int>::iterator tempBeatIt = beatIt; tempBeatIt != beatsTime.end(); ++tempBeatIt, ++tempRainbowIndex)
 	{
@@ -398,24 +405,11 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 
 		if (timeOffset > maxOffsetMS) break;
 		if (prevBeatTimeMS >= bufferTime) continue;
-		int distanceFromEnd = timeOffset / 10;
-		CircleShape circle;
-		circle.setRadius(innerRadius + distanceFromEnd);
-		circle.setPosition(Vector2f(1024 - (innerRadius + distanceFromEnd), boardY + squareSize * 5 - distanceFromEnd - innerRadius));
-		circle.setFillColor(Color::Transparent);
-		circle.setOutlineColor(Color(200, 200, 200, 200));
-		circle.setOutlineThickness(5);
-		window.draw(circle);
-
-		//draw outer rect border (beat)
-		//sf::RectangleShape rectangle;
-		//rectangle.setSize(sf::Vector2f(squareSize * 10 + distanceFromEnd * 4, squareSize * 20 + distanceFromEnd * 4));
-		//rectangle.setFillColor(Color(0, 0, 0, 0));
-		//rectangle.setOutlineColor(rainbow.at(tempRainbowIndex % 7));
-		//rectangle.setOutlineThickness(5);
-		//rectangle.setPosition(boardX - distanceFromEnd * 2, boardY - distanceFromEnd * 2);
-		//window.draw(rectangle);
-
+		int distanceFromEnd = timeOffset / 5;
+		RectangleShape preview(Vector2f(24, 24));
+		preview.setFillColor(currentPiecePtr->getBaseColor());
+		preview.setPosition(boardX + boardWidthPx / 2 - distanceFromEnd - 45 / 4, boardY - 100 + 50/4);
+		window.draw(preview);
 	}
 
 }
@@ -732,30 +726,8 @@ Tetromino& GameBase::nextPiece()
 	alreadyHold = false;
 	// If pieces have no possible move, game over
 	std::array <int, 4> possibleMovesCurrent = currentPiecePtr->firstPossibleMove(board);
-	std::array <int, 4> possibleMovesHold = holdPiecePtr != nullptr ? holdPiecePtr->firstPossibleMove(board) : bag.front()->firstPossibleMove(board);
-	if (possibleMovesCurrent[3] == 1)
+	if (possibleMovesCurrent[3] == 1) // if possible to place current piece
 	{
-		lastX = possibleMovesCurrent[0];
-		lastY = possibleMovesCurrent[1];
-		switch (possibleMovesCurrent[2])
-		{
-		case 1:
-			currentPiecePtr->rotate(Rotational_Direction::CW, board);
-			break;
-		case 2:
-			currentPiecePtr->rotate(Rotational_Direction::R180, board);
-			break;
-		case 3:
-			currentPiecePtr->rotate(Rotational_Direction::CCW, board);
-			break;
-		default:
-			break;
-		};
-		currentPiecePtr->setXY(lastX, lastY, board);
-	}
-	else if (possibleMovesHold[3] == 1)
-	{
-		hold();
 	}
 	else
 	{
@@ -770,20 +742,16 @@ void GameBase::hold()
 {
 	if (!alreadyHold)
 	{
-		if (holdPiecePtr != nullptr && holdPiecePtr->firstPossibleMove(board)[3] == 1)
+		if (holdPiecePtr != nullptr && holdPiecePtr->firstPossibleMove(board)[3] == 1) // not first hold
 		{
 			Tetromino* tempPiecePtr = holdPiecePtr;
 			holdPiecePtr = currentPiecePtr;
 			currentPiecePtr = tempPiecePtr;
-			ghostPiece = currentPiecePtr->getGhost(board);
 		}
-		else if (bag.front()->firstPossibleMove(board)[3] == 1)
+		else if (bag.front()->firstPossibleMove(board)[3] == 1) // first hold
 		{
 			holdPiecePtr = currentPiecePtr;
-			ghostPiece = currentPiecePtr->getGhost(board);
-			//currentPiecePtr = &nextPiece();
 			nextPiece();
-
 		}
 		holdPiecePtr->reset();
 		alreadyHold = true;
@@ -861,8 +829,8 @@ std::array<int, 2> GameBase::findNearestPossiblePlacement(RenderWindow& window, 
 	int maxX = 9 - currentPiecePtr->getMaxX();
 	int maxY = 9 - currentPiecePtr->getMaxY();
 	// x - 1, y - 1 to offset to center of the piece
-	int x = std::clamp((int)std::floor((mouseViewPos.x - boardX) / squareSize) - 1, -currentPiecePtr->getMinX(), 9 - currentPiecePtr->getMaxX());
-	int y = std::clamp((int)std::floor((mouseViewPos.y - boardY) / squareSize) - 1, -currentPiecePtr->getMinY(), 9 - currentPiecePtr->getMaxY());
+	int x = std::clamp((int)std::floor((mouseViewPos.x - boardX) / boardSquareSize) - 1, -currentPiecePtr->getMinX(), 9 - currentPiecePtr->getMaxX());
+	int y = std::clamp((int)std::floor((mouseViewPos.y - boardY) / boardSquareSize) - 1, -currentPiecePtr->getMinY(), 9 - currentPiecePtr->getMaxY());
 
 	int minDistance = INT_MAX;
 	int mouseMinDistance = INT_MAX;
@@ -873,7 +841,7 @@ std::array<int, 2> GameBase::findNearestPossiblePlacement(RenderWindow& window, 
 		for (int j = minY; j <= maxY; j++)
 		{
 			int distance = std::pow(i - x, 2) + std::pow(j - y, 2);
-			int mouseDistance = std::pow(mouseViewPos.x - (i * squareSize) + squareSize / 2, 2) + std::pow(mouseViewPos.y - (j * squareSize) + squareSize / 2, 2);
+			int mouseDistance = std::pow(mouseViewPos.x - (i * boardSquareSize + boardSquareSize)/ 2, 2) + std::pow(mouseViewPos.y - (j * boardSquareSize) + boardSquareSize / 2, 2);
 			if (distance < minDistance && mouseDistance < mouseMinDistance && piece.checkCollision(i, j, board))
 			{
 				minDistance = distance;

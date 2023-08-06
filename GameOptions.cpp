@@ -32,10 +32,9 @@ void GameOptions::render(RenderWindow& window)
 	text.setPosition(1024 - text.getLocalBounds().width / 2, 50);
 	window.draw(text);
 
-	drawGameModeOption(window, "Auto Drop Beat", 50, 300, cursorMode == 0);	// get as many points as you can but a beat will force a hard drop
-	drawGameModeOption(window, "Drop on Beat", 50, 500, cursorMode == 1);		// drop blocks on the beat receives bonus
-	drawGameModeOption(window, "Limited Time", 50, 700, cursorMode == 2);		// get the highest score in 2 min
-	drawGameModeOption(window, "Endless", 50, 900, cursorMode == 3);		// just play
+	drawGameModeOption(window, "Drop on Beat", 50, 500, cursorMode == 0);		// drop blocks on the beat receives bonus
+	drawGameModeOption(window, "Limited Time", 50, 700, cursorMode == 1);		// get the highest score in 2 min
+	drawGameModeOption(window, "Endless", 50, 900, cursorMode == 2);		// just play
 
 	CircleShape triangle(60, 3);
 	triangle.setScale(0.5, 0.5);
@@ -75,15 +74,12 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 		switch (cursorMode)
 		{
 		case 0:
-			gamePtr = new AutoDropGame(settings, fs::absolute(maps[cursorMap]).string());
-			break;
-		case 1:
 			gamePtr = new DropToTheBeatGame(settings, fs::absolute(maps[cursorMap]).string());
 			break;
-		case 2:
+		case 1:
 			gamePtr = new LimitedTimeGame(settings, fs::absolute(maps[cursorMap]).string());
 			break;
-		case 3:
+		case 2:
 			gamePtr = new EndlessGame(settings, fs::absolute(maps[cursorMap]).string());
 			break;
 		}

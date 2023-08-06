@@ -16,6 +16,8 @@ MasterClass::MasterClass(RenderWindow& window)
 	text.setFont(font);
 	text.setCharacterSize(20);
 	text.setFillColor(Color::White);
+	backgroundTexture.loadFromFile(backgroundImagePath);
+	backgroundSprite.setTexture(backgroundTexture);
 }
 
 MasterClass::~MasterClass()
@@ -110,6 +112,7 @@ void MasterClass::run()
 
 		// Render and display
 		window->clear(Color::Black);
+		window->draw(backgroundSprite);
 		window->draw(text);
 
 		render();

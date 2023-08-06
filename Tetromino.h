@@ -22,8 +22,16 @@ enum class Type { Z = 0, L = 1, O = 2, S = 3, I = 4, J = 5, T = 6 };
 enum class Orientation { SPAWN = 0, RIGHT = 1, FLIP = 2, LEFT = 3 };
 enum class Rotational_Direction { CCW = -1, NORO = 0, CW = 1, R180 = 2 };
 enum class Moving_Direction { UP_DIR = 0, LEFT_DIR = 1, RIGHT_DIR = 2, DOWN_DIR = 3 };
-const static vector<Type> allPieces{ Type::Z, Type::L, Type::O, Type::S, Type::I,Type::J,Type::T };
-
+const static vector<Type> allPieces{ Type::Z, Type::L, Type::O, Type::S, Type::I, Type::J, Type::T };
+const static map<Type, Color> pieceColorMap {
+	{Type::Z, Color::Red},
+	{ Type::L, Color(255,165,0) },
+	{ Type::O, Color::Yellow },
+	{ Type::S, Color::Green },
+	{ Type::I, Color(173, 216, 230) },
+	{ Type::J, Color(0, 0, 139) },
+	{ Type::T, Color::Magenta }
+};
 
 
 const static std::array<std::array<std::array<int, 4>, 4>, 7> tetrominos = { {
@@ -131,6 +139,98 @@ const static std::array<std::array<std::array<int, 2>, 5>, 8> IWallKickData = { 
 												}},
 } };
 
+// orientational mapping from mouse moving direction
+const static std::array<std::array<Orientation, 4>, 7> orientationFromMouse = { {
+	{{ // Z piece
+		{Orientation::LEFT}, // UP
+		{Orientation::SPAWN},  // LEFT
+		{Orientation::FLIP}, // RIGHT
+		{Orientation::RIGHT}  // DOWN
+	}},
+	{{ // L piece
+		{Orientation::LEFT}, // UP
+		{Orientation::SPAWN},  // LEFT
+		{Orientation::FLIP}, // RIGHT
+		{Orientation::RIGHT}  // DOWN
+	}},
+	{{ // O piece
+		{Orientation::RIGHT}, // UP
+		{Orientation::FLIP},  // LEFT
+		{Orientation::SPAWN}, // RIGHT
+		{Orientation::LEFT}  // DOWN
+	}},
+	{{ // S piece
+		{Orientation::RIGHT}, // UP
+		{Orientation::FLIP},  // LEFT
+		{Orientation::SPAWN}, // RIGHT
+		{Orientation::LEFT}  // DOWN
+	}},
+	{{ // I piece
+		{Orientation::LEFT}, // UP
+		{Orientation::SPAWN},  // LEFT
+		{Orientation::FLIP}, // RIGHT
+		{Orientation::RIGHT}  // DOWN
+	}},
+	{{ // J piece
+		{Orientation::RIGHT}, // UP
+		{Orientation::FLIP},  // LEFT
+		{Orientation::SPAWN}, // RIGHT
+		{Orientation::LEFT}  // DOWN
+	}},
+	{{ // T piece
+		{Orientation::SPAWN}, // UP
+		{Orientation::LEFT},  // LEFT
+		{Orientation::RIGHT}, // RIGHT
+		{Orientation::FLIP}  // DOWN
+	}},
+} };
+
+// shiftPos[type][orientation][x or y]
+const static std::array<std::array<std::array<int, 2>, 4>, 7> shiftPos = { {
+	{{ // Z piece
+		{-2,-1}, // SPAWN
+		{-2,0}, // RIGHT
+		{0,-1}, // FLIP
+		{0,-2}  // LEFT
+	}},
+	{{ // L piece
+		{-2,-1}, // SPAWN
+		{-1,-1}, // RIGHT
+		{0,-1}, // FLIP
+		{-1,-2}  // LEFT
+	}},
+	{{ // O piece
+		{-1,-1}, // SPAWN
+		{-2,-1}, // RIGHT
+		{-2,-1}, // FLIP
+		{-1,0}  // LEFT
+	}},
+	{{ // S piece
+		{0,-1}, // SPAWN
+		{-2,-2}, // RIGHT
+		{-2,-1}, // FLIP
+		{0,0}  // LEFT
+	}},
+	{{ // I piece
+		{-2,-1}, // SPAWN
+		{-2,-1}, // RIGHT
+		{-1,-2}, // FLIP
+		{-1,-2}  // LEFT
+	}},
+	{{ // J piece
+		{0,-1}, // SPAWN
+		{-1,-2}, // RIGHT
+		{-2,-1}, // FLIP
+		{-1,-1}  // LEFT
+	}},
+	{{ // T piece
+		{-1,-1}, // SPAWN
+		{-1,-1}, // RIGHT
+		{-1,-1}, // FLIP
+		{-1,-1}  // LEFT
+	}},
+}};
+
 
 
 /**
@@ -183,6 +283,10 @@ public:
 	 *
 	 */
 	void turnToGhostColor();
+
+	bool setPiece(int x, int y, Moving_Direction mDir, Board& board);
+
+	bool rotate(Rotational_Direction rDir);
 
 	/**
 	 * Rotate the tetromino on the board. Wall kick is implemented
@@ -278,7 +382,7 @@ public:
 	 * \param x
 	 * \param y
 	 */
-	void render(RenderWindow& window, int x, int y);
+	void render(RenderWindow& window, int x, int y, int scale = 2);
 
 	/**
 	 * Reset back to spawn condition.
@@ -309,11 +413,18 @@ public:
 	 */
 	bool getRotateLast();
 
+	Color getBaseColor()
+	{
+		return  pieceColorMap.find(this->type)->second;
+	};
+
 
 	int getMinX();
 	int getMinY();
 	int getMaxX();
 	int getMaxY();
+	int getSquareCountX();
+	int getSquareCountY();
 
 };
 
