@@ -1,27 +1,28 @@
+#pragma once
 #include "StateScreen.h"
 #include "Enums.h"
 #include "BeatMapEditor.h"
+#include "StateManager.h"
 class MapEditorSelect : public StateScreen
 {
 private:
 	Text text;
 	Font font;
-	BeatMapEditor*& mapEditor;
 	vector<fs::path> maps;
 	int cursor;
 public:
-	MapEditorSelect(BeatMapEditor*& mapEditor);
+	MapEditorSelect(StateManager &stateManager);
 	~MapEditorSelect();
 
 	// StateScreen functions
 	//****************************************************
-	void tick(State& state, RenderWindow& window);
+	void tick(RenderWindow& window);
 	void render(RenderWindow& window);
-	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(State& state, RenderWindow& window, Event event);
+	void keyEvent(Event event);
+	void mouseEvent(RenderWindow& window, Event event);
 
 
-	void openBeatMapEditor(State& state, string folderPath);
+	void openBeatMapEditor(string folderPath);
 	void drawOptions(RenderWindow& window, string options, int x, int y, bool isHighlight);
 };
 

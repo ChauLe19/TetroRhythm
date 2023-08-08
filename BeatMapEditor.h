@@ -6,6 +6,7 @@
  * \date   July 2021
  *********************************************************************/
 
+#pragma once
 #ifndef BEAT_MAP_H
 #define BEAT_MAP_H
 
@@ -23,6 +24,8 @@
 #include <iostream>
 #include <filesystem>
 #include <stdlib.h>
+#include "StateManager.h"
+#include "Menu.h"
 
 
 using namespace std;
@@ -57,17 +60,17 @@ private:
 	int sliderLength = 2000;
 	int sliderHeight = 100;
 public:
-	BeatMapEditor(string folderPath);
-	BeatMapEditor(string audioFilePath, string textFilePath);
+	BeatMapEditor(StateManager &stateManager, string folderPath);
+	BeatMapEditor(StateManager &stateManager, string audioFilePath, string textFilePath);
 	~BeatMapEditor();
 
 	void save();
 	void addCursorToBeatList();
 
-	void tick(State& state, RenderWindow& window);
+	void tick(RenderWindow& window);
 	void render(RenderWindow& window);
-	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(State& state, RenderWindow& window, Event event);
+	void keyEvent(Event event);
+	void mouseEvent(RenderWindow& window, Event event);
 };
 
 #endif

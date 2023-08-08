@@ -1,6 +1,7 @@
 #include "Settings.h"
+#include "Menu.h"
 
-Settings::Settings(Controls_Settings& settings) : settings(settings)
+Settings::Settings(StateManager& stateManager) : StateScreen(stateManager)
 {
 	font.loadFromFile("Dense-Regular.otf");
 	text.setFont(font);
@@ -11,8 +12,10 @@ Settings::~Settings()
 {
 }
 
-void Settings::keyEvent(State& state, Keyboard::Key key)
+void Settings::keyEvent(Event event)
 {
+	if (event.type != Event::KeyPressed) return;
+	Keyboard::Key key = event.key.code;
 	if (isChanging)
 	{
 		changeKey(key);
@@ -32,7 +35,9 @@ void Settings::keyEvent(State& state, Keyboard::Key key)
 		outFile << "DAS " << settings.delayAutoShift << endl;
 		outFile << "ARR " << settings.autoRepeatRate << endl;
 		outFile.close();
-		state = State::MENU;
+		// state = State::MENU;
+		GameSettings::loadFiles(); // reload settings
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::Down:
 		setCursor(cursor + 1);
@@ -46,7 +51,7 @@ void Settings::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-void Settings::tick(State& state, RenderWindow& window)
+void Settings::tick(RenderWindow& window)
 {
 }
 
@@ -152,7 +157,7 @@ bool Settings::changeKey(Keyboard::Key key)
 }
 
 
-void Settings::mouseEvent(State& state, RenderWindow& window, Event event)
+void Settings::mouseEvent(RenderWindow& window, Event event)
 {
 }
 

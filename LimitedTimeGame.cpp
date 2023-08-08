@@ -1,11 +1,7 @@
 #include "LimitedTimeGame.h"
 
 //TODO: speed depends on the song speed. the song speed up after every round
-LimitedTimeGame::LimitedTimeGame(Controls_Settings& settings) : GameBase(settings)
-{
-	clock = Clock();
-}
-LimitedTimeGame::LimitedTimeGame(Controls_Settings& settings, string folderPath) : GameBase(settings, folderPath)
+LimitedTimeGame::LimitedTimeGame(StateManager& stateManager, string folderPath) : GameBase(stateManager, folderPath)
 {
 	clock = Clock();
 }
@@ -14,43 +10,40 @@ LimitedTimeGame::~LimitedTimeGame()
 {
 }
 
-void LimitedTimeGame::tick(State& state, RenderWindow& window)
+void LimitedTimeGame::tick(RenderWindow& window)
 {
 	if (isGameOver) return;
-	GameBase::tick(state, window);
+	GameBase::tick(window);
 	frameCount++;
 	// restart song if not game over
 	if (!isGameOver && sound.getStatus() == SoundSource::Status::Stopped)
 	{
 		sound.play();
 	}
-}
 
-void LimitedTimeGame::tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr)
-{
-	tick(state, window);
 	if (clock.getElapsedTime().asSeconds() >= 120)
 	{
 		gameOver();
 	}
 }
 
-void LimitedTimeGame::keyEvent(State& state, Keyboard::Key key)
+void LimitedTimeGame::keyEvent(Event event)
 {
-	GameBase::keyEvent(state, key);
-	if (key == Keyboard::R)
+	if (event.type != Event::KeyPressed) return;
+	GameBase::keyEvent(event);
+	if (event.key.code == Keyboard::R)
 	{
 		clock = Clock();
 	}
 }
 
-void LimitedTimeGame::mouseEvent(State& state, RenderWindow& window, Event event)
+void LimitedTimeGame::mouseEvent(RenderWindow& window, Event event)
 {
 	if (isGameOver && Mouse::isButtonPressed(Mouse::Left) && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // RESTART button
 	{
 		clock = Clock();
 	}
-	GameBase::mouseEvent(state, window, event);
+	GameBase::mouseEvent(window, event);
 }
 
 void LimitedTimeGame::render(RenderWindow& window)

@@ -6,6 +6,7 @@
  * \date   July 2021
  *********************************************************************/
 
+#pragma once
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
@@ -15,6 +16,8 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <fstream>
+#include "GameSettings.h"
+#include "StateManager.h"
 
 using namespace sf;
 using namespace std;
@@ -23,15 +26,10 @@ const string controlsList[8] = { "MOVE_LEFT","MOVE_RIGHT","ROTATE_CCW","ROTATE_C
 class Settings : public StateScreen
 {
 public:
-	struct Controls_Settings {
-		map<string, Keyboard::Key> keybinds;
-		int delayAutoShift;
-		int autoRepeatRate;
-	};
 private:
 	Text text;
 	Font font;
-	Controls_Settings& settings;
+	GameSettings::Controls_Settings settings = GameSettings::getSettings();
 	int cursor = 0;
 	bool isChanging = false;
 
@@ -52,16 +50,16 @@ private:
 	string fromControlsToString(Controls_Key key);
 public:
 
-	Settings(Controls_Settings& settings);
+	Settings(StateManager &stateManager);
 	~Settings();
 
 	// GameBase functions
 	//********************************************
 
-	void tick(State& state, RenderWindow& window);
+	void tick(RenderWindow& window);
 	void render(RenderWindow& window);
-	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(State& state, RenderWindow& window, Event event);
+	void keyEvent(Event event);
+	void mouseEvent(RenderWindow& window, Event event);
 
 	/**
 	 * Draw option

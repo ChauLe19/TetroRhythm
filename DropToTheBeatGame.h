@@ -6,10 +6,12 @@
  * \author Chau Le
  * \date   July 2021
  *********************************************************************/
+#pragma once
 #ifndef DROP_TO_BEAT_H
 #define DROP_TO_BEAT_H
 
 #include "GameBase.h"
+#include "Button.h"
 
 /**
  * Drop to the beat game mode.
@@ -26,10 +28,10 @@ private:
 	int accuracyTimer = 0; 
 	int health = 100; // 0 <= health <= 100
 	int healthCounter = 0; // if reaches 60, health +=1 (every second, health +=1_
+	Button *clearBoardButton;
 
 public:
-	DropToTheBeatGame(Controls_Settings& settings);
-	DropToTheBeatGame(Controls_Settings& settings, string folderPath);
+	DropToTheBeatGame(StateManager &stateManager, string folderPath);
 	~DropToTheBeatGame();
 
 
@@ -39,10 +41,9 @@ public:
 	// Game Base functions
 	//*****************************************************
 
-	void tick(State& state, RenderWindow& window);
-	void tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr);
-	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(State& state, RenderWindow& window, Event event);
+	void tick(RenderWindow& window);
+	void keyEvent(Event event);
+	void mouseEvent(RenderWindow& window, Event event);
 	void restart();
 	void render(RenderWindow& window);
 private:

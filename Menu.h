@@ -12,6 +12,10 @@
 #include "Utils.h"
 
 #include <SFML/Graphics.hpp>
+#include "StateManager.h"
+#include "GameOptions.h"
+#include "Settings.h"
+#include "MapEditorSelect.h"
 
 using namespace sf;
 using namespace std;
@@ -28,15 +32,15 @@ private:
 	Sprite buttonImage;
 
 public:
-	Menu();
+	Menu(StateManager &stateManager);
 	~Menu();
 
 	// StateScreen functions
 	//**************************************************
 
-	void tick(State& state, RenderWindow& window);
+	void tick(RenderWindow& window);
 	void render(RenderWindow& window);
-	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(State& state, RenderWindow& window, Event event);
+	void keyEvent(Event event);
+	void mouseEvent(RenderWindow& window, Event event);
 };
 #endif

@@ -1,7 +1,8 @@
 #include "ResultScreen.h"
+#include "Menu.h"
 #include "GameBase.h"
 
-ResultScreen::ResultScreen(int accuracyBeatCount[3], int rawScore, int combo)
+ResultScreen::ResultScreen(StateManager& stateManager, int accuracyBeatCount[3], int rawScore, int combo) : StateScreen(stateManager)
 {
 	font.loadFromFile("Dense-Regular.otf");
 	text.setFont(font);
@@ -45,7 +46,7 @@ ResultScreen::~ResultScreen()
 {
 }
 
-void ResultScreen::tick(State& state, RenderWindow& window)
+void ResultScreen::tick(RenderWindow& window)
 {
 }
 
@@ -71,46 +72,40 @@ void ResultScreen::render(RenderWindow& window)
 	text.setString("Combo: " + to_string(combo));
 	window.draw(text);
 
-	text.setPosition(200, 700);
-	text.setString("Raw Score: " + to_string(rawScore));
-	window.draw(text);
+	// text.setPosition(200, 700);
+	// text.setString("Raw Score: " + to_string(rawScore));
+	// window.draw(text);
 
-	text.setPosition(1200, 400);
-	text.setString("Score: " + to_string(adjustedScore));
-	window.draw(text);
 
-	text.setCharacterSize(200);
-	text.setPosition(1200, 400);
+	text.setCharacterSize(500);
+	text.setPosition(1200, 200);
 	text.setString(letterRanked);
 	window.draw(text);
+	text.setPosition(1000, 700);
+	text.setString("Score: " + to_string(adjustedScore));
+	text.setCharacterSize(150);
+	window.draw(text);
 
 
 }
 
-void ResultScreen::keyEvent(State& state, Keyboard::Key key)
+void ResultScreen::keyEvent(Event event)
 {
-	switch (key)
+	if (event.type != Event::KeyPressed) return;
+	switch (event.key.code)
 	{
 	case Keyboard::Key::Escape:
-		state = State::MENU;
+		stateManager.removeState();
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::R:
-		state = State::GAME;
-		break;
-	}
-}
-void ResultScreen::keyEvent(State& state, Keyboard::Key key, GameBase*& game)
-{
-	keyEvent(state, key);
-	switch (key)
-	{
-	case Keyboard::Key::R:
-		state = State::GAME;
-		game->restart();
+		stateManager.removeState();
+		GameBase *currGame = static_cast<GameBase *>(stateManager.getCurrentState().get());
+		currGame->reset();
 		break;
 	}
 }
 
-void ResultScreen::mouseEvent(State& state, RenderWindow& window, Event event)
+void ResultScreen::mouseEvent(RenderWindow& window, Event event)
 {
 }

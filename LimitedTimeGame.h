@@ -14,17 +14,15 @@ class LimitedTimeGame :
 	public GameBase
 {
 public:
-	LimitedTimeGame(Controls_Settings& settings);
-	LimitedTimeGame(Controls_Settings& settings, string folderPath);
+	LimitedTimeGame(StateManager &stateManager, string folderPath);
 	~LimitedTimeGame();
 	sf::Clock clock;
 	// Game Base functions
 	//************************************************
 
-	void tick(State& state, RenderWindow& window);
-	void tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr);
-	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(State& state, RenderWindow& window, Event event);
+	void tick(RenderWindow& window);
+	void keyEvent(Event event);
+	void mouseEvent(RenderWindow& window, Event event);
 	void render(RenderWindow& window);
 
 

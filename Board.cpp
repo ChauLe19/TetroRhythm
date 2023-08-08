@@ -3,9 +3,10 @@ Board::Board(int xPos, int yPos)
 {
 	this->xPos = xPos;
 	this->yPos = yPos;
-	frameTexture.loadFromFile("Images/frame flat.png");
+	frameTexture.loadFromFile("Images/frame.png");
 	image.setTexture(frameTexture);
-	image.setPosition((float)xPos - 255, (float)yPos - 10);
+	image.setScale(4, 4);
+	image.setPosition((float)xPos, (float)yPos);
 	cellsTexture.loadFromFile("Images/tiles-2.png");
 	cellImage.setTexture(cellsTexture);
 
@@ -26,6 +27,11 @@ Board::~Board()
 
 void Board::render(RenderWindow& window)
 {
+	RectangleShape frame(Vector2f(boardSquareSize * boardWidth, boardSquareSize * boardHeight));
+	frame.setOutlineThickness(10);
+	frame.setOutlineColor(Color(63,119,179));
+	frame.setPosition(xPos, yPos);
+	frame.setFillColor(Color::Transparent);
 	for (int i = 0; i < boardHeight; i++)
 	{
 		for (int j = 0; j < boardWidth; j++)
@@ -33,7 +39,7 @@ void Board::render(RenderWindow& window)
 			RectangleShape rect(Vector2f(boardSquareSize, boardSquareSize));
 			rect.setFillColor(Color(0, 0, 0, 150));
 			rect.setPosition(xPos + boardSquareSize * j, yPos + boardSquareSize * i);
-			rect.setOutlineColor(Color(255, 255, 255, 100));
+			rect.setOutlineColor(Color(0, 168, 236, 50));
 			rect.setOutlineThickness(5);
 			window.draw(rect);
 			if (board[i][j] % 8 != 0)
@@ -46,6 +52,7 @@ void Board::render(RenderWindow& window)
 
 		}
 	}
+	window.draw(frame);
 }
 
 
@@ -98,6 +105,17 @@ ClearingInfo Board::clearLines()
 	result.linesCleared = linesCleared;
 	return result;
 
+}
+
+void Board::clearBoard()
+{
+	for (int i = 0; i < boardHeight; i++)
+	{
+		for (int j = 0; j < boardWidth; j++)
+		{
+			board[i][j] = 0;
+		}
+	}
 }
 
 

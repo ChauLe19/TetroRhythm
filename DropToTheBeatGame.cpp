@@ -1,37 +1,27 @@
 #include "DropToTheBeatGame.h"
 
-DropToTheBeatGame::DropToTheBeatGame(Controls_Settings& settings) : GameBase(settings)
+DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
 {
-}
-DropToTheBeatGame::DropToTheBeatGame(Controls_Settings& settings, string folderPath) : GameBase(settings, folderPath)
-{
+	this->clearBoardButton = new Button(Color::Black, 100, Color::White, "Clear", boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200, 200, 200, Keyboard::Unknown);
 }
 
 DropToTheBeatGame::~DropToTheBeatGame()
 {
+	delete this->clearBoardButton;
 }
 
-
-void DropToTheBeatGame::tick(State& state, RenderWindow& window)
+void DropToTheBeatGame::tick(RenderWindow& window)
 {
 	if (isGameOver) return;
-	GameBase::tick(state, window);
+	GameBase::tick(window);
 
-	// it's triggered only when the sound stops on its own
-	if (sound.getStatus() == SoundSource::Status::Stopped)
-	{
-		finished = true;
-		gameOver();
-		state = State::GAMEOVER;
-		return;
-	}
 	// every secon passed, health + 1
-		/*healthCounter++;
-		if (healthCounter >= 60)
-		{
-			health = clamp(health  + 1, 0, 100);
-			healthCounter = 0;
-		}*/
+	/*healthCounter++;
+	if (healthCounter >= 60)
+	{
+		health = clamp(health  + 1, 0, 100);
+		healthCounter = 0;
+	}*/
 
 	int tempTime = sound.getPlayingOffset().asMilliseconds();
 
@@ -47,7 +37,7 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 			combo++;
 			hitType = 2;
 		}
-		else if (abs(tempTime - nextBeatTimeMS) <= 200) // ALMOST
+		else if (abs(tempTime - nextBeatTimeMS) <= 250) // ALMOST
 		{
 			combo++;
 			hitType = 1;
@@ -87,7 +77,7 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 		}
 
 		// if next beat is in 200ms window, skip it or clear it
-		if (abs(tempTime-nextBeatTimeMS) <= 200 && beatIt != beatsTime.end())
+		if (abs(tempTime-nextBeatTimeMS) <= 250 && beatIt != beatsTime.end())
 		{
 			prevBeatTimeMS = nextBeatTimeMS;
 			beatIt++;
@@ -97,7 +87,7 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 	}
 	else // too late, move to next beat
 	{
-		if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 200 && beatIt != beatsTime.end())
+		if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 250 && beatIt != beatsTime.end())
 		{
 			combo = 0;
 			comboString = "TOO LATE";
@@ -114,26 +104,25 @@ void DropToTheBeatGame::tick(State& state, RenderWindow& window)
 		gameOver();
 		return;
 	}
-}
 
-void DropToTheBeatGame::tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr)
-{
-	tick(state, window);
 	if (sound.getStatus() == SoundSource::Status::Stopped)
 	{
+		finished = true;
 		gameOver();
-		state = State::GAMEOVER;
-		resultScreenPtr = new ResultScreen(beatAccuracyCount, score, maxCombo);
+		ResultScreen *resultScreenPtr = new ResultScreen(stateManager, beatAccuracyCount, score, maxCombo);
+		stateManager.addState(unique_ptr<StateScreen>(resultScreenPtr), false);
+		reset();
 		return;
 	}
 }
 
-void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
+void DropToTheBeatGame::keyEvent(Event event)
 {
-	GameBase::keyEvent(state, key);
+	if (event.type != Event::KeyPressed) return;
+	GameBase::keyEvent(event);
 
 	// reset on top of the gamebase's reset
-	if (key == Keyboard::Key::R)
+	if (event.key.code == Keyboard::Key::R)
 	{
 		restart();
 	}
@@ -142,14 +131,20 @@ void DropToTheBeatGame::keyEvent(State& state, Keyboard::Key key)
 void DropToTheBeatGame::checkDropOnBeat()
 {
 }
-void DropToTheBeatGame::mouseEvent(State& state, RenderWindow& window, Event event)
+void DropToTheBeatGame::mouseEvent(RenderWindow& window, Event event)
 {
 	if (finished) return;
-	if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && 
+		this->clearBoardButton->mouseInButton(window))
+	{
+		board.clearBoard();
+		return;
+	}
+	else if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
 		beatPressed = true;
 	}
-	GameBase::mouseEvent(state, window, event);
+	GameBase::mouseEvent(window, event);
 }
 
 void DropToTheBeatGame::restart()
@@ -204,6 +199,7 @@ void DropToTheBeatGame::render(RenderWindow& window)
 		accuracyTimer--;
 		window.draw(text);
 	}
+	this->clearBoardButton->render(window, text);
 
 	/*if (bonus != 0 && clearTypeCounter > 0)
 	{

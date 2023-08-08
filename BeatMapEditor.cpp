@@ -1,6 +1,6 @@
 #include "BeatMapEditor.h"
 
-BeatMapEditor::BeatMapEditor(string folderPath)
+BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : StateScreen(stateManager)
 {
 	font.loadFromFile("Dense-Regular.otf");
 	text.setFont(font);
@@ -90,7 +90,8 @@ BeatMapEditor::BeatMapEditor(string folderPath)
 	cursorRelToMusicMS = sound.getPlayingOffset().asMilliseconds();
 }
 
-BeatMapEditor::BeatMapEditor(string audioFilePath, string textFilePath)
+BeatMapEditor::BeatMapEditor(StateManager &stateManager, string audioFilePath, string textFilePath) : StateScreen(stateManager)
+
 {
 	this->audioFilePath = audioFilePath;
 	this->textFilePath = textFilePath;
@@ -148,7 +149,7 @@ void BeatMapEditor::save()
 	outFile.close();
 }
 
-void BeatMapEditor::tick(State& state, RenderWindow& window)
+void BeatMapEditor::tick(RenderWindow& window)
 {
 	if (sound.getStatus() == Music::Status::Stopped)
 	{
@@ -285,14 +286,16 @@ void BeatMapEditor::render(RenderWindow& window)
 	window.draw(beatButton);
 }
 
-void BeatMapEditor::keyEvent(State& state, Keyboard::Key key)
+void BeatMapEditor::keyEvent(Event event)
 {
+	if (event.type != Event::KeyPressed) return;
+	Keyboard::Key key = event.key.code;
 	switch (key)
 	{
 	case Keyboard::Key::Escape:
 		save();
 		sound.stop();
-		state = State::MENU;
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::Num2:
 		sound.setPitch(0.25);
@@ -349,7 +352,7 @@ void BeatMapEditor::addCursorToBeatList()
 	}
 }
 
-void BeatMapEditor::mouseEvent(State& state, RenderWindow& window, Event event)
+void BeatMapEditor::mouseEvent(RenderWindow& window, Event event)
 {
 
 	if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)

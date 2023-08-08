@@ -5,6 +5,7 @@
  * \author Chau Le
  * \date   July 2021
  *********************************************************************/
+#pragma once
 #ifndef GAME_BASE_H
 #define GAME_BASE_H
 
@@ -13,6 +14,7 @@
 #include "Tetromino.h"
 #include "StateScreen.h"
 #include "ResultScreen.h"
+#include "StateManager.h"
 #include "Utils.h"
 
 #include <SFML/Graphics.hpp>
@@ -43,6 +45,7 @@ const int boardY = 576 - 90 * 5;
 //https://tetris.wiki/Marathon
 //TODO: change to float
 const int levelSpeed[15] = { 60, 58, 37, 28, 21, 16, 11, 8, 6, 4, 3, 2, 1, 1, 1 };
+
 /**
  * Class for general Tetris controls and mechanics.
  */
@@ -54,6 +57,7 @@ protected:
 	SoundBuffer buffer;
 	Sound sound;
 	ifstream inFile;
+	Shader beatShader;
 
 	// Objects in game
 	//**************************************
@@ -91,13 +95,9 @@ protected:
 	// Controls related variables
 	//****************************************
 
-	typedef Settings::Controls_Settings Controls_Settings;
-	Controls_Settings& settings;
-	map<string, Keyboard::Key>& keybinds;
 	Keyboard::Key holdKey;
 	Keyboard::Key currentKey;
-	int& delayAutoShift;
-	int& autoRepeatRate;
+	GameSettings::Controls_Settings controlsSettings = GameSettings::getSettings();
 	int delayAutoShiftCount = 0;
 	int autoRepeatRateCount = 0;
 	bool isAutoShiftActive = false;
@@ -121,18 +121,16 @@ protected:
 	static bool isB2BChain(ClearType type);
 	static int getTSpinType(Tetromino piece, Board& board);
 public:
-	GameBase(Controls_Settings& settings);
-	GameBase(Controls_Settings& settings, string folderPath);
+	GameBase(StateManager& stateManager, string folderPath);
 	~GameBase();
 
 	// State Screen functions
 	//***************************************************
 
-	virtual void tick(State& state, RenderWindow& window);
-	virtual void tick(State& state, RenderWindow& window, ResultScreen*& resultScrenPtr) = 0;
+	virtual void tick(RenderWindow& window);
 	virtual void render(RenderWindow& window);
-	virtual void keyEvent(State& state, Keyboard::Key key);
-	virtual void mouseEvent(State& state, RenderWindow& window, Event event);
+	virtual void keyEvent(Event event);
+	virtual void mouseEvent(RenderWindow& window, Event event);
 	virtual void mouseScrollEvent(Event event);
 
 	void renderBeatSignal(RenderWindow& window);

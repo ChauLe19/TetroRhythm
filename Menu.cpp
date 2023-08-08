@@ -1,6 +1,6 @@
 #include "Menu.h"
 
-Menu::Menu()
+Menu::Menu(StateManager &stateManager) : StateScreen(stateManager)
 {
 	font.loadFromFile("Dense-Regular.otf");
 	text.setFont(font);
@@ -14,7 +14,7 @@ Menu::~Menu()
 {
 }
 
-void Menu::tick(State& state, RenderWindow& window)
+void Menu::tick(RenderWindow& window)
 {
 }
 
@@ -33,37 +33,38 @@ void Menu::render(RenderWindow& window)
 
 }
 
-void Menu::keyEvent(State& state, Keyboard::Key key)
+void Menu::keyEvent(Event event)
 {
-	switch (key)
+	if (event.type != Event::KeyPressed) return;
+	switch (event.key.code)
 	{
 	case Keyboard::Key::Enter:
-		state = State::GAME_OPTIONS;
+		stateManager.addState(std::unique_ptr<StateScreen>(new GameOptions(stateManager)));
 		break;
 	case Keyboard::Key::C:
-		state = State::SETTINGS;
+		stateManager.addState(std::unique_ptr<StateScreen>(new Settings(stateManager)));
 		break;
 	case Keyboard::Key::E:
-		state = State::MAP_EDITOR_SELECT;
+		stateManager.addState(std::unique_ptr<StateScreen>(new MapEditorSelect(stateManager)));
 		break;
 	}
 }
 
-void Menu::mouseEvent(State& state, RenderWindow& window, Event event)
+void Menu::mouseEvent(RenderWindow& window, Event event)
 {
 	if (event.type == Event::MouseButtonPressed)
 	{
 		if (mouseInBox(window, 1024 - 200, 600, 400, 60)) // BEGIN button
 		{
-			state = State::GAME_OPTIONS;
+			stateManager.addState(std::unique_ptr<StateScreen>(new GameOptions(stateManager)));
 		}
 		else if ( mouseInBox(window, 1024 - 200, 700, 400, 60)) //SETTINGS button
 		{
-			state = State::SETTINGS;
+			stateManager.addState(std::unique_ptr<StateScreen>(new Settings(stateManager)));
 		}
 		else if (mouseInBox(window, 1024 - 200, 800, 400, 60)) // EDIT BEAT MAPS button
 		{
-			state = State::MAP_EDITOR_SELECT;
+			stateManager.addState(std::unique_ptr<StateScreen>(new MapEditorSelect(stateManager)));
 		}
 	}
 }

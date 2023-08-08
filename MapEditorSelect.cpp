@@ -1,6 +1,7 @@
 #include "MapEditorSelect.h"
 
-MapEditorSelect::MapEditorSelect(BeatMapEditor*& mapEditor) : mapEditor(mapEditor)
+
+MapEditorSelect::MapEditorSelect(StateManager &stateManager) : StateScreen(stateManager)
 {
 	font.loadFromFile("Dense-Regular.otf");
 	text.setFont(font);
@@ -43,7 +44,7 @@ void MapEditorSelect::drawOptions(RenderWindow& window, string options, int x, i
 }
 
 
-void MapEditorSelect::tick(State& state, RenderWindow& window)
+void MapEditorSelect::tick(RenderWindow& window)
 {
 }
 
@@ -67,22 +68,17 @@ void MapEditorSelect::render(RenderWindow& window)
 	}
 }
 
-void MapEditorSelect::keyEvent(State& state, Keyboard::Key key)
+void MapEditorSelect::keyEvent(Event event)
 {
+	if (event.type != Event::KeyPressed) return;
+	Keyboard::Key key = event.key.code;
 	switch (key)
 	{
 	case Keyboard::Key::Enter:
-		mapEditor = new BeatMapEditor(fs::absolute(maps[cursor]).string());
-		state = State::MAP_EDITOR;
-		break;
-	case Keyboard::Key::C:
-		state = State::SETTINGS;
-		break;
-	case Keyboard::Key::E:
-		state = State::MAP_EDITOR_SELECT;
+		stateManager.addState(std::unique_ptr<StateScreen>(new BeatMapEditor(stateManager, fs::absolute(maps[cursor]).string())));
 		break;
 	case Keyboard::Key::Escape:
-		state = State::MENU;
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::Up:
 		cursor = clamp(cursor - 1, 0, (int)maps.size() - 1);
@@ -93,12 +89,12 @@ void MapEditorSelect::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-void MapEditorSelect::mouseEvent(State& state, RenderWindow& window, Event event)
+void MapEditorSelect::mouseEvent(RenderWindow& window, Event event)
 {
 }
 
-void MapEditorSelect::openBeatMapEditor(State& state, string folderPath)
+void MapEditorSelect::openBeatMapEditor(string folderPath)
 {
-	mapEditor = new BeatMapEditor(folderPath);
-	state = State::MAP_EDITOR;
+	BeatMapEditor *mapEditor = new BeatMapEditor(stateManager, folderPath);
+	stateManager.addState(std::unique_ptr<StateScreen>(mapEditor));
 }

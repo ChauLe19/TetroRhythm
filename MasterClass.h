@@ -6,6 +6,7 @@
  * \date   July 2021
  *********************************************************************/
 
+#pragma once
 #ifndef MASTER_CLASS_H
 #define MASTER_CLASS_H
 
@@ -19,6 +20,7 @@
 #include "BeatMapEditor.h"
 #include "ResultScreen.h"
 #include <map>
+#include "StateManager.h"
 
 #define backgroundImagePath "images/background.png"
 
@@ -30,35 +32,19 @@ class MasterClass
 public:
 	static string BeatMapFolderPath;
 private:
-	typedef Settings::Controls_Settings Controls_Settings;
-	Controls_Settings controlsSettings;
 	Clock clock;
 	Font font;
 	Text text;
 	sf::Texture backgroundTexture;
 	sf::Sprite backgroundSprite;
 
-	State state = State::MENU;
-
-	// All state screens
-	//**************************************************
-
-	Menu* menu;
-	GameBase* game;
-	Settings* settings;
 	RenderWindow* window;
-	GameOptions* gameOptions;
-	MapEditorSelect* mapEditorSelect;
-	BeatMapEditor* beatMapEditor;
-	ResultScreen* resultScreen;
+	StateManager stateManager;
 
 	bool firstScroll = true;
 public:
 	MasterClass(RenderWindow& window);
 	~MasterClass();
-
-	void initKeys();
-	void initConfig();
 
 	/**
 	 * .Loop forever until close window
@@ -85,7 +71,7 @@ public:
 	 * 
 	 * \param key: input from keyboard
 	 */
-	void keyEvent(Keyboard::Key key);
+	void keyEvent(Event event);
 	
 	/**
 	 * Based on the key input and current state, do things accordingly. 
@@ -95,7 +81,7 @@ public:
 	 */
 	void mouseEvent(Event event);
 
-	void openBeatMapEditor(string folderPath);
+	// void openBeatMapEditor(string folderPath);
 
 };
 

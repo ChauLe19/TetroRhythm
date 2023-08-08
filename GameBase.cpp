@@ -1,9 +1,9 @@
 #include "GameBase.h"
 #include "ResultScreen.h"
+#include "Menu.h"
 
-GameBase::GameBase(Controls_Settings& settings)
-	: settings(settings), delayAutoShift(settings.delayAutoShift),
-	autoRepeatRate(settings.autoRepeatRate), keybinds(settings.keybinds)
+GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme")
+	: StateScreen(stateManager)
 {
 	cout << "Initializing game" << endl;
 
@@ -11,63 +11,11 @@ GameBase::GameBase(Controls_Settings& settings)
 	text.setFont(font);
 	text.setFillColor(Color::White);
 
-	boardPtr = new Board(boardX, boardY);
-	board = *boardPtr;
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-
-	// add 2 initial 7-bags
-	for (int j = 0; j < 2; j++)
+	// load both shaders
+	if (!beatShader.loadFromFile("BeatShader.vert", sf::Shader::Vertex))
 	{
-		vector<Type> tempTypeVector = allPieces;
-		shuffle(tempTypeVector.begin(), tempTypeVector.end(), default_random_engine(seed));
-
-		while (!tempTypeVector.empty())
-		{
-			Type tempType = tempTypeVector.back();
-			tempTypeVector.pop_back();
-			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
-		}
+		std::cout << "error loading shader" << std::endl;
 	}
-
-	// Load map info
-	string txtFile = "output.txt";
-	//string txtFile = "Tetris_theme.txt";
-	string musicFile = "Tetris_theme.ogg";
-	inFile.open(txtFile);
-	if (!inFile)
-	{
-		cerr << "Unable to open file " + txtFile << endl;;
-	}
-
-
-	char beat[10];
-	inFile.getline(beat, 10, '\r');
-	while (inFile.getline(beat, 10, '\r'))
-	{
-		beatsTime.push_back(atoi(beat));
-	}
-	beatIt = beatsTime.begin();
-	nextBeatTimeMS = *beatIt;
-
-	if (!buffer.loadFromFile(musicFile))
-	{
-		cerr << "Unable to open file " + musicFile << endl;;
-	}
-	sound.setBuffer(buffer);
-
-
-	currentPiecePtr = &nextPiece();
-}
-
-GameBase::GameBase(Controls_Settings& settings, string folderPath)
-	: settings(settings), delayAutoShift(settings.delayAutoShift),
-	autoRepeatRate(settings.autoRepeatRate), keybinds(settings.keybinds)
-{
-	cout << "Initializing game" << endl;
-
-	font.loadFromFile("Dense-Regular.otf");
-	text.setFont(font);
-	text.setFillColor(Color::White);
 
 	boardPtr = new Board(boardX, boardY);
 	board = *boardPtr;
@@ -145,7 +93,7 @@ GameBase::~GameBase()
 	delete holdPiecePtr;
 }
 
-void GameBase::tick(State& state, RenderWindow& window)
+void GameBase::tick(RenderWindow& window)
 {
 	if (isGameOver) return;
 	std::array <int, 2> res = findNearestPossiblePlacement(window, *currentPiecePtr, board);
@@ -165,7 +113,7 @@ void GameBase::render(RenderWindow& window)
 		{
 			extra = 0;
 		}
-		holdPiecePtr->render(window, boardX - (boardSquareSize/ 2 + 20) - boardSquareSize* 4 + extra, boardY + boardSquareSize/ 2);
+		holdPiecePtr->render(window, boardX - boardSquareSize* 4 + extra, boardY + boardSquareSize/ 2);
 	}
 
 	// Render 2 preview pieces
@@ -208,12 +156,14 @@ void GameBase::render(RenderWindow& window)
 }
 
 
-void GameBase::keyEvent(State& state, Keyboard::Key key)
+void GameBase::keyEvent(Event event)
 {
+	if (event.type != Event::KeyPressed) return;
+	Keyboard::Key key = event.key.code;
 	if (key == Keyboard::Escape)
 	{
 		reset();
-		state = State::MENU;
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 	}
 	else if (key == Keyboard::R)
 	{
@@ -222,11 +172,17 @@ void GameBase::keyEvent(State& state, Keyboard::Key key)
 
 	if (isGameOver) return;
 
+	
+	map<string, Keyboard::Key> keybinds = controlsSettings.keybinds;
 	// No hold key control (rotation)
 	if (key == keybinds["ROTATE_CW"]
 		|| key == keybinds["ROTATE_CCW"]
-		|| key == keybinds["HARD_DROP"]
 		|| key == keybinds["HOLD"]) return;
+
+	if ( key == keybinds["HARD_DROP"])
+	{
+
+	}
 
 	currentKey = key;
 	firstPressed = true;
@@ -247,7 +203,7 @@ void GameBase::mouseScrollEvent(Event event)
 	}
 }
 
-void GameBase::mouseEvent(State& state, RenderWindow& window, Event event)
+void GameBase::mouseEvent(RenderWindow& window, Event event)
 {
 	if (isGameOver)
 	{
@@ -257,8 +213,8 @@ void GameBase::mouseEvent(State& state, RenderWindow& window, Event event)
 		}
 		else if (event.type == Event::MouseButtonPressed && mouseInBox(window, 1024 - 150, 576 + 20, 300, 60)) // Menu button
 		{
-			reset();
-			state = State::MENU;
+			// reset();
+			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		}
 	}
 	else // game is still going
@@ -279,70 +235,70 @@ void GameBase::mouseEvent(State& state, RenderWindow& window, Event event)
 			Moving_Direction mouseDirection = Moving_Direction::UP_DIR;
 			
 			int XorYdir = max(abs(xDir), abs(yDir));
-			if (XorYdir >= 40) // only register input if it's long enough
+			if (XorYdir >= 50) // only register input if it's long enough
 			{
 				if (XorYdir == abs(xDir))// favor x direction
 				{
 					if (xDir > 0) // mouse move right
 					{
-						mouseDirection= Moving_Direction::RIGHT_DIR;
+						mouseDirection = Moving_Direction::RIGHT_DIR;
 					}
 					else if (xDir < 0)
 					{
-						mouseDirection= Moving_Direction::LEFT_DIR;
+						mouseDirection = Moving_Direction::LEFT_DIR;
 					}
 				}
 				else // favor y direction
 				{
 					if (yDir > 0)
 					{
-						mouseDirection= Moving_Direction::DOWN_DIR;
+						mouseDirection = Moving_Direction::DOWN_DIR;
 					}
 					else if (yDir < 0)
 					{
-						mouseDirection= Moving_Direction::UP_DIR;
+						mouseDirection = Moving_Direction::UP_DIR;
 					}
 				}
-			}
 
-			int minX = -currentPiecePtr->getMinX();
-			int minY = -currentPiecePtr->getMinY();
-			int maxX = 9 - currentPiecePtr->getMaxX();
-			int maxY = 9 - currentPiecePtr->getMaxY();
-			// x - 1, y - 1 to offset to center of the piece
-			int x = std::floor((firstPoint.position.x - boardX) / boardSquareSize);
-			int y = std::floor((firstPoint.position.y - boardY) / boardSquareSize);
+				int minX = -currentPiecePtr->getMinX();
+				int minY = -currentPiecePtr->getMinY();
+				int maxX = 9 - currentPiecePtr->getMaxX();
+				int maxY = 9 - currentPiecePtr->getMaxY();
+				// x - 1, y - 1 to offset to center of the piece
+				int x = std::floor((firstPoint.position.x - boardX) / boardSquareSize);
+				int y = std::floor((firstPoint.position.y - boardY) / boardSquareSize);
 
-			std::cout << x << ":" << y << "=" << static_cast<int> (mouseDirection) << std::endl;
+				std::cout << x << ":" << y << "=" << static_cast<int> (mouseDirection) << std::endl;
 
-			bool possible = currentPiecePtr->setPiece(x, y, mouseDirection, board);
+				bool possible = currentPiecePtr->setPiece(x, y, mouseDirection, board);
 
-			if (possible) // if set piece sucessfully, move to next piece
-			{
-				if (prevPiecePtr != nullptr)
+				if (possible) // if set piece sucessfully, move to next piece
 				{
-					//cout << "Clearing" << endl;
-					// TODO: copy board before clear, is this optimized???
-					Board tempBoard = board;
-					ClearingInfo tempClearingInfo = board.clearLines();
-					linesCleared += tempClearingInfo.linesCleared;
-					level = clamp(linesCleared / 10 + 1, 1, 15);
-					ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-
-					//update clear type everytime the play drop a piece
-					recentClearType = tempScoresType;
-
-					//update clear type only when the dropped piece clear lines
-					// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
-					if (tempScoresType != ClearType::NONE)
+					if (prevPiecePtr != nullptr)
 					{
-						prevClearType = tempScoresType;
-						clearTypeCounter = 60; // 1 second display
-					}
-					score += GameBase::convertClearTypeToScores(tempScoresType);
-				}
+						//cout << "Clearing" << endl;
+						// TODO: copy board before clear, is this optimized???
+						Board tempBoard = board;
+						ClearingInfo tempClearingInfo = board.clearLines();
+						linesCleared += tempClearingInfo.linesCleared;
+						level = clamp(linesCleared / 10 + 1, 1, 15);
+						ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
 
-				nextPiece();
+						//update clear type everytime the play drop a piece
+						recentClearType = tempScoresType;
+
+						//update clear type only when the dropped piece clear lines
+						// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
+						if (tempScoresType != ClearType::NONE)
+						{
+							prevClearType = tempScoresType;
+							clearTypeCounter = 60; // 1 second display
+						}
+						score += GameBase::convertClearTypeToScores(tempScoresType);
+					}
+
+					nextPiece();
+				}
 			}
 			inputVertex.clear();
 		}
@@ -380,35 +336,48 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 
 	const int innerRadius = 150;
 
-	int maxOffsetMS = 3000;
+	int maxOffsetMS = 1000; // 1000ms
 	int nowTime = sound.getPlayingOffset().asMilliseconds();
 
+	// half bar should represent 1000ms of beat
+	// bar window = 2000ms
+	const static int BarWindow = 2000;
 	int boardWidthPx = boardWidth * boardSquareSize;
-	RectangleShape beatBar(Vector2f(boardWidthPx, 50));
-	beatBar.setPosition(boardX, boardY - 100);
-	beatBar.setOutlineColor(Color::White);
+	RectangleShape beatBar(Vector2f(boardWidthPx, 20));
+	beatBar.setPosition(boardX, boardY - 50);
+	beatBar.setOutlineColor(Color(205, 92, 92, 0));
 	beatBar.setOutlineThickness(5);
-	beatBar.setFillColor(Color::Transparent);
+	beatBar.setFillColor(Color(205,92,92));
 	window.draw(beatBar);
 
-	RectangleShape midBar(Vector2f(10, 50));
-	midBar.setPosition(boardX + boardWidthPx/2, boardY - 100);
-	midBar.setFillColor(Color::Red);
-	window.draw(midBar);
+	// ALMOST zone = 400ms each side = 200ms
+	const static int AlmostWindow = 500;
+	RectangleShape almostBar(Vector2f(boardWidthPx * AlmostWindow / BarWindow, 20));
+	almostBar.setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (AlmostWindow/2) / BarWindow ), boardY - 50);
+	almostBar.setFillColor(Color(152, 251, 152));
+	window.draw(almostBar);
+
+	// HIT zone = 100ms each side = 200ms
+	const static int HitWindow = 200;
+	RectangleShape hitBar(Vector2f(boardWidthPx * HitWindow / BarWindow, 20));
+	hitBar.setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (HitWindow/2) / BarWindow), boardY - 50);
+	hitBar.setFillColor(Color(0, 100,0));
+	window.draw(hitBar);
 
 
 
 	for (list<int>::iterator tempBeatIt = beatIt; tempBeatIt != beatsTime.end(); ++tempBeatIt, ++tempRainbowIndex)
 	{
 		int bufferTime = *tempBeatIt;
-		int timeOffset = bufferTime - nowTime;// (1 / 60 second per frame)*1000 milisec per sec
+		int timeOffset = bufferTime - nowTime;
 
 		if (timeOffset > maxOffsetMS) break;
-		if (prevBeatTimeMS >= bufferTime) continue;
-		int distanceFromEnd = timeOffset / 5;
-		RectangleShape preview(Vector2f(24, 24));
+		int distanceFromEnd = timeOffset * boardWidthPx/BarWindow;
+		RectangleShape preview(Vector2f(20, 50));
+		preview.setOutlineThickness(2);
+		preview.setOutlineColor(Color::White);
 		preview.setFillColor(currentPiecePtr->getBaseColor());
-		preview.setPosition(boardX + boardWidthPx / 2 - distanceFromEnd - 45 / 4, boardY - 100 + 50/4);
+		preview.setPosition(boardX + boardWidthPx / 2 - distanceFromEnd - 20 / 2, boardY - 65);
 		window.draw(preview);
 	}
 
@@ -418,17 +387,9 @@ void GameBase::renderGameOver(RenderWindow& window)
 {
 	RectangleShape blurScreen;
 	blurScreen.setPosition(0, 0);
-	blurScreen.setSize(Vector2f(window.getSize()));
+	blurScreen.setSize(Vector2f(window.getView().getSize()));
 	blurScreen.setFillColor(Color(0, 0, 0, 220));
 	window.draw(blurScreen);
-
-	/*RectangleShape gameoverBox;
-	gameoverBox.setPosition(1024 - 200, 576 - 150);
-	gameoverBox.setSize(Vector2f(400, 300));
-	gameoverBox.setFillColor(Color::Black);
-	gameoverBox.setOutlineColor(Color::White);
-	gameoverBox.setOutlineThickness(5);
-	window.draw(gameoverBox);*/
 
 	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "Restart", 300, 60, 1024 - 150, 576 - 60 - 20);
 	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "Menu", 300, 60, 1024 - 150, 576 + 20);
@@ -597,104 +558,7 @@ ClearType GameBase::determineClearType(Tetromino clearingPiece, ClearingInfo inf
 
 string GameBase::clearTypeToString(ClearType clearType)
 {
-	switch (clearType)
-	{
-	case ClearType::NONE:
-		return "None";
-		break;
-	case ClearType::SINGLE:
-		return "Single";
-		break;
-	case ClearType::DOUBLE:
-		return "Double";
-		break;
-	case ClearType::TRIPLE:
-		return "Triple";
-		break;
-	case ClearType::TETRIS:
-		return "Tetris";
-		break;
-	case ClearType::TSPIN_MINI_NO:
-		return "T-Spin Mini";
-		break;
-	case ClearType::TSPIN_NO:
-		return "T-Spin";
-		break;
-	case ClearType::TSPIN_MINI_SINGLE:
-		return "T-Spin Mini Single";
-		break;
-	case ClearType::TSPIN_SINGLE:
-		return "T-Spin Single";
-		break;
-	case ClearType::TSPIN_MINI_DOUBLE:
-		return "T-Spin Mini Double";
-		break;
-	case ClearType::TSPIN_DOUBLE:
-		return "T-Spin Double";
-		break;
-	case ClearType::TSPIN_TRIPLE:
-		return "T-Spin Triple";
-		break;
-	case ClearType::COMBO:
-		return "Combo";
-		break;
-	case ClearType::SOFTDROP:
-		return "Soft Drop";
-		break;
-	case ClearType::HARDDROP:
-		return "Hard Drop";
-		break;
-	case ClearType::SINGLE_LINE_PC:
-		return "Single-Line PC";
-		break;
-	case ClearType::DOUBLE_LINE_PC:
-		return "Double-Line PC";
-		break;
-	case ClearType::TRIPLE_LINE_PC:
-		return "Triple-Line PC";
-		break;
-	case ClearType::TETRIS_PC:
-		return "Tetris PC";
-		break;
-	case ClearType::B2B_TETRIS_PC:
-		return "B2B Tetris PC";
-		break;
-	case ClearType::B2B_TETRIS:
-		return "B2B Tetris";
-		break;
-	case ClearType::B2B_TSPIN_MINI_SINGLE:
-		return "B2B T-Spin Mini Single";
-		break;
-	case ClearType::B2B_TSPIN_SINGLE:
-		return "B2B T-Spin Single";
-		break;
-	case ClearType::B2B_TSPIN_MINI_DOUBLE:
-		return "B2B T-Spin Mini Double";
-		break;
-	case ClearType::B2B_TSPIN_DOUBLE:
-		return "B2B T-Spin Double";
-		break;
-	case ClearType::B2B_TSPIN_TRIPLE:
-		return "B2B T-Spin Triple";
-		break;
-	case ClearType::B2B_PENTRIS_PC:
-		return "B2B Pentris PC";
-		break;
-	case ClearType::B2B_PENTRIS:
-		return "B2B Pentris";
-		break;
-	case ClearType::PENTRIS_PC:
-		return "Pentris PC";
-		break;
-	case ClearType::PENTRIS:
-		return "Pentris";
-		break;
-
-
-	default:
-		return "INVALID";
-		break;
-	}
+	return clearTypeStringMap.find(clearType)->second;
 }
 
 Tetromino& GameBase::nextPiece()
@@ -722,7 +586,6 @@ Tetromino& GameBase::nextPiece()
 	}
 
 	ghostPiece = currentPiecePtr->getGhost(board);
-	currentPiecePtr->setTransparency(150);
 	alreadyHold = false;
 	// If pieces have no possible move, game over
 	std::array <int, 4> possibleMovesCurrent = currentPiecePtr->firstPossibleMove(board);
@@ -908,7 +771,7 @@ int GameBase::getTSpinType(Tetromino piece, Board& board)
 		int x = piece.getXPos();
 		int y = piece.getYPos();
 
-	https://drive.google.com/file/d/1ev8Uo6qXt-oBwEoPyCPXUkOUkB4wh1QA/view?usp=sharing
+		https://drive.google.com/file/d/1ev8Uo6qXt-oBwEoPyCPXUkOUkB4wh1QA/view?usp=sharing
 		int ori = static_cast<int> (piece.getOrientation());
 		bool leftFrontCornerFilled = ori / 2 * 2 + y >= boardHeight || (ori + 1) % 4 / 2 * 2 + x >= boardWidth || ori / 2 * 2 + y < 0 || (ori + 1) % 4 / 2 * 2 + x < 0 || board.getBoard()[ori / 2 * 2 + y][(ori + 1) % 4 / 2 * 2 + x] > 0;
 		bool rightFrontCornerFilled = (ori + 1) % 4 / 2 * 2 + y >= boardHeight || (ori + 2) % 4 / 2 * 2 + x >= boardWidth || (ori + 1) % 4 / 2 * 2 + y < 0 || (ori + 2) % 4 / 2 * 2 + x < 0 || board.getBoard()[(ori + 1) % 4 / 2 * 2 + y][(ori + 2) % 4 / 2 * 2 + x] > 0;

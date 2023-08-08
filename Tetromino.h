@@ -5,6 +5,8 @@
  * \author Chau Le
  * \date   July 2021
  *********************************************************************/
+
+#pragma once
 #ifndef TETROMINO_H
 #define TETROMINO_H
 
@@ -24,15 +26,15 @@ enum class Rotational_Direction { CCW = -1, NORO = 0, CW = 1, R180 = 2 };
 enum class Moving_Direction { UP_DIR = 0, LEFT_DIR = 1, RIGHT_DIR = 2, DOWN_DIR = 3 };
 const static vector<Type> allPieces{ Type::Z, Type::L, Type::O, Type::S, Type::I, Type::J, Type::T };
 const static map<Type, Color> pieceColorMap {
-	{Type::Z, Color::Red},
-	{ Type::L, Color(255,165,0) },
-	{ Type::O, Color::Yellow },
-	{ Type::S, Color::Green },
-	{ Type::I, Color(173, 216, 230) },
-	{ Type::J, Color(0, 0, 139) },
-	{ Type::T, Color::Magenta }
+	{Type::Z, Color(255, 0, 0)},
+	{ Type::L, Color(255,74,2) },
+	{ Type::O, Color(255, 191, 0)},
+	{ Type::S, Color(0, 219, 100)},
+	{ Type::I, Color(0, 219, 255) },
+	{ Type::J, Color(0, 0, 124) },
+	{ Type::T, Color(241, 10, 249)}
 };
-
+ 
 
 const static std::array<std::array<std::array<int, 4>, 4>, 7> tetrominos = { {
 											{{  //Z block

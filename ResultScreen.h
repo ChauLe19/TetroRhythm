@@ -7,13 +7,12 @@
  * \date   August 2021
  *********************************************************************/
 
+#pragma once
 #ifndef RESULT_SCREEN_H
 #define RESULT_SCREEN_H
 #include "StateScreen.h"
 
 using namespace std;
-class GameBase;
-class DropToTheBeatGame;
 class ResultScreen :
 	public StateScreen
 {
@@ -29,16 +28,15 @@ private:
 	Text text;
 	Font font;
 public:
-	ResultScreen(int accuracyBeatCount[3], int rawScore, int combo);
+	ResultScreen(StateManager &stateManager, int accuracyBeatCount[3], int rawScore, int combo);
 	~ResultScreen();
 
 	// StateScreen functions
 	//****************************************************
-	void tick(State& state, RenderWindow& window);
+	void tick(RenderWindow& window);
 	void render(RenderWindow& window);
-	void keyEvent(State& state, Keyboard::Key key);
-	void keyEvent(State& state, Keyboard::Key key, GameBase*& game);
-	void mouseEvent(State& state, RenderWindow& window, Event event);
+	void keyEvent(Event event);
+	void mouseEvent(RenderWindow& window, Event event);
 
 };
 #endif

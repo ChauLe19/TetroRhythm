@@ -5,6 +5,7 @@
  * \author Chau Le
  * \date   August 2021
  *********************************************************************/
+#pragma once
 #ifndef ENDLESS_GAME_H
 #define ENDLESS_GAME_H
 
@@ -14,17 +15,15 @@ class EndlessGame :
 	public GameBase
 {
 public:
-	EndlessGame(Controls_Settings& settings);
-	EndlessGame(Controls_Settings& settings, string folderPath);
+	EndlessGame(StateManager &stateManager, string folderPath);
 	~EndlessGame();
 	//sf::Clock clock;
 	// Game Base functions
 	//************************************************
 
-	void tick(State& state, RenderWindow& window);
-	void tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr);
-	void keyEvent(State& state, Keyboard::Key key);
-	void mouseEvent(State& state, RenderWindow& window, Event event);
+	void tick(RenderWindow& window);
+	void keyEvent(Event event);
+	void mouseEvent(RenderWindow& window, Event event);
 	void render(RenderWindow& window);
 
 

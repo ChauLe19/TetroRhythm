@@ -1,7 +1,8 @@
 #include "GameOptions.h"
+#include "Menu.h"
 
-GameOptions::GameOptions(GameBase*& gamePtr, Controls_Settings& settings)
-	: gamePtr(gamePtr), settings(settings)
+GameOptions::GameOptions(StateManager& stateManager)
+	: StateScreen(stateManager)
 {
 	cursorMap = 0;
 	cursorMode = 0;
@@ -20,7 +21,7 @@ GameOptions::~GameOptions()
 {
 }
 
-void GameOptions::tick(State& state, RenderWindow& window)
+void GameOptions::tick(RenderWindow& window)
 {
 }
 
@@ -32,9 +33,9 @@ void GameOptions::render(RenderWindow& window)
 	text.setPosition(1024 - text.getLocalBounds().width / 2, 50);
 	window.draw(text);
 
-	drawGameModeOption(window, "Drop on Beat", 50, 500, cursorMode == 0);		// drop blocks on the beat receives bonus
-	drawGameModeOption(window, "Limited Time", 50, 700, cursorMode == 1);		// get the highest score in 2 min
-	drawGameModeOption(window, "Endless", 50, 900, cursorMode == 2);		// just play
+	drawGameModeOption(window, "Drop on Beat", 50, 300, cursorMode == 0);		// drop blocks on the beat receives bonus
+	drawGameModeOption(window, "Limited Time", 50, 500, cursorMode == 1);		// get the highest score in 2 min
+	drawGameModeOption(window, "Endless", 50, 700, cursorMode == 2);		// just play
 
 	CircleShape triangle(60, 3);
 	triangle.setScale(0.5, 0.5);
@@ -56,12 +57,13 @@ void GameOptions::render(RenderWindow& window)
 
 }
 
-void GameOptions::keyEvent(State& state, Keyboard::Key key)
+void GameOptions::keyEvent(Event event)
 {
-	switch (key)
+	if (event.type != Event::KeyPressed) return;
+	switch (event.key.code)
 	{
 	case Keyboard::Key::Escape:
-		state = State::MENU;
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::Enter:
 		if (!choosingMap) // if player is not choosing map (choosing mode), enter allow user to choose map
@@ -69,20 +71,23 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 			choosingMap = true;
 			return;
 		}
-		state = State::GAME;
-		delete gamePtr;
+		GameBase* gamePtr;
 		switch (cursorMode)
 		{
 		case 0:
-			gamePtr = new DropToTheBeatGame(settings, fs::absolute(maps[cursorMap]).string());
+			gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
 			break;
 		case 1:
-			gamePtr = new LimitedTimeGame(settings, fs::absolute(maps[cursorMap]).string());
+			gamePtr = new LimitedTimeGame(stateManager, fs::absolute(maps[cursorMap]).string());
 			break;
 		case 2:
-			gamePtr = new EndlessGame(settings, fs::absolute(maps[cursorMap]).string());
+			gamePtr = new EndlessGame(stateManager, fs::absolute(maps[cursorMap]).string());
+			break;
+		default:
+			gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
 			break;
 		}
+		stateManager.addState(std::unique_ptr<StateScreen>(gamePtr));
 		gamePtr->start();
 		break;
 	case Keyboard::Key::Up:
@@ -119,7 +124,7 @@ void GameOptions::keyEvent(State& state, Keyboard::Key key)
 	}
 }
 
-void GameOptions::mouseEvent(State& state, RenderWindow& window, Event event)
+void GameOptions::mouseEvent(RenderWindow& window, Event event)
 {
 }
 

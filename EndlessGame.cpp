@@ -1,10 +1,7 @@
 #include "EndlessGame.h"
 
 //TODO: speed depends on the song speed. the song speed up after every round
-EndlessGame::EndlessGame(Controls_Settings& settings) : GameBase(settings)
-{
-}
-EndlessGame::EndlessGame(Controls_Settings& settings, string folderPath) : GameBase(settings, folderPath)
+EndlessGame::EndlessGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
 {
 }
 
@@ -12,10 +9,10 @@ EndlessGame::~EndlessGame()
 {
 }
 
-void EndlessGame::tick(State& state, RenderWindow& window)
+void EndlessGame::tick(RenderWindow& window)
 {
 	if (isGameOver) return;
-	GameBase::tick(state, window);
+	GameBase::tick(window);
 	frameCount++;
 	// restart song if not game over
 	if (!isGameOver && sound.getStatus() == SoundSource::Status::Stopped)
@@ -59,19 +56,14 @@ void EndlessGame::tick(State& state, RenderWindow& window)
 	//}
 }
 
-void EndlessGame::tick(State& state, RenderWindow& window, ResultScreen*& resultScreenPtr)
+void EndlessGame::keyEvent(Event event)
 {
-	tick(state, window);
+	GameBase::keyEvent(event);
 }
 
-void EndlessGame::keyEvent(State& state, Keyboard::Key key)
+void EndlessGame::mouseEvent(RenderWindow& window, Event event)
 {
-	GameBase::keyEvent(state, key);
-}
-
-void EndlessGame::mouseEvent(State& state, RenderWindow& window, Event event)
-{
-	GameBase::mouseEvent(state, window, event);
+	GameBase::mouseEvent(window, event);
 }
 
 void EndlessGame::render(RenderWindow& window)

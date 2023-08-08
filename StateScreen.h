@@ -6,6 +6,7 @@
  * \date   July 2021
  *********************************************************************/
 
+#pragma once
 #ifndef STATE_SCREEN_H
 #define STATE_SCREEN_H
 
@@ -15,15 +16,20 @@
 
 using namespace sf;
 
+class StateManager;
 class StateScreen
 {
+protected:
+	StateManager &stateManager;
 public:
+	StateScreen(StateManager& stateManager);
+	~StateScreen();
 	/**
 	 * Life cycle function. Run each frame.
 	 *
 	 * \param window Rendering window
 	 */
-	virtual void tick(State& state, RenderWindow& window) = 0;
+	virtual void tick(RenderWindow& window) = 0;
 
 	/**
 	 * Function for drawing the screen.
@@ -39,19 +45,23 @@ public:
 	 *
 	 * \param key Was pressed
 	 */
-	virtual void keyEvent(State& state, Keyboard::Key key) = 0;
+	virtual void keyEvent(Event event) = 0;
 
 	/**
 	 * Function run when a mouse event is detected.
 	 *
 	 */
-	virtual void mouseEvent(State& state, RenderWindow& window, Event event) = 0;
+	virtual void mouseEvent(RenderWindow& window, Event event) = 0;
 	
 	/**
 	 * Function run when a mouse scroll event is detected.
 	 *
 	 */
 	virtual void mouseScrollEvent(Event event) {};
+
+	virtual void init() {};
+	virtual void pause() {};
+	virtual  void resume() {};
 };
 
 #endif

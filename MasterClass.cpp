@@ -1,16 +1,7 @@
 #include "MasterClass.h"
 MasterClass::MasterClass(RenderWindow& window)
 {
-	initKeys();
-	initConfig();
-	/*controlsSettings.keyMap = { Keyboard::Key::J, Keyboard::Key::L, Keyboard::Key::A, Keyboard::Key::F,
-		Keyboard::Key::S, Keyboard::Key::D, Keyboard::Key::I, Keyboard::Key::K };*/
-	this->menu = new Menu();
-	this->settings = new Settings(controlsSettings);
-	this->gameOptions = new GameOptions(game, controlsSettings);
-	this->mapEditorSelect = new MapEditorSelect(beatMapEditor);
 	int a[3] = { 0,0,0 };
-	this->resultScreen = new ResultScreen(a, 0, 0);
 	this->window = &window;
 	font.loadFromFile("arial.ttf");
 	text.setFont(font);
@@ -18,54 +9,23 @@ MasterClass::MasterClass(RenderWindow& window)
 	text.setFillColor(Color::White);
 	backgroundTexture.loadFromFile(backgroundImagePath);
 	backgroundSprite.setTexture(backgroundTexture);
+	this->stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 }
 
 MasterClass::~MasterClass()
 {
-	delete game;
-}
-
-void MasterClass::initKeys()
-{
-	ifstream keybindsStream("Config/Keybinds.txt");
-
-	if (keybindsStream.is_open())
-	{
-		string key = "";
-		int keyVal = 0;
-		while (keybindsStream >> key >> keyVal)
-		{
-			controlsSettings.keybinds[key] = Keyboard::Key(keyVal);
-		}
-	}
-}
-
-void MasterClass::initConfig()
-{
-	ifstream configStream("Config/Config.txt");
-
-	if (configStream.is_open())
-	{
-		string key = "";
-		int keyVal = 0;
-		while (configStream >> key >> keyVal)
-		{
-			if (key == "DAS")
-			{
-				controlsSettings.delayAutoShift = keyVal;
-			}
-			else if (key == "ARR")
-			{
-				controlsSettings.autoRepeatRate = keyVal;
-			}
-		}
-	}
+	delete this->window;
 }
 
 
 
 void MasterClass::run()
 {
+	static sf::Shader shader;
+	// if (!shader.loadFromFile("BeatShader.frag", sf::Shader::Fragment))
+	// {
+	//		std::cout << "error reading shader" << std::endl;
+	// }
 
 	while (window->isOpen())
 	{
@@ -82,18 +42,9 @@ void MasterClass::run()
 			if (event.type == Event::Closed)
 				window->close();
 
-			if (event.type == Event::KeyPressed)
+			if (event.type == Event::KeyPressed || event.type == Event::KeyReleased)
 			{
-				keyEvent(event.key.code);
-			}
-			else if (event.type == Event::MouseWheelMoved)
-			{
-				scrollEntered = true;
-				if (state == State::GAME && firstScroll)
-				{
-					firstScroll = false;
-					game->mouseScrollEvent(event);
-				}
+				keyEvent(event);
 			}
 			else if (event.type == Event::MouseButtonPressed || event.type == Event::MouseButtonReleased)
 			{
@@ -111,7 +62,7 @@ void MasterClass::run()
 
 
 		// Render and display
-		window->clear(Color::Black);
+		window->clear(Color(14, 60, 109));
 		window->draw(backgroundSprite);
 		window->draw(text);
 
@@ -124,110 +75,29 @@ void MasterClass::run()
 
 void MasterClass::render()
 {
-	switch (state)
-	{
-	case State::MENU:
-		menu->render(*window);
-		break;
-	case State::GAME:
-		game->render(*window);
-		break;
-	case State::GAME_OPTIONS:
-		gameOptions->render(*window);
-		break;
-	case State::SETTINGS:
-		settings->render(*window);
-		break;
-	case State::MAP_EDITOR_SELECT:
-		mapEditorSelect->render(*window);
-		break;
-	case State::MAP_EDITOR:
-		beatMapEditor->render(*window);
-		break;
-	case State::GAMEOVER:
-		resultScreen->render(*window);
-		break;
-	}
+	this->stateManager.getCurrentState().get()->render(*this->window);
 }
 
 
 void MasterClass::tick()
 {
-	switch (state)
-	{
-	case State::MENU:
-		menu->tick(state, *window);
-		break;
-	case State::GAME:
-		game->tick(state, *window, resultScreen);
-		break;
-	case State::MAP_EDITOR:
-		beatMapEditor->tick(state, *window);
-		break;
-	case State::GAMEOVER:
-		resultScreen->tick(state, *window);
-		break;
-	}
+	this->stateManager.getCurrentState().get()->tick(*this->window);
 }
 
-void MasterClass::keyEvent(Keyboard::Key key)
+void MasterClass::keyEvent(Event event)
 {
-	switch (state)
-	{
-	case State::MENU:
-		menu->keyEvent(state, key);
-		break;
-	case State::GAME_OPTIONS:
-		gameOptions->keyEvent(state, key);
-		break;
-	case State::SETTINGS:
-		settings->keyEvent(state, key);
-		break;
-	case State::GAME:
-		game->keyEvent(state, key);
-		break;
-	case State::MAP_EDITOR_SELECT:
-		mapEditorSelect->keyEvent(state, key);
-		break;
-	case State::MAP_EDITOR:
-		beatMapEditor->keyEvent(state, key);
-		break;
-	case State::GAMEOVER:
-		resultScreen->keyEvent(state, key, game);
-		break;
-	}
+	this->stateManager.getCurrentState().get()->keyEvent(event);
 }
 
 void MasterClass::mouseEvent(Event event)
 {
-	switch (state)
-	{
-	case State::MENU:
-		menu->mouseEvent(state, *window, event);
-		break;
-	case State::GAME_OPTIONS:
-		gameOptions->mouseEvent(state, *window, event);
-		break;
-	case State::SETTINGS:
-		break;
-	case State::GAME:
-		game->mouseEvent(state, *window, event);
-		break;
-	case State::MAP_EDITOR_SELECT:
-		break;
-	case State::MAP_EDITOR:
-		beatMapEditor->mouseEvent(state, *window, event);
-		break;
-	case State::GAMEOVER:
-		resultScreen->mouseEvent(state, *window, event);
-		break;
-	}
+	this->stateManager.getCurrentState().get()->mouseEvent(*window, event);
 }
 
-void MasterClass::openBeatMapEditor(string folderPath)
-{
-	if (state == State::MAP_EDITOR_SELECT)
-	{
-		mapEditorSelect->openBeatMapEditor(state, folderPath);
-	}
-}
+// void MasterClass::openBeatMapEditor(string folderPath)
+// {
+// 	if (state == State::MAP_EDITOR_SELECT)
+// 	{
+// 		mapEditorSelect->openBeatMapEditor(state, folderPath);
+// 	}
+// }

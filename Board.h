@@ -6,6 +6,7 @@
  * \date   July 2021
  *********************************************************************/
 
+#pragma once
 #ifndef BOARD_H
 #define BOARD_H
 
@@ -157,6 +158,8 @@ public:
 	 * Print out array representation of board in the console.
 	 */
 	void print();
+
+	void clearBoard();
 
 	int getXPos();
 	int getYPos();
