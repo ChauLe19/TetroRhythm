@@ -38,7 +38,7 @@ void Menu::keyEvent(Event event)
 	if (event.type != Event::KeyPressed) return;
 	switch (event.key.code)
 	{
-	case Keyboard::Key::Enter:
+	case Keyboard::Key::Return:
 		stateManager.addState(std::unique_ptr<StateScreen>(new GameOptions(stateManager)));
 		break;
 	case Keyboard::Key::C:

@@ -65,7 +65,7 @@ void GameOptions::keyEvent(Event event)
 	case Keyboard::Key::Escape:
 		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
-	case Keyboard::Key::Enter:
+	case Keyboard::Key::Return:
 		if (!choosingMap) // if player is not choosing map (choosing mode), enter allow user to choose map
 		{
 			choosingMap = true;

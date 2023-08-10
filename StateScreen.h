@@ -12,7 +12,6 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Enums.h"
 
 using namespace sf;
 

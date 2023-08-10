@@ -15,7 +15,6 @@
 #include "EndlessGame.h"
 #include "LimitedTimeGame.h"
 #include "Settings.h"
-#include "AutoDropGame.h"
 #include "ResultScreen.h"
 #include "Enums.h"
 

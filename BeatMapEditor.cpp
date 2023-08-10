@@ -1,4 +1,5 @@
 #include "BeatMapEditor.h"
+#include "Menu.h"
 
 BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : StateScreen(stateManager)
 {

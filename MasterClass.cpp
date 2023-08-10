@@ -14,7 +14,6 @@ MasterClass::MasterClass(RenderWindow& window)
 
 MasterClass::~MasterClass()
 {
-	delete this->window;
 }
 
 

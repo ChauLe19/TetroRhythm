@@ -19,37 +19,36 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>16.0</VCProjectVersion>
+    <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{4a39d4b3-f4e4-499b-bdb9-7fa3964b4b62}</ProjectGuid>
-    <RootNamespace>TetroRythm</RootNamespace>
+    <ProjectGuid>{657f8f7e-6c4e-4354-aff8-b1a10942c274}</ProjectGuid>
+    <RootNamespace>TetroRhythm</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>TetroRhythm</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -71,33 +70,17 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\ASUS\Documents\CPP_libs\SFML-2.5.1\include</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\ASUS\Documents\CPP_libs\SFML-2.5.1\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -108,17 +91,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\ASUS\Documents\CPP_libs\SFML-2.5.1\include</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\ASUS\Documents\CPP_libs\SFML-2.5.1\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-system.lib;sfml-audio.lib;sfml-network.lib;opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;ws2_32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -127,6 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,68 +129,96 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AutoDropGame.cpp" />
+    <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="BeatMapEditor.h" />
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="DropToTheBeatGame.h" />
+    <ClInclude Include="EndlessGame.h" />
+    <ClInclude Include="Enums.h" />
+    <ClInclude Include="GameBase.h" />
+    <ClInclude Include="GameOptions.h" />
+    <ClInclude Include="GameSettings.h" />
+    <ClInclude Include="LimitedTimeGame.h" />
+    <ClInclude Include="MapEditorSelect.h" />
+    <ClInclude Include="MasterClass.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="MiniBpm.h" />
+    <ClInclude Include="ResultScreen.h" />
+    <ClInclude Include="Settings.h" />
+    <ClInclude Include="StateManager.h" />
+    <ClInclude Include="StateScreen.h" />
+    <ClInclude Include="Tetromino.h" />
+    <ClInclude Include="Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="BeatMapEditor.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="DropToTheBeatGame.cpp" />
     <ClCompile Include="EndlessGame.cpp" />
+    <ClCompile Include="GameBase.cpp" />
+    <ClCompile Include="GameOptions.cpp" />
+    <ClCompile Include="GameSettings.cpp" />
     <ClCompile Include="LimitedTimeGame.cpp" />
     <ClCompile Include="MapEditorSelect.cpp" />
+    <ClCompile Include="MasterClass.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MiniBpm.cpp" />
     <ClCompile Include="ResultScreen.cpp" />
     <ClCompile Include="Settings.cpp" />
-    <ClCompile Include="GameBase.cpp" />
-    <ClCompile Include="GameOptions.cpp" />
-    <ClCompile Include="MasterClass.cpp" />
-    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="StateScreen.cpp" />
     <ClCompile Include="Tetromino.cpp" />
     <ClCompile Include="TetroRhythm.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AutoDropGame.h" />
-    <ClInclude Include="BeatMapEditor.h" />
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="DropToTheBeatGame.h" />
-    <ClInclude Include="EndlessGame.h" />
-    <ClInclude Include="LimitedTimeGame.h" />
-    <ClInclude Include="MapEditorSelect.h" />
-    <ClInclude Include="MiniBpm.h" />
-    <ClInclude Include="ResultScreen.h" />
-    <ClInclude Include="Settings.h" />
-    <ClInclude Include="Enums.h" />
-    <ClInclude Include="GameBase.h" />
-    <ClInclude Include="GameOptions.h" />
-    <ClInclude Include="MasterClass.h" />
-    <ClInclude Include="Menu.h" />
-    <ClInclude Include="StateScreen.h" />
-    <ClInclude Include="Tetromino.h" />
-    <ClInclude Include="Utils.h" />
+    <Image Include="Images\background.png" />
+    <Image Include="Images\tiles-2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="frame.png" />
-    <Image Include="tiles.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="arial.ttf" />
-    <Font Include="Dense-Regular.otf" />
-    <Font Include="times-new-roman-bold.otf" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Tetris_theme.ogg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="output.txt" />
-    <Text Include="Tetris_theme - Hard.txt" />
-    <Text Include="Tetris_theme.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="Tetris_theme.wav" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\sfml-graphics.redist.2.4.2.0\build\native\sfml-graphics.redist.targets" Condition="Exists('packages\sfml-graphics.redist.2.4.2.0\build\native\sfml-graphics.redist.targets')" />
+    <Import Project="packages\sfml-system.redist.2.4.2.0\build\native\sfml-system.redist.targets" Condition="Exists('packages\sfml-system.redist.2.4.2.0\build\native\sfml-system.redist.targets')" />
+    <Import Project="packages\sfml-system.2.4.2.0\build\native\sfml-system.targets" Condition="Exists('packages\sfml-system.2.4.2.0\build\native\sfml-system.targets')" />
+    <Import Project="packages\sfml-window.redist.2.4.2.0\build\native\sfml-window.redist.targets" Condition="Exists('packages\sfml-window.redist.2.4.2.0\build\native\sfml-window.redist.targets')" />
+    <Import Project="packages\sfml-window.2.4.2.0\build\native\sfml-window.targets" Condition="Exists('packages\sfml-window.2.4.2.0\build\native\sfml-window.targets')" />
+    <Import Project="packages\sfml-graphics.2.4.2.0\build\native\sfml-graphics.targets" Condition="Exists('packages\sfml-graphics.2.4.2.0\build\native\sfml-graphics.targets')" />
+    <Import Project="packages\sfml-audio.redist.2.4.2.0\build\native\sfml-audio.redist.targets" Condition="Exists('packages\sfml-audio.redist.2.4.2.0\build\native\sfml-audio.redist.targets')" />
+    <Import Project="packages\sfml-audio.2.4.2.0\build\native\sfml-audio.targets" Condition="Exists('packages\sfml-audio.2.4.2.0\build\native\sfml-audio.targets')" />
+    <Import Project="packages\sfml_system.redist.2.6.0\build\native\sfml_system.redist.targets" Condition="Exists('packages\sfml_system.redist.2.6.0\build\native\sfml_system.redist.targets')" />
+    <Import Project="packages\sfml_system.2.6.0\build\native\sfml_system.targets" Condition="Exists('packages\sfml_system.2.6.0\build\native\sfml_system.targets')" />
+    <Import Project="packages\sfml_window.redist.2.6.0\build\native\sfml_window.redist.targets" Condition="Exists('packages\sfml_window.redist.2.6.0\build\native\sfml_window.redist.targets')" />
+    <Import Project="packages\sfml_window.2.6.0\build\native\sfml_window.targets" Condition="Exists('packages\sfml_window.2.6.0\build\native\sfml_window.targets')" />
+    <Import Project="packages\sfml_graphics.redist.2.6.0\build\native\sfml_graphics.redist.targets" Condition="Exists('packages\sfml_graphics.redist.2.6.0\build\native\sfml_graphics.redist.targets')" />
+    <Import Project="packages\sfml_graphics.2.6.0\build\native\sfml_graphics.targets" Condition="Exists('packages\sfml_graphics.2.6.0\build\native\sfml_graphics.targets')" />
+    <Import Project="packages\sfml_audio.redist.2.6.0\build\native\sfml_audio.redist.targets" Condition="Exists('packages\sfml_audio.redist.2.6.0\build\native\sfml_audio.redist.targets')" />
+    <Import Project="packages\sfml_audio.2.6.0\build\native\sfml_audio.targets" Condition="Exists('packages\sfml_audio.2.6.0\build\native\sfml_audio.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\sfml-graphics.redist.2.4.2.0\build\native\sfml-graphics.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-graphics.redist.2.4.2.0\build\native\sfml-graphics.redist.targets'))" />
+    <Error Condition="!Exists('packages\sfml-system.redist.2.4.2.0\build\native\sfml-system.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-system.redist.2.4.2.0\build\native\sfml-system.redist.targets'))" />
+    <Error Condition="!Exists('packages\sfml-system.2.4.2.0\build\native\sfml-system.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-system.2.4.2.0\build\native\sfml-system.targets'))" />
+    <Error Condition="!Exists('packages\sfml-window.redist.2.4.2.0\build\native\sfml-window.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-window.redist.2.4.2.0\build\native\sfml-window.redist.targets'))" />
+    <Error Condition="!Exists('packages\sfml-window.2.4.2.0\build\native\sfml-window.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-window.2.4.2.0\build\native\sfml-window.targets'))" />
+    <Error Condition="!Exists('packages\sfml-graphics.2.4.2.0\build\native\sfml-graphics.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-graphics.2.4.2.0\build\native\sfml-graphics.targets'))" />
+    <Error Condition="!Exists('packages\sfml-audio.redist.2.4.2.0\build\native\sfml-audio.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-audio.redist.2.4.2.0\build\native\sfml-audio.redist.targets'))" />
+    <Error Condition="!Exists('packages\sfml-audio.2.4.2.0\build\native\sfml-audio.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml-audio.2.4.2.0\build\native\sfml-audio.targets'))" />
+    <Error Condition="!Exists('packages\sfml_system.redist.2.6.0\build\native\sfml_system.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml_system.redist.2.6.0\build\native\sfml_system.redist.targets'))" />
+    <Error Condition="!Exists('packages\sfml_system.2.6.0\build\native\sfml_system.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml_system.2.6.0\build\native\sfml_system.targets'))" />
+    <Error Condition="!Exists('packages\sfml_window.redist.2.6.0\build\native\sfml_window.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml_window.redist.2.6.0\build\native\sfml_window.redist.targets'))" />
+    <Error Condition="!Exists('packages\sfml_window.2.6.0\build\native\sfml_window.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml_window.2.6.0\build\native\sfml_window.targets'))" />
+    <Error Condition="!Exists('packages\sfml_graphics.redist.2.6.0\build\native\sfml_graphics.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml_graphics.redist.2.6.0\build\native\sfml_graphics.redist.targets'))" />
+    <Error Condition="!Exists('packages\sfml_graphics.2.6.0\build\native\sfml_graphics.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml_graphics.2.6.0\build\native\sfml_graphics.targets'))" />
+    <Error Condition="!Exists('packages\sfml_audio.redist.2.6.0\build\native\sfml_audio.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml_audio.redist.2.6.0\build\native\sfml_audio.redist.targets'))" />
+    <Error Condition="!Exists('packages\sfml_audio.2.6.0\build\native\sfml_audio.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sfml_audio.2.6.0\build\native\sfml_audio.targets'))" />
+  </Target>
 </Project>

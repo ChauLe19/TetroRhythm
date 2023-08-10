@@ -1,4 +1,5 @@
 #include "MapEditorSelect.h"
+#include "Menu.h"
 
 
 MapEditorSelect::MapEditorSelect(StateManager &stateManager) : StateScreen(stateManager)
@@ -74,7 +75,7 @@ void MapEditorSelect::keyEvent(Event event)
 	Keyboard::Key key = event.key.code;
 	switch (key)
 	{
-	case Keyboard::Key::Enter:
+	case Keyboard::Key::Return:
 		stateManager.addState(std::unique_ptr<StateScreen>(new BeatMapEditor(stateManager, fs::absolute(maps[cursor]).string())));
 		break;
 	case Keyboard::Key::Escape:
@@ -91,10 +92,4 @@ void MapEditorSelect::keyEvent(Event event)
 
 void MapEditorSelect::mouseEvent(RenderWindow& window, Event event)
 {
-}
-
-void MapEditorSelect::openBeatMapEditor(string folderPath)
-{
-	BeatMapEditor *mapEditor = new BeatMapEditor(stateManager, folderPath);
-	stateManager.addState(std::unique_ptr<StateScreen>(mapEditor));
 }

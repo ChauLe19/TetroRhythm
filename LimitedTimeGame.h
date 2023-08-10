@@ -5,6 +5,7 @@
  * \author Chau Le
  * \date   August 2021
  *********************************************************************/
+#pragma once
 #ifndef LIMITED_TIME_GAME_H
 #define LIMITED_TIME_GAME_H
 

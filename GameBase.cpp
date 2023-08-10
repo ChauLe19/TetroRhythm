@@ -1,5 +1,4 @@
 #include "GameBase.h"
-#include "ResultScreen.h"
 #include "Menu.h"
 
 GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme")
@@ -228,76 +227,80 @@ void GameBase::mouseEvent(RenderWindow& window, Event event)
 		if (event.type == sf::Event::MouseButtonReleased)
 		{
 			locked = false; // Reset
-			Vertex firstPoint = inputVertex[0];
-			Vertex lastPoint = inputVertex[inputVertex.getVertexCount() - 1];
-			int xDir = lastPoint.position.x - firstPoint.position.x;
-			int yDir = lastPoint.position.y - firstPoint.position.y;
-			Moving_Direction mouseDirection = Moving_Direction::UP_DIR;
-			
-			int XorYdir = max(abs(xDir), abs(yDir));
-			if (XorYdir >= 50) // only register input if it's long enough
+			if (inputVertex.getVertexCount() >= 2)
 			{
-				if (XorYdir == abs(xDir))// favor x direction
+
+				Vertex firstPoint = inputVertex[0];
+				Vertex lastPoint = inputVertex[inputVertex.getVertexCount() - 1];
+				int xDir = lastPoint.position.x - firstPoint.position.x;
+				int yDir = lastPoint.position.y - firstPoint.position.y;
+				Moving_Direction mouseDirection = Moving_Direction::UP_DIR;
+				
+				int XorYdir = max(abs(xDir), abs(yDir));
+				if (XorYdir >= 50) // only register input if it's long enough
 				{
-					if (xDir > 0) // mouse move right
+					if (XorYdir == abs(xDir))// favor x direction
 					{
-						mouseDirection = Moving_Direction::RIGHT_DIR;
-					}
-					else if (xDir < 0)
-					{
-						mouseDirection = Moving_Direction::LEFT_DIR;
-					}
-				}
-				else // favor y direction
-				{
-					if (yDir > 0)
-					{
-						mouseDirection = Moving_Direction::DOWN_DIR;
-					}
-					else if (yDir < 0)
-					{
-						mouseDirection = Moving_Direction::UP_DIR;
-					}
-				}
-
-				int minX = -currentPiecePtr->getMinX();
-				int minY = -currentPiecePtr->getMinY();
-				int maxX = 9 - currentPiecePtr->getMaxX();
-				int maxY = 9 - currentPiecePtr->getMaxY();
-				// x - 1, y - 1 to offset to center of the piece
-				int x = std::floor((firstPoint.position.x - boardX) / boardSquareSize);
-				int y = std::floor((firstPoint.position.y - boardY) / boardSquareSize);
-
-				std::cout << x << ":" << y << "=" << static_cast<int> (mouseDirection) << std::endl;
-
-				bool possible = currentPiecePtr->setPiece(x, y, mouseDirection, board);
-
-				if (possible) // if set piece sucessfully, move to next piece
-				{
-					if (prevPiecePtr != nullptr)
-					{
-						//cout << "Clearing" << endl;
-						// TODO: copy board before clear, is this optimized???
-						Board tempBoard = board;
-						ClearingInfo tempClearingInfo = board.clearLines();
-						linesCleared += tempClearingInfo.linesCleared;
-						level = clamp(linesCleared / 10 + 1, 1, 15);
-						ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-
-						//update clear type everytime the play drop a piece
-						recentClearType = tempScoresType;
-
-						//update clear type only when the dropped piece clear lines
-						// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
-						if (tempScoresType != ClearType::NONE)
+						if (xDir > 0) // mouse move right
 						{
-							prevClearType = tempScoresType;
-							clearTypeCounter = 60; // 1 second display
+							mouseDirection = Moving_Direction::RIGHT_DIR;
 						}
-						score += GameBase::convertClearTypeToScores(tempScoresType);
+						else if (xDir < 0)
+						{
+							mouseDirection = Moving_Direction::LEFT_DIR;
+						}
+					}
+					else // favor y direction
+					{
+						if (yDir > 0)
+						{
+							mouseDirection = Moving_Direction::DOWN_DIR;
+						}
+						else if (yDir < 0)
+						{
+							mouseDirection = Moving_Direction::UP_DIR;
+						}
 					}
 
-					nextPiece();
+					int minX = -currentPiecePtr->getMinX();
+					int minY = -currentPiecePtr->getMinY();
+					int maxX = 9 - currentPiecePtr->getMaxX();
+					int maxY = 9 - currentPiecePtr->getMaxY();
+					// x - 1, y - 1 to offset to center of the piece
+					int x = std::floor((firstPoint.position.x - boardX) / boardSquareSize);
+					int y = std::floor((firstPoint.position.y - boardY) / boardSquareSize);
+
+					std::cout << x << ":" << y << "=" << static_cast<int> (mouseDirection) << std::endl;
+
+					bool possible = currentPiecePtr->setPiece(x, y, mouseDirection, board);
+
+					if (possible) // if set piece sucessfully, move to next piece
+					{
+						if (prevPiecePtr != nullptr)
+						{
+							//cout << "Clearing" << endl;
+							// TODO: copy board before clear, is this optimized???
+							Board tempBoard = board;
+							ClearingInfo tempClearingInfo = board.clearLines();
+							linesCleared += tempClearingInfo.linesCleared;
+							level = clamp(linesCleared / 10 + 1, 1, 15);
+							ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+
+							//update clear type everytime the play drop a piece
+							recentClearType = tempScoresType;
+
+							//update clear type only when the dropped piece clear lines
+							// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
+							if (tempScoresType != ClearType::NONE)
+							{
+								prevClearType = tempScoresType;
+								clearTypeCounter = 60; // 1 second display
+							}
+							score += GameBase::convertClearTypeToScores(tempScoresType);
+						}
+
+						nextPiece();
+					}
 				}
 			}
 			inputVertex.clear();
@@ -585,7 +588,6 @@ Tetromino& GameBase::nextPiece()
 		}
 	}
 
-	ghostPiece = currentPiecePtr->getGhost(board);
 	alreadyHold = false;
 	// If pieces have no possible move, game over
 	std::array <int, 4> possibleMovesCurrent = currentPiecePtr->firstPossibleMove(board);

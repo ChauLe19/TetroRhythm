@@ -15,6 +15,7 @@
 #include "Utils.h"
 #include "Button.h"
 #include "MiniBpm.h"
+
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -25,7 +26,6 @@
 #include <filesystem>
 #include <stdlib.h>
 #include "StateManager.h"
-#include "Menu.h"
 
 
 using namespace std;

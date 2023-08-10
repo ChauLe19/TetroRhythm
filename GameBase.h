@@ -9,14 +9,6 @@
 #ifndef GAME_BASE_H
 #define GAME_BASE_H
 
-#include "Board.h"
-#include "Settings.h"
-#include "Tetromino.h"
-#include "StateScreen.h"
-#include "ResultScreen.h"
-#include "StateManager.h"
-#include "Utils.h"
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <list>
@@ -30,12 +22,16 @@
 #include <string>
 #include <filesystem>
 
+#include "Board.h"
+#include "Tetromino.h"
+#include "StateScreen.h"
+#include "StateManager.h"
+#include "GameSettings.h"
+
 #define inputThickness 5
 
 using namespace sf;
 namespace fs = std::filesystem;
-
-class ResultScreen;
 
 //const int boardX = 1024- 45*5;
 const int boardX = 1024 - 90 * 5;

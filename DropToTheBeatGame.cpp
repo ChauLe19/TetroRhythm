@@ -1,4 +1,5 @@
 #include "DropToTheBeatGame.h"
+#include "ResultScreen.h"
 
 DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
 {

@@ -45,7 +45,7 @@ void Settings::keyEvent(Event event)
 	case Keyboard::Key::Up:
 		setCursor(cursor - 1);
 		break;
-	case Keyboard::Key::Enter:
+	case Keyboard::Key::Return:
 		isChanging = true;
 		break;
 	}
@@ -124,7 +124,7 @@ bool Settings::changeKey(Keyboard::Key key)
 			settings.delayAutoShift--;
 			return true;
 		}
-		else if (key == Keyboard::Key::Enter)
+		else if (key == Keyboard::Key::Return)
 		{
 			isChanging = false;
 			return true;
@@ -143,7 +143,7 @@ bool Settings::changeKey(Keyboard::Key key)
 			settings.autoRepeatRate--;
 			return true;
 		}
-		else if (key == Keyboard::Key::Enter)
+		else if (key == Keyboard::Key::Return)
 		{
 			isChanging = false;
 			return true;

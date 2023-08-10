@@ -1,4 +1,5 @@
 #include "LimitedTimeGame.h"
+#include "Utils.h"
 
 //TODO: speed depends on the song speed. the song speed up after every round
 LimitedTimeGame::LimitedTimeGame(StateManager& stateManager, string folderPath) : GameBase(stateManager, folderPath)

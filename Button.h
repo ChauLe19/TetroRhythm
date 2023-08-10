@@ -1,4 +1,6 @@
 #pragma once
+#ifndef BUTTON_H
+#define BUTTON_H
 #include <SFML/Graphics.hpp>
 #include "Utils.h"
 
@@ -24,4 +26,4 @@ public:
 	bool mouseInButton(RenderWindow& window);
 
 };
-
+#endif

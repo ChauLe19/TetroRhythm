@@ -1,8 +1,9 @@
 #pragma once
+#include <memory>
 #include "StateScreen.h"
-#include "Enums.h"
-#include "BeatMapEditor.h"
 #include "StateManager.h"
+#include "BeatMapEditor.h"
+
 class MapEditorSelect : public StateScreen
 {
 private:
@@ -22,7 +23,6 @@ public:
 	void mouseEvent(RenderWindow& window, Event event);
 
 
-	void openBeatMapEditor(string folderPath);
 	void drawOptions(RenderWindow& window, string options, int x, int y, bool isHighlight);
 };
 
