@@ -148,7 +148,13 @@
     <Image Include="Images\background.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Images\tiles-2.png">
+    <Image Include="Images\tiles.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\frame.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\button.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -6,8 +6,7 @@ GameOptions::GameOptions(StateManager& stateManager)
 {
 	cursorMap = 0;
 	cursorMode = 0;
-	font.loadFromFile("Dense-Regular.otf");
-	text.setFont(font);
+	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
 
 	std::string path = "BeatMaps";

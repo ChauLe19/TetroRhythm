@@ -11,6 +11,7 @@
 #define STATE_SCREEN_H
 
 #include <SFML/Graphics.hpp>
+#include "AssetManager.h"
 
 
 using namespace sf;
@@ -20,6 +21,7 @@ class StateScreen
 {
 protected:
 	StateManager &stateManager;
+	AssetManager* assetManager = AssetManager::getInstance();
 public:
 	StateScreen(StateManager& stateManager);
 	~StateScreen();

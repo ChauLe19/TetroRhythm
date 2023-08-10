@@ -81,7 +81,7 @@ public:
 	 */
 	void mouseEvent(Event event);
 
-	// void openBeatMapEditor(string folderPath);
+	void loadResources();
 
 };
 

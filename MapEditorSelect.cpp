@@ -4,8 +4,7 @@
 
 MapEditorSelect::MapEditorSelect(StateManager &stateManager) : StateScreen(stateManager)
 {
-	font.loadFromFile("Dense-Regular.otf");
-	text.setFont(font);
+	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
 
 

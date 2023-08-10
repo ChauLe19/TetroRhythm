@@ -1,28 +1,19 @@
 #include "Tetromino.h"
+#include "AssetManager.h"
 
 Tetromino::Tetromino(Type type)
 {
 	this->type = type;
-	cellsTexture.loadFromFile("Images/tiles-2.png");
-	cellImage.setTexture(cellsTexture);
+	cellImage.setTexture(AssetManager::getInstance()->getTexture("tiles"));
 	int halfSquareSize = squareSize / 2;
 	cellImage.setTextureRect(IntRect(static_cast<int>(type) * halfSquareSize, 0, halfSquareSize, halfSquareSize));
-	// TODO: Check if this copied
 	this->cells = tetrominos[static_cast<int>(type)];
 }
 
-Tetromino::Tetromino(Type type, bool isGhost)
+Tetromino::Tetromino(Type type, bool isGhost) : Tetromino(type)
 {
-	this->type = type;
-	cellsTexture.loadFromFile("Images/tiles-2.png");
-	cellImage.setTexture(cellsTexture);
 	if (isGhost)
 		cellImage.setColor(Color(255, 255, 255, 100));
-	int halfSquareSize = squareSize / 2;
-	cellImage.setTextureRect(IntRect(static_cast<int>(type) * halfSquareSize, 0, halfSquareSize, halfSquareSize));
-	// TODO: Check if this copied
-	this->cells = tetrominos[static_cast<int>(type)];
-
 }
 
 Tetromino::~Tetromino()

@@ -3,8 +3,7 @@
 
 BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : StateScreen(stateManager)
 {
-	font.loadFromFile("Dense-Regular.otf");
-	text.setFont(font);
+	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
 	speedButton025 = new Button(Color::Black, 35, Color::White, "x0.25\n(Press 2)", 1500, 300, 100, 70, Keyboard::Key::Num2);
 	speedButton050 = new Button(Color::Black, 35, Color::White, "x0.50\n(Press 5)", 1650, 300, 100, 70, Keyboard::Key::Num5);

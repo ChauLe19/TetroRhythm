@@ -4,8 +4,7 @@
 
 ResultScreen::ResultScreen(StateManager& stateManager, int accuracyBeatCount[3], int rawScore, int combo) : StateScreen(stateManager)
 {
-	font.loadFromFile("Dense-Regular.otf");
-	text.setFont(font);
+	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
 	if (2 * (accuracyBeatCount[0] + accuracyBeatCount[1] + accuracyBeatCount[2]) != 0) 
 		accuracy = ((float)accuracyBeatCount[1] + 2.0 * (float)accuracyBeatCount[2]) * 100.0 / (2.0 * ((float)accuracyBeatCount[0] + (float)accuracyBeatCount[1] + (float)accuracyBeatCount[2])) ;

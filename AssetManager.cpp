@@ -1,11 +1,22 @@
 #include "AssetManager.h"
 
+AssetManager* AssetManager::assetManager;
+
 AssetManager::AssetManager()
 {
 }
 
 AssetManager::~AssetManager()
 {
+}
+
+AssetManager* AssetManager::getInstance()
+{
+	if (assetManager == nullptr)
+	{
+		assetManager = new AssetManager();
+	}
+	return assetManager;
 }
 
 void AssetManager::loadTexture(std::string name, std::string filename)

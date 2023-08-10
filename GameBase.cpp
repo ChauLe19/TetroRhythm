@@ -6,8 +6,7 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 {
 	cout << "Initializing game" << endl;
 
-	font.loadFromFile("Dense-Regular.otf");
-	text.setFont(font);
+	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
 
 	// load both shaders

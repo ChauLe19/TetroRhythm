@@ -1,14 +1,14 @@
 #include "MasterClass.h"
+#include "AssetManager.h"
 MasterClass::MasterClass(RenderWindow& window)
 {
-	int a[3] = { 0,0,0 };
 	this->window = &window;
-	font.loadFromFile("arial.ttf");
-	text.setFont(font);
+	loadResources();
+
+	text.setFont(AssetManager::getInstance()->getFont("main font"));
 	text.setCharacterSize(20);
 	text.setFillColor(Color::White);
-	backgroundTexture.loadFromFile(backgroundImagePath);
-	backgroundSprite.setTexture(backgroundTexture);
+	backgroundSprite.setTexture(AssetManager::getInstance()->getTexture("background"));
 	this->stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 }
 
@@ -93,10 +93,18 @@ void MasterClass::mouseEvent(Event event)
 	this->stateManager.getCurrentState().get()->mouseEvent(*window, event);
 }
 
-// void MasterClass::openBeatMapEditor(string folderPath)
-// {
-// 	if (state == State::MAP_EDITOR_SELECT)
-// 	{
-// 		mapEditorSelect->openBeatMapEditor(state, folderPath);
-// 	}
-// }
+void MasterClass::loadResources()
+{
+	AssetManager *assetManager = AssetManager::getInstance();
+
+	// load fonts
+	assetManager->loadFont("main font", "arial.ttf");
+	assetManager->loadFont("game font", "Dense-Regular.otf");
+
+	// load textures
+	assetManager->loadTexture("background", backgroundImagePath);
+	assetManager->loadTexture("frame", "Images/frame.png");
+	assetManager->loadTexture("tiles", "Images/tiles.png");
+	assetManager->loadTexture("button", "Images/button.png");
+
+}

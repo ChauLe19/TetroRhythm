@@ -1,24 +1,18 @@
 #include "Board.h"
-Board::Board(int xPos, int yPos)
+#include "AssetManager.h"
+Board::Board(int xPos, int yPos) : Board()
 {
 	this->xPos = xPos;
 	this->yPos = yPos;
-	frameTexture.loadFromFile("Images/frame.png");
-	image.setTexture(frameTexture);
 	image.setScale(4, 4);
 	image.setPosition((float)xPos, (float)yPos);
-	cellsTexture.loadFromFile("Images/tiles-2.png");
-	cellImage.setTexture(cellsTexture);
 
 }
 
 Board::Board()
 {
-	frameTexture.loadFromFile("Images/frame flat.png");
-	image.setTexture(frameTexture);
-	image.setPosition((float)0, (float)0);
-	cellsTexture.loadFromFile("Images/tiles-2.png");
-	cellImage.setTexture(cellsTexture);
+	image.setTexture(AssetManager::getInstance()->getTexture("frame"));
+	cellImage.setTexture(AssetManager::getInstance()->getTexture("tiles"));
 }
 
 Board::~Board()

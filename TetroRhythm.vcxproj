@@ -176,7 +176,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Images\background.png" />
-    <Image Include="Images\tiles-2.png" />
+    <Image Include="Images\button.png" />
+    <Image Include="Images\frame.png" />
+    <Image Include="Images\tiles.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
