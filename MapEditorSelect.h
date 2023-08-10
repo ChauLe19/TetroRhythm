@@ -8,7 +8,6 @@ class MapEditorSelect : public StateScreen
 {
 private:
 	Text text;
-	Font font;
 	vector<fs::path> maps;
 	int cursor;
 public:

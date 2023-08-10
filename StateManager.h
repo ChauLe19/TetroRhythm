@@ -16,7 +16,6 @@ public:
 
 	void addState(std::unique_ptr<StateScreen> addState, bool isReplacing = true);
 	void removeState();
-	void processStateChanges();
 	std::unique_ptr<StateScreen>& getCurrentState();
 
 };

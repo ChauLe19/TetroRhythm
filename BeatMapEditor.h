@@ -37,9 +37,6 @@ class BeatMapEditor : public StateScreen
 private:
 	Sound sound;
 	SoundBuffer buffer;
-	ifstream inFile;
-	ofstream outFile;
-	Font font;
 	Text text;
 	Button* speedButton025;
 	Button* speedButton050;
@@ -61,7 +58,6 @@ private:
 	int sliderHeight = 100;
 public:
 	BeatMapEditor(StateManager &stateManager, string folderPath);
-	BeatMapEditor(StateManager &stateManager, string audioFilePath, string textFilePath);
 	~BeatMapEditor();
 
 	void save();

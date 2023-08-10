@@ -23,10 +23,8 @@ private:
 	int combo = 0;
 	int accuracyBeatCount[3];
 	string letterRanked;
-	//GameBase* game;
 
 	Text text;
-	Font font;
 public:
 	ResultScreen(StateManager &stateManager, int accuracyBeatCount[3], int rawScore, int combo);
 	~ResultScreen();

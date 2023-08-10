@@ -17,12 +17,6 @@ Button::~Button()
 {
 }
 
-// Not sure how to use function pointer
-//void Button::doFunc()
-//{
-//	f();
-//}
-
 bool Button::keyEvent(Keyboard::Key key)
 {
 	if (this->key == key)

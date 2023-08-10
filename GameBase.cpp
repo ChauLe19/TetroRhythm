@@ -34,36 +34,47 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 	}
 
 
-	fs::path audioPath = folderPath;
-	audioPath.append(audioPath.filename().string() + ".ogg");
-	cout << "Beat map editor" << endl;
-	if (!fs::exists(audioPath))
+	// load song
+	fs::path oggPath = folderPath;
+	fs::path wavPath = folderPath;
+	oggPath.append(oggPath.filename().string() + ".ogg");
+	wavPath.append(wavPath.filename().string() + ".wav");
+	if (fs::exists(oggPath))
 	{
-		audioPath = audioPath.parent_path();
-		audioPath.append(audioPath.filename().string() + ".wav");
-		if (!fs::exists(audioPath))
-			cerr << "Audio file doesn't exist." << endl;
+		if (!buffer.loadFromFile(oggPath.string()))
+		{
+			cerr << "Unable to open file " + oggPath.string() << endl;;
+		}
 	}
+	else if (fs::exists(wavPath))
+	{
+		if (!buffer.loadFromFile(wavPath.string()))
+		{
+			cerr << "Unable to open file " + wavPath.string() << endl;;
+		}
+	}
+	else
+	{
+		cerr << "Audio file doesn't exist." << endl;
+		throw "Audio file doesn't exist.";
+	}
+	sound.setBuffer(buffer);
 
+
+
+	// Load map info
 	fs::path txtPath = folderPath;
 	txtPath.append(txtPath.filename().string() + ".txt");
 
 	if (!fs::exists(txtPath))
 		cerr << "Text file doesn't exist." << endl;
 
-	// Load map info
-	string txtFile = fs::absolute(txtPath).string();
-	//string txtFile = "Tetris_theme.txt";
-	string musicFile = fs::absolute(audioPath).string();
-
-	cout << txtFile << endl;
-	cout << musicFile << endl;
-	inFile.open(txtFile);
+	std::ifstream inFile;
+	inFile.open(txtPath);
 	if (!inFile)
 	{
-		cerr << "Unable to open file " + txtFile << endl;;
+		cerr << "Unable to open file " + txtPath.string() << endl;;
 	}
-
 
 	char beat[10];
 	inFile.getline(beat, 10, '\r');
@@ -73,13 +84,6 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 	}
 	beatIt = beatsTime.begin();
 	nextBeatTimeMS = *beatIt;
-
-	if (!buffer.loadFromFile(musicFile))
-	{
-		cerr << "Unable to open file " + musicFile << endl;;
-	}
-	sound.setBuffer(buffer);
-
 
 	currentPiecePtr = &nextPiece();
 }
@@ -644,7 +648,6 @@ void GameBase::reset()
 	score = 0;
 	isGameOver = false;
 	alreadyHold = false;
-	inFile.clear();
 
 	beatIt = beatsTime.begin();
 	nextBeatTimeMS = *beatIt;

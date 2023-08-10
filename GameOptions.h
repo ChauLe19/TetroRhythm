@@ -29,7 +29,6 @@ class GameOptions : public StateScreen
 {
 private:
 	Text text;
-	Font font;
 	bool choosingMap = false;
 	int cursorMap = 0; // a table of game
 	int cursorMode = 0;

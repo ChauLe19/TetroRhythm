@@ -10,16 +10,30 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 	speedButton100 = new Button(Color::Black, 35, Color::White, "x1\n(Press 1)", 1800, 300, 100, 70, Keyboard::Key::Num1);
 
 
-	fs::path audioPath = folderPath;
-	audioPath.append(audioPath.filename().string() + ".ogg");
-	cout << "Beat map editor" << endl;
-	if (!fs::exists(audioPath))
+	fs::path oggPath = folderPath;
+	fs::path wavPath = folderPath;
+	oggPath.append(oggPath.filename().string() + ".ogg");
+	wavPath.append(wavPath.filename().string() + ".wav");
+	if (fs::exists(oggPath))
 	{
-		audioPath = audioPath.parent_path();
-		audioPath.append(audioPath.filename().string() + ".wav");
-		if (!fs::exists(audioPath))
-			cerr << "Audio file doesn't exist." << endl;
+		if (!buffer.loadFromFile(oggPath.string()))
+		{
+			cerr << "Unable to open file " + oggPath.string() << endl;;
+		}
 	}
+	else if (fs::exists(wavPath))
+	{
+		if (!buffer.loadFromFile(wavPath.string()))
+		{
+			cerr << "Unable to open file " + wavPath.string() << endl;;
+		}
+	}
+	else
+	{
+		cerr << "Audio file doesn't exist." << endl;
+		throw "Audio file doesn't exist.";
+	}
+	sound.setBuffer(buffer);
 
 	fs::path txtPath = folderPath;
 	txtPath.append(txtPath.filename().string() + ".txt");
@@ -28,18 +42,13 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 		cerr << "Text file doesn't exist." << endl;
 
 
-	this->audioFilePath = fs::absolute(audioPath).string();
 	this->textFilePath = fs::absolute(txtPath).string(); // change to text file file with audio file path
-	if (!buffer.loadFromFile(audioFilePath))
-	{
-		cerr << "Unable to open file " + audioFilePath << endl;;
-	}
-	sound.setBuffer(buffer);
 
 
 
 	musicDurationMS = buffer.getDuration().asMilliseconds();
 
+	std::ifstream inFile;
 	inFile.open(textFilePath);
 	if (!inFile)
 	{
@@ -90,44 +99,6 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 	cursorRelToMusicMS = sound.getPlayingOffset().asMilliseconds();
 }
 
-BeatMapEditor::BeatMapEditor(StateManager &stateManager, string audioFilePath, string textFilePath) : StateScreen(stateManager)
-
-{
-	this->audioFilePath = audioFilePath;
-	this->textFilePath = textFilePath;
-	if (!buffer.loadFromFile(audioFilePath))
-	{
-		cerr << "Unable to open file " + audioFilePath << endl;;
-	}
-
-	sound.setBuffer(buffer);
-
-
-	musicDurationMS = buffer.getDuration().asMilliseconds();
-
-	inFile.open(textFilePath);
-	if (!inFile)
-	{
-		cerr << "Unable to open file " + textFilePath << endl;;
-	}
-	else
-	{
-		char beat[10];
-		while (inFile.getline(beat, 10, '\r'))
-		{
-			beatsTime.push_back(atoi(beat));
-		}
-	}
-	beatIt = beatsTime.begin();
-
-
-	// must play before setPlayingOffset
-	sound.play();
-	sound.pause();
-	sound.setPlayingOffset(milliseconds(0));
-	cursorRelToMusicMS = sound.getPlayingOffset().asMilliseconds();
-}
-
 BeatMapEditor::~BeatMapEditor()
 {
 	delete speedButton025;
@@ -137,6 +108,7 @@ BeatMapEditor::~BeatMapEditor()
 
 void BeatMapEditor::save()
 {
+	std::ofstream outFile;
 	outFile.open(textFilePath, ios::out);
 	outFile << "bpm " << bpm << '\r';
 	list<int>::iterator it = beatsTime.begin();

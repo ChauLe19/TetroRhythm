@@ -19,41 +19,6 @@ void EndlessGame::tick(RenderWindow& window)
 	{
 		sound.play();
 	}
-
-	/*if (frameCount >= levelSpeed[level - 1])
-	{
-		currentPiecePtr->move(Moving_Direction::DOWN_DIR, board);
-		frameCount = 0;
-	}*/
-
-
-	//if (currentPiecePtr->checkIsOnGround(board))
-	//{
-	//	onGroundCount++;
-	//	if (onGroundCount > 100)
-	//	{
-	//		currentPiecePtr->hardDrop(board);
-	//		// TODO: copy board before clear, is this optimized???
-	//		Board tempBoard = board;
-	//		prevPiecePtr = currentPiecePtr;
-	//		ClearingInfo tempClearingInfo = board.clearLines();
-	//		linesCleared += tempClearingInfo.linesCleared;
-	//		level = clamp(linesCleared / 10 + 1, 1, 15);
-
-	//		ClearType tempScoresType = determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-
-	//		if (tempScoresType != ClearType::NONE)
-	//		{
-	//			prevClearType = tempScoresType;
-	//			clearTypeCounter = 60; // 1 second display
-	//		}
-	//		score += convertClearTypeToScores(tempScoresType);
-	//		//currentPiecePtr = &nextPiece();
-	//		nextPiece();
-	//		alreadyHold = false;
-	//		onGroundCount = 0;
-	//	}
-	//}
 }
 
 void EndlessGame::keyEvent(Event event)

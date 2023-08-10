@@ -49,10 +49,8 @@ class GameBase : public StateScreen
 {
 protected:
 	Text text;
-	Font font;
 	SoundBuffer buffer;
 	Sound sound;
-	ifstream inFile;
 	Shader beatShader;
 
 	// Objects in game

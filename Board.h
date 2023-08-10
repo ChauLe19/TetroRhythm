@@ -103,8 +103,6 @@ struct ClearingInfo
 class Board
 {
 private:
-	Texture frameTexture;
-	Texture cellsTexture;
 	Sprite image;
 	Sprite cellImage;
 

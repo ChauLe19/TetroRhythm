@@ -77,7 +77,7 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 				break;
 		}
 
-		// if next beat is in 200ms window, skip it or clear it
+		// if next beat is in 250ms window, skip it or clear it
 		if (abs(tempTime-nextBeatTimeMS) <= 250 && beatIt != beatsTime.end())
 		{
 			prevBeatTimeMS = nextBeatTimeMS;

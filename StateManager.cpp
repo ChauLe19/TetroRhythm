@@ -40,11 +40,6 @@ void StateManager::removeState()
     }
 }
 
-void StateManager::processStateChanges()
-{
-
-}
-
 std::unique_ptr<StateScreen>& StateManager::getCurrentState()
 {
     return this->stateStack.top();

@@ -28,7 +28,6 @@ class Settings : public StateScreen
 public:
 private:
 	Text text;
-	Font font;
 	GameSettings::Controls_Settings settings = GameSettings::getSettings();
 	int cursor = 0;
 	bool isChanging = false;

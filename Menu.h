@@ -27,8 +27,6 @@ class Menu : public StateScreen
 {
 private:
 	Text text;
-	Font font;
-	Texture buttonTexture;
 	Sprite buttonImage;
 
 public:

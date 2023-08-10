@@ -71,10 +71,6 @@ void ResultScreen::render(RenderWindow& window)
 	text.setString("Combo: " + to_string(combo));
 	window.draw(text);
 
-	// text.setPosition(200, 700);
-	// text.setString("Raw Score: " + to_string(rawScore));
-	// window.draw(text);
-
 
 	text.setCharacterSize(500);
 	text.setPosition(1200, 200);
