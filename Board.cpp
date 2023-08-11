@@ -23,9 +23,10 @@ void Board::render(RenderWindow& window)
 {
 	RectangleShape frame(Vector2f(boardSquareSize * boardWidth, boardSquareSize * boardHeight));
 	frame.setOutlineThickness(10);
-	frame.setOutlineColor(Color(63,119,179));
+	frame.setOutlineColor(Color(255, 255, 255, 150));
 	frame.setPosition(xPos, yPos);
-	frame.setFillColor(Color::Transparent);
+	frame.setFillColor(Color(0,0,0, 100));
+	window.draw(frame);
 	for (int i = 0; i < boardHeight; i++)
 	{
 		for (int j = 0; j < boardWidth; j++)
@@ -33,7 +34,7 @@ void Board::render(RenderWindow& window)
 			RectangleShape rect(Vector2f(boardSquareSize, boardSquareSize));
 			rect.setFillColor(Color(0, 0, 0, 150));
 			rect.setPosition(xPos + boardSquareSize * j, yPos + boardSquareSize * i);
-			rect.setOutlineColor(Color(0, 168, 236, 50));
+			rect.setOutlineColor(Color(50, 50, 50));
 			rect.setOutlineThickness(5);
 			window.draw(rect);
 			if (board[i][j] % 8 != 0)
@@ -46,7 +47,6 @@ void Board::render(RenderWindow& window)
 
 		}
 	}
-	window.draw(frame);
 }
 
 

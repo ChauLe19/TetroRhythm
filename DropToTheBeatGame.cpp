@@ -46,19 +46,19 @@ void DropToTheBeatGame::loadStaticAssets()
 	beatBar->setPosition(boardX, boardY - 50);
 	beatBar->setOutlineColor(Color(205, 92, 92, 0));
 	beatBar->setOutlineThickness(5);
-	beatBar->setFillColor(Color(205,92,92));
+	beatBar->setFillColor(Color(211, 33, 44));
 
 	// ALMOST zone = 400ms each side = 200ms
 	const static int AlmostWindow = 800;
 	RectangleShape *almostBar = new RectangleShape(Vector2f(boardWidthPx * AlmostWindow / BarWindow, 20));
 	almostBar->setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (AlmostWindow/2) / BarWindow ), boardY - 50);
-	almostBar->setFillColor(Color(152, 251, 152));
+	almostBar->setFillColor(Color(255, 152, 14));
 
 	// HIT zone = 400ms each side = 200ms
 	const static int HitWindow = 400;
 	RectangleShape *hitBar = new RectangleShape(Vector2f(boardWidthPx * HitWindow / BarWindow, 20));
 	hitBar->setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (HitWindow/2) / BarWindow), boardY - 50);
-	hitBar->setFillColor(Color(0, 100,0));
+	hitBar->setFillColor(Color(6, 156, 86));
 
 	RectangleShape *healthBar = new RectangleShape();
 	healthBar->setPosition(20, 40);

@@ -9,6 +9,7 @@ MasterClass::MasterClass(RenderWindow& window)
 	text.setCharacterSize(20);
 	text.setFillColor(Color::White);
 	backgroundSprite.setTexture(AssetManager::getInstance()->getTexture("background"));
+	backgroundSprite.setColor(Color(255, 255, 255, 50));
 	this->stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 }
 
@@ -61,7 +62,7 @@ void MasterClass::run()
 
 
 		// Render and display
-		window->clear(Color(14, 60, 109));
+		window->clear(Color::Transparent);
 		window->draw(backgroundSprite);
 		window->draw(text);
 
