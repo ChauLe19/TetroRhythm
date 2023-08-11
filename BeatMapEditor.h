@@ -56,6 +56,8 @@ private:
 
 	int sliderLength = 2000;
 	int sliderHeight = 100;
+
+	void loadStaticAssets();
 public:
 	BeatMapEditor(StateManager &stateManager, string folderPath);
 	~BeatMapEditor();

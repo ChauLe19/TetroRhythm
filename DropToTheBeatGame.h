@@ -30,9 +30,11 @@ private:
 	int healthCounter = 0; // if reaches 60, health +=1 (every second, health +=1_
 	Button *clearBoardButton;
 
+	void loadStaticAssets();
 public:
 	DropToTheBeatGame(StateManager &stateManager, string folderPath);
 	~DropToTheBeatGame();
+
 
 
 	string comboString="";

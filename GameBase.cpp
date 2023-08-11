@@ -86,6 +86,8 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 	nextBeatTimeMS = *beatIt;
 
 	currentPiecePtr = &nextPiece();
+	
+	loadStaticAssets();
 }
 
 GameBase::~GameBase()
@@ -93,6 +95,33 @@ GameBase::~GameBase()
 	delete boardPtr;
 	delete currentPiecePtr;
 	delete holdPiecePtr;
+}
+
+void GameBase::loadStaticAssets()
+{
+	const int BarWindow = 2000;
+	const int boardWidthPx = boardWidth * boardSquareSize;
+	RectangleShape *beatBar = new RectangleShape(Vector2f(boardWidthPx, 20));
+	beatBar->setPosition(boardX, boardY - 50);
+	beatBar->setOutlineColor(Color(205, 92, 92, 0));
+	beatBar->setOutlineThickness(5);
+	beatBar->setFillColor(Color(205,92,92));
+
+	// ALMOST zone = 400ms each side = 200ms
+	const static int AlmostWindow = 500;
+	RectangleShape *almostBar = new RectangleShape(Vector2f(boardWidthPx * AlmostWindow / BarWindow, 20));
+	almostBar->setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (AlmostWindow/2) / BarWindow ), boardY - 50);
+	almostBar->setFillColor(Color(152, 251, 152));
+
+	// HIT zone = 100ms each side = 200ms
+	const static int HitWindow = 200;
+	RectangleShape *hitBar = new RectangleShape(Vector2f(boardWidthPx * HitWindow / BarWindow, 20));
+	hitBar->setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (HitWindow/2) / BarWindow), boardY - 50);
+	hitBar->setFillColor(Color(0, 100,0));
+
+	assetManager->loadDrawable("beat bar", std::unique_ptr<sf::Drawable>(beatBar));
+	assetManager->loadDrawable("almost window", std::unique_ptr<sf::Drawable>(almostBar));
+	assetManager->loadDrawable("hit window", std::unique_ptr<sf::Drawable>(hitBar));
 }
 
 void GameBase::tick(RenderWindow& window)
@@ -349,28 +378,11 @@ void GameBase::renderBeatSignal(RenderWindow& window)
 	// bar window = 2000ms
 	const static int BarWindow = 2000;
 	int boardWidthPx = boardWidth * boardSquareSize;
-	RectangleShape beatBar(Vector2f(boardWidthPx, 20));
-	beatBar.setPosition(boardX, boardY - 50);
-	beatBar.setOutlineColor(Color(205, 92, 92, 0));
-	beatBar.setOutlineThickness(5);
-	beatBar.setFillColor(Color(205,92,92));
-	window.draw(beatBar);
-
-	// ALMOST zone = 400ms each side = 200ms
-	const static int AlmostWindow = 500;
-	RectangleShape almostBar(Vector2f(boardWidthPx * AlmostWindow / BarWindow, 20));
-	almostBar.setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (AlmostWindow/2) / BarWindow ), boardY - 50);
-	almostBar.setFillColor(Color(152, 251, 152));
-	window.draw(almostBar);
-
-	// HIT zone = 100ms each side = 200ms
-	const static int HitWindow = 200;
-	RectangleShape hitBar(Vector2f(boardWidthPx * HitWindow / BarWindow, 20));
-	hitBar.setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (HitWindow/2) / BarWindow), boardY - 50);
-	hitBar.setFillColor(Color(0, 100,0));
-	window.draw(hitBar);
 
 
+	window.draw(assetManager->getDrawable("beat bar"));
+	window.draw(assetManager->getDrawable("almost window"));
+	window.draw(assetManager->getDrawable("hit window"));
 
 	for (list<int>::iterator tempBeatIt = beatIt; tempBeatIt != beatsTime.end(); ++tempBeatIt, ++tempRainbowIndex)
 	{

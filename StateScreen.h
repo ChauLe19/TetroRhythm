@@ -19,9 +19,12 @@ using namespace sf;
 class StateManager;
 class StateScreen
 {
+private:
 protected:
 	StateManager &stateManager;
 	AssetManager* assetManager = AssetManager::getInstance();
+
+	virtual void loadStaticAssets() {};
 public:
 	StateScreen(StateManager& stateManager);
 	~StateScreen();
@@ -59,6 +62,7 @@ public:
 	 *
 	 */
 	virtual void mouseScrollEvent(Event event) {};
+
 
 	virtual void init() {};
 	virtual void pause() {};

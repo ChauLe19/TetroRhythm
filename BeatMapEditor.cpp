@@ -1,8 +1,10 @@
 #include "BeatMapEditor.h"
 #include "Menu.h"
+#include <memory>
 
 BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : StateScreen(stateManager)
 {
+	loadStaticAssets();
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
 	speedButton025 = new Button(Color::Black, 35, Color::White, "x0.25\n(Press 2)", 1500, 300, 100, 70, Keyboard::Key::Num2);
@@ -99,6 +101,59 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 	cursorRelToMusicMS = sound.getPlayingOffset().asMilliseconds();
 }
 
+
+void BeatMapEditor::loadStaticAssets()
+{
+	CircleShape *playButton = new CircleShape(40, 3);
+	playButton->setFillColor(Color::White);
+	playButton->setPosition(1060, 900);
+	playButton->rotate(90);
+
+	RectangleShape *leftPause = new RectangleShape();
+	leftPause->setSize(Vector2f(15, 60));
+	leftPause->setFillColor(Color::White);
+	leftPause->setPosition(1000, 900);
+
+	RectangleShape *rightPause = new RectangleShape();
+	rightPause->setSize(Vector2f(15, 60));
+	rightPause->setFillColor(Color::White);
+	rightPause->setPosition(1040, 900);
+
+	RectangleShape *wholeAudioSlider = new RectangleShape(); // a slider of the whole audio file
+	wholeAudioSlider->setSize(Vector2f(sliderLength, sliderHeight));
+	wholeAudioSlider->setFillColor(Color(0, 0, 0, 0));
+	wholeAudioSlider->setOutlineColor(Color::White);
+	wholeAudioSlider->setOutlineThickness(5);
+	wholeAudioSlider->setPosition(24, 1000);
+
+	RectangleShape *partAudioSlider = new RectangleShape(); // a slider show only 5 sec part of the audio at the cursor
+	partAudioSlider->setSize(Vector2f(sliderLength, sliderHeight));
+	partAudioSlider->setOutlineColor(Color::White);
+	partAudioSlider->setOutlineThickness(5);
+	partAudioSlider->setFillColor(Color(0, 0, 0, 0));
+	partAudioSlider->setPosition(24, 50);
+
+
+	RectangleShape *partAudioCursor = new RectangleShape(); // cursor for part audio slider
+	partAudioCursor->setSize(Vector2f(10, sliderHeight));
+	partAudioCursor->setFillColor(Color::Yellow);
+	partAudioCursor->setOutlineColor(Color::Yellow);
+	partAudioCursor->setPosition(24 - 5 + sliderLength / 2, 50); // middle of slider
+
+	CircleShape *beatButton = new CircleShape();
+	beatButton->setRadius(250);
+	beatButton->setPosition(1024 - 250, 576 - 250);
+	beatButton->setOutlineColor(Color::White);
+
+	assetManager->loadDrawable("play button", std::unique_ptr<sf::Drawable>(playButton));
+	assetManager->loadDrawable("left pause", std::unique_ptr<sf::Drawable>(leftPause));
+	assetManager->loadDrawable("right pause", std::unique_ptr<sf::Drawable>(rightPause));
+	assetManager->loadDrawable("whole audio slider", std::unique_ptr<sf::Drawable>(wholeAudioSlider));
+	assetManager->loadDrawable("part audio slider", std::unique_ptr<sf::Drawable>(partAudioSlider));
+	assetManager->loadDrawable("part audio cursor", std::unique_ptr<sf::Drawable>(partAudioCursor));
+	assetManager->loadDrawable("beat button", std::unique_ptr<sf::Drawable>(beatButton));
+}
+
 BeatMapEditor::~BeatMapEditor()
 {
 	delete speedButton025;
@@ -146,72 +201,36 @@ void BeatMapEditor::render(RenderWindow& window)
 
 	if (sound.getStatus() != Music::Status::Playing) // draw playing status
 	{
-		CircleShape playButton(40, 3);
-		playButton.setFillColor(Color::White);
-		playButton.setPosition(1060, 900);
-		playButton.rotate(90);
-		window.draw(playButton);
+		window.draw(assetManager->getDrawable("play button"));
 	}
 	else
 	{
-		RectangleShape left;
-		left.setSize(Vector2f(15, 60));
-		left.setFillColor(Color::White);
-		left.setPosition(1000, 900);
-
-		RectangleShape right;
-		right.setSize(Vector2f(15, 60));
-		right.setFillColor(Color::White);
-		right.setPosition(1040, 900);
-
-		window.draw(left);
-		window.draw(right);
+		window.draw(assetManager->getDrawable("left pause"));
+		window.draw(assetManager->getDrawable("right pause"));
 	}
 
-	RectangleShape wholeAudioSlider; // a slider of the whole audio file
+	window.draw(assetManager->getDrawable("whole audio slider"));
+	window.draw(assetManager->getDrawable("part audio slider"));
+	window.draw(assetManager->getDrawable("part audio cursor"));
+
 	RectangleShape wholeAudioCursor; // cursor for whole audio slider
-	RectangleShape partAudioSlider; // a slider show only 5 sec part of the audio at the cursor
-	RectangleShape partAudioCursor; // cursor for part audio slider
-
-	wholeAudioSlider.setSize(Vector2f(sliderLength, sliderHeight));
-	wholeAudioSlider.setFillColor(Color(0, 0, 0, 0));
-	wholeAudioSlider.setOutlineColor(Color::White);
-	wholeAudioSlider.setOutlineThickness(5);
-	wholeAudioSlider.setPosition(24, 1000);
-	window.draw(wholeAudioSlider);
-
 	wholeAudioCursor.setSize(Vector2f(10, sliderHeight));
 	wholeAudioCursor.setFillColor(Color::Yellow);
 	wholeAudioCursor.setOutlineColor(Color::Yellow);
 	wholeAudioCursor.setPosition(24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1000);
 	window.draw(wholeAudioCursor);
 
-
-	partAudioSlider.setSize(Vector2f(sliderLength, sliderHeight));
-	partAudioSlider.setOutlineColor(Color::White);
-	partAudioSlider.setOutlineThickness(5);
-	partAudioSlider.setFillColor(Color(0, 0, 0, 0));
-	partAudioSlider.setPosition(24, 50);
-	window.draw(partAudioSlider);
-
-
-	partAudioCursor.setSize(Vector2f(10, sliderHeight));
-	partAudioCursor.setFillColor(Color::Yellow);
-	partAudioCursor.setOutlineColor(Color::Yellow);
-	partAudioCursor.setPosition(24 - 5 + sliderLength / 2, 50); // middle of slider
-	window.draw(partAudioCursor);
-
-
 	list<int>::iterator it = beatsTime.begin(); // draw beats
 	while (it != beatsTime.end())
 	{
+		// draw the bottom beats (the entire audio)
 		RectangleShape beat;
 		beat.setSize(Vector2f(4, sliderHeight / 2));
 		beat.setFillColor(Color::Green);
 		beat.setPosition(24 - 2 + sliderLength * (*it) / musicDurationMS, 1000 + sliderHeight / 2);
 		window.draw(beat);
 
-
+		// draw the top beats (the closeup audio)
 		if (cursorRelToMusicMS >= *it - 2500 && cursorRelToMusicMS <= *it + 2500)
 		{
 			RectangleShape beatInPartSlider;
@@ -226,36 +245,19 @@ void BeatMapEditor::render(RenderWindow& window)
 	}
 
 
-	// render minor notes
+	// render major/minor notes
+	// major notes occur every 4 minor notes
 	for (int i = std::ceil((float)(cursorRelToMusicMS - 2500) / ((float)mspb / 4)); i <= std::floor((float)(cursorRelToMusicMS + 2500) / ((float)mspb / 4)); i++)
 	{
 		RectangleShape beatInPartSlider;
 		beatInPartSlider.setSize(Vector2f(4, sliderHeight / 4));
-		beatInPartSlider.setFillColor(Color::Blue);
+		beatInPartSlider.setFillColor(i % 4 == 0 ? Color::White : Color::Blue);
 		int t = i * (float)mspb / 4;
 		beatInPartSlider.setPosition(24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - t) / 2500, 50 + sliderHeight * 3 / 8);
 		window.draw(beatInPartSlider);
 	}
 
-	//render major notes
-	for (int i = std::ceil((float)(cursorRelToMusicMS - 2500) / (mspb)); i <= std::floor((float)(cursorRelToMusicMS + 2500) / (mspb)); i++)
-	{
-		RectangleShape beatInPartSlider;
-		beatInPartSlider.setSize(Vector2f(4, sliderHeight / 4));
-		beatInPartSlider.setFillColor(Color(211, 211, 211));
-		int t = i * mspb;
-		beatInPartSlider.setPosition(24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - t) / 2500, 50 + sliderHeight * 3 / 8);
-		window.draw(beatInPartSlider);
-	}
-
-
-
-	CircleShape beatButton;
-	beatButton.setRadius(250);
-	beatButton.setPosition(1024 - 250, 576 - 250);
-	beatButton.setOutlineColor(Color::White);
-
-	window.draw(beatButton);
+	window.draw(assetManager->getDrawable("beat button"));
 }
 
 void BeatMapEditor::keyEvent(Event event)

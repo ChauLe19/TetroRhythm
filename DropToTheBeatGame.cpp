@@ -3,12 +3,26 @@
 
 DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
 {
+	loadStaticAssets();
 	this->clearBoardButton = new Button(Color::Black, 100, Color::White, "Clear", boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200, 200, 200, Keyboard::Unknown);
 }
+
 
 DropToTheBeatGame::~DropToTheBeatGame()
 {
 	delete this->clearBoardButton;
+}
+
+void DropToTheBeatGame::loadStaticAssets()
+{
+	RectangleShape *healthBar = new RectangleShape();
+	healthBar->setPosition(20, 40);
+	healthBar->setSize(Vector2f(500, 20));
+	healthBar->setFillColor(Color::Transparent);
+	healthBar->setOutlineColor(Color::White);
+	healthBar->setOutlineThickness(5);
+
+	assetManager->loadDrawable("health bar", std::unique_ptr<Drawable>(healthBar));
 }
 
 void DropToTheBeatGame::tick(RenderWindow& window)
@@ -176,13 +190,7 @@ void DropToTheBeatGame::render(RenderWindow& window)
 	healthRect.setOutlineThickness(5);
 	window.draw(healthRect);
 
-	RectangleShape healthBar;
-	healthBar.setPosition(20, 40);
-	healthBar.setSize(Vector2f(500, 20));
-	healthBar.setFillColor(Color::Transparent);
-	healthBar.setOutlineColor(Color::White);
-	healthBar.setOutlineThickness(5);
-	window.draw(healthBar);
+	window.draw(assetManager->getDrawable("health bar"));
 
 	text.setCharacterSize(50);
 	text.setPosition(300, 600);
