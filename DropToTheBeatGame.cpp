@@ -43,80 +43,16 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 		healthCounter = 0;
 	}*/
 
-	int tempTime = sound.getPlayingOffset().asMilliseconds();
-
-	// if pressed in 400ms window, doesn't get "TOO LATE"
-	// TOO LATE	-> health -= 10
-	// MISS		-> health -= 1
-	// ALMOST	-> health += 1
-	// HIT		-> health += 2
-	if (beatPressed)
+	// skip beat was out of 1000ms window
+	if (sound.getPlayingOffset().asMilliseconds() - 1000 >= nextBeatTimeMS  && beatIt != beatsTime.end())
 	{
-		if (abs(tempTime - nextBeatTimeMS) <= 200) // HIT
-		{
-			combo++;
-			hitType = 2;
-		}
-		else if (abs(tempTime - nextBeatTimeMS) <= 400) // ALMOST
-		{
-			combo++;
-			hitType = 1;
-
-		}
-		else // MISS
-		{
-			hitType = 0;
-			combo = 0;
-		}
-
-		beatAccuracyCount[hitType]++;
-
-		if (combo > maxCombo)
-		{
-			maxCombo = combo;
-		}
-		beatPressed = false;
-
-
-		switch (hitType)
-		{
-			case 0:
-				comboString = "MISS";
-				health = clamp(health - 10, 0, 100);
-			break;
-			case 1:
-				comboString = "ALMOST";
-				health = clamp(health + 1, 0, 100);
-			break;
-			case 2:
-				comboString = "HIT";
-				health = clamp(health + 2, 0, 100);
-			break;
-			default:
-				break;
-		}
-
-		// if next beat is in 250ms window, skip it or clear it
-		if (abs(tempTime-nextBeatTimeMS) <= 400 && beatIt != beatsTime.end())
-		{
-			prevBeatTimeMS = nextBeatTimeMS;
-			beatIt++;
-			if (beatIt != beatsTime.end())
-				nextBeatTimeMS = *beatIt;
-		}
-	}
-	else // too late, move to next beat
-	{
-		if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 400 && beatIt != beatsTime.end())
-		{
-			combo = 0;
-			comboString = "TOO LATE";
-			beatAccuracyCount[0]++;
-			health = clamp(health - 10, 0, 100);
-			prevBeatTimeMS = nextBeatTimeMS;
-			beatIt++;
-			nextBeatTimeMS = *beatIt;
-		}
+		combo = 0;
+		comboString = "TOO LATE";
+		beatAccuracyCount[0]++;
+		health = clamp(health - 10, 0, 100);
+		prevBeatTimeMS = nextBeatTimeMS;
+		beatIt++;
+		nextBeatTimeMS = *beatIt;
 	}
 
 	if (health <= 0)
@@ -161,7 +97,64 @@ void DropToTheBeatGame::mouseEvent(RenderWindow& window, Event event)
 	}
 	else if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
-		beatPressed = true;
+		int tempTime = sound.getPlayingOffset().asMilliseconds();
+
+		// if pressed in 400ms window, doesn't get "TOO LATE"
+		// TOO LATE	-> health -= 10
+		// MISS		-> health -= 1
+		// ALMOST	-> health += 1
+		// HIT		-> health += 2
+		if (abs(tempTime - nextBeatTimeMS) <= 200) // HIT
+		{
+			combo++;
+			hitType = 2;
+		}
+		else if (abs(tempTime - nextBeatTimeMS) <= 400) // ALMOST
+		{
+			combo++;
+			hitType = 1;
+
+		}
+		else // MISS
+		{
+			hitType = 0;
+			combo = 0;
+		}
+
+		beatAccuracyCount[hitType]++;
+
+		if (combo > maxCombo)
+		{
+			maxCombo = combo;
+		}
+		beatPressed = false;
+
+
+		switch (hitType)
+		{
+			case 0:
+				comboString = "MISS";
+				health = clamp(health - 10, 0, 100);
+			break;
+			case 1:
+				comboString = "ALMOST";
+				health = clamp(health + 1, 0, 100);
+			break;
+			case 2:
+				comboString = "HIT";
+				health = clamp(health + 2, 0, 100);
+			break;
+			default:
+				break;
+		}
+
+		if (beatIt != beatsTime.end())
+		{
+			prevBeatTimeMS = nextBeatTimeMS;
+			beatIt++;
+			if (beatIt != beatsTime.end())
+				nextBeatTimeMS = *beatIt;
+		}
 	}
 	GameBase::mouseEvent(window, event);
 }
