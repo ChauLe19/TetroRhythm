@@ -20,6 +20,11 @@ class DropToTheBeatGame :
 	public GameBase
 {
 private:
+	list<int> beatsTime;
+	list<int>::iterator beatIt;
+	int nextBeatTimeMS = 0;
+	int prevBeatTimeMS = 0;
+
 	int combo = 0;
 	int maxCombo = 0;
 	bool beatPressed = false;
@@ -31,7 +36,6 @@ private:
 	Button *clearBoardButton;
 
 	void loadStaticAssets();
-	void init();
 public:
 	DropToTheBeatGame(StateManager &stateManager, string folderPath);
 	~DropToTheBeatGame();
@@ -49,6 +53,7 @@ public:
 	void mouseEvent(RenderWindow& window, Event event);
 	void restart();
 	void render(RenderWindow& window);
+	void renderBeatSignal(RenderWindow& window);
 private:
 	void checkDropOnBeat();
 };

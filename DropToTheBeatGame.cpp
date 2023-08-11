@@ -5,6 +5,31 @@ DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPa
 {
 	loadStaticAssets();
 	this->clearBoardButton = new Button(Color::Black, 100, Color::White, "Clear", boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200, 200, 200, Keyboard::Unknown);
+
+	// Load map info
+	fs::path txtPath = folderPath;
+	txtPath.append(txtPath.filename().string() + ".txt");
+
+	if (!fs::exists(txtPath))
+		cerr << "Text file doesn't exist." << endl;
+
+	std::ifstream inFile;
+	inFile.open(txtPath);
+	if (!inFile)
+	{
+		cerr << "Unable to open file " + txtPath.string() << endl;;
+	}
+
+	char beat[10];
+	inFile.getline(beat, 10, '\r');
+	while (inFile.getline(beat, 10, '\r'))
+	{
+		beatsTime.push_back(atoi(beat));
+	}
+	beatIt = beatsTime.begin();
+	nextBeatTimeMS = *beatIt;
+
+	currentPiecePtr = &nextPiece();
 }
 
 
@@ -15,6 +40,26 @@ DropToTheBeatGame::~DropToTheBeatGame()
 
 void DropToTheBeatGame::loadStaticAssets()
 {
+	const int BarWindow = 2000;
+	const int boardWidthPx = boardWidth * boardSquareSize;
+	RectangleShape *beatBar = new RectangleShape(Vector2f(boardWidthPx, 20));
+	beatBar->setPosition(boardX, boardY - 50);
+	beatBar->setOutlineColor(Color(205, 92, 92, 0));
+	beatBar->setOutlineThickness(5);
+	beatBar->setFillColor(Color(205,92,92));
+
+	// ALMOST zone = 400ms each side = 200ms
+	const static int AlmostWindow = 800;
+	RectangleShape *almostBar = new RectangleShape(Vector2f(boardWidthPx * AlmostWindow / BarWindow, 20));
+	almostBar->setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (AlmostWindow/2) / BarWindow ), boardY - 50);
+	almostBar->setFillColor(Color(152, 251, 152));
+
+	// HIT zone = 400ms each side = 200ms
+	const static int HitWindow = 400;
+	RectangleShape *hitBar = new RectangleShape(Vector2f(boardWidthPx * HitWindow / BarWindow, 20));
+	hitBar->setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (HitWindow/2) / BarWindow), boardY - 50);
+	hitBar->setFillColor(Color(0, 100,0));
+
 	RectangleShape *healthBar = new RectangleShape();
 	healthBar->setPosition(20, 40);
 	healthBar->setSize(Vector2f(500, 20));
@@ -22,12 +67,10 @@ void DropToTheBeatGame::loadStaticAssets()
 	healthBar->setOutlineColor(Color::White);
 	healthBar->setOutlineThickness(5);
 
+	assetManager->loadDrawable("beat bar", std::unique_ptr<sf::Drawable>(beatBar));
+	assetManager->loadDrawable("almost window", std::unique_ptr<sf::Drawable>(almostBar));
+	assetManager->loadDrawable("hit window", std::unique_ptr<sf::Drawable>(hitBar));
 	assetManager->loadDrawable("health bar", std::unique_ptr<Drawable>(healthBar));
-}
-
-void DropToTheBeatGame::init()
-{
-	restart();
 }
 
 void DropToTheBeatGame::tick(RenderWindow& window)
@@ -159,6 +202,43 @@ void DropToTheBeatGame::mouseEvent(RenderWindow& window, Event event)
 	GameBase::mouseEvent(window, event);
 }
 
+void DropToTheBeatGame::renderBeatSignal(RenderWindow& window)
+{
+	static vector<Color> rainbow = { Color::Red, Color(255, 165, 0), Color::Yellow, Color::Green, Color::Blue, Color(75,0,130) ,Color(127,0,255) };
+	int tempRainbowIndex = rainbowIndex;
+
+	const int innerRadius = 150;
+
+	int maxOffsetMS = 1000; // 1000ms
+	int nowTime = sound.getPlayingOffset().asMilliseconds();
+
+	// half bar should represent 1000ms of beat
+	// bar window = 2000ms
+	const static int BarWindow = 2000;
+	int boardWidthPx = boardWidth * boardSquareSize;
+
+
+	window.draw(assetManager->getDrawable("beat bar"));
+	window.draw(assetManager->getDrawable("almost window"));
+	window.draw(assetManager->getDrawable("hit window"));
+
+	for (list<int>::iterator tempBeatIt = beatIt; tempBeatIt != beatsTime.end(); ++tempBeatIt, ++tempRainbowIndex)
+	{
+		int bufferTime = *tempBeatIt;
+		int timeOffset = bufferTime - nowTime;
+
+		if (timeOffset > maxOffsetMS) break;
+		int distanceFromEnd = timeOffset * boardWidthPx/BarWindow;
+		RectangleShape preview(Vector2f(20, 50));
+		preview.setOutlineThickness(2);
+		preview.setOutlineColor(Color::White);
+		preview.setFillColor(currentPiecePtr->getBaseColor());
+		preview.setPosition(boardX + boardWidthPx / 2 - distanceFromEnd - 20 / 2, boardY - 65);
+		window.draw(preview);
+	}
+
+}
+
 void DropToTheBeatGame::restart()
 {
 	GameBase::restart();
@@ -171,12 +251,15 @@ void DropToTheBeatGame::restart()
 	beatAccuracyCount[1] = 0;
 	beatAccuracyCount[2] = 0;
 	finished = false;
+	beatIt = beatsTime.begin();
+	nextBeatTimeMS = *beatIt;
+	prevBeatTimeMS = 0;
 }
 
 void DropToTheBeatGame::render(RenderWindow& window)
 {
 	GameBase::render(window);
-	GameBase::renderBeatSignal(window);
+	renderBeatSignal(window);
 
 
 	RectangleShape healthRect;
@@ -206,13 +289,6 @@ void DropToTheBeatGame::render(RenderWindow& window)
 		window.draw(text);
 	}
 	this->clearBoardButton->render(window, text);
-
-	/*if (bonus != 0 && clearTypeCounter > 0)
-	{
-		text.setPosition(700, 400);
-		text.setString("+" + to_string(bonus));
-		window.draw(text);
-	}*/
 
 
 

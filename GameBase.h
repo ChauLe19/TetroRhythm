@@ -58,7 +58,6 @@ protected:
 	//**************************************
 
 	list<Tetromino*> bag;
-	list<int> beatsTime;
 	Tetromino* prevPiecePtr;
 	Tetromino* currentPiecePtr;
 	Tetromino* holdPiecePtr;
@@ -67,7 +66,6 @@ protected:
 	ClearType recentClearType = ClearType::NONE; // records the clear type even when player didn't clear any lines
 	Board* boardPtr;
 	Board board;
-	list<int>::iterator beatIt;
 
 	// Game status
 	//*************************************
@@ -77,8 +75,6 @@ protected:
 	int frameCount = 0;
 	int onGroundCount = 0;
 	bool isGameOver = false;
-	int nextBeatTimeMS = 0;
-	int prevBeatTimeMS = 0;
 	int rainbowIndex = 0;
 	int linesCleared = 0;
 	int clearTypeCounter = 0;
@@ -93,30 +89,15 @@ protected:
 	Keyboard::Key holdKey;
 	Keyboard::Key currentKey;
 	GameSettings::Controls_Settings controlsSettings = GameSettings::getSettings();
-	int delayAutoShiftCount = 0;
-	int autoRepeatRateCount = 0;
-	bool isAutoShiftActive = false;
-	bool isAutoRepeatActive = false;
 	bool firstPressed = false;
 	bool alreadyHold = false;
 	bool locked = false;
 	VertexArray inputVertex = VertexArray(PrimitiveType::Quads);
 	Vector2i lastMousePos = Vector2i(0,0);
 
-	//Softdrop DAS
-	int SDdelayAutoShiftCount = 0;
-	int SDautoRepeatRateCount = 0;
-	bool SDisAutoShiftActive = false;
-	bool SDisAutoRepeatActive = false;
-	bool SDfirstPressed = false;
-	bool SDalreadyHold = false;
-
-	bool hardDropOnTick = false;
-
 	static bool isB2BChain(ClearType type);
 	static int getTSpinType(Tetromino piece, Board& board);
 
-	void loadStaticAssets();
 public:
 	GameBase(StateManager& stateManager, string folderPath);
 	~GameBase();
@@ -130,7 +111,6 @@ public:
 	virtual void mouseEvent(RenderWindow& window, Event event);
 	virtual void mouseScrollEvent(Event event);
 
-	void renderBeatSignal(RenderWindow& window);
 	void renderGameOver(RenderWindow& window);
 
 	/**

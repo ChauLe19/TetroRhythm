@@ -9,12 +9,6 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
 
-	// load both shaders
-	if (!beatShader.loadFromFile("BeatShader.vert", sf::Shader::Vertex))
-	{
-		std::cout << "error loading shader" << std::endl;
-	}
-
 	boardPtr = new Board(boardX, boardY);
 	board = *boardPtr;
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -32,7 +26,6 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
 		}
 	}
-
 
 	// load song
 	fs::path oggPath = folderPath;
@@ -58,33 +51,8 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 		cerr << "Audio file doesn't exist." << endl;
 		throw "Audio file doesn't exist.";
 	}
+
 	sound.setBuffer(buffer);
-
-
-
-	// Load map info
-	fs::path txtPath = folderPath;
-	txtPath.append(txtPath.filename().string() + ".txt");
-
-	if (!fs::exists(txtPath))
-		cerr << "Text file doesn't exist." << endl;
-
-	std::ifstream inFile;
-	inFile.open(txtPath);
-	if (!inFile)
-	{
-		cerr << "Unable to open file " + txtPath.string() << endl;;
-	}
-
-	char beat[10];
-	inFile.getline(beat, 10, '\r');
-	while (inFile.getline(beat, 10, '\r'))
-	{
-		beatsTime.push_back(atoi(beat));
-	}
-	beatIt = beatsTime.begin();
-	nextBeatTimeMS = *beatIt;
-
 	currentPiecePtr = &nextPiece();
 	
 	loadStaticAssets();
@@ -97,32 +65,6 @@ GameBase::~GameBase()
 	delete holdPiecePtr;
 }
 
-void GameBase::loadStaticAssets()
-{
-	const int BarWindow = 2000;
-	const int boardWidthPx = boardWidth * boardSquareSize;
-	RectangleShape *beatBar = new RectangleShape(Vector2f(boardWidthPx, 20));
-	beatBar->setPosition(boardX, boardY - 50);
-	beatBar->setOutlineColor(Color(205, 92, 92, 0));
-	beatBar->setOutlineThickness(5);
-	beatBar->setFillColor(Color(205,92,92));
-
-	// ALMOST zone = 400ms each side = 200ms
-	const static int AlmostWindow = 800;
-	RectangleShape *almostBar = new RectangleShape(Vector2f(boardWidthPx * AlmostWindow / BarWindow, 20));
-	almostBar->setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (AlmostWindow/2) / BarWindow ), boardY - 50);
-	almostBar->setFillColor(Color(152, 251, 152));
-
-	// HIT zone = 400ms each side = 200ms
-	const static int HitWindow = 400;
-	RectangleShape *hitBar = new RectangleShape(Vector2f(boardWidthPx * HitWindow / BarWindow, 20));
-	hitBar->setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (HitWindow/2) / BarWindow), boardY - 50);
-	hitBar->setFillColor(Color(0, 100,0));
-
-	assetManager->loadDrawable("beat bar", std::unique_ptr<sf::Drawable>(beatBar));
-	assetManager->loadDrawable("almost window", std::unique_ptr<sf::Drawable>(almostBar));
-	assetManager->loadDrawable("hit window", std::unique_ptr<sf::Drawable>(hitBar));
-}
 
 void GameBase::tick(RenderWindow& window)
 {
@@ -217,21 +159,10 @@ void GameBase::keyEvent(Event event)
 
 	currentKey = key;
 	firstPressed = true;
-	isAutoShiftActive = false;
 }
 
 void GameBase::mouseScrollEvent(Event event)
 {
-	if (event.mouseWheel.delta < 0)
-	{
-		currentPiecePtr->rotate(Rotational_Direction::CCW, board);
-		hardDropOnTick = true;
-	}
-	else if (event.mouseWheel.delta > 0)
-	{
-		currentPiecePtr->rotate(Rotational_Direction::CW, board);
-		hardDropOnTick = true;
-	}
 }
 
 void GameBase::mouseEvent(RenderWindow& window, Event event)
@@ -310,7 +241,6 @@ void GameBase::mouseEvent(RenderWindow& window, Event event)
 					{
 						if (prevPiecePtr != nullptr)
 						{
-							//cout << "Clearing" << endl;
 							// TODO: copy board before clear, is this optimized???
 							Board tempBoard = board;
 							ClearingInfo tempClearingInfo = board.clearLines();
@@ -362,43 +292,6 @@ void GameBase::mouseEvent(RenderWindow& window, Event event)
         }
 
 	}
-}
-
-void GameBase::renderBeatSignal(RenderWindow& window)
-{
-	static vector<Color> rainbow = { Color::Red, Color(255, 165, 0), Color::Yellow, Color::Green, Color::Blue, Color(75,0,130) ,Color(127,0,255) };
-	int tempRainbowIndex = rainbowIndex;
-
-	const int innerRadius = 150;
-
-	int maxOffsetMS = 1000; // 1000ms
-	int nowTime = sound.getPlayingOffset().asMilliseconds();
-
-	// half bar should represent 1000ms of beat
-	// bar window = 2000ms
-	const static int BarWindow = 2000;
-	int boardWidthPx = boardWidth * boardSquareSize;
-
-
-	window.draw(assetManager->getDrawable("beat bar"));
-	window.draw(assetManager->getDrawable("almost window"));
-	window.draw(assetManager->getDrawable("hit window"));
-
-	for (list<int>::iterator tempBeatIt = beatIt; tempBeatIt != beatsTime.end(); ++tempBeatIt, ++tempRainbowIndex)
-	{
-		int bufferTime = *tempBeatIt;
-		int timeOffset = bufferTime - nowTime;
-
-		if (timeOffset > maxOffsetMS) break;
-		int distanceFromEnd = timeOffset * boardWidthPx/BarWindow;
-		RectangleShape preview(Vector2f(20, 50));
-		preview.setOutlineThickness(2);
-		preview.setOutlineColor(Color::White);
-		preview.setFillColor(currentPiecePtr->getBaseColor());
-		preview.setPosition(boardX + boardWidthPx / 2 - distanceFromEnd - 20 / 2, boardY - 65);
-		window.draw(preview);
-	}
-
 }
 
 void GameBase::renderGameOver(RenderWindow& window)
@@ -661,9 +554,6 @@ void GameBase::reset()
 	isGameOver = false;
 	alreadyHold = false;
 
-	beatIt = beatsTime.begin();
-	nextBeatTimeMS = *beatIt;
-	prevBeatTimeMS = 0;
 	bag.clear();
 
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
