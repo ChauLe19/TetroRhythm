@@ -191,7 +191,7 @@ void DropToTheBeatGame::mouseEvent(RenderWindow& window, Event event)
 				break;
 		}
 
-		if (beatIt != beatsTime.end())
+		if (*beatIt <= tempTime + 800 && beatIt != beatsTime.end())
 		{
 			prevBeatTimeMS = nextBeatTimeMS;
 			beatIt++;
