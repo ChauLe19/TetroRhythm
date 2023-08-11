@@ -2,7 +2,7 @@
 #include "Menu.h"
 
 GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme")
-	: StateScreen(stateManager)
+	: StateScreen(stateManager), songName(folderPath)
 {
 	cout << "Initializing game" << endl;
 
@@ -23,7 +23,7 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 	for (int j = 0; j < 2; j++)
 	{
 		vector<Type> tempTypeVector = allPieces;
-		shuffle(tempTypeVector.begin(), tempTypeVector.end(), default_random_engine(seed));
+		std::shuffle(tempTypeVector.begin(), tempTypeVector.end(), default_random_engine(seed));
 
 		while (!tempTypeVector.empty())
 		{
@@ -108,13 +108,13 @@ void GameBase::loadStaticAssets()
 	beatBar->setFillColor(Color(205,92,92));
 
 	// ALMOST zone = 400ms each side = 200ms
-	const static int AlmostWindow = 500;
+	const static int AlmostWindow = 800;
 	RectangleShape *almostBar = new RectangleShape(Vector2f(boardWidthPx * AlmostWindow / BarWindow, 20));
 	almostBar->setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (AlmostWindow/2) / BarWindow ), boardY - 50);
 	almostBar->setFillColor(Color(152, 251, 152));
 
-	// HIT zone = 100ms each side = 200ms
-	const static int HitWindow = 200;
+	// HIT zone = 400ms each side = 200ms
+	const static int HitWindow = 400;
 	RectangleShape *hitBar = new RectangleShape(Vector2f(boardWidthPx * HitWindow / BarWindow, 20));
 	hitBar->setPosition(boardX + boardWidthPx/2 - (boardWidthPx * (HitWindow/2) / BarWindow), boardY - 50);
 	hitBar->setFillColor(Color(0, 100,0));

@@ -31,6 +31,7 @@ private:
 	Button *clearBoardButton;
 
 	void loadStaticAssets();
+	void init();
 public:
 	DropToTheBeatGame(StateManager &stateManager, string folderPath);
 	~DropToTheBeatGame();

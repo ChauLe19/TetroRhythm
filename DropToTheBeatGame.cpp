@@ -25,6 +25,11 @@ void DropToTheBeatGame::loadStaticAssets()
 	assetManager->loadDrawable("health bar", std::unique_ptr<Drawable>(healthBar));
 }
 
+void DropToTheBeatGame::init()
+{
+	restart();
+}
+
 void DropToTheBeatGame::tick(RenderWindow& window)
 {
 	if (isGameOver) return;
@@ -47,12 +52,12 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 	// HIT		-> health += 2
 	if (beatPressed)
 	{
-		if (abs(tempTime - nextBeatTimeMS) <= 100) // HIT
+		if (abs(tempTime - nextBeatTimeMS) <= 200) // HIT
 		{
 			combo++;
 			hitType = 2;
 		}
-		else if (abs(tempTime - nextBeatTimeMS) <= 250) // ALMOST
+		else if (abs(tempTime - nextBeatTimeMS) <= 400) // ALMOST
 		{
 			combo++;
 			hitType = 1;
@@ -92,7 +97,7 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 		}
 
 		// if next beat is in 250ms window, skip it or clear it
-		if (abs(tempTime-nextBeatTimeMS) <= 250 && beatIt != beatsTime.end())
+		if (abs(tempTime-nextBeatTimeMS) <= 400 && beatIt != beatsTime.end())
 		{
 			prevBeatTimeMS = nextBeatTimeMS;
 			beatIt++;
@@ -102,7 +107,7 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 	}
 	else // too late, move to next beat
 	{
-		if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 250 && beatIt != beatsTime.end())
+		if (sound.getPlayingOffset().asMilliseconds() > nextBeatTimeMS + 400 && beatIt != beatsTime.end())
 		{
 			combo = 0;
 			comboString = "TOO LATE";
@@ -124,9 +129,8 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 	{
 		finished = true;
 		gameOver();
-		ResultScreen *resultScreenPtr = new ResultScreen(stateManager, beatAccuracyCount, score, maxCombo);
-		stateManager.addState(unique_ptr<StateScreen>(resultScreenPtr), false);
-		reset();
+		ResultScreen *resultScreenPtr = new ResultScreen(stateManager, songName, beatAccuracyCount, score, maxCombo);
+		stateManager.addState(unique_ptr<StateScreen>(resultScreenPtr));
 		return;
 	}
 }

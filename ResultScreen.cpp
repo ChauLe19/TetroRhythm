@@ -2,7 +2,7 @@
 #include "Menu.h"
 #include "GameBase.h"
 
-ResultScreen::ResultScreen(StateManager& stateManager, int accuracyBeatCount[3], int rawScore, int combo) : StateScreen(stateManager)
+ResultScreen::ResultScreen(StateManager& stateManager, string songName, int accuracyBeatCount[3], int rawScore, int combo) : StateScreen(stateManager), songName(songName)
 {
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
@@ -90,13 +90,10 @@ void ResultScreen::keyEvent(Event event)
 	switch (event.key.code)
 	{
 	case Keyboard::Key::Escape:
-		stateManager.removeState();
 		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::R:
-		stateManager.removeState();
-		GameBase *currGame = static_cast<GameBase *>(stateManager.getCurrentState().get());
-		currGame->reset();
+		stateManager.addState(std::unique_ptr<StateScreen>(new DropToTheBeatGame(stateManager, songName)));
 		break;
 	}
 }

@@ -17,6 +17,7 @@ class ResultScreen :
 	public StateScreen
 {
 private:
+	string songName;
 	float accuracy = 0; // percentage = (almostCount + 2*hitCount)/(2*(almostCount + hitCount + missCount)
 	int rawScore = 0;
 	int adjustedScore = 0; // adjustedScore = accuracyPercentage * rawScore
@@ -26,7 +27,7 @@ private:
 
 	Text text;
 public:
-	ResultScreen(StateManager &stateManager, int accuracyBeatCount[3], int rawScore, int combo);
+	ResultScreen(StateManager& stateManager, string folderPath, int accuracyBeatCount[3], int rawScore, int combo);
 	~ResultScreen();
 
 	// StateScreen functions

@@ -48,6 +48,7 @@ const int levelSpeed[15] = { 60, 58, 37, 28, 21, 16, 11, 8, 6, 4, 3, 2, 1, 1, 1 
 class GameBase : public StateScreen
 {
 protected:
+	string songName; // the folder will have the same name
 	Text text;
 	SoundBuffer buffer;
 	Sound sound;
