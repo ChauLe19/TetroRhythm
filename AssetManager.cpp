@@ -48,3 +48,13 @@ sf::Font& AssetManager::getFont(std::string name)
 {
 	return this->fonts.at(name);
 }
+
+void AssetManager::loadDrawable(std::string name, std::unique_ptr<sf::Drawable> drawable)
+{
+	this->drawables[name] = std::move(drawable);
+}
+
+sf::Drawable& AssetManager::getDrawable(std::string name)
+{
+	return *this->drawables.at(name);
+}
