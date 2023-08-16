@@ -113,18 +113,13 @@ void GameBase::render(RenderWindow& window)
 		window.draw(text);
 	}
 
-	text.setCharacterSize(50);
-	text.setString("SCORE");
-	text.setPosition(1024 + boardSquareSize* 5 + 20, boardY + boardSquareSize* 15 + 50);
-	window.draw(text);
 	text.setCharacterSize(60);
 	text.setString(to_string(score));
-	text.setPosition(1024 + boardSquareSize* 5 + 20, boardY + boardSquareSize* 15 + 100);
+	text.setPosition(boardX + boardSquareSize* boardWidth / 2 - text.getLocalBounds().width/2, boardY + boardSquareSize * boardHeight);
 	window.draw(text);
 
 
 	// render input
-
 	window.draw(inputVertex);
 }
 

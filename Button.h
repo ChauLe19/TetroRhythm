@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include "Utils.h"
 
-using namespace sf;
 class Button
 {
 private:
@@ -18,7 +17,7 @@ private:
 	sf::Color textColor;
 	Keyboard::Key key;
 public:
-	Button(Color textColor, int fontSize, Color boxColor, string textString, int x, int y, int width, int height, Keyboard::Key key);
+	Button(Color textColor, int fontSize, sf::Color boxColor, string textString, int x, int y, int width, int height, Keyboard::Key key);
 	~Button();
 	//void doFunc(void (*function)());
 	bool keyEvent(Keyboard::Key key);

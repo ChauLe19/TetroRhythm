@@ -12,6 +12,8 @@
 
 #include "GameBase.h"
 #include "Button.h"
+#include "ResultScreen.h"
+#include "Utils.h"
 
 /**
  * Drop to the beat game mode.

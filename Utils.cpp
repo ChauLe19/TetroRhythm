@@ -35,3 +35,9 @@ void createButton(RenderWindow& window, Text& text,  Color textColor, int textSi
 	window.draw(text);
 }
 
+std::string getLeftPaddingString(std::string const& str, int n, char paddedChar)
+{
+	std::ostringstream ss;
+	ss << std::right << std::setfill(paddedChar) << std::setw(n) << str;
+	return ss.str();
+}

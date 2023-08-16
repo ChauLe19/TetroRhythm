@@ -1,5 +1,4 @@
 #include "DropToTheBeatGame.h"
-#include "ResultScreen.h"
 
 DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
 {
@@ -273,16 +272,13 @@ void DropToTheBeatGame::render(RenderWindow& window)
 	window.draw(assetManager->getDrawable("health bar"));
 
 	text.setCharacterSize(50);
-	text.setPosition(300, 600);
-	text.setString("Combo");
-	window.draw(text);
-	text.setPosition(300, 650);
-	text.setString(to_string(combo));
+	text.setString("Combo: " + getLeftPaddingString(to_string(combo), 4, ' ') );
+	text.setPosition(boardX - text.getLocalBounds().width - 100, 600);
 	window.draw(text);
 
 	text.setFillColor(Color(255, 255, 255, 200));
 	text.setString(comboString);
-	text.setPosition(1024 - text.getLocalBounds().width / 2, boardY + boardSquareSize * 5 + 75 / 2);
+	text.setPosition(1024 - text.getLocalBounds().width, boardY + boardSquareSize * 5 + 75 / 2);
 	if (accuracyTimer > 0)
 	{
 		accuracyTimer--;
