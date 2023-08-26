@@ -11,7 +11,7 @@ Settings::~Settings()
 {
 }
 
-void Settings::keyEvent(Event event)
+void Settings::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed) return;
 	Keyboard::Key key = event.key.code;
@@ -50,7 +50,7 @@ void Settings::keyEvent(Event event)
 	}
 }
 
-void Settings::tick(RenderWindow& window)
+void Settings::tick(const float & dt, RenderWindow& window)
 {
 }
 
@@ -156,7 +156,7 @@ bool Settings::changeKey(Keyboard::Key key)
 }
 
 
-void Settings::mouseEvent(RenderWindow& window, Event event)
+void Settings::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 }
 

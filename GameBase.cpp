@@ -66,7 +66,7 @@ GameBase::~GameBase()
 }
 
 
-void GameBase::tick(RenderWindow& window)
+void GameBase::tick(const float & dt, RenderWindow& window)
 {
 	if (isGameOver) return;
 	std::array <int, 2> res = findNearestPossiblePlacement(window, *currentPiecePtr, board);
@@ -124,7 +124,7 @@ void GameBase::render(RenderWindow& window)
 }
 
 
-void GameBase::keyEvent(Event event)
+void GameBase::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed) return;
 	Keyboard::Key key = event.key.code;
@@ -160,7 +160,7 @@ void GameBase::mouseScrollEvent(Event event)
 {
 }
 
-void GameBase::mouseEvent(RenderWindow& window, Event event)
+void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 	if (isGameOver)
 	{

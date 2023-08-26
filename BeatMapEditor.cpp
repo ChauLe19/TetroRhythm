@@ -176,7 +176,7 @@ void BeatMapEditor::save()
 	outFile.close();
 }
 
-void BeatMapEditor::tick(RenderWindow& window)
+void BeatMapEditor::tick(const float & dt, RenderWindow& window)
 {
 	if (sound.getStatus() == Music::Status::Stopped)
 	{
@@ -260,7 +260,7 @@ void BeatMapEditor::render(RenderWindow& window)
 	window.draw(assetManager->getDrawable("beat button"));
 }
 
-void BeatMapEditor::keyEvent(Event event)
+void BeatMapEditor::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed) return;
 	Keyboard::Key key = event.key.code;
@@ -326,7 +326,7 @@ void BeatMapEditor::addCursorToBeatList()
 	}
 }
 
-void BeatMapEditor::mouseEvent(RenderWindow& window, Event event)
+void BeatMapEditor::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 
 	if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)

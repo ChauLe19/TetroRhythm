@@ -135,6 +135,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="DropToTheBeatGame.h" />
     <ClInclude Include="EndlessGame.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="GameOptions.h" />
@@ -158,6 +159,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="DropToTheBeatGame.cpp" />
     <ClCompile Include="EndlessGame.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="GameOptions.cpp" />
     <ClCompile Include="GameSettings.cpp" />

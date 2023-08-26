@@ -45,7 +45,7 @@ ResultScreen::~ResultScreen()
 {
 }
 
-void ResultScreen::tick(RenderWindow& window)
+void ResultScreen::tick(const float & dt, RenderWindow& window)
 {
 }
 
@@ -84,7 +84,7 @@ void ResultScreen::render(RenderWindow& window)
 
 }
 
-void ResultScreen::keyEvent(Event event)
+void ResultScreen::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed) return;
 	switch (event.key.code)
@@ -98,6 +98,6 @@ void ResultScreen::keyEvent(Event event)
 	}
 }
 
-void ResultScreen::mouseEvent(RenderWindow& window, Event event)
+void ResultScreen::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 }

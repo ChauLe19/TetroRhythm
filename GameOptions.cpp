@@ -20,7 +20,7 @@ GameOptions::~GameOptions()
 {
 }
 
-void GameOptions::tick(RenderWindow& window)
+void GameOptions::tick(const float & dt, RenderWindow& window)
 {
 }
 
@@ -56,7 +56,7 @@ void GameOptions::render(RenderWindow& window)
 
 }
 
-void GameOptions::keyEvent(Event event)
+void GameOptions::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed) return;
 	switch (event.key.code)
@@ -123,7 +123,7 @@ void GameOptions::keyEvent(Event event)
 	}
 }
 
-void GameOptions::mouseEvent(RenderWindow& window, Event event)
+void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 }
 

@@ -35,6 +35,7 @@ void MasterClass::run()
 		text.setString(to_string(round(1 / elapsed.asSeconds())));
 
 
+		updateDt();
 		Event event;
 		bool scrollEntered = false;
 		while (window->pollEvent(event))
@@ -44,11 +45,11 @@ void MasterClass::run()
 
 			if (event.type == Event::KeyPressed || event.type == Event::KeyReleased)
 			{
-				keyEvent(event);
+				keyEvent(dt, event);
 			}
 			else if (event.type == Event::MouseButtonPressed || event.type == Event::MouseButtonReleased)
 			{
-				mouseEvent(event);
+				mouseEvent(dt, event);
 			}
 
 		}
@@ -56,9 +57,9 @@ void MasterClass::run()
 
 		// change event type to anything other then button pressed. This is for hold functionality
 		event.type = Event::Closed;
-		mouseEvent(event);
+		mouseEvent(dt, event);
 
-		tick();
+		tick(dt);
 
 
 		// Render and display
@@ -79,19 +80,24 @@ void MasterClass::render()
 }
 
 
-void MasterClass::tick()
+void MasterClass::tick(const float & dt)
 {
-	this->stateManager.getCurrentState().get()->tick(*this->window);
+	this->stateManager.getCurrentState().get()->tick(dt, *this->window);
 }
 
-void MasterClass::keyEvent(Event event)
+void MasterClass::keyEvent(const float & dt, Event event)
 {
-	this->stateManager.getCurrentState().get()->keyEvent(event);
+	this->stateManager.getCurrentState().get()->keyEvent(dt, event);
 }
 
-void MasterClass::mouseEvent(Event event)
+void MasterClass::mouseEvent(const float & dt, Event event)
 {
-	this->stateManager.getCurrentState().get()->mouseEvent(*window, event);
+	this->stateManager.getCurrentState().get()->mouseEvent(dt, *window, event);
+}
+
+void MasterClass::updateDt()
+{
+	this->dt = this->clock.restart().asSeconds();
 }
 
 void MasterClass::loadResources()

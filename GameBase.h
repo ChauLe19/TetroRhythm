@@ -105,10 +105,10 @@ public:
 	// State Screen functions
 	//***************************************************
 
-	virtual void tick(RenderWindow& window);
+	virtual void tick(const float & dt, RenderWindow& window);
 	virtual void render(RenderWindow& window);
-	virtual void keyEvent(Event event);
-	virtual void mouseEvent(RenderWindow& window, Event event);
+	virtual void keyEvent(const float & dt, Event event);
+	virtual void mouseEvent(const float & dt, RenderWindow& window, Event event);
 	virtual void mouseScrollEvent(Event event);
 
 	void renderGameOver(RenderWindow& window);

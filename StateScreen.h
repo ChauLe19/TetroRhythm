@@ -33,7 +33,7 @@ public:
 	 *
 	 * \param window Rendering window
 	 */
-	virtual void tick(RenderWindow& window) = 0;
+	virtual void tick(const float & dt, RenderWindow& window) = 0;
 
 	/**
 	 * Function for drawing the screen.
@@ -49,19 +49,19 @@ public:
 	 *
 	 * \param key Was pressed
 	 */
-	virtual void keyEvent(Event event) = 0;
+	virtual void keyEvent(const float & dt, Event event) = 0;
 
 	/**
 	 * Function run when a mouse event is detected.
 	 *
 	 */
-	virtual void mouseEvent(RenderWindow& window, Event event) = 0;
+	virtual void mouseEvent(const float & dt, RenderWindow& window, Event event) = 0;
 	
 	/**
 	 * Function run when a mouse scroll event is detected.
 	 *
 	 */
-	virtual void mouseScrollEvent(Event event) {};
+	virtual void mouseScrollEvent(const float & dt, Event event) {};
 
 
 	virtual void init() {};

@@ -72,10 +72,10 @@ void DropToTheBeatGame::loadStaticAssets()
 	assetManager->loadDrawable("health bar", std::unique_ptr<Drawable>(healthBar));
 }
 
-void DropToTheBeatGame::tick(RenderWindow& window)
+void DropToTheBeatGame::tick(const float & dt, RenderWindow& window)
 {
 	if (isGameOver) return;
-	GameBase::tick(window);
+	GameBase::tick(dt, window);
 
 	// every secon passed, health + 1
 	/*healthCounter++;
@@ -113,10 +113,10 @@ void DropToTheBeatGame::tick(RenderWindow& window)
 	}
 }
 
-void DropToTheBeatGame::keyEvent(Event event)
+void DropToTheBeatGame::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed) return;
-	GameBase::keyEvent(event);
+	GameBase::keyEvent(dt, event);
 
 	// reset on top of the gamebase's reset
 	if (event.key.code == Keyboard::Key::R)
@@ -128,7 +128,7 @@ void DropToTheBeatGame::keyEvent(Event event)
 void DropToTheBeatGame::checkDropOnBeat()
 {
 }
-void DropToTheBeatGame::mouseEvent(RenderWindow& window, Event event)
+void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 	if (finished) return;
 	if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && 
@@ -198,7 +198,7 @@ void DropToTheBeatGame::mouseEvent(RenderWindow& window, Event event)
 				nextBeatTimeMS = *beatIt;
 		}
 	}
-	GameBase::mouseEvent(window, event);
+	GameBase::mouseEvent(dt, window, event);
 }
 
 void DropToTheBeatGame::renderBeatSignal(RenderWindow& window)

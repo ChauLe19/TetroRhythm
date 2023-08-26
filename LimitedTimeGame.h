@@ -21,9 +21,9 @@ public:
 	// Game Base functions
 	//************************************************
 
-	void tick(RenderWindow& window);
-	void keyEvent(Event event);
-	void mouseEvent(RenderWindow& window, Event event);
+	void tick(const float & dt, RenderWindow& window);
+	void keyEvent(const float & dt, Event event);
+	void mouseEvent(const float & dt, RenderWindow& window, Event event);
 	void render(RenderWindow& window);
 
 

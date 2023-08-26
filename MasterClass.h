@@ -33,9 +33,9 @@ public:
 	static string BeatMapFolderPath;
 private:
 	Clock clock;
-	Font font;
+	Clock dtClock;
+	float dt;
 	Text text;
-	sf::Texture backgroundTexture;
 	sf::Sprite backgroundSprite;
 
 	RenderWindow* window;
@@ -62,7 +62,7 @@ public:
 	 * Life cycle function.
 	 * Tick every frame
 	 */
-	void tick();
+	void tick(const float & dt);
 
 
 	/**
@@ -71,7 +71,7 @@ public:
 	 * 
 	 * \param key: input from keyboard
 	 */
-	void keyEvent(Event event);
+	void keyEvent(const float & dt, Event event);
 	
 	/**
 	 * Based on the key input and current state, do things accordingly. 
@@ -79,7 +79,9 @@ public:
 	 * 
 	 * \param key: input from keyboard
 	 */
-	void mouseEvent(Event event);
+	void mouseEvent(const float & dt, Event event);
+
+	void updateDt();
 
 	void loadResources();
 

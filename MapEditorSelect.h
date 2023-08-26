@@ -16,10 +16,10 @@ public:
 
 	// StateScreen functions
 	//****************************************************
-	void tick(RenderWindow& window);
+	void tick(const float & dt, RenderWindow& window);
 	void render(RenderWindow& window);
-	void keyEvent(Event event);
-	void mouseEvent(RenderWindow& window, Event event);
+	void keyEvent(const float & dt, Event event);
+	void mouseEvent(const float & dt, RenderWindow& window, Event event);
 
 
 	void drawOptions(RenderWindow& window, string options, int x, int y, bool isHighlight);

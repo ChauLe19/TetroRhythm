@@ -9,10 +9,10 @@ EndlessGame::~EndlessGame()
 {
 }
 
-void EndlessGame::tick(RenderWindow& window)
+void EndlessGame::tick(const float & dt, RenderWindow& window)
 {
 	if (isGameOver) return;
-	GameBase::tick(window);
+	GameBase::tick(dt, window);
 	frameCount++;
 	// restart song if not game over
 	if (!isGameOver && sound.getStatus() == SoundSource::Status::Stopped)
@@ -21,14 +21,14 @@ void EndlessGame::tick(RenderWindow& window)
 	}
 }
 
-void EndlessGame::keyEvent(Event event)
+void EndlessGame::keyEvent(const float & dt, Event event)
 {
-	GameBase::keyEvent(event);
+	GameBase::keyEvent(dt, event);
 }
 
-void EndlessGame::mouseEvent(RenderWindow& window, Event event)
+void EndlessGame::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
-	GameBase::mouseEvent(window, event);
+	GameBase::mouseEvent(dt, window, event);
 }
 
 void EndlessGame::render(RenderWindow& window)

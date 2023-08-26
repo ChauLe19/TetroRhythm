@@ -11,10 +11,10 @@ LimitedTimeGame::~LimitedTimeGame()
 {
 }
 
-void LimitedTimeGame::tick(RenderWindow& window)
+void LimitedTimeGame::tick(const float & dt, RenderWindow& window)
 {
 	if (isGameOver) return;
-	GameBase::tick(window);
+	GameBase::tick(dt, window);
 	frameCount++;
 	// restart song if not game over
 	if (!isGameOver && sound.getStatus() == SoundSource::Status::Stopped)
@@ -28,23 +28,23 @@ void LimitedTimeGame::tick(RenderWindow& window)
 	}
 }
 
-void LimitedTimeGame::keyEvent(Event event)
+void LimitedTimeGame::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed) return;
-	GameBase::keyEvent(event);
+	GameBase::keyEvent(dt, event);
 	if (event.key.code == Keyboard::R)
 	{
 		clock = Clock();
 	}
 }
 
-void LimitedTimeGame::mouseEvent(RenderWindow& window, Event event)
+void LimitedTimeGame::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 	if (isGameOver && Mouse::isButtonPressed(Mouse::Left) && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // RESTART button
 	{
 		clock = Clock();
 	}
-	GameBase::mouseEvent(window, event);
+	GameBase::mouseEvent(dt, window, event);
 }
 
 void LimitedTimeGame::render(RenderWindow& window)

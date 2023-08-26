@@ -12,7 +12,7 @@ Menu::~Menu()
 {
 }
 
-void Menu::tick(RenderWindow& window)
+void Menu::tick(const float & dt, RenderWindow& window)
 {
 }
 
@@ -31,7 +31,7 @@ void Menu::render(RenderWindow& window)
 
 }
 
-void Menu::keyEvent(Event event)
+void Menu::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed) return;
 	switch (event.key.code)
@@ -48,7 +48,7 @@ void Menu::keyEvent(Event event)
 	}
 }
 
-void Menu::mouseEvent(RenderWindow& window, Event event)
+void Menu::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 	if (event.type == Event::MouseButtonPressed)
 	{

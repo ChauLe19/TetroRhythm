@@ -44,7 +44,7 @@ void MapEditorSelect::drawOptions(RenderWindow& window, string options, int x, i
 }
 
 
-void MapEditorSelect::tick(RenderWindow& window)
+void MapEditorSelect::tick(const float & dt, RenderWindow& window)
 {
 }
 
@@ -68,7 +68,7 @@ void MapEditorSelect::render(RenderWindow& window)
 	}
 }
 
-void MapEditorSelect::keyEvent(Event event)
+void MapEditorSelect::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed) return;
 	Keyboard::Key key = event.key.code;
@@ -89,6 +89,6 @@ void MapEditorSelect::keyEvent(Event event)
 	}
 }
 
-void MapEditorSelect::mouseEvent(RenderWindow& window, Event event)
+void MapEditorSelect::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 }
