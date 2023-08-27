@@ -34,6 +34,7 @@ private:
 	int cursorMode = 0;
 	const int modeCount = 3;
 	vector<fs::path> maps;
+	int mapRenderOffset = 0;
 
 
 public:
@@ -46,6 +47,8 @@ public:
 	void render(RenderWindow& window);
 	void keyEvent(const float & dt, Event event);
 	void mouseEvent(const float & dt, RenderWindow& window, Event event);
+
+	void drawGameModeOption(RenderTexture& window, string gameMode, int x, int y, bool isHighlight);
 
 	/**
 	 * Draw option out to window. If the cursor is on it, highlight it.

@@ -26,6 +26,12 @@ void GameOptions::tick(const float & dt, RenderWindow& window)
 
 void GameOptions::render(RenderWindow& window)
 {
+	RenderTexture mapsTexture;
+	mapsTexture.create(500, 500);
+
+	mapsTexture.clear(Color::Transparent);
+	mapsTexture.display();
+
 	text.setFillColor(Color::White);
 	text.setCharacterSize(120);
 	text.setString("Game Options");
@@ -44,15 +50,15 @@ void GameOptions::render(RenderWindow& window)
 	window.draw(triangle);
 
 
-	int tempCursor = cursorMap - 1;
 	int size = maps.size();
-	for (int i = 0; i < 3 && tempCursor < size; ++tempCursor, ++i)
+	for (int i = 0; i < size; ++i)
 	{
-		if (tempCursor >= 0)
-		{
-			drawGameModeOption(window, maps[tempCursor].filename().string(), 1100, 300 + i * 200, cursorMap == tempCursor);
-		}
+		drawGameModeOption(mapsTexture, maps[i].filename().string(), 0, i * 200 + mapRenderOffset + 200, cursorMap == i);
 	}
+
+	Sprite sprite(mapsTexture.getTexture());
+	sprite.setPosition(1100, 300);
+	window.draw(sprite);
 
 }
 
@@ -125,6 +131,57 @@ void GameOptions::keyEvent(const float & dt, Event event)
 
 void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
+	static bool isPressed = false;
+	static Vector2f pressedPosition = Vector2f(0,0);
+	static int prevMapRenderOffset = 0;
+	if (event.type == Event::MouseButtonPressed && mouseInBox(window, 1100, 300, 500, 700))
+	{
+		isPressed = true;
+		Vector2i pixelPos = Mouse::getPosition(window);
+		Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
+		pressedPosition = Vector2f(mouseViewPos.x, mouseViewPos.y);
+		prevMapRenderOffset = mapRenderOffset;
+	}
+	else if (isPressed && Mouse::isButtonPressed(Mouse::Left))
+	{
+		Vector2i pixelPos = Mouse::getPosition(window);
+		Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
+		mapRenderOffset = prevMapRenderOffset;
+		mapRenderOffset += mouseViewPos.y - pressedPosition.y;
+		cursorMap = clamp( - (mapRenderOffset - 100) / 200, 0, (int)maps.size() - 1);
+	}
+	else if (event.type == Event::MouseButtonReleased)
+	{
+		isPressed = false;
+		mapRenderOffset = -cursorMap * 200;
+		prevMapRenderOffset = mapRenderOffset;
+	}
+}
+
+void GameOptions::drawGameModeOption(RenderTexture& window, string gameMode, int x, int y, bool isHighlight)
+{
+	if (isHighlight)
+	{
+		RectangleShape rect(Vector2f(500, 100));
+		rect.setPosition(x, y - 15);
+		rect.setFillColor(Color(125, 125, 125, 255));
+		window.draw(rect);
+		rect.setPosition(x, y - 25);
+		rect.setFillColor(Color::White);
+		window.draw(rect);
+
+		text.setFillColor(Color(0, 0, 50, 255));
+
+	}
+	else
+	{
+		text.setFillColor(Color::White);
+	}
+	text.setPosition(x, y);
+	text.setCharacterSize(60);
+	text.setString(gameMode);
+	window.draw(text);
+
 }
 
 void GameOptions::drawGameModeOption(RenderWindow& window, string gameMode, int x, int y, bool isHighlight)
