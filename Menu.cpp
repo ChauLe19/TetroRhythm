@@ -67,21 +67,8 @@ void Menu::mouseEvent(const float & dt, RenderWindow& window, Event event)
 	}
 	else if (event.type == Event::MouseMoved)
 	{
-		beginButton.setHighlight(false);
-		settingsButton.setHighlight(false);
-		beatmapButton.setHighlight(false);
-
-		if (beginButton.mouseInButton(window)) // BEGIN button
-		{
-			beginButton.setHighlight(true);
-		}
-		else if (settingsButton.mouseInButton(window)) //SETTINGS button
-		{
-			settingsButton.setHighlight(true);
-		}
-		else if (beatmapButton.mouseInButton(window)) // EDIT BEAT MAPS button
-		{
-			beatmapButton.setHighlight(true);
-		}
+		beginButton.setHighlight(beginButton.mouseInButton(window));
+		settingsButton.setHighlight(settingsButton.mouseInButton(window));
+		beatmapButton.setHighlight(beatmapButton.mouseInButton(window));
 	}
 }

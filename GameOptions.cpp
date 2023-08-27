@@ -27,7 +27,7 @@ void GameOptions::tick(const float & dt, RenderWindow& window)
 void GameOptions::render(RenderWindow& window)
 {
 	RenderTexture mapsTexture;
-	mapsTexture.create(500, 500);
+	mapsTexture.create(1000, 500);
 
 	mapsTexture.clear(Color::Transparent);
 	mapsTexture.display();
@@ -38,16 +38,24 @@ void GameOptions::render(RenderWindow& window)
 	text.setPosition(1024 - text.getLocalBounds().width / 2, 50);
 	window.draw(text);
 
-	drawGameModeOption(window, "Drop on Beat", 50, 300, cursorMode == 0);		// drop blocks on the beat receives bonus
-	drawGameModeOption(window, "Limited Time", 50, 500, cursorMode == 1);		// get the highest score in 2 min
-	drawGameModeOption(window, "Endless", 50, 700, cursorMode == 2);		// just play
-
-	CircleShape triangle(60, 3);
-	triangle.setScale(0.5, 0.5);
-	triangle.setPosition(1024, 512);
-	triangle.rotate(90);
-	triangle.setFillColor(choosingMap ? Color::White : Color(128, 128, 128, 255));
-	window.draw(triangle);
+	dropOnBeatGameButton.setHighlight(false);
+	limitedGameButton.setHighlight(false);
+	endlessGameButton.setHighlight(false);
+	switch (cursorMode)
+	{
+	case 0:
+		dropOnBeatGameButton.setHighlight(true);
+		break;
+	case 1:
+		limitedGameButton.setHighlight(true);
+		break;
+	case 2:
+		endlessGameButton.setHighlight(true);
+		break;
+	}
+	dropOnBeatGameButton.render(window, text);		// drop blocks on the beat receives bonus
+	limitedGameButton.render(window, text);		// get the highest score in 2 min
+	endlessGameButton.render(window, text);	// just play
 
 
 	int size = maps.size();
@@ -57,8 +65,10 @@ void GameOptions::render(RenderWindow& window)
 	}
 
 	Sprite sprite(mapsTexture.getTexture());
-	sprite.setPosition(1100, 300);
+	sprite.setPosition(window.getSize().x - 1000, 300);
 	window.draw(sprite);
+
+	startButton.render(window, text);
 
 }
 
@@ -134,7 +144,44 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 	static bool isPressed = false;
 	static Vector2f pressedPosition = Vector2f(0,0);
 	static int prevMapRenderOffset = 0;
-	if (event.type == Event::MouseButtonPressed && mouseInBox(window, 1100, 300, 500, 700))
+	if (event.type == Event::MouseMoved)
+	{
+		startButton.setHighlight(startButton.mouseInButton(window));
+	}
+	else if (event.type == Event::MouseButtonPressed && startButton.mouseInButton(window))
+	{
+		GameBase* gamePtr;
+		switch (cursorMode)
+		{
+		case 0:
+			gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
+			break;
+		case 1:
+			gamePtr = new LimitedTimeGame(stateManager, fs::absolute(maps[cursorMap]).string());
+			break;
+		case 2:
+			gamePtr = new EndlessGame(stateManager, fs::absolute(maps[cursorMap]).string());
+			break;
+		default:
+			gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
+			break;
+		}
+		stateManager.addState(std::unique_ptr<StateScreen>(gamePtr));
+		gamePtr->start();
+	}
+	else if (event.type == Event::MouseButtonPressed && dropOnBeatGameButton.mouseInButton(window))
+	{
+		cursorMode = 0;
+	}
+	else if (event.type == Event::MouseButtonPressed && limitedGameButton.mouseInButton(window))
+	{
+		cursorMode = 1;
+	}
+	else if (event.type == Event::MouseButtonPressed && endlessGameButton.mouseInButton(window))
+	{
+		cursorMode = 2;
+	}
+	else if (event.type == Event::MouseButtonPressed && mouseInBox(window, window.getSize().x - 1000, 300, 1000, 700))
 	{
 		isPressed = true;
 		Vector2i pixelPos = Mouse::getPosition(window);
@@ -162,41 +209,12 @@ void GameOptions::drawGameModeOption(RenderTexture& window, string gameMode, int
 {
 	if (isHighlight)
 	{
-		RectangleShape rect(Vector2f(500, 100));
-		rect.setPosition(x, y - 15);
-		rect.setFillColor(Color(125, 125, 125, 255));
-		window.draw(rect);
+		RectangleShape rect(Vector2f(window.getSize().x, 100));
 		rect.setPosition(x, y - 25);
-		rect.setFillColor(Color::White);
+		rect.setFillColor(Color(0, 186, 211));
 		window.draw(rect);
 
-		text.setFillColor(Color(0, 0, 50, 255));
-
-	}
-	else
-	{
-		text.setFillColor(Color::White);
-	}
-	text.setPosition(x, y);
-	text.setCharacterSize(60);
-	text.setString(gameMode);
-	window.draw(text);
-
-}
-
-void GameOptions::drawGameModeOption(RenderWindow& window, string gameMode, int x, int y, bool isHighlight)
-{
-	if (isHighlight)
-	{
-		RectangleShape rect(Vector2f(500, 100));
-		rect.setPosition(x, y - 15);
-		rect.setFillColor(Color(125, 125, 125, 255));
-		window.draw(rect);
-		rect.setPosition(x, y - 25);
-		rect.setFillColor(Color::White);
-		window.draw(rect);
-
-		text.setFillColor(Color(0, 0, 50, 255));
+		text.setFillColor(Color::Black);
 
 	}
 	else
