@@ -25,9 +25,9 @@ void Menu::render(RenderWindow& window)
 	window.draw(text);
 
 
-	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "BEGIN (Enter)", 400, 60, 1024 - 200, 600);
-	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "SETTINGS (C)", 400, 60, 1024 - 200, 700);
-	createButton(window, text, Color(0, 0, 50, 255), 60, Color::White, "EDIT BEAT MAPS (E)", 400, 60, 1024 - 200, 800);
+	beginButton.render(window, text);
+	settingsButton.render(window, text);
+	beatmapButton.render(window, text);
 
 }
 
@@ -52,17 +52,36 @@ void Menu::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 	if (event.type == Event::MouseButtonPressed)
 	{
-		if (mouseInBox(window, 1024 - 200, 600, 400, 60)) // BEGIN button
+		if (beginButton.mouseInButton(window)) // BEGIN button
 		{
 			stateManager.addState(std::unique_ptr<StateScreen>(new GameOptions(stateManager)));
 		}
-		else if ( mouseInBox(window, 1024 - 200, 700, 400, 60)) //SETTINGS button
+		else if (settingsButton.mouseInButton(window)) //SETTINGS button
 		{
 			stateManager.addState(std::unique_ptr<StateScreen>(new Settings(stateManager)));
 		}
-		else if (mouseInBox(window, 1024 - 200, 800, 400, 60)) // EDIT BEAT MAPS button
+		else if (beatmapButton.mouseInButton(window)) // EDIT BEAT MAPS button
 		{
 			stateManager.addState(std::unique_ptr<StateScreen>(new MapEditorSelect(stateManager)));
+		}
+	}
+	else if (event.type == Event::MouseMoved)
+	{
+		beginButton.setHighlight(false);
+		settingsButton.setHighlight(false);
+		beatmapButton.setHighlight(false);
+
+		if (beginButton.mouseInButton(window)) // BEGIN button
+		{
+			beginButton.setHighlight(true);
+		}
+		else if (settingsButton.mouseInButton(window)) //SETTINGS button
+		{
+			settingsButton.setHighlight(true);
+		}
+		else if (beatmapButton.mouseInButton(window)) // EDIT BEAT MAPS button
+		{
+			beatmapButton.setHighlight(true);
 		}
 	}
 }

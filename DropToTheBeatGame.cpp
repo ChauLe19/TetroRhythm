@@ -3,7 +3,7 @@
 DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
 {
 	loadStaticAssets();
-	this->clearBoardButton = new Button(Color::Black, 100, Color::White, "Clear", boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200, 200, 200, Keyboard::Unknown);
+	this->clearBoardButton = new Button(Color::White, 50, Color::Transparent, "Clear", Vector2f(boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200), Vector2f(200, 200), Color(0, 186, 211), Keyboard::Unknown);
 
 	// Load map info
 	fs::path txtPath = folderPath;

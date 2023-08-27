@@ -47,7 +47,7 @@ void MasterClass::run()
 			{
 				keyEvent(dt, event);
 			}
-			else if (event.type == Event::MouseButtonPressed || event.type == Event::MouseButtonReleased)
+			else if (event.type == Event::MouseButtonPressed || event.type == Event::MouseButtonReleased || event.type == Event::MouseMoved)
 			{
 				mouseEvent(dt, event);
 			}
@@ -105,8 +105,8 @@ void MasterClass::loadResources()
 	AssetManager *assetManager = AssetManager::getInstance();
 
 	// load fonts
-	assetManager->loadFont("main font", "arial.ttf");
-	assetManager->loadFont("game font", "Dense-Regular.otf");
+	assetManager->loadFont("main font", "ChakraPetch-Regular.ttf");
+	assetManager->loadFont("game font", "ChakraPetch-Bold.ttf");
 
 	// load textures
 	assetManager->loadTexture("background", backgroundImagePath);

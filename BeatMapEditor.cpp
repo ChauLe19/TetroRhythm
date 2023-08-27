@@ -7,9 +7,9 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 	loadStaticAssets();
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
-	speedButton025 = new Button(Color::Black, 35, Color::White, "x0.25\n(Press 2)", 1500, 300, 100, 70, Keyboard::Key::Num2);
-	speedButton050 = new Button(Color::Black, 35, Color::White, "x0.50\n(Press 5)", 1650, 300, 100, 70, Keyboard::Key::Num5);
-	speedButton100 = new Button(Color::Black, 35, Color::White, "x1\n(Press 1)", 1800, 300, 100, 70, Keyboard::Key::Num1);
+	speedButton025 = new Button(Color::White, 35, Color::Transparent, "x0.25\n(Press 2)", Vector2f(1500, 300), Vector2f(100, 70), Color(0, 186, 211), Keyboard::Key::Num2);
+	speedButton050 = new Button(Color::White, 35, Color::Transparent, "x0.50\n(Press 5)", Vector2f(1650, 300), Vector2f(100, 70), Color(0, 186, 211), Keyboard::Key::Num5);
+	speedButton100 = new Button(Color::White, 35, Color::Transparent, "x1\n(Press 1)", Vector2f(1800, 300), Vector2f(100, 70), Color(0, 186, 211), Keyboard::Key::Num1);
 
 
 	fs::path oggPath = folderPath;

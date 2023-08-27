@@ -18,20 +18,17 @@ bool mouseInCircle(RenderWindow& window, int x, int y, int r)
 void createButton(RenderWindow& window, Text& text,  Color textColor, int textSize, Color boxColor, string textString, int width, int height, int x, int y)
 {
 	RectangleShape rect;
-	rect.setSize(Vector2f(width, height));
-	rect.setFillColor(Color(boxColor.r - 100, boxColor.g - 100, boxColor.b - 100, 255));
-	rect.setPosition(Vector2f(x, y + 10));
-	window.draw(rect);
-
 	rect.setFillColor(boxColor);
 	rect.setSize(Vector2f(width, height));
 	rect.setPosition(Vector2f(x, y));
+	rect.setOutlineThickness(5);
+	rect.setOutlineColor(Color::White);
 	window.draw(rect);
 
 	text.setFillColor(textColor);
 	text.setCharacterSize(textSize);
 	text.setString(textString);
-	text.setPosition(x + width / 2 - text.getLocalBounds().width / 2, y - 10);
+	text.setPosition(x + width / 2 - text.getLocalBounds().width / 2, y + height /2 - text.getLocalBounds().height);
 	window.draw(text);
 }
 
