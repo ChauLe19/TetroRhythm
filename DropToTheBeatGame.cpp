@@ -131,6 +131,11 @@ void DropToTheBeatGame::checkDropOnBeat()
 void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 	if (finished) return;
+	if (!isGameOver && event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left &&
+		this->clearBoardButton->mouseInButton(window))
+	{
+		return;
+	}
 	if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && 
 		this->clearBoardButton->mouseInButton(window))
 	{
