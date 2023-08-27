@@ -92,6 +92,8 @@ protected:
 	bool firstPressed = false;
 	bool alreadyHold = false;
 	bool locked = false;
+	bool keyMouseRegistered = false;
+	bool keyMouseReleased = false;
 	VertexArray inputVertex = VertexArray(PrimitiveType::Quads);
 	Vector2i lastMousePos = Vector2i(0,0);
 

@@ -115,7 +115,12 @@ void DropToTheBeatGame::tick(const float & dt, RenderWindow& window)
 
 void DropToTheBeatGame::keyEvent(const float & dt, Event event)
 {
-	if (event.type != Event::KeyPressed) return;
+	if (event.type != Event::KeyPressed && event.type != Event::KeyReleased) return;
+	map<string, Keyboard::Key> keybinds = controlsSettings.keybinds;
+	if (event.type == Event::KeyReleased && event.key.code == keybinds["HARD_DROP"])
+	{
+		checkDropOnBeat();
+	}
 	GameBase::keyEvent(dt, event);
 
 	// reset on top of the gamebase's reset
@@ -127,6 +132,64 @@ void DropToTheBeatGame::keyEvent(const float & dt, Event event)
 
 void DropToTheBeatGame::checkDropOnBeat()
 {
+	int tempTime = sound.getPlayingOffset().asMilliseconds();
+
+	// if pressed in 400ms window, doesn't get "TOO LATE"
+	// TOO LATE	-> health -= 10
+	// MISS		-> health -= 1
+	// ALMOST	-> health += 1
+	// HIT		-> health += 2
+	if (abs(tempTime - nextBeatTimeMS) <= 200) // HIT
+	{
+		combo++;
+		hitType = 2;
+	}
+	else if (abs(tempTime - nextBeatTimeMS) <= 400) // ALMOST
+	{
+		combo++;
+		hitType = 1;
+
+	}
+	else // MISS
+	{
+		hitType = 0;
+		combo = 0;
+	}
+
+	beatAccuracyCount[hitType]++;
+
+	if (combo > maxCombo)
+	{
+		maxCombo = combo;
+	}
+	beatPressed = false;
+
+
+	switch (hitType)
+	{
+		case 0:
+			comboString = "MISS";
+			health = clamp(health - 10, 0, 100);
+		break;
+		case 1:
+			comboString = "ALMOST";
+			health = clamp(health + 1, 0, 100);
+		break;
+		case 2:
+			comboString = "HIT";
+			health = clamp(health + 2, 0, 100);
+		break;
+		default:
+			break;
+	}
+
+	if (beatIt != beatsTime.end() && *beatIt <= tempTime + 800 )
+	{
+		prevBeatTimeMS = nextBeatTimeMS;
+		beatIt++;
+		if (beatIt != beatsTime.end())
+			nextBeatTimeMS = *beatIt;
+	}
 }
 void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
@@ -144,64 +207,7 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 	}
 	else if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
 	{
-		int tempTime = sound.getPlayingOffset().asMilliseconds();
-
-		// if pressed in 400ms window, doesn't get "TOO LATE"
-		// TOO LATE	-> health -= 10
-		// MISS		-> health -= 1
-		// ALMOST	-> health += 1
-		// HIT		-> health += 2
-		if (abs(tempTime - nextBeatTimeMS) <= 200) // HIT
-		{
-			combo++;
-			hitType = 2;
-		}
-		else if (abs(tempTime - nextBeatTimeMS) <= 400) // ALMOST
-		{
-			combo++;
-			hitType = 1;
-
-		}
-		else // MISS
-		{
-			hitType = 0;
-			combo = 0;
-		}
-
-		beatAccuracyCount[hitType]++;
-
-		if (combo > maxCombo)
-		{
-			maxCombo = combo;
-		}
-		beatPressed = false;
-
-
-		switch (hitType)
-		{
-			case 0:
-				comboString = "MISS";
-				health = clamp(health - 10, 0, 100);
-			break;
-			case 1:
-				comboString = "ALMOST";
-				health = clamp(health + 1, 0, 100);
-			break;
-			case 2:
-				comboString = "HIT";
-				health = clamp(health + 2, 0, 100);
-			break;
-			default:
-				break;
-		}
-
-		if (*beatIt <= tempTime + 800 && beatIt != beatsTime.end())
-		{
-			prevBeatTimeMS = nextBeatTimeMS;
-			beatIt++;
-			if (beatIt != beatsTime.end())
-				nextBeatTimeMS = *beatIt;
-		}
+		checkDropOnBeat();
 	}
 	GameBase::mouseEvent(dt, window, event);
 }

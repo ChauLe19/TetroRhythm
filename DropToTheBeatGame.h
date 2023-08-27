@@ -38,6 +38,7 @@ private:
 	Button *clearBoardButton;
 
 	void loadStaticAssets();
+	void beatClickedCheck();
 public:
 	DropToTheBeatGame(StateManager &stateManager, string folderPath);
 	~DropToTheBeatGame();

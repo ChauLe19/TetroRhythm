@@ -126,22 +126,36 @@ void GameBase::render(RenderWindow& window)
 
 void GameBase::keyEvent(const float & dt, Event event)
 {
-	if (event.type != Event::KeyPressed) return;
 	Keyboard::Key key = event.key.code;
-	if (key == Keyboard::Escape)
+	map<string, Keyboard::Key> keybinds = controlsSettings.keybinds;
+	if (event.type == Event::KeyPressed)
 	{
-		reset();
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+		if (key == Keyboard::Escape)
+		{
+			reset();
+			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+		}
+		else if (key == Keyboard::R)
+		{
+			restart();
+		}
+		else if (key == keybinds["HARD_DROP"])
+		{
+			keyMouseRegistered = true;
+		}
+
 	}
-	else if (key == Keyboard::R)
+	else if (event.type == Event::KeyReleased)
 	{
-		restart();
+		if (key == keybinds["HARD_DROP"])
+		{
+			keyMouseReleased = true;
+		}
 	}
 
 	if (isGameOver) return;
 
 	
-	map<string, Keyboard::Key> keybinds = controlsSettings.keybinds;
 	// No hold key control (rotation)
 	if (key == keybinds["ROTATE_CW"]
 		|| key == keybinds["ROTATE_CCW"]
@@ -176,14 +190,17 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 	}
 	else // game is still going
 	{
-		if (event.type == sf::Event::MouseButtonPressed)
+		if (keyMouseRegistered == true || event.type == sf::Event::MouseButtonPressed)
 		{
 			locked = true;
+			keyMouseRegistered = false;
 			lastMousePos = (Mouse::getPosition(window));
 		}
 
-		if (event.type == sf::Event::MouseButtonReleased)
+		if (keyMouseReleased == true || event.type == sf::Event::MouseButtonReleased)
 		{
+			cout << "key mouse released" << endl;
+			keyMouseReleased = false;
 			locked = false; // Reset
 			if (inputVertex.getVertexCount() >= 2)
 			{
