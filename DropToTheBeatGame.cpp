@@ -60,10 +60,10 @@ void DropToTheBeatGame::loadStaticAssets()
 	hitBar->setFillColor(Color(6, 156, 86));
 
 	RectangleShape *healthBar = new RectangleShape();
-	healthBar->setPosition(20, 40);
-	healthBar->setSize(Vector2f(500, 20));
+	healthBar->setPosition(boardX + boardWidth * boardSquareSize + 10, boardY - 5);
+	healthBar->setSize(Vector2f(20, boardHeight * boardSquareSize + 10));
 	healthBar->setFillColor(Color::Transparent);
-	healthBar->setOutlineColor(Color::White);
+	healthBar->setOutlineColor(Color(255, 255, 255, 200));
 	healthBar->setOutlineThickness(5);
 
 	assetManager->loadDrawable("beat bar", std::unique_ptr<sf::Drawable>(beatBar));
@@ -86,7 +86,7 @@ void DropToTheBeatGame::tick(const float & dt, RenderWindow& window)
 	}*/
 
 	// skip beat was out of 1000ms window
-	if (sound.getPlayingOffset().asMilliseconds() - 1000 >= nextBeatTimeMS  && beatIt != beatsTime.end())
+	if (beatIt != beatsTime.end() && sound.getPlayingOffset().asMilliseconds() - 1000 >= nextBeatTimeMS)
 	{
 		combo = 0;
 		comboString = "TOO LATE";
@@ -94,7 +94,8 @@ void DropToTheBeatGame::tick(const float & dt, RenderWindow& window)
 		health = clamp(health - 10, 0, 100);
 		prevBeatTimeMS = nextBeatTimeMS;
 		beatIt++;
-		nextBeatTimeMS = *beatIt;
+		if(beatIt != beatsTime.end())
+			nextBeatTimeMS = *beatIt;
 	}
 
 	if (health <= 0)
@@ -273,10 +274,10 @@ void DropToTheBeatGame::render(RenderWindow& window)
 
 
 	RectangleShape healthRect;
-	healthRect.setPosition(20, 40);
-	healthRect.setSize(Vector2f(health * 5, 20));
-	healthRect.setFillColor(Color::Yellow);
-	healthRect.setOutlineColor(Color::Yellow);
+	healthRect.setPosition(boardX + boardWidth * boardSquareSize + 10, boardY + boardHeight * boardSquareSize * (100-health)/100);
+	healthRect.setSize(Vector2f(20, boardHeight * boardSquareSize * health/ 100));
+	healthRect.setFillColor(Color(211,33, 44));
+	healthRect.setOutlineColor(Color(211, 33, 44));
 	healthRect.setOutlineThickness(5);
 	window.draw(healthRect);
 
