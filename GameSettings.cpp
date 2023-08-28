@@ -53,13 +53,13 @@ void GameSettings::initConfig()
 		int keyVal = 0;
 		while (configStream >> key >> keyVal)
 		{
-			if (key == "DAS")
+			if (key == "SFX")
 			{
-				controlsSettings->delayAutoShift = keyVal;
+				controlsSettings->sfx = keyVal;
 			}
-			else if (key == "ARR")
+			else if (key == "MUSIC")
 			{
-				controlsSettings->autoRepeatRate = keyVal;
+				controlsSettings->music = keyVal;
 			}
 		}
 	}

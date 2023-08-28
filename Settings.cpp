@@ -31,8 +31,8 @@ void Settings::keyEvent(const float & dt, Event event)
 		}
 		outFile.close();
 		outFile.open("Config/Config.txt", ios::out);
-		outFile << "DAS " << settings.delayAutoShift << endl;
-		outFile << "ARR " << settings.autoRepeatRate << endl;
+		outFile << "SFX " << settings.sfx << endl;
+		outFile << "MUSIC " << settings.music << endl;
 		outFile.close();
 		// state = State::MENU;
 		GameSettings::loadFiles(); // reload settings
@@ -62,15 +62,15 @@ void Settings::render(RenderWindow& window)
 	text.setPosition(1024 - text.getLocalBounds().width / 2, 50);
 	window.draw(text);
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		Controls_Key key = static_cast<Controls_Key> (i);
 		drawKeyConfig(fromControlsToString(key), fromKtoS(settings.keybinds[controlsList[i]]), 500, 300 + 80 * i, window, cursor == i, isChanging);
 	}
 
 
-	drawKeyConfig("DAS", "<  " + to_string(settings.delayAutoShift) + "  >", 500, 300 + 80 * 8, window, cursor == 8, isChanging);
-	drawKeyConfig("ARR", "<  " + to_string(settings.autoRepeatRate) + "  >", 500, 300 + 80 * 9, window, cursor == 9, isChanging);
+	drawKeyConfig("SFX", "<  " + to_string(settings.sfx) + "  >", 500, 300 + 80 * 3, window, cursor == 3, isChanging);
+	drawKeyConfig("MUSIC", "<  " + to_string(settings.music) + "  >", 500, 300 + 80 * 4, window, cursor == 4, isChanging);
 }
 
 void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow& window, bool isHighlight, bool changing)
@@ -101,7 +101,7 @@ void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow
 	text.setString(name);
 	window.draw(text);
 
-	text.setPosition(x + 825, y-15);
+	text.setPosition(x + 750, y-15);
 	text.setString(key);
 	window.draw(text);
 }
@@ -111,16 +111,16 @@ bool Settings::changeKey(Keyboard::Key key)
 	// dismiss special keys
 	if (key == Keyboard::Key::Escape || key == Keyboard::Key::Unknown || key == Keyboard::Key::R) return false;
 
-	if (cursor == 8)
+	if (cursor == 3)
 	{
 		if (key == Keyboard::Key::Right)
 		{
-			settings.delayAutoShift++;
+			settings.sfx = clamp(settings.sfx + 1, 0, 100);
 			return true;
 		}
 		else if (key == Keyboard::Key::Left)
 		{
-			settings.delayAutoShift--;
+			settings.sfx = clamp(settings.sfx - 1, 0, 100);
 			return true;
 		}
 		else if (key == Keyboard::Key::Return)
@@ -130,16 +130,16 @@ bool Settings::changeKey(Keyboard::Key key)
 		}
 		return false;
 	}
-	else if (cursor == 9)
+	else if (cursor == 4)
 	{
 		if (key == Keyboard::Key::Right)
 		{
-			settings.autoRepeatRate++;
+			settings.music = clamp(settings.music + 1, 0, 100);
 			return true;
 		}
 		else if (key == Keyboard::Key::Left)
 		{
-			settings.autoRepeatRate--;
+			settings.music = clamp(settings.music - 1, 0, 100);
 			return true;
 		}
 		else if (key == Keyboard::Key::Return)
@@ -163,7 +163,7 @@ void Settings::mouseEvent(const float & dt, RenderWindow& window, Event event)
 void Settings::setCursor(int cursor)
 {
 	// clamping from 0 to 9
-	this->cursor = cursor < 0 ? 0 : cursor >9 ? 9 : cursor;
+	this->cursor = clamp(cursor, 0, 4);
 }
 
 // TODO: Handle invalid input

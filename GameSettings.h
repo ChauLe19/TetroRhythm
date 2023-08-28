@@ -11,8 +11,8 @@ class GameSettings
 public:
 	struct Controls_Settings {
 		std::map<std::string, sf::Keyboard::Key> keybinds;
-		int delayAutoShift = 0;
-		int autoRepeatRate = 0;
+		int sfx = 0;
+		int music = 0;
 	};
 
 	static Controls_Settings getSettings();

@@ -199,7 +199,6 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 
 		if (keyMouseReleased == true || event.type == sf::Event::MouseButtonReleased)
 		{
-			cout << "key mouse released" << endl;
 			keyMouseReleased = false;
 			locked = false; // Reset
 			if (inputVertex.getVertexCount() >= 2)

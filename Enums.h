@@ -11,8 +11,7 @@ enum class State {
 };
 
 enum class Controls_Key {
-	MOVE_LEFT = 0, MOVE_RIGHT, ROTATE_CCW, ROTATE_CW,
-	ROTATE_180, HOLD, HARD_DROP, SOFT_DROP
+	HOLD, HARD_DROP, HARD_DROP_ALT
 };
 
 const map<ClearType, string> clearTypeStringMap = {
@@ -48,14 +47,9 @@ const map<ClearType, string> clearTypeStringMap = {
 };
 
 const map<Controls_Key, string> controlsStringMap = {
-	{Controls_Key::MOVE_LEFT, "Move left"},
-	{Controls_Key::MOVE_RIGHT, "Move right"},
-	{Controls_Key::ROTATE_CCW, "Rotate CCW"},
-	{Controls_Key::ROTATE_CW, "Rotate CW"},
-	{Controls_Key::ROTATE_180, "Rotate 180"},
 	{Controls_Key::HOLD, "Hold"},
 	{Controls_Key::HARD_DROP, "Hard drop"},
-	{Controls_Key::SOFT_DROP, "Soft drop"},
+	{Controls_Key::HARD_DROP_ALT, "Hard drop alt"},
 };
 
 const map<Keyboard::Key, string> keyboardKeyStringMap = {
