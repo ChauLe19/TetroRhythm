@@ -1,5 +1,6 @@
 #include "GameSettings.h"
 #include <fstream>
+#include <iostream>
 GameSettings::Controls_Settings* GameSettings::controlsSettings = NULL;
 
 GameSettings::GameSettings()
@@ -38,6 +39,7 @@ void GameSettings::initKeys()
 		while (keybindsStream >> key >> keyVal)
 		{
 			controlsSettings->keybinds[key] = sf::Keyboard::Key(keyVal);
+			std::cout << key << " " << keyVal << std::endl;
 		}
 	}
 	keybindsStream.close();

@@ -117,7 +117,7 @@ void DropToTheBeatGame::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed && event.type != Event::KeyReleased) return;
 	map<string, Keyboard::Key> keybinds = controlsSettings.keybinds;
-	if (event.type == Event::KeyReleased && event.key.code == keybinds["HARD_DROP"])
+	if (event.type == Event::KeyReleased && (event.key.code == keybinds["HARD_DROP"] || event.key.code == keybinds["HARD_DROP_ALT"]))
 	{
 		checkDropOnBeat();
 	}

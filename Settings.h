@@ -22,7 +22,7 @@
 using namespace sf;
 using namespace std;
 
-const string controlsList[8] = { "MOVE_LEFT","MOVE_RIGHT","ROTATE_CCW","ROTATE_CW","ROTATE_180","HOLD","HARD_DROP","SOFT_DROP" };
+const string controlsList[8] = { "HOLD","HARD_DROP","HARD_DROP_ALT" };
 class Settings : public StateScreen
 {
 public:

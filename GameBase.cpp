@@ -139,7 +139,7 @@ void GameBase::keyEvent(const float & dt, Event event)
 		{
 			restart();
 		}
-		else if (key == keybinds["HARD_DROP"])
+		else if (key == keybinds["HARD_DROP"] || key == keybinds["HARD_DROP_ALT"])
 		{
 			keyMouseRegistered = true;
 		}
@@ -147,7 +147,7 @@ void GameBase::keyEvent(const float & dt, Event event)
 	}
 	else if (event.type == Event::KeyReleased)
 	{
-		if (key == keybinds["HARD_DROP"])
+		if (key == keybinds["HARD_DROP"] || key == keybinds["HARD_DROP_ALT"])
 		{
 			keyMouseReleased = true;
 		}
