@@ -24,18 +24,8 @@ void Settings::keyEvent(const float & dt, Event event)
 	switch (key)
 	{
 	case Keyboard::Key::Escape:
-		outFile.open("Config/Keybinds.txt", ios::out);
-		for (std::map<string, Keyboard::Key>::iterator it = settings.keybinds.begin(); it != settings.keybinds.end(); ++it)
-		{
-			outFile << it->first << ' ' << it->second << endl;
-		}
-		outFile.close();
-		outFile.open("Config/Config.txt", ios::out);
-		outFile << "SFX " << settings.sfx << endl;
-		outFile << "MUSIC " << settings.music << endl;
-		outFile.close();
-		// state = State::MENU;
-		GameSettings::loadFiles(); // reload settings
+		GameSettings::saveKeys();
+		GameSettings::saveConfig();
 		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::Down:
@@ -65,12 +55,12 @@ void Settings::render(RenderWindow& window)
 	for (int i = 0; i < 3; i++)
 	{
 		Controls_Key key = static_cast<Controls_Key> (i);
-		drawKeyConfig(fromControlsToString(key), fromKtoS(settings.keybinds[controlsList[i]]), 500, 300 + 80 * i, window, cursor == i, isChanging);
+		drawKeyConfig(fromControlsToString(key), fromKtoS(settings->keybinds[controlsList[i]]), 500, 300 + 80 * i, window, cursor == i, isChanging);
 	}
 
 
-	drawKeyConfig("SFX", "<  " + to_string(settings.sfx) + "  >", 500, 300 + 80 * 3, window, cursor == 3, isChanging);
-	drawKeyConfig("MUSIC", "<  " + to_string(settings.music) + "  >", 500, 300 + 80 * 4, window, cursor == 4, isChanging);
+	drawKeyConfig("SFX", "<  " + to_string(settings->sfx) + "  >", 500, 300 + 80 * 3, window, cursor == 3, isChanging);
+	drawKeyConfig("MUSIC", "<  " + to_string(settings->music) + "  >", 500, 300 + 80 * 4, window, cursor == 4, isChanging);
 }
 
 void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow& window, bool isHighlight, bool changing)
@@ -115,12 +105,12 @@ bool Settings::changeKey(Keyboard::Key key)
 	{
 		if (key == Keyboard::Key::Right)
 		{
-			settings.sfx = clamp(settings.sfx + 1, 0, 100);
+			settings->sfx = clamp(settings->sfx + 1, 0, 100);
 			return true;
 		}
 		else if (key == Keyboard::Key::Left)
 		{
-			settings.sfx = clamp(settings.sfx - 1, 0, 100);
+			settings->sfx = clamp(settings->sfx - 1, 0, 100);
 			return true;
 		}
 		else if (key == Keyboard::Key::Return)
@@ -134,12 +124,12 @@ bool Settings::changeKey(Keyboard::Key key)
 	{
 		if (key == Keyboard::Key::Right)
 		{
-			settings.music = clamp(settings.music + 1, 0, 100);
+			settings->music = clamp(settings->music + 1, 0, 100);
 			return true;
 		}
 		else if (key == Keyboard::Key::Left)
 		{
-			settings.music = clamp(settings.music - 1, 0, 100);
+			settings->music = clamp(settings->music - 1, 0, 100);
 			return true;
 		}
 		else if (key == Keyboard::Key::Return)
@@ -150,7 +140,7 @@ bool Settings::changeKey(Keyboard::Key key)
 		return false;
 	}
 
-	settings.keybinds[controlsList[cursor]] = key;
+	settings->keybinds[controlsList[cursor]] = key;
 	isChanging = false;
 	return true;
 }

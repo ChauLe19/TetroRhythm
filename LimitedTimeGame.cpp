@@ -24,8 +24,14 @@ void LimitedTimeGame::tick(const float & dt, RenderWindow& window)
 
 	if (clock.getElapsedTime().asSeconds() >= 120)
 	{
-		gameOver();
 	}
+}
+
+void LimitedTimeGame::gameOver()
+{
+	GameBase::gameOver();
+	highscores->limit = max(highscores->limit, score);
+	GameSettings::saveHighscores();
 }
 
 void LimitedTimeGame::keyEvent(const float & dt, Event event)

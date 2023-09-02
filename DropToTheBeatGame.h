@@ -59,5 +59,6 @@ public:
 	void renderBeatSignal(RenderWindow& window);
 private:
 	void checkDropOnBeat();
+	void gameOver();
 };
 #endif

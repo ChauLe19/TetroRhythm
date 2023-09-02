@@ -14,6 +14,8 @@
 class EndlessGame :
 	public GameBase
 {
+private:
+	bool hsSaved = false;
 public:
 	EndlessGame(StateManager &stateManager, string folderPath);
 	~EndlessGame();
@@ -26,6 +28,8 @@ public:
 	void mouseEvent(const float & dt, RenderWindow& window, Event event);
 	void render(RenderWindow& window);
 
+private:
+	void gameOver();
 
 };
 

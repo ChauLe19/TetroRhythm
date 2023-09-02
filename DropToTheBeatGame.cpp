@@ -114,10 +114,24 @@ void DropToTheBeatGame::tick(const float & dt, RenderWindow& window)
 	}
 }
 
+void DropToTheBeatGame::gameOver()
+{
+	GameBase::gameOver();
+	if (highscores->dropToBeatHS.find(songName) != highscores->dropToBeatHS.end())
+	{
+		highscores->dropToBeatHS[songName] = max(highscores->dropToBeatHS[songName], score);
+	}
+	else
+	{
+		highscores->dropToBeatHS[songName] = score;
+	}
+	GameSettings::saveHighscores();
+}
+
 void DropToTheBeatGame::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed && event.type != Event::KeyReleased) return;
-	map<string, Keyboard::Key> keybinds = controlsSettings.keybinds;
+	map<string, Keyboard::Key> keybinds = controlsSettings->keybinds;
 	if (event.type == Event::KeyReleased && (event.key.code == keybinds["HARD_DROP"] || event.key.code == keybinds["HARD_DROP_ALT"]))
 	{
 		checkDropOnBeat();

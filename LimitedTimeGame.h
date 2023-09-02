@@ -26,6 +26,8 @@ public:
 	void mouseEvent(const float & dt, RenderWindow& window, Event event);
 	void render(RenderWindow& window);
 
+private:
+	void gameOver();
 
 };
 

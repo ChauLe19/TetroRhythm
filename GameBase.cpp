@@ -2,7 +2,7 @@
 #include "Menu.h"
 
 GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme")
-	: StateScreen(stateManager), songName(folderPath)
+	: StateScreen(stateManager), songName(fs::path(folderPath).filename().string())
 {
 	cout << "Initializing game" << endl;
 
@@ -127,7 +127,7 @@ void GameBase::render(RenderWindow& window)
 void GameBase::keyEvent(const float & dt, Event event)
 {
 	Keyboard::Key key = event.key.code;
-	map<string, Keyboard::Key> keybinds = controlsSettings.keybinds;
+	map<string, Keyboard::Key> keybinds = controlsSettings->keybinds;
 	if (event.type == Event::KeyPressed)
 	{
 		if (key == Keyboard::Escape)

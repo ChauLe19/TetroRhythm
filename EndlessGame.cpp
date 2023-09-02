@@ -21,6 +21,13 @@ void EndlessGame::tick(const float & dt, RenderWindow& window)
 	}
 }
 
+void EndlessGame::gameOver()
+{
+	GameBase::gameOver();
+	highscores->endless = max(highscores->endless, score);
+	GameSettings::saveHighscores();
+}
+
 void EndlessGame::keyEvent(const float & dt, Event event)
 {
 	GameBase::keyEvent(dt, event);
@@ -29,6 +36,10 @@ void EndlessGame::keyEvent(const float & dt, Event event)
 void EndlessGame::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 	GameBase::mouseEvent(dt, window, event);
+	if (isGameOver && !hsSaved)
+	{
+		hsSaved = true;
+	}
 }
 
 void EndlessGame::render(RenderWindow& window)

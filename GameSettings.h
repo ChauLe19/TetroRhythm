@@ -15,14 +15,27 @@ public:
 		int music = 0;
 	};
 
-	static Controls_Settings getSettings();
+	struct Highscores {
+		std::map<std::string, int> dropToBeatHS;
+		int endless = 0;
+		int limit = 0;
+	};
+
+	static Controls_Settings* getSettings();
+	static Highscores* getHighscores();
 	static void loadFiles();
+
+	static void saveKeys();
+	static void saveConfig();
+	static void saveHighscores();
 private:
 	static Controls_Settings* controlsSettings;
+	static Highscores* highscores;
 	GameSettings();
 	~GameSettings();
 
 	static void initKeys();
 	static void initConfig();
+	static void initHighscores();
 };
 

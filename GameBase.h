@@ -88,7 +88,8 @@ protected:
 
 	Keyboard::Key holdKey;
 	Keyboard::Key currentKey;
-	GameSettings::Controls_Settings controlsSettings = GameSettings::getSettings();
+	GameSettings::Controls_Settings* controlsSettings = GameSettings::getSettings();
+	GameSettings::Highscores* highscores = GameSettings::getHighscores();
 	bool firstPressed = false;
 	bool alreadyHold = false;
 	bool locked = false;
@@ -158,7 +159,7 @@ public:
 	void start();
 	void reset();
 	virtual void restart();
-	void gameOver();
+	virtual void gameOver();
 	bool createGarbageLine(int holePos);
 
 
