@@ -43,7 +43,7 @@ void GameSettings::loadFiles()
 void GameSettings::saveKeys()
 {
 	ofstream outFile;
-	outFile.open("Config/Keybinds.txt", ios::out);
+	outFile.open("Config/Keybinds.ini", ios::out);
 	for (std::map<string, sf::Keyboard::Key>::iterator it = controlsSettings->keybinds.begin(); it != controlsSettings->keybinds.end(); ++it)
 	{
 		outFile << it->first << ' ' << it->second << endl;
@@ -54,7 +54,7 @@ void GameSettings::saveKeys()
 void GameSettings::saveConfig()
 {
 	ofstream outFile;
-	outFile.open("Config/Config.txt", ios::out);
+	outFile.open("Config/Config.ini", ios::out);
 	outFile << "SFX " << controlsSettings->sfx << endl;
 	outFile << "MUSIC " << controlsSettings->music << endl;
 	outFile.close();
@@ -76,7 +76,7 @@ void GameSettings::saveHighscores()
 
 void GameSettings::initKeys()
 {
-	ifstream keybindsStream("Config/Keybinds.txt");
+	ifstream keybindsStream("Config/Keybinds.ini");
 	controlsSettings->keybinds.clear();
 
 	if (keybindsStream.is_open())
@@ -94,7 +94,7 @@ void GameSettings::initKeys()
 
 void GameSettings::initConfig()
 {
-	ifstream configStream("Config/Config.txt");
+	ifstream configStream("Config/Config.ini");
 
 	if (configStream.is_open())
 	{
