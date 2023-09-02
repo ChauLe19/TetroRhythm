@@ -36,7 +36,7 @@ void LimitedTimeGame::gameOver()
 
 void LimitedTimeGame::keyEvent(const float & dt, Event event)
 {
-	if (event.type != Event::KeyPressed) return;
+	if (event.type != Event::KeyPressed && event.type != Event::KeyReleased) return;
 	GameBase::keyEvent(dt, event);
 	if (event.key.code == Keyboard::R)
 	{
