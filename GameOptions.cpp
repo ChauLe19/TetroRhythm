@@ -205,42 +205,6 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 	}
 }
 
-std::string getRank(int score, int threshold)
-{
-	if (score == 0)
-	{
-		return "F";
-	}
-	else if (score >= threshold * 95 / 100)
-	{
-		return "SS";
-	}
-	else if (score >= threshold * 90 / 100)
-	{
-		return "S";
-	}
-	else if (score >= threshold * 85 / 100)
-	{
-		return "A";
-	}
-	else if (score >= threshold * 80 / 100)
-	{
-		return "B";
-	}
-	else if (score >= threshold * 75 / 100)
-	{
-		return "C";
-	}
-	else if (score >= threshold * 70 / 100)
-	{
-		return "D";
-	}
-	else
-	{
-		return "F";
-	}
-}
-
 void GameOptions::drawGameModeOption(RenderTexture& window, string gameMode, int x, int y, bool isHighlight)
 {
 	if (isHighlight)

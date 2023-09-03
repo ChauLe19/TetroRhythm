@@ -8,37 +8,16 @@ ResultScreen::ResultScreen(StateManager& stateManager, string songName, int accu
 	text.setFillColor(Color::White);
 	if (2 * (accuracyBeatCount[0] + accuracyBeatCount[1] + accuracyBeatCount[2]) != 0) 
 		accuracy = ((float)accuracyBeatCount[1] + 2.0 * (float)accuracyBeatCount[2]) * 100.0 / (2.0 * ((float)accuracyBeatCount[0] + (float)accuracyBeatCount[1] + (float)accuracyBeatCount[2])) ;
-	if (accuracy == 100.0)
-	{
-		letterRanked = "SS";
-	}
-	else if (accuracy >= 95.0)
-	{
-		letterRanked = "S";
-	}
-	else if (accuracy >= 90.0)
-	{
-		letterRanked = "A";
-	}
-	else if (accuracy >= 80.0)
-	{
-		letterRanked = "B";
-	}
-	else if (accuracy >= 70.0)
-	{
-		letterRanked = "C";
-	}
-	else
-	{
-		letterRanked = "D";
-	}
 	this->accuracyBeatCount[0] = accuracyBeatCount[0];
 	this->accuracyBeatCount[1] = accuracyBeatCount[1];
 	this->accuracyBeatCount[2] = accuracyBeatCount[2];
 	this->combo = combo;
 	this->rawScore = rawScore;
-	adjustedScore = accuracy * rawScore / 100;
-	//this->game = game;
+	this->rawScore = rawScore;
+	this->adjustedScore = rawScore;
+	std::map<std::string, int> thresholds = GameSettings::getHighscores()->dropToBeatThreshold;
+	int threshold = thresholds.find(songName) != thresholds.end() ? thresholds.at(songName) : 1;
+	this->letterRanked = getRank(rawScore, threshold);
 }
 
 ResultScreen::~ResultScreen()
@@ -93,7 +72,7 @@ void ResultScreen::keyEvent(const float & dt, Event event)
 		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::R:
-		stateManager.addState(std::unique_ptr<StateScreen>(new DropToTheBeatGame(stateManager, songName)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new DropToTheBeatGame(stateManager, fs::current_path().append("BeatMaps").append(songName).string())));
 		break;
 	}
 }

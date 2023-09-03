@@ -88,8 +88,8 @@ int getBeatMapThreshold(std::string songName)
 		beatCount--;
 	}
 
-	cout << songName << " : " << 100 * beatCount << std::endl;
-	return 100 * beatCount;
+	cout << songName << " : " << 150 * beatCount << std::endl;
+	return 150 * beatCount;
 }
 
 void GameSettings::initKeys()

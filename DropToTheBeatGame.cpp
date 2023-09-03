@@ -158,11 +158,13 @@ void DropToTheBeatGame::checkDropOnBeat()
 	{
 		combo++;
 		hitType = 2;
+		score += combo;
 	}
 	else if (abs(tempTime - nextBeatTimeMS) <= 400) // ALMOST
 	{
 		combo++;
 		hitType = 1;
+		score += combo;
 
 	}
 	else // MISS
@@ -189,10 +191,12 @@ void DropToTheBeatGame::checkDropOnBeat()
 		case 1:
 			comboString = "ALMOST";
 			health = clamp(health + 1, 0, 100);
+			score += 5;
 		break;
 		case 2:
 			comboString = "HIT";
 			health = clamp(health + 2, 0, 100);
+			score += 10;
 		break;
 		default:
 			break;
