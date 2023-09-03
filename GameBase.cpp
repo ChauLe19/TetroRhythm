@@ -178,7 +178,7 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 	if (isGameOver)
 	{
-		if (event.type == Event::MouseButtonPressed && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // Restart button
+		if (event.type == Event::MouseButtonReleased && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // Restart button
 		{
 			restart();
 		}
