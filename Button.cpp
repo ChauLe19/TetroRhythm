@@ -53,3 +53,8 @@ bool Button::mouseInButton(RenderWindow& window)
 {
 	return mouseInBox(window, position.x, position.y, size.x, size.y);
 }
+
+bool Button::posInButton(int x, int y)
+{
+	return posInBox(x, y, position.x, position.y, size.x, size.y);
+}

@@ -219,9 +219,10 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 		return;
 	}
 	if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && 
-		this->clearBoardButton->mouseInButton(window))
+		this->clearBoardButton->mouseInButton(window) && (inputVertex.getVertexCount() == 0 || this->clearBoardButton->posInButton(inputVertex[0].position.x, inputVertex[0].position.y)))
 	{
 		board.clearBoard();
+		this->inputVertex.clear();
 		return;
 	}
 	else if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)

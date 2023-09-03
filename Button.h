@@ -25,6 +25,7 @@ public:
 	bool keyEvent(Keyboard::Key key);
 	void render(RenderWindow& window, Text& text);
 	bool mouseInButton(RenderWindow& window);
+	bool posInButton(int x, int y);
 
 };
 #endif

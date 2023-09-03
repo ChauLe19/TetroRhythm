@@ -8,6 +8,12 @@ bool mouseInBox(RenderWindow& window, int x, int y, int width, int height)
 		&& mouseViewPos.y >= y && mouseViewPos.y <= y + height);
 }
 
+bool posInBox(int posX, int posY, int x, int y, int width, int height)
+{
+	return (posX >= x && posX <= x + width
+		&& posY >= y && posY <= y + height);
+}
+
 bool mouseInCircle(RenderWindow& window, int x, int y, int r)
 {
 	Vector2i pixelPos = Mouse::getPosition(window);
