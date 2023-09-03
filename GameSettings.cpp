@@ -74,6 +74,24 @@ void GameSettings::saveHighscores()
 	outFile.close();
 }
 
+int getBeatMapThreshold(std::string songName)
+{
+	ifstream beatStream("BeatMaps/" + songName +"/"+ songName+ ".txt");
+	int beatCount = 0;
+	if (beatStream.is_open()) {
+		char beat[10];
+		while (beatStream.getline(beat, 10, '\r')) // read bpm
+		{
+			beatCount++;
+		}
+		// remove the first init line
+		beatCount--;
+	}
+
+	cout << songName << " : " << 100 * beatCount << std::endl;
+	return 100 * beatCount;
+}
+
 void GameSettings::initKeys()
 {
 	ifstream keybindsStream("Config/Keybinds.ini");
@@ -118,8 +136,7 @@ void GameSettings::initConfig()
 void GameSettings::initHighscores()
 {
 	ifstream scoresStream("Config/scores.sav");
-	if (scoresStream.is_open())
-	{
+	if (scoresStream.is_open()) {
 		std::string line("");
 		int limitHS, endlessHS;
 		// parse the first line
@@ -138,6 +155,7 @@ void GameSettings::initHighscores()
 		while (std::getline(scoresStream, line)) // read song name here
 		{
 			songName = std::string(line);
+			highscores->dropToBeatThreshold.insert(std::pair<std::string, int> (songName, getBeatMapThreshold(songName)));
 			if (std::getline(scoresStream, line))
 			{
 				std::istringstream iss(line);

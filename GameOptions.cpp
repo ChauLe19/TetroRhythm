@@ -205,12 +205,48 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 	}
 }
 
+std::string getRank(int score, int threshold)
+{
+	if (score == 0)
+	{
+		return "F";
+	}
+	else if (score >= threshold * 95 / 100)
+	{
+		return "SS";
+	}
+	else if (score >= threshold * 90 / 100)
+	{
+		return "S";
+	}
+	else if (score >= threshold * 85 / 100)
+	{
+		return "A";
+	}
+	else if (score >= threshold * 80 / 100)
+	{
+		return "B";
+	}
+	else if (score >= threshold * 75 / 100)
+	{
+		return "C";
+	}
+	else if (score >= threshold * 70 / 100)
+	{
+		return "D";
+	}
+	else
+	{
+		return "F";
+	}
+}
+
 void GameOptions::drawGameModeOption(RenderTexture& window, string gameMode, int x, int y, bool isHighlight)
 {
 	if (isHighlight)
 	{
-		RectangleShape rect(Vector2f(window.getSize().x, 100));
-		rect.setPosition(x, y - 25);
+		RectangleShape rect(Vector2f(window.getSize().x, 150));
+		rect.setPosition(x, y - 38);
 		rect.setFillColor(Color(0, 186, 211));
 		window.draw(rect);
 
@@ -224,6 +260,17 @@ void GameOptions::drawGameModeOption(RenderTexture& window, string gameMode, int
 	text.setPosition(x, y);
 	text.setCharacterSize(60);
 	text.setString(gameMode);
+	window.draw(text);
+
+	text.setFillColor(Color::Green);
+	text.setPosition(x, y - 30);
+	text.setCharacterSize(30);
+	std::map<std::string, int> thresholds = GameSettings::getHighscores()->dropToBeatThreshold;
+	auto highscores = GameSettings::getHighscores()->dropToBeatHS;
+	int highscore = highscores.find(gameMode) != highscores.end() ? highscores.at(gameMode) : 0;
+	int threshold = thresholds.find(gameMode) != thresholds.end() ? thresholds.at(gameMode) : 1;
+
+	text.setString("Rank: " + getRank(highscore, threshold) + "\t HS : " + to_string(highscore));
 	window.draw(text);
 
 }

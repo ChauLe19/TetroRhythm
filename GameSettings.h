@@ -17,6 +17,7 @@ public:
 
 	struct Highscores {
 		std::map<std::string, int> dropToBeatHS;
+		std::map<std::string, int> dropToBeatThreshold;
 		int endless = 0;
 		int limit = 0;
 	};
