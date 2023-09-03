@@ -257,7 +257,7 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 							ClearingInfo tempClearingInfo = board.clearLines();
 							linesCleared += tempClearingInfo.linesCleared;
 							level = clamp(linesCleared / 10 + 1, 1, 15);
-							ClearType tempScoresType = GameBase::determineClearType(*prevPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+							ClearType tempScoresType = GameBase::determineClearType(*currentPiecePtr, tempClearingInfo, prevClearType, tempBoard);
 
 							//update clear type everytime the play drop a piece
 							recentClearType = tempScoresType;
@@ -685,6 +685,7 @@ int GameBase::getTSpinType(Tetromino piece, Board& board)
 {
 	if (piece.getType() == Type::T)
 	{
+		cout << "It's T" << std::endl;
 		int x = piece.getXPos();
 		int y = piece.getYPos();
 
@@ -698,9 +699,11 @@ int GameBase::getTSpinType(Tetromino piece, Board& board)
 		if (leftFrontCornerFilled && rightFrontCornerFilled && (rightBackCornerFilled || leftBackCornerFilled))
 		{
 			return 2;
+			cout << "It's T2" << std::endl;
 		}
 		else if (rightBackCornerFilled && leftBackCornerFilled && (leftFrontCornerFilled || rightFrontCornerFilled))
 		{
+			cout << "It's T1" << std::endl;
 			return 1;
 		}
 	}
