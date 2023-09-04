@@ -101,6 +101,9 @@ protected:
 	static bool isB2BChain(ClearType type);
 	static int getTSpinType(Tetromino piece, Board& board);
 
+protected:
+	void clearLines();
+
 public:
 	GameBase(StateManager& stateManager, string folderPath);
 	~GameBase();

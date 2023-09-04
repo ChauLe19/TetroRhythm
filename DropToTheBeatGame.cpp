@@ -222,6 +222,8 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 		this->gravityButton->mouseInButton(window) && (inputVertex.getVertexCount() == 0 || this->gravityButton->posInButton(inputVertex[0].position.x, inputVertex[0].position.y)))
 	{
 		board.enforceGravity();
+		clearLines();
+		checkDropOnBeat();
 		this->inputVertex.clear();
 		return;
 	}

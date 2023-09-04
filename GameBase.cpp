@@ -170,6 +170,28 @@ void GameBase::keyEvent(const float & dt, Event event)
 	firstPressed = true;
 }
 
+void GameBase::clearLines()
+{
+	// TODO: copy board before clear, is this optimized???
+	Board tempBoard = board;
+	ClearingInfo tempClearingInfo = board.clearLines();
+	linesCleared += tempClearingInfo.linesCleared;
+	level = clamp(linesCleared / 10 + 1, 1, 15);
+	ClearType tempScoresType = GameBase::determineClearType(*currentPiecePtr, tempClearingInfo, prevClearType, tempBoard);
+
+	//update clear type everytime the play drop a piece
+	recentClearType = tempScoresType;
+
+	//update clear type only when the dropped piece clear lines
+	// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
+	if (tempScoresType != ClearType::NONE)
+	{
+		prevClearType = tempScoresType;
+		clearTypeCounter = 60; // 1 second display
+	}
+	score += GameBase::convertClearTypeToScores(tempScoresType);
+}
+
 void GameBase::mouseScrollEvent(Event event)
 {
 }
@@ -252,24 +274,7 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 					{
 						if (prevPiecePtr != nullptr)
 						{
-							// TODO: copy board before clear, is this optimized???
-							Board tempBoard = board;
-							ClearingInfo tempClearingInfo = board.clearLines();
-							linesCleared += tempClearingInfo.linesCleared;
-							level = clamp(linesCleared / 10 + 1, 1, 15);
-							ClearType tempScoresType = GameBase::determineClearType(*currentPiecePtr, tempClearingInfo, prevClearType, tempBoard);
-
-							//update clear type everytime the play drop a piece
-							recentClearType = tempScoresType;
-
-							//update clear type only when the dropped piece clear lines
-							// ignore if not clearing anything. maintain b2b after a clearing-nothing hard drop
-							if (tempScoresType != ClearType::NONE)
-							{
-								prevClearType = tempScoresType;
-								clearTypeCounter = 60; // 1 second display
-							}
-							score += GameBase::convertClearTypeToScores(tempScoresType);
+							clearLines();
 						}
 
 						nextPiece();
