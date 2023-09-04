@@ -35,10 +35,9 @@ private:
 	int accuracyTimer = 0; 
 	int health = 100; // 0 <= health <= 100
 	int healthCounter = 0; // if reaches 60, health +=1 (every second, health +=1_
-	Button *clearBoardButton;
+	Button *gravityButton;
 
 	void loadStaticAssets();
-	void beatClickedCheck();
 public:
 	DropToTheBeatGame(StateManager &stateManager, string folderPath);
 	~DropToTheBeatGame();

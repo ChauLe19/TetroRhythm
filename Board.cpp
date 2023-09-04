@@ -112,6 +112,34 @@ void Board::clearBoard()
 	}
 }
 
+void Board::enforceGravity()
+{
+	// check each collumn
+	for (int j = 0; j < boardWidth; j++)
+	{
+		// while the current cell is empty, shift all the cells above down
+		for (int k = boardHeight - 1; k >= 0; k--)
+		{
+			int linesShift = 0;
+			// count number of empty cells right above the current cell
+			for (int t = k; t > 0; t--)
+			{
+				if (board[t][j] > 0)
+				{
+					break;
+				}
+				linesShift++;
+			}
+			
+			for (int t = k; linesShift > 0 && t - linesShift >= 0; t--)
+			{
+				board[t][j] = board[t - linesShift][j];
+				board[t - linesShift][j] = 0;
+			}
+		}
+	}
+}
+
 
 
 // TODO: check if this return a copy or reference

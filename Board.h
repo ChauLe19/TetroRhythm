@@ -158,6 +158,7 @@ public:
 	void print();
 
 	void clearBoard();
+	void enforceGravity();
 
 	int getXPos();
 	int getYPos();

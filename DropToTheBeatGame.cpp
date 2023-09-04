@@ -3,7 +3,7 @@
 DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
 {
 	loadStaticAssets();
-	this->clearBoardButton = new Button(Color::White, 50, Color::Transparent, "Clear", Vector2f(boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200), Vector2f(200, 200), Color(0, 186, 211), Keyboard::Unknown);
+	this->gravityButton = new Button(Color::White, 50, Color::Transparent, "Gravity", Vector2f(boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200), Vector2f(200, 200), Color(0, 186, 211), Keyboard::Unknown);
 
 	// Load map info
 	fs::path txtPath = folderPath;
@@ -34,7 +34,7 @@ DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPa
 
 DropToTheBeatGame::~DropToTheBeatGame()
 {
-	delete this->clearBoardButton;
+	delete this->gravityButton;
 }
 
 void DropToTheBeatGame::loadStaticAssets()
@@ -214,14 +214,14 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 {
 	if (finished) return;
 	if (!isGameOver && event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left &&
-		this->clearBoardButton->mouseInButton(window))
+		this->gravityButton->mouseInButton(window))
 	{
 		return;
 	}
 	if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && 
-		this->clearBoardButton->mouseInButton(window) && (inputVertex.getVertexCount() == 0 || this->clearBoardButton->posInButton(inputVertex[0].position.x, inputVertex[0].position.y)))
+		this->gravityButton->mouseInButton(window) && (inputVertex.getVertexCount() == 0 || this->gravityButton->posInButton(inputVertex[0].position.x, inputVertex[0].position.y)))
 	{
-		board.clearBoard();
+		board.enforceGravity();
 		this->inputVertex.clear();
 		return;
 	}
@@ -315,7 +315,7 @@ void DropToTheBeatGame::render(RenderWindow& window)
 		accuracyTimer--;
 		window.draw(text);
 	}
-	this->clearBoardButton->render(window, text);
+	this->gravityButton->render(window, text);
 
 
 
