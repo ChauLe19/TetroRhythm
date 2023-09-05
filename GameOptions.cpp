@@ -226,7 +226,7 @@ void GameOptions::drawGameModeOption(RenderTexture& window, string gameMode, int
 	text.setString(gameMode);
 	window.draw(text);
 
-	text.setFillColor(Color::Green);
+	text.setFillColor(isHighlight ? Color(50, 50, 50) : Color(200, 200, 200));
 	text.setPosition(x, y - 30);
 	text.setCharacterSize(30);
 	std::map<std::string, int> thresholds = GameSettings::getHighscores()->dropToBeatThreshold;
