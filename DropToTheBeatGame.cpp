@@ -3,7 +3,7 @@
 DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
 {
 	loadStaticAssets();
-	this->gravityButton = new Button(Color::White, 50, Color::Transparent, "Gravity", Vector2f(boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200), Vector2f(200, 200), Color(0, 186, 211), Keyboard::Unknown);
+	this->gravityButton = new GravityButton(Color::White, 50, Color::Transparent, "Gravity", Vector2f(boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200), Vector2f(200, 200), Color(0, 186, 211), Keyboard::Unknown);
 
 	// Load map info
 	fs::path txtPath = folderPath;
@@ -159,13 +159,16 @@ void DropToTheBeatGame::checkDropOnBeat()
 		combo++;
 		hitType = 2;
 		score += combo;
+		gravityCharge = clamp(gravityCharge + 5, 0, 100);
+		gravityButton->setProgress(gravityCharge);
 	}
 	else if (abs(tempTime - nextBeatTimeMS) <= 400) // ALMOST
 	{
 		combo++;
 		hitType = 1;
 		score += combo;
-
+		gravityCharge = clamp(gravityCharge + 5, 0, 100);
+		gravityButton->setProgress(gravityCharge);
 	}
 	else // MISS
 	{
@@ -221,6 +224,8 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 	if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && 
 		this->gravityButton->mouseInButton(window) && (inputVertex.getVertexCount() == 0 || this->gravityButton->posInButton(inputVertex[0].position.x, inputVertex[0].position.y)))
 	{
+		gravityCharge = 0;
+		gravityButton->setProgress(gravityCharge);
 		board.enforceGravity();
 		clearLines();
 		checkDropOnBeat();
@@ -286,6 +291,8 @@ void DropToTheBeatGame::restart()
 	beatIt = beatsTime.begin();
 	nextBeatTimeMS = *beatIt;
 	prevBeatTimeMS = 0;
+	gravityCharge = 0;
+	gravityButton->setProgress(gravityCharge);
 }
 
 void DropToTheBeatGame::render(RenderWindow& window)

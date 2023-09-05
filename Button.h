@@ -6,7 +6,7 @@
 
 class Button
 {
-private:
+protected:
 	Vector2f position;
 	Vector2f size;
 	int fontSize;

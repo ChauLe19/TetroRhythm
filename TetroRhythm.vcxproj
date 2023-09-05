@@ -140,6 +140,7 @@
     <ClInclude Include="GameBase.h" />
     <ClInclude Include="GameOptions.h" />
     <ClInclude Include="GameSettings.h" />
+    <ClInclude Include="GravityButton.h" />
     <ClInclude Include="LimitedTimeGame.h" />
     <ClInclude Include="MapEditorSelect.h" />
     <ClInclude Include="MasterClass.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="GameBase.cpp" />
     <ClCompile Include="GameOptions.cpp" />
     <ClCompile Include="GameSettings.cpp" />
+    <ClCompile Include="GravityButton.cpp" />
     <ClCompile Include="LimitedTimeGame.cpp" />
     <ClCompile Include="MapEditorSelect.cpp" />
     <ClCompile Include="MasterClass.cpp" />
