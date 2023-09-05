@@ -232,9 +232,21 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 		this->inputVertex.clear();
 		return;
 	}
-	else if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left)
+	else if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && inputVertex.getVertexCount() > 0)
 	{
-		checkDropOnBeat();
+		// if it's a valid drawing input (long enough), then register as a check drop on beat
+		// redundant since you do this twice in the GameBase too
+		Vertex firstPoint = inputVertex[0];
+		Vertex lastPoint = inputVertex[inputVertex.getVertexCount() - 1];
+		int xDir = lastPoint.position.x - firstPoint.position.x;
+		int yDir = lastPoint.position.y - firstPoint.position.y;
+		Moving_Direction mouseDirection = Moving_Direction::UP_DIR;
+		
+		int XorYdir = max(abs(xDir), abs(yDir));
+		if (XorYdir >= 50) // only register input if it's long enough
+		{
+			checkDropOnBeat();
+		}
 	}
 	GameBase::mouseEvent(dt, window, event);
 }
