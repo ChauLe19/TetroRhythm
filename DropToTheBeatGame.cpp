@@ -390,7 +390,7 @@ void DropToTheBeatGame::render(RenderWindow& window)
 
 	text.setCharacterSize(50);
 	text.setString("Combo: " + getLeftPaddingString(to_string(combo), 4, ' ') );
-	text.setPosition(boardX - text.getLocalBounds().width - 100, boardY);
+	text.setPosition(boardX - text.getLocalBounds().width - 50, boardY);
 	window.draw(text);
 
 	text.setFillColor(Color(255, 255, 255, 200));

@@ -24,6 +24,8 @@ void LimitedTimeGame::tick(const float & dt, RenderWindow& window)
 
 	if (clock.getElapsedTime().asSeconds() >= 120)
 	{
+		sound.stop();
+		isGameOver = true;
 	}
 }
 
@@ -58,11 +60,13 @@ void LimitedTimeGame::render(RenderWindow& window)
 	GameBase::render(window);
 
 	Int32 tleft = 120000-clock.getElapsedTime().asMilliseconds();
+	text.setCharacterSize(50);
 	text.setString("Time left ");
-	text.setPosition(250, 500);
+	text.setPosition(300, 500);
 	window.draw(text);
+	text.setCharacterSize(70);
 	text.setString(to_string(tleft / 1000/60) + ":"+to_string(tleft / 1000%60) + ":" + to_string((tleft % 1000)/10));
-	text.setPosition(300, 600);
+	text.setPosition(300, 550);
 	window.draw(text);
 
 	if (isGameOver)

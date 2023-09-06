@@ -75,6 +75,7 @@ void GameBase::tick(const float & dt, RenderWindow& window)
 void GameBase::render(RenderWindow& window)
 {
 	text.setFillColor(Color::White);
+	text.setCharacterSize(50);
 	board.render(window);
 
 	holdPiecePtr = currentPiecePtr;
@@ -109,7 +110,7 @@ void GameBase::render(RenderWindow& window)
 	{
 		clearTypeCounter--;
 		text.setString(clearTypeToString(prevClearType));
-		text.setPosition(boardX - text.getLocalBounds().width - 100, 300);
+		text.setPosition(boardX - text.getLocalBounds().width - 50, 300);
 		window.draw(text);
 	}
 
