@@ -65,7 +65,7 @@ void GameOptions::render(RenderWindow& window)
 	}
 
 	Sprite sprite(mapsTexture.getTexture());
-	sprite.setPosition(window.getSize().x - 1000, 300);
+	sprite.setPosition(2048 - 1000, 300);
 	window.draw(sprite);
 
 	startButton.render(window, text);
@@ -181,7 +181,7 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 	{
 		cursorMode = 2;
 	}
-	else if (event.type == Event::MouseButtonPressed && mouseInBox(window, window.getSize().x - 1000, 300, 1000, 700))
+	else if (event.type == Event::MouseButtonPressed && mouseInBox(window, 2048 - 1000, 300, 1000, 700))
 	{
 		isPressed = true;
 		Vector2i pixelPos = Mouse::getPosition(window);
