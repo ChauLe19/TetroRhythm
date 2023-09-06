@@ -86,11 +86,11 @@ void GameBase::render(RenderWindow& window)
 		{
 			extra = 0;
 		}
-		holdPiecePtr->render(window, boardX - boardSquareSize* 4 + extra, boardY + boardSquareSize/ 2);
+		holdPiecePtr->render(window, boardX + (boardSquareSize/2) + boardSquareSize * boardWidth + extra, boardY + boardSquareSize / 2);
 	}
 
 	// Render 2 preview pieces
-	int counter = 0;
+	int counter = 1; // shift 1 tetrmino down to leave space for the current piece
 	std::list<Tetromino*>::iterator fifthIt = bag.begin();
 	advance(fifthIt, 2);
 	for (std::list<Tetromino*>::iterator it = bag.begin(); it != fifthIt; ++it)
@@ -100,7 +100,7 @@ void GameBase::render(RenderWindow& window)
 		{
 			extra = 0;
 		}
-		(*it)->render(window, boardX + (boardSquareSize/ 2) + boardSquareSize* boardWidth + extra, boardY + boardSquareSize+ boardSquareSize* 3 * counter);
+		(*it)->render(window, boardX + (boardSquareSize/ 2) + boardSquareSize* boardWidth + extra, boardY + boardSquareSize / 2+ boardSquareSize* 2 * counter);
 		counter++;
 	}
 
@@ -109,7 +109,7 @@ void GameBase::render(RenderWindow& window)
 	{
 		clearTypeCounter--;
 		text.setString(clearTypeToString(prevClearType));
-		text.setPosition(1024 - boardSquareSize* 5 - 20 - text.getLocalBounds().width, 300);
+		text.setPosition(boardX - text.getLocalBounds().width - 100, 300);
 		window.draw(text);
 	}
 
