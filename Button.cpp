@@ -28,6 +28,11 @@ void Button::setHighlight(bool isHighlight)
 	this->isHighlight = isHighlight;
 }
 
+bool Button::isHighlighted()
+{
+	return this->isHighlight;
+}
+
 bool Button::keyEvent(Keyboard::Key key)
 {
 	if (this->key == key)

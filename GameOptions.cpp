@@ -53,9 +53,22 @@ void GameOptions::render(RenderWindow& window)
 		endlessGameButton.setHighlight(true);
 		break;
 	}
+
 	dropOnBeatGameButton.render(window, text);		// drop blocks on the beat receives bonus
+
 	limitedGameButton.render(window, text);		// get the highest score in 2 min
+	text.setFillColor(limitedGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
+	text.setCharacterSize(30);
+	text.setString("Highscore: " + to_string(GameSettings::getHighscores()->limit));
+	text.setPosition(200, 500 - 40);
+	window.draw(text);
+
 	endlessGameButton.render(window, text);	// just play
+	text.setFillColor(endlessGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
+	text.setCharacterSize(30);
+	text.setString("Highscore: " + to_string(GameSettings::getHighscores()->endless));
+	text.setPosition(200, 700 - 40);
+	window.draw(text);
 
 
 	int size = maps.size();
