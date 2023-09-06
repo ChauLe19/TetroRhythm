@@ -58,13 +58,13 @@ void LimitedTimeGame::render(RenderWindow& window)
 	GameBase::render(window);
 
 	Int32 tleft = 120000-clock.getElapsedTime().asMilliseconds();
-	text.setString("Time left: " + to_string(tleft / 1000/60) + ":"+to_string(tleft / 1000%60) + ":" + to_string(tleft % 1000));
-	text.setPosition(200, 600);
+	text.setString("Time left ");
+	text.setPosition(250, 500);
+	window.draw(text);
+	text.setString(to_string(tleft / 1000/60) + ":"+to_string(tleft / 1000%60) + ":" + to_string((tleft % 1000)/10));
+	text.setPosition(300, 600);
 	window.draw(text);
 
-	text.setString("Score: " + to_string(score));
-	text.setPosition(200, 500);
-	window.draw(text);
 	if (isGameOver)
 	{
 		GameBase::renderGameOver(window);
