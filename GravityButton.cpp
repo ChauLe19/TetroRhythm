@@ -3,7 +3,7 @@
 GravityButton::GravityButton(Color textColor, int fontSize, sf::Color boxColor, string textString, Vector2f position, Vector2f size, sf::Color highlightColor, Keyboard::Key key)
 	:Button(textColor, fontSize, boxColor, textString, position, size, highlightColor, key)
 {
-	progressRect.setFillColor(Color::Green);
+	progressRect.setFillColor(Color(0, 186, 211, 200));
 	progressRect.setPosition(position);
 	progressRect.setOutlineThickness(5);
 	progressRect.setOutlineColor(Color::Transparent);
