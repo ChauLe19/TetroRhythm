@@ -113,9 +113,9 @@ void GameBase::render(RenderWindow& window)
 		window.draw(text);
 	}
 
-	text.setCharacterSize(60);
+	text.setCharacterSize(70);
 	text.setString(to_string(score));
-	text.setPosition(boardX + boardSquareSize* boardWidth / 2 - text.getLocalBounds().width/2, boardY + boardSquareSize * boardHeight);
+	text.setPosition(boardX + boardSquareSize* boardWidth / 2 - text.getLocalBounds().width/2, boardY + boardSquareSize * boardHeight + 50);
 	window.draw(text);
 
 

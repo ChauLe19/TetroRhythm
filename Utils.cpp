@@ -51,19 +51,19 @@ std::string getRank(int score, int threshold)
 	{
 		return "F";
 	}
-	else if (score >= threshold * 95 / 100)
+	else if (score >= threshold) // 100%
 	{
 		return "SS";
 	}
-	else if (score >= threshold * 90 / 100)
+	else if (score >= threshold * 95 / 100)
 	{
 		return "S";
 	}
-	else if (score >= threshold * 85 / 100)
+	else if (score >= threshold * 90 / 100)
 	{
 		return "A";
 	}
-	else if (score >= threshold * 80 / 100)
+	else if (score >= threshold * 85 / 100)
 	{
 		return "B";
 	}
@@ -71,7 +71,7 @@ std::string getRank(int score, int threshold)
 	{
 		return "C";
 	}
-	else if (score >= threshold * 70 / 100)
+	else if (score >= threshold * 60 / 100)
 	{
 		return "D";
 	}
