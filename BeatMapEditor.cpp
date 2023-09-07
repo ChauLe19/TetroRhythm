@@ -120,25 +120,25 @@ void BeatMapEditor::loadStaticAssets()
 	rightPause->setPosition(1040, 900);
 
 	RectangleShape *wholeAudioSlider = new RectangleShape(); // a slider of the whole audio file
-	wholeAudioSlider->setSize(Vector2f(sliderLength, sliderHeight));
-	wholeAudioSlider->setFillColor(Color(0, 0, 0, 0));
-	wholeAudioSlider->setOutlineColor(Color::White);
+	wholeAudioSlider->setSize(Vector2f(2048, sliderHeight));
+	wholeAudioSlider->setFillColor(Color(0, 0, 0, 150));
+	wholeAudioSlider->setOutlineColor(Color::Transparent);
 	wholeAudioSlider->setOutlineThickness(5);
-	wholeAudioSlider->setPosition(24, 1000);
+	wholeAudioSlider->setPosition(0, 1152 - sliderHeight);
 
 	RectangleShape *partAudioSlider = new RectangleShape(); // a slider show only 5 sec part of the audio at the cursor
-	partAudioSlider->setSize(Vector2f(sliderLength, sliderHeight));
-	partAudioSlider->setOutlineColor(Color::White);
+	partAudioSlider->setSize(Vector2f(2048, sliderHeight));
+	partAudioSlider->setOutlineColor(Color::Transparent);
 	partAudioSlider->setOutlineThickness(5);
-	partAudioSlider->setFillColor(Color(0, 0, 0, 0));
-	partAudioSlider->setPosition(24, 50);
+	partAudioSlider->setFillColor(Color(0, 0, 0, 150));
+	partAudioSlider->setPosition(0, 0);
 
 
 	RectangleShape *partAudioCursor = new RectangleShape(); // cursor for part audio slider
 	partAudioCursor->setSize(Vector2f(10, sliderHeight));
 	partAudioCursor->setFillColor(Color::Yellow);
 	partAudioCursor->setOutlineColor(Color::Yellow);
-	partAudioCursor->setPosition(24 - 5 + sliderLength / 2, 50); // middle of slider
+	partAudioCursor->setPosition(24 - 5 + sliderLength / 2, 0); // middle of slider
 
 	CircleShape *beatButton = new CircleShape();
 	beatButton->setRadius(250);
@@ -193,7 +193,7 @@ void BeatMapEditor::render(RenderWindow& window)
 	text.setPosition(20, 10);
 	text.setCharacterSize(30);
 	text.setString("Drag the bottom cursor to navigate along the beats. Hover your mouse over green tick(s) while holding right click to erase them. Press B or right click the center circle to place beat. Spacebar to play/pause.");
-	window.draw(text);
+	// window.draw(text);
 
 	speedButton025->render(window, text);
 	speedButton050->render(window, text);
@@ -217,7 +217,7 @@ void BeatMapEditor::render(RenderWindow& window)
 	wholeAudioCursor.setSize(Vector2f(10, sliderHeight));
 	wholeAudioCursor.setFillColor(Color::Yellow);
 	wholeAudioCursor.setOutlineColor(Color::Yellow);
-	wholeAudioCursor.setPosition(24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1000);
+	wholeAudioCursor.setPosition(24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1152 - sliderHeight);
 	window.draw(wholeAudioCursor);
 
 	list<int>::iterator it = beatsTime.begin(); // draw beats
@@ -227,7 +227,7 @@ void BeatMapEditor::render(RenderWindow& window)
 		RectangleShape beat;
 		beat.setSize(Vector2f(4, sliderHeight / 2));
 		beat.setFillColor(Color::Green);
-		beat.setPosition(24 - 2 + sliderLength * (*it) / musicDurationMS, 1000 + sliderHeight / 2);
+		beat.setPosition(24 - 2 + sliderLength * (*it) / musicDurationMS, 1152 - sliderHeight / 2);
 		window.draw(beat);
 
 		// draw the top beats (the closeup audio)
@@ -236,7 +236,7 @@ void BeatMapEditor::render(RenderWindow& window)
 			RectangleShape beatInPartSlider;
 			beatInPartSlider.setSize(Vector2f(10, sliderHeight * 2 / 3));
 			beatInPartSlider.setFillColor(Color::Green);
-			beatInPartSlider.setPosition(24 - 10 / 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - *it) / 2500, 50 + sliderHeight / 3);
+			beatInPartSlider.setPosition(24 - 10 / 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - *it) / 2500, sliderHeight / 3);
 			window.draw(beatInPartSlider);
 		}
 
@@ -253,7 +253,7 @@ void BeatMapEditor::render(RenderWindow& window)
 		beatInPartSlider.setSize(Vector2f(4, sliderHeight / 4));
 		beatInPartSlider.setFillColor(i % 4 == 0 ? Color::White : Color::Blue);
 		int t = i * (float)mspb / 4;
-		beatInPartSlider.setPosition(24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - t) / 2500, 50 + sliderHeight * 3 / 8);
+		beatInPartSlider.setPosition(24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - t) / 2500, sliderHeight * 3 / 8);
 		window.draw(beatInPartSlider);
 	}
 
@@ -349,7 +349,7 @@ void BeatMapEditor::mouseEvent(const float & dt, RenderWindow& window, Event eve
 			if (cursorRelToMusicMS >= *it - 2500 && cursorRelToMusicMS <= *it + 2500)
 			{
 				// erase beat that mouse if over when right mouse is pressed	
-				if (mouseInBox(window, 24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - *it) / 2500, 50 + sliderHeight / 2, 10, sliderHeight / 2))
+				if (mouseInBox(window, 24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - *it) / 2500, sliderHeight / 2, 10, sliderHeight / 2))
 				{
 					beatsTime.erase(it);
 					break;
@@ -362,7 +362,7 @@ void BeatMapEditor::mouseEvent(const float & dt, RenderWindow& window, Event eve
 
 	Vector2i pixelPos = Mouse::getPosition(window);
 	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
-	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1000, 10, sliderHeight))
+	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1152 - sliderHeight, 10, sliderHeight))
 	{
 		cursorSelected = true;
 		cursorRelToMusicMS = (mouseViewPos.x - 24 + 5) * musicDurationMS / sliderLength;

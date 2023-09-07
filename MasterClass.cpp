@@ -9,7 +9,7 @@ MasterClass::MasterClass(RenderWindow& window)
 	text.setCharacterSize(20);
 	text.setFillColor(Color::White);
 	backgroundSprite.setTexture(AssetManager::getInstance()->getTexture("background"));
-	backgroundSprite.setColor(Color(255, 255, 255, 50));
+	backgroundSprite.setColor(Color(255, 255, 255, 100));
 	this->stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 }
 
