@@ -431,6 +431,23 @@ void BeatMapEditor::mouseEvent(const float & dt, RenderWindow& window, Event eve
 		{
 			divider = 16;
 		}
+		else if (mouseInBox(window, 50, 1152 - sliderHeight - 40, 30, 40))
+		{
+			if (sound.getPlayingOffset().asMilliseconds() == musicDurationMS)
+			{
+				//basically restart if at the end
+				sound.setPlayingOffset(milliseconds(0));
+				sound.play();
+			}
+			else if (sound.getStatus() != Music::Status::Playing)
+			{
+				sound.play();
+			}
+			else
+			{
+				sound.pause();
+			}
+		}
 	}
 	else if (Mouse::isButtonPressed(Mouse::Right))
 	{
