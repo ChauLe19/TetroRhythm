@@ -7,15 +7,15 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 	loadStaticAssets();
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
-	speedButton025 = new Button(Color::White, 35, Color::Transparent, "x0.25", Vector2f(2048 - 470, 1152 - sliderHeight - 70), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Num2);
-	speedButton050 = new Button(Color::White, 35, Color::Transparent, "x0.50", Vector2f(2048 - 320, 1152 - sliderHeight - 70), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Num5);
+	speedButton025 = new Button(Color::White, 35, Color::Transparent, "x0.25", Vector2f(2048 - 3 * 170, 1152 - sliderHeight - 70), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Num2);
+	speedButton050 = new Button(Color::White, 35, Color::Transparent, "x0.50", Vector2f(2048 - 2 * 170, 1152 - sliderHeight - 70), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Num5);
 	speedButton100 = new Button(Color::White, 35, Color::Transparent, "x1", Vector2f(2048 - 170, 1152 - sliderHeight - 70), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Num1);
 
-	dividerButton1 = new Button(Color::White, 35, Color::Transparent, "1", Vector2f(50, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
-	dividerButton12 = new Button(Color::White, 35, Color::Transparent, "1/2", Vector2f(200, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
-	dividerButton13 = new Button(Color::White, 35, Color::Transparent, "1/3", Vector2f(350, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
-	dividerButton14 = new Button(Color::White, 35, Color::Transparent, "1/4", Vector2f(500, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
-	dividerButton116 = new Button(Color::White, 35, Color::Transparent, "1/16", Vector2f(650, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
+	dividerButton1 = new Button(Color::White, 35, Color::Transparent, "1", Vector2f(2048 - 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
+	dividerButton12 = new Button(Color::White, 35, Color::Transparent, "1/2", Vector2f(2048 - 2 * 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
+	dividerButton13 = new Button(Color::White, 35, Color::Transparent, "1/3", Vector2f(2048 - 3 * 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
+	dividerButton14 = new Button(Color::White, 35, Color::Transparent, "1/4", Vector2f(2048 - 4 * 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
+	dividerButton116 = new Button(Color::White, 35, Color::Transparent, "1/16", Vector2f(2048 - 5 * 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
 
 
 
@@ -111,23 +111,23 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 
 void BeatMapEditor::loadStaticAssets()
 {
-	CircleShape *playButton = new CircleShape(40, 3);
+	CircleShape *playButton = new CircleShape(20, 3);
 	playButton->setFillColor(Color::White);
-	playButton->setPosition(1060, 900);
+	playButton->setPosition(80, 1152 - sliderHeight - 40);
 	playButton->rotate(90);
 
 	RectangleShape *leftPause = new RectangleShape();
-	leftPause->setSize(Vector2f(15, 60));
+	leftPause->setSize(Vector2f(10, 40));
 	leftPause->setFillColor(Color::White);
-	leftPause->setPosition(1000, 900);
+	leftPause->setPosition(50, 1152 - sliderHeight - 40);
 
 	RectangleShape *rightPause = new RectangleShape();
-	rightPause->setSize(Vector2f(15, 60));
+	rightPause->setSize(Vector2f(10, 40));
 	rightPause->setFillColor(Color::White);
-	rightPause->setPosition(1040, 900);
+	rightPause->setPosition(70, 1152 - sliderHeight - 40);
 
 	RectangleShape *wholeAudioSlider = new RectangleShape(); // a slider of the whole audio file
-	wholeAudioSlider->setSize(Vector2f(2048, sliderHeight));
+	wholeAudioSlider->setSize(Vector2f(2048, sliderHeight * 2/3));
 	wholeAudioSlider->setFillColor(Color(0, 0, 0, 150));
 	wholeAudioSlider->setOutlineColor(Color::Transparent);
 	wholeAudioSlider->setOutlineThickness(5);
@@ -143,8 +143,7 @@ void BeatMapEditor::loadStaticAssets()
 
 	RectangleShape *partAudioCursor = new RectangleShape(); // cursor for part audio slider
 	partAudioCursor->setSize(Vector2f(10, sliderHeight));
-	partAudioCursor->setFillColor(Color::Yellow);
-	partAudioCursor->setOutlineColor(Color::Yellow);
+	partAudioCursor->setFillColor(Color(245, 222, 72));
 	partAudioCursor->setPosition(24 - 5 + sliderLength / 2, 0); // middle of slider
 
 	CircleShape *beatButton = new CircleShape();
@@ -245,10 +244,10 @@ void BeatMapEditor::render(RenderWindow& window)
 	window.draw(assetManager->getDrawable("part audio cursor"));
 
 	RectangleShape wholeAudioCursor; // cursor for whole audio slider
-	wholeAudioCursor.setSize(Vector2f(10, sliderHeight));
+	wholeAudioCursor.setSize(Vector2f(10, sliderHeight * 2 / 3));
 	wholeAudioCursor.setFillColor(Color::Yellow);
 	wholeAudioCursor.setOutlineColor(Color::Yellow);
-	wholeAudioCursor.setPosition(24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1152 - sliderHeight);
+	wholeAudioCursor.setPosition(24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1152 - sliderHeight * 2 /3);
 	window.draw(wholeAudioCursor);
 
 	list<int>::iterator it = beatsTime.begin(); // draw beats
@@ -261,7 +260,7 @@ void BeatMapEditor::render(RenderWindow& window)
 		// draw the bottom beats (the entire audio)
 		RectangleShape beat;
 		beat.setSize(Vector2f(4, sliderHeight / 2));
-		beat.setFillColor(Color::Green);
+		beat.setFillColor(Color::Red);
 		beat.setPosition(24 - 2 + sliderLength * (*it) / musicDurationMS, 1152 - sliderHeight / 2);
 		window.draw(beat);
 
@@ -270,7 +269,7 @@ void BeatMapEditor::render(RenderWindow& window)
 		{
 			RectangleShape beatInPartSlider;
 			beatInPartSlider.setSize(Vector2f(10, sliderHeight * 2 / 3));
-			beatInPartSlider.setFillColor(Color::Green);
+			beatInPartSlider.setFillColor(Color::Red);
 			beatInPartSlider.setPosition(24 - 10 / 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - *it) / 2500, sliderHeight / 3);
 			window.draw(beatInPartSlider);
 		}
@@ -292,7 +291,7 @@ void BeatMapEditor::render(RenderWindow& window)
 	{
 		RectangleShape beatInPartSlider;
 		beatInPartSlider.setSize(Vector2f(4, sliderHeight / 4));
-		beatInPartSlider.setFillColor(i % divider == 0 ? Color::White : Color::Blue);
+		beatInPartSlider.setFillColor(i % divider == 0 ? Color::White : Color(0, 159, 180));
 		int t = i * (float)mspb / divider;
 		beatInPartSlider.setPosition(24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - t) / 2500, sliderHeight * 3 / 8);
 		window.draw(beatInPartSlider);
@@ -311,12 +310,12 @@ void BeatMapEditor::render(RenderWindow& window)
 		+ getPaddingString(to_string(tTotal % 1000), 3, '0', false);
 	text.setCharacterSize(35);
 	text.setString(tLeftString);
-	text.setPosition(50, 1152 - sliderHeight - 40);
+	text.setPosition(100, 1152 - sliderHeight - 40);
 	window.draw(text);
 	text.setString("/");
-	text.setPosition(240, 1152 - sliderHeight - 40);
+	text.setPosition(290, 1152 - sliderHeight - 40);
 	window.draw(text);
-	text.setPosition(280, 1152 - sliderHeight - 40);
+	text.setPosition(330, 1152 - sliderHeight - 40);
 	text.setString(tTotalString);
 	window.draw(text);
 }
