@@ -38,10 +38,18 @@ void createButton(RenderWindow& window, Text& text,  Color textColor, int textSi
 	window.draw(text);
 }
 
-std::string getLeftPaddingString(std::string const& str, int n, char paddedChar)
+// if isPaddingRight == true, paddedChar will fill the right side, else fill the left side
+std::string getPaddingString(std::string const& str, int n, char paddedChar, bool isPaddingRight)
 {
 	std::ostringstream ss;
-	ss << std::right << std::setfill(paddedChar) << std::setw(n) << str;
+	if (isPaddingRight)
+	{
+		ss << std::left << std::setfill(paddedChar) << std::setw(n) << str;
+	}
+	else
+	{
+		ss << std::right << std::setfill(paddedChar) << std::setw(n) << str;
+	}
 	return ss.str();
 }
 

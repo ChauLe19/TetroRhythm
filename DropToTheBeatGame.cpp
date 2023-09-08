@@ -389,7 +389,7 @@ void DropToTheBeatGame::render(RenderWindow& window)
 	window.draw(assetManager->getDrawable("health bar"));
 
 	text.setCharacterSize(50);
-	text.setString("Combo: " + getLeftPaddingString(to_string(combo), 4, ' ') );
+	text.setString("Combo: " + getPaddingString(to_string(combo), 4, ' ') );
 	text.setPosition(boardX - text.getLocalBounds().width - 50, boardY);
 	window.draw(text);
 

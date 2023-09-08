@@ -7,9 +7,15 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 	loadStaticAssets();
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
-	speedButton025 = new Button(Color::White, 35, Color::Transparent, "x0.25\n(Press 2)", Vector2f(1500, 300), Vector2f(100, 70), Color(0, 186, 211), Keyboard::Key::Num2);
-	speedButton050 = new Button(Color::White, 35, Color::Transparent, "x0.50\n(Press 5)", Vector2f(1650, 300), Vector2f(100, 70), Color(0, 186, 211), Keyboard::Key::Num5);
-	speedButton100 = new Button(Color::White, 35, Color::Transparent, "x1\n(Press 1)", Vector2f(1800, 300), Vector2f(100, 70), Color(0, 186, 211), Keyboard::Key::Num1);
+	speedButton025 = new Button(Color::White, 35, Color::Transparent, "x0.25", Vector2f(2048 - 470, 1152 - sliderHeight - 70), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Num2);
+	speedButton050 = new Button(Color::White, 35, Color::Transparent, "x0.50", Vector2f(2048 - 320, 1152 - sliderHeight - 70), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Num5);
+	speedButton100 = new Button(Color::White, 35, Color::Transparent, "x1", Vector2f(2048 - 170, 1152 - sliderHeight - 70), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Num1);
+
+	dividerButton1 = new Button(Color::White, 35, Color::Transparent, "1", Vector2f(50, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
+	dividerButton12 = new Button(Color::White, 35, Color::Transparent, "1/2", Vector2f(200, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
+	dividerButton13 = new Button(Color::White, 35, Color::Transparent, "1/3", Vector2f(350, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
+	dividerButton14 = new Button(Color::White, 35, Color::Transparent, "1/4", Vector2f(500, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
+	dividerButton116 = new Button(Color::White, 35, Color::Transparent, "1/16", Vector2f(650, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
 
 
 	fs::path oggPath = folderPath;
@@ -189,15 +195,30 @@ void BeatMapEditor::tick(const float & dt, RenderWindow& window)
 
 void BeatMapEditor::render(RenderWindow& window)
 {
+	speedButton025->setHighlight(speedButton025->mouseInButton(window) || sound.getPitch() == 0.25);
+	speedButton050->setHighlight(speedButton050->mouseInButton(window) || sound.getPitch() == 0.5);
+	speedButton100->setHighlight(speedButton100->mouseInButton(window) || sound.getPitch() == 1);
+	speedButton025->render(window, text);
+	speedButton050->render(window, text);
+	speedButton100->render(window, text);
+
+	dividerButton1->setHighlight(dividerButton1->mouseInButton(window) || divider == 1);
+	dividerButton12->setHighlight(dividerButton12->mouseInButton(window) || divider == 2);
+	dividerButton13->setHighlight(dividerButton13->mouseInButton(window) || divider == 3);
+	dividerButton14->setHighlight(dividerButton14->mouseInButton(window) || divider == 4);
+	dividerButton116->setHighlight(dividerButton116->mouseInButton(window) || divider == 16);
+	dividerButton1->render(window, text);
+	dividerButton12->render(window, text);
+	dividerButton13->render(window, text);
+	dividerButton14->render(window, text);
+	dividerButton116->render(window, text);
+
 	text.setFillColor(Color::White);
 	text.setPosition(20, 10);
 	text.setCharacterSize(30);
 	text.setString("Drag the bottom cursor to navigate along the beats. Hover your mouse over green tick(s) while holding right click to erase them. Press B or right click the center circle to place beat. Spacebar to play/pause.");
 	// window.draw(text);
 
-	speedButton025->render(window, text);
-	speedButton050->render(window, text);
-	speedButton100->render(window, text);
 
 	if (sound.getStatus() != Music::Status::Playing) // draw playing status
 	{
@@ -247,17 +268,37 @@ void BeatMapEditor::render(RenderWindow& window)
 
 	// render major/minor notes
 	// major notes occur every 4 minor notes
-	for (int i = std::ceil((float)(cursorRelToMusicMS - 2500) / ((float)mspb / 4)); i <= std::floor((float)(cursorRelToMusicMS + 2500) / ((float)mspb / 4)); i++)
+	for (int i = std::ceil((float)(cursorRelToMusicMS - 2500) / ((float)mspb / divider)); i <= std::floor((float)(cursorRelToMusicMS + 2500) / ((float)mspb / divider)); i++)
 	{
 		RectangleShape beatInPartSlider;
 		beatInPartSlider.setSize(Vector2f(4, sliderHeight / 4));
-		beatInPartSlider.setFillColor(i % 4 == 0 ? Color::White : Color::Blue);
-		int t = i * (float)mspb / 4;
+		beatInPartSlider.setFillColor(i % divider == 0 ? Color::White : Color::Blue);
+		int t = i * (float)mspb / divider;
 		beatInPartSlider.setPosition(24 - 2 + sliderLength / 2 - sliderLength / 2 * (cursorRelToMusicMS - t) / 2500, sliderHeight * 3 / 8);
 		window.draw(beatInPartSlider);
 	}
 
 	window.draw(assetManager->getDrawable("beat button"));
+
+	// draw audio timestamp
+	Int32 tleft = sound.getPlayingOffset().asMilliseconds();
+	Int32 tTotal = sound.getBuffer()->getDuration().asMilliseconds();
+	String tLeftString = getPaddingString(to_string(tleft / 1000 / 60), 2, '0', false) + ":"
+		+ getPaddingString(to_string(tleft / 1000 % 60), 2, ' 0', false) + ":" 
+		+ getPaddingString(to_string(tleft % 1000), 3, '0', false);
+	String tTotalString = getPaddingString(to_string(tTotal / 1000 / 60), 2, '0', false) + ":"
+		+ getPaddingString(to_string(tTotal / 1000 % 60), 2, ' 0', false) + ":" 
+		+ getPaddingString(to_string(tTotal % 1000), 3, '0', false);
+	text.setCharacterSize(35);
+	text.setString(tLeftString);
+	text.setPosition(50, 1152 - sliderHeight - 40);
+	window.draw(text);
+	text.setString("/");
+	text.setPosition(240, 1152 - sliderHeight - 40);
+	window.draw(text);
+	text.setPosition(280, 1152 - sliderHeight - 40);
+	text.setString(tTotalString);
+	window.draw(text);
 }
 
 void BeatMapEditor::keyEvent(const float & dt, Event event)
@@ -304,8 +345,8 @@ void BeatMapEditor::keyEvent(const float & dt, Event event)
 
 void BeatMapEditor::addCursorToBeatList()
 {
-	int nearestBeat = std::round((float)(cursorRelToMusicMS) / ((float)mspb / 4));
-	nearestBeat = nearestBeat * ((float)mspb / 4);
+	int nearestBeat = std::round((float)(cursorRelToMusicMS) / ((float)mspb / divider));
+	nearestBeat = nearestBeat * ((float)mspb / divider);
 	list<int>::iterator temp = beatsTime.begin();
 	int prev = 0;
 	while (temp != beatsTime.end() && *temp < nearestBeat)
@@ -338,6 +379,38 @@ void BeatMapEditor::mouseEvent(const float & dt, RenderWindow& window, Event eve
 		if (mouseInCircle(window, 1024, 576, 250))
 		{
 			addCursorToBeatList();
+		}
+		else if (speedButton025->mouseInButton(window))
+		{
+			sound.setPitch(0.25);
+		}
+		else if (speedButton050->mouseInButton(window))
+		{
+			sound.setPitch(0.5);
+		}
+		else if (speedButton100->mouseInButton(window))
+		{
+			sound.setPitch(1);
+		}
+		else if (dividerButton1->mouseInButton(window))
+		{
+			divider = 1;
+		}
+		else if (dividerButton12->mouseInButton(window))
+		{
+			divider = 2;
+		}
+		else if (dividerButton13->mouseInButton(window))
+		{
+			divider = 3;
+		}
+		else if (dividerButton14->mouseInButton(window))
+		{
+			divider = 4;
+		}
+		else if (dividerButton116->mouseInButton(window))
+		{
+			divider = 16;
 		}
 	}
 	else if (Mouse::isButtonPressed(Mouse::Right))

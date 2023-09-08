@@ -38,9 +38,15 @@ private:
 	Sound sound;
 	SoundBuffer buffer;
 	Text text;
-	Button* speedButton025;
-	Button* speedButton050;
-	Button* speedButton100;
+	Button* speedButton025; // speed x0.25
+	Button* speedButton050; // speed x0.5
+	Button* speedButton100; // speed x1
+
+	Button* dividerButton1; // divider 1
+	Button* dividerButton12; // divider 1/2
+	Button* dividerButton13; // divider 1/3
+	Button* dividerButton14; // divider 1/4
+	Button* dividerButton116; // divider 1/16
 
 	list<int> beatsTime;
 	list<int>::iterator beatIt;
@@ -56,6 +62,7 @@ private:
 
 	int sliderLength = 2000;
 	int sliderHeight = 100;
+	int divider = 1;
 
 	void loadStaticAssets();
 public:
