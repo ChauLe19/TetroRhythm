@@ -14,6 +14,7 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
 	// add 2 initial 7-bags
+	/*
 	for (int j = 0; j < 2; j++)
 	{
 		vector<Type> tempTypeVector = allPieces;
@@ -26,6 +27,55 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
 		}
 	}
+	*/
+	bag.push_back(new Tetromino(Type::J));
+	bag.push_back(new Tetromino(Type::T));
+	bag.push_back(new Tetromino(Type::Z));
+	bag.push_back(new Tetromino(Type::S));
+	bag.push_back(new Tetromino(Type::L));
+	bag.push_back(new Tetromino(Type::O));
+	bag.push_back(new Tetromino(Type::I));
+
+	bag.push_back(new Tetromino(Type::S));
+	bag.push_back(new Tetromino(Type::T));
+	bag.push_back(new Tetromino(Type::Z));
+	bag.push_back(new Tetromino(Type::I));
+	bag.push_back(new Tetromino(Type::L));
+	bag.push_back(new Tetromino(Type::O));
+	bag.push_back(new Tetromino(Type::J));
+
+	bag.push_back(new Tetromino(Type::O));
+	bag.push_back(new Tetromino(Type::S));
+	bag.push_back(new Tetromino(Type::Z));
+	bag.push_back(new Tetromino(Type::J));
+	bag.push_back(new Tetromino(Type::L));
+	bag.push_back(new Tetromino(Type::T));
+	bag.push_back(new Tetromino(Type::I));
+	//done
+
+	bag.push_back(new Tetromino(Type::L));
+	bag.push_back(new Tetromino(Type::J));
+	bag.push_back(new Tetromino(Type::S));
+	bag.push_back(new Tetromino(Type::I));
+	bag.push_back(new Tetromino(Type::Z));
+	bag.push_back(new Tetromino(Type::O));
+	bag.push_back(new Tetromino(Type::T));
+
+	bag.push_back(new Tetromino(Type::Z));
+	bag.push_back(new Tetromino(Type::I));
+	bag.push_back(new Tetromino(Type::O));
+	bag.push_back(new Tetromino(Type::J));
+	bag.push_back(new Tetromino(Type::L));
+	bag.push_back(new Tetromino(Type::S));
+	bag.push_back(new Tetromino(Type::T));
+
+	bag.push_back(new Tetromino(Type::I));
+	bag.push_back(new Tetromino(Type::S));
+	bag.push_back(new Tetromino(Type::J));
+	bag.push_back(new Tetromino(Type::L));
+	bag.push_back(new Tetromino(Type::Z));
+	bag.push_back(new Tetromino(Type::T));
+	bag.push_back(new Tetromino(Type::O));
 
 	// load song
 	fs::path oggPath = folderPath;
@@ -277,6 +327,7 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 						{
 							clearLines();
 						}
+						board.print();
 
 						nextPiece();
 					}
@@ -339,33 +390,33 @@ ClearType GameBase::determineClearType(Tetromino clearingPiece, ClearingInfo inf
 	case 0:
 		if (tspinType == 1)
 		{
-			cout << "TSPIN_MINI_NO" << endl;
+			//cout << "TSPIN_MINI_NO" << endl;
 			return ClearType::TSPIN_MINI_NO;
 		}
 		else if (tspinType == 2)
 		{
-			cout << "TSPIN_NO" << endl;
+			//cout << "TSPIN_NO" << endl;
 			return ClearType::TSPIN_NO;
 		}
-		cout << "NONE" << endl;
+		//cout << "NONE" << endl;
 		return ClearType::NONE;
 		break;
 	case 1:
 		if (info.isPC)
 		{
-			cout << "SINGLE_LINE_PC" << endl;
+			//cout << "SINGLE_LINE_PC" << endl;
 			return ClearType::SINGLE_LINE_PC;
 		}
 		if (isB2BChainActive)
 		{
 			if (tspinType == 1)
 			{
-				cout << "B2B_TSPIN_MINI_SINGLE" << endl;
+				//cout << "B2B_TSPIN_MINI_SINGLE" << endl;
 				return ClearType::B2B_TSPIN_MINI_SINGLE;
 			}
 			else if (tspinType == 2)
 			{
-				cout << "B2B_TSPIN_SINGLE" << endl;
+				//cout << "B2B_TSPIN_SINGLE" << endl;
 				return ClearType::B2B_TSPIN_SINGLE;
 			}
 		}
@@ -373,34 +424,34 @@ ClearType GameBase::determineClearType(Tetromino clearingPiece, ClearingInfo inf
 		{
 			if (tspinType == 1)
 			{
-				cout << "TSPIN_MINI_SINGLE" << endl;
+				//cout << "TSPIN_MINI_SINGLE" << endl;
 				return ClearType::TSPIN_MINI_SINGLE;
 			}
 			else if (tspinType == 2)
 			{
-				cout << "TSPIN_SINGLE" << endl;
+				//cout << "TSPIN_SINGLE" << endl;
 				return ClearType::TSPIN_SINGLE;
 			}
 		}
-		cout << "SINGLE" << endl;
+		//cout << "SINGLE" << endl;
 		return ClearType::SINGLE;
 		break;
 	case 2:
 		if (info.isPC)
 		{
-			cout << "DOUBLE_LINE_PC" << endl;
+			//cout << "DOUBLE_LINE_PC" << endl;
 			return ClearType::DOUBLE_LINE_PC;
 		}
 		if (isB2BChainActive)
 		{
 			if (tspinType == 1)
 			{
-				cout << "B2B_TSPIN_MINI_DOUBLE" << endl;
+				//cout << "B2B_TSPIN_MINI_DOUBLE" << endl;
 				return ClearType::B2B_TSPIN_MINI_DOUBLE;
 			}
 			else if (tspinType == 2)
 			{
-				cout << "B2B_TSPIN_DOUBLE" << endl;
+				//cout << "B2B_TSPIN_DOUBLE" << endl;
 				return ClearType::B2B_TSPIN_DOUBLE;
 			}
 		}
@@ -408,77 +459,77 @@ ClearType GameBase::determineClearType(Tetromino clearingPiece, ClearingInfo inf
 		{
 			if (tspinType == 1)
 			{
-				cout << "TSPIN_MINI_DOUBLE" << endl;
+				//cout << "TSPIN_MINI_DOUBLE" << endl;
 				return ClearType::TSPIN_MINI_DOUBLE;
 			}
 			else if (tspinType == 2)
 			{
-				cout << "TSPIN_DOUBLE" << endl;
+				//cout << "TSPIN_DOUBLE" << endl;
 				return ClearType::TSPIN_DOUBLE;
 			}
 		}
-		cout << "DOUBLE" << endl;
+		//cout << "DOUBLE" << endl;
 		return ClearType::DOUBLE;
 		break;
 	case 3:
 		if (info.isPC)
 		{
-			cout << "TRIPLE_LINE_PC" << endl;
+			//cout << "TRIPLE_LINE_PC" << endl;
 			return ClearType::TRIPLE_LINE_PC;
 		}
 		if (isB2BChainActive && tspinType > 0)
 		{
-			cout << "B2B_TSPIN_TRIPLE" << endl;
+			//cout << "B2B_TSPIN_TRIPLE" << endl;
 			return ClearType::B2B_TSPIN_TRIPLE;
 		}
 		else if (tspinType > 0)
 		{
-			cout << "TSPIN_TRIPLE" << endl;
+			//cout << "TSPIN_TRIPLE" << endl;
 			return ClearType::TSPIN_TRIPLE;
 		}
-		cout << "TRIPLE" << endl;
+		//cout << "TRIPLE" << endl;
 		return ClearType::TRIPLE;
 		break;
 	case 4:
 		if (info.isPC && isB2BChainActive)
 		{
-			cout << "B2B_TETRIS_PC" << endl;
+			//cout << "B2B_TETRIS_PC" << endl;
 			return ClearType::B2B_TETRIS_PC;
 		}
 		else if (info.isPC)
 		{
-			cout << "TETRIS_PC" << endl;
+			//cout << "TETRIS_PC" << endl;
 			return ClearType::TETRIS_PC;
 		}
 		else if (isB2BChainActive)
 		{
-			cout << "B2B_TETRIS" << endl;
+			//cout << "B2B_TETRIS" << endl;
 			return ClearType::B2B_TETRIS;
 		}
-		cout << "TETRIS" << endl;
+		//cout << "TETRIS" << endl;
 		return ClearType::TETRIS;
 		break;
 	case 5:
 		if (info.isPC && isB2BChainActive)
 		{
-			cout << "B2B_PENTRIS_PC" << endl;
+			//cout << "B2B_PENTRIS_PC" << endl;
 			return ClearType::B2B_PENTRIS_PC;
 		}
 		else if (info.isPC)
 		{
-			cout << "TETRIS_PC" << endl;
+			//cout << "TETRIS_PC" << endl;
 			return ClearType::PENTRIS_PC;
 		}
 		else if (isB2BChainActive)
 		{
-			cout << "B2B_PENTRIS" << endl;
+			//cout << "B2B_PENTRIS" << endl;
 			return ClearType::B2B_PENTRIS;
 		}
-		cout << "PENTRIS" << endl;
+		//cout << "PENTRIS" << endl;
 		return ClearType::PENTRIS;
 		break;
 	default:
-		cout << "NONE" << endl;
+		//cout << "NONE" << endl;
 		return ClearType::NONE;
 		break;
 	}
@@ -691,7 +742,6 @@ int GameBase::getTSpinType(Tetromino piece, Board& board)
 {
 	if (piece.getType() == Type::T)
 	{
-		cout << "It's T" << std::endl;
 		int x = piece.getXPos();
 		int y = piece.getYPos();
 
@@ -705,11 +755,9 @@ int GameBase::getTSpinType(Tetromino piece, Board& board)
 		if (leftFrontCornerFilled && rightFrontCornerFilled && (rightBackCornerFilled || leftBackCornerFilled))
 		{
 			return 2;
-			cout << "It's T2" << std::endl;
 		}
 		else if (rightBackCornerFilled && leftBackCornerFilled && (leftFrontCornerFilled || rightFrontCornerFilled))
 		{
-			cout << "It's T1" << std::endl;
 			return 1;
 		}
 	}

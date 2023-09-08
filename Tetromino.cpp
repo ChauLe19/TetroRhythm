@@ -221,7 +221,7 @@ bool Tetromino::move(Moving_Direction dir, Board& board)
 
 bool Tetromino::checkCollision(int xPos, int yPos, Board& board)
 {
-	array<array<int, boardWidth>, boardHeight> boardMatrix = board.getBoard();
+	array<array<short, boardWidth>, boardHeight> boardMatrix = board.getBoard();
 	//Traverse the cells if it collide with any blocks on the board
 	for (int i = 0; i < 4; i++)
 	{
@@ -243,7 +243,7 @@ bool Tetromino::checkCollision(int xPos, int yPos, Board& board)
 
 bool Tetromino::checkCollision(Board& board)
 {
-	array<array<int, boardWidth>, boardHeight> boardMatrix = board.getBoard();
+	array<array<short, boardWidth>, boardHeight> boardMatrix = board.getBoard();
 	//Traverse the cells if it collide with any blocks on the board
 	for (int i = 0; i < 4; i++)
 	{

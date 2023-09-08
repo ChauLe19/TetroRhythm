@@ -101,6 +101,11 @@ ClearingInfo Board::clearLines()
 
 }
 
+void Board::setBoard(std::array<std::array<short, boardHeight>, boardWidth> board)
+{
+	this->board = board;
+}
+
 void Board::clearBoard()
 {
 	for (int i = 0; i < boardHeight; i++)
@@ -143,7 +148,7 @@ void Board::enforceGravity()
 
 
 // TODO: check if this return a copy or reference
-array<array<int, boardWidth>, boardHeight> Board::getBoard()
+array<array<short, boardWidth>, boardHeight> Board::getBoard()
 {
 	return board;
 }
@@ -196,14 +201,19 @@ bool Board::createGarbageLine(int holePos)
 
 void Board::print()
 {
+	cout <<  "{{" << std::endl;
 	for (int i = 0; i < board.size(); i++)
 	{
+		cout <<  "\t{{";
 		for (int j = 0; j < board[0].size(); j++)
 		{
-			cout << board[i][j] << ' ';
+			string divider = j == board[0].size() - 1 ? " " : ", ";
+			cout << board[i][j] << divider;
 		}
-		cout << endl;
+		string divider = i == board.size() - 1 ? " " : ", ";
+		cout <<  "}}" << divider << std::endl;
 	}
+	cout << "}}" << std::endl;
 }
 
 int Board::getXPos()

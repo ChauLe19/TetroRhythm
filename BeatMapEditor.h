@@ -38,6 +38,7 @@ private:
 	Sound sound;
 	SoundBuffer buffer;
 	Text text;
+	Button beatButton = Button(Color::Black, 50, Color(255, 255, 255, 200), "Beat", Vector2f(1024 + 1024 / 2 - 200, 1152 / 2 - 200), Vector2f(400, 400), Color(0, 186, 211), Keyboard::Key::Unknown);
 	Button* speedButton025; // speed x0.25
 	Button* speedButton050; // speed x0.5
 	Button* speedButton100; // speed x1
@@ -47,6 +48,7 @@ private:
 	Button* dividerButton13; // divider 1/3
 	Button* dividerButton14; // divider 1/4
 	Button* dividerButton116; // divider 1/16
+	Board simulatorBoard = Board(100, 195);
 
 	list<int> beatsTime;
 	list<int>::iterator beatIt;

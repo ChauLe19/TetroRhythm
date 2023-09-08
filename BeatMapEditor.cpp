@@ -18,6 +18,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 	dividerButton116 = new Button(Color::White, 35, Color::Transparent, "1/16", Vector2f(650, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
 
 
+
 	fs::path oggPath = folderPath;
 	fs::path wavPath = folderPath;
 	oggPath.append(oggPath.filename().string() + ".ogg");
@@ -149,7 +150,12 @@ void BeatMapEditor::loadStaticAssets()
 	CircleShape *beatButton = new CircleShape();
 	beatButton->setRadius(250);
 	beatButton->setPosition(1024 - 250, 576 - 250);
-	beatButton->setOutlineColor(Color::White);
+	beatButton->setFillColor(Color::White);
+
+	CircleShape *beatHLButton = new CircleShape();
+	beatHLButton->setRadius(250);
+	beatHLButton->setPosition(1024 - 250, 576 - 250);
+	beatHLButton->setFillColor(Color(0, 186, 211));
 
 	assetManager->loadDrawable("play button", std::unique_ptr<sf::Drawable>(playButton));
 	assetManager->loadDrawable("left pause", std::unique_ptr<sf::Drawable>(leftPause));
@@ -158,6 +164,7 @@ void BeatMapEditor::loadStaticAssets()
 	assetManager->loadDrawable("part audio slider", std::unique_ptr<sf::Drawable>(partAudioSlider));
 	assetManager->loadDrawable("part audio cursor", std::unique_ptr<sf::Drawable>(partAudioCursor));
 	assetManager->loadDrawable("beat button", std::unique_ptr<sf::Drawable>(beatButton));
+	assetManager->loadDrawable("beat highlight button", std::unique_ptr<sf::Drawable>(beatHLButton));
 }
 
 BeatMapEditor::~BeatMapEditor()
@@ -195,6 +202,9 @@ void BeatMapEditor::tick(const float & dt, RenderWindow& window)
 
 void BeatMapEditor::render(RenderWindow& window)
 {
+	simulatorBoard.render(window);
+	beatButton.setHighlight(beatButton.mouseInButton(window));
+	beatButton.render(window, text);
 	speedButton025->setHighlight(speedButton025->mouseInButton(window) || sound.getPitch() == 0.25);
 	speedButton050->setHighlight(speedButton050->mouseInButton(window) || sound.getPitch() == 0.5);
 	speedButton100->setHighlight(speedButton100->mouseInButton(window) || sound.getPitch() == 1);
@@ -242,8 +252,12 @@ void BeatMapEditor::render(RenderWindow& window)
 	window.draw(wholeAudioCursor);
 
 	list<int>::iterator it = beatsTime.begin(); // draw beats
+	int count = 0;
+	int currentBeatIndex = 0;
 	while (it != beatsTime.end())
 	{
+		count++;
+
 		// draw the bottom beats (the entire audio)
 		RectangleShape beat;
 		beat.setSize(Vector2f(4, sliderHeight / 2));
@@ -261,9 +275,15 @@ void BeatMapEditor::render(RenderWindow& window)
 			window.draw(beatInPartSlider);
 		}
 
+		if (cursorRelToMusicMS >= *it)
+		{
+			currentBeatIndex = count;
+		}
 
 		it++;
+
 	}
+	simulatorBoard.setBoard(infBoardSimulation.at(currentBeatIndex % infBoardSimulation.size()));
 
 
 	// render major/minor notes
@@ -278,7 +298,7 @@ void BeatMapEditor::render(RenderWindow& window)
 		window.draw(beatInPartSlider);
 	}
 
-	window.draw(assetManager->getDrawable("beat button"));
+	//window.draw(assetManager->getDrawable("beat button"));
 
 	// draw audio timestamp
 	Int32 tleft = sound.getPlayingOffset().asMilliseconds();
@@ -376,7 +396,7 @@ void BeatMapEditor::mouseEvent(const float & dt, RenderWindow& window, Event eve
 	}
 	else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 	{
-		if (mouseInCircle(window, 1024, 576, 250))
+		if (beatButton.mouseInButton(window))
 		{
 			addCursorToBeatList();
 		}

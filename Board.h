@@ -106,7 +106,7 @@ private:
 	Sprite image;
 	Sprite cellImage;
 
-	array<array<int, boardWidth>, boardHeight> board = { 0 };
+	array<array<short, boardWidth>, boardHeight> board = { 0 };
 	int xPos = 0;
 	int yPos = 0;
 
@@ -133,7 +133,7 @@ public:
 	/**
 	 * Get an array representation of the board.
 	 */
-	array<array<int, boardWidth>, boardHeight> getBoard();
+	array<array<short, boardWidth>, boardHeight> getBoard();
 
 	/**
 	 * Set cell with a specific value.
@@ -156,6 +156,9 @@ public:
 	 * Print out array representation of board in the console.
 	 */
 	void print();
+
+
+	void setBoard(std::array<std::array<short, boardHeight>, boardWidth> board);
 
 	void clearBoard();
 	void enforceGravity();
