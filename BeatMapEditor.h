@@ -47,7 +47,6 @@ private:
 	Button* dividerButton12; // divider 1/2
 	Button* dividerButton13; // divider 1/3
 	Button* dividerButton14; // divider 1/4
-	Button* dividerButton116; // divider 1/16
 	Board simulatorBoard = Board(100, 1152 / 2 - (boardSquareSize * boardHeight)/2);
 
 	list<int> beatsTime;

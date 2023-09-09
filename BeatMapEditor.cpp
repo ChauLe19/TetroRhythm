@@ -15,7 +15,6 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 	dividerButton12 = new Button(Color::White, 35, Color::Transparent, "1/2", Vector2f(2048 - 2 * 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
 	dividerButton13 = new Button(Color::White, 35, Color::Transparent, "1/3", Vector2f(2048 - 3 * 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
 	dividerButton14 = new Button(Color::White, 35, Color::Transparent, "1/4", Vector2f(2048 - 4 * 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
-	dividerButton116 = new Button(Color::White, 35, Color::Transparent, "1/16", Vector2f(2048 - 5 * 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
 
 
 
@@ -215,12 +214,10 @@ void BeatMapEditor::render(RenderWindow& window)
 	dividerButton12->setHighlight(dividerButton12->mouseInButton(window) || divider == 2);
 	dividerButton13->setHighlight(dividerButton13->mouseInButton(window) || divider == 3);
 	dividerButton14->setHighlight(dividerButton14->mouseInButton(window) || divider == 4);
-	dividerButton116->setHighlight(dividerButton116->mouseInButton(window) || divider == 16);
 	dividerButton1->render(window, text);
 	dividerButton12->render(window, text);
 	dividerButton13->render(window, text);
 	dividerButton14->render(window, text);
-	dividerButton116->render(window, text);
 
 	text.setFillColor(Color::White);
 	text.setPosition(20, 10);
@@ -426,10 +423,6 @@ void BeatMapEditor::mouseEvent(const float & dt, RenderWindow& window, Event eve
 		else if (dividerButton14->mouseInButton(window))
 		{
 			divider = 4;
-		}
-		else if (dividerButton116->mouseInButton(window))
-		{
-			divider = 16;
 		}
 		else if (mouseInBox(window, 50, 1152 - sliderHeight - 40, 30, 40))
 		{
