@@ -96,6 +96,14 @@ void MapEditorSelect::render(RenderWindow& window)
 	sprite.setPosition(2048/2 - 800/2, 100);
 	window.draw(sprite);
 
+	if (mouseInBox(window, 20, 20, 40, 40)) // back button
+	{
+		window.draw(assetManager->getDrawable("back button hl"));
+	}
+	else
+	{
+		window.draw(assetManager->getDrawable("back button"));
+	}
 	startButton.render(window, text);
 }
 
@@ -146,8 +154,19 @@ void MapEditorSelect::mouseEvent(const float & dt, RenderWindow& window, Event e
 		mapRenderOffset = -cursor * 150;
 		prevMapRenderOffset = mapRenderOffset;
 	}
-	else if (event.type == Event::MouseButtonPressed && startButton.mouseInButton(window))
+	else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 	{
-		stateManager.addState(std::unique_ptr<StateScreen>(new BeatMapEditor(stateManager, fs::absolute(maps[cursor]).string())));
+		if (startButton.mouseInButton(window))
+		{
+			stateManager.addState(std::unique_ptr<StateScreen>(new BeatMapEditor(stateManager, fs::absolute(maps[cursor]).string())));
+		}
+		else if (mouseInBox(window, 20, 20, 40, 40)) // back button
+		{
+			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+		}
+		else if (mouseInBox(window, 20, 20, 40, 40)) // back button
+		{
+			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+		}
 	}
 }

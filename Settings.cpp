@@ -61,6 +61,15 @@ void Settings::render(RenderWindow& window)
 
 	drawKeyConfig("SFX", "<  " + to_string(settings->sfx) + "  >", 500, 300 + 80 * 3, window, cursor == 3, isChanging);
 	drawKeyConfig("MUSIC", "<  " + to_string(settings->music) + "  >", 500, 300 + 80 * 4, window, cursor == 4, isChanging);
+
+	if (mouseInBox(window, 20, 20, 40, 40)) // back button
+	{
+		window.draw(assetManager->getDrawable("back button hl"));
+	}
+	else
+	{
+		window.draw(assetManager->getDrawable("back button"));
+	}
 }
 
 void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow& window, bool isHighlight, bool changing)
@@ -148,6 +157,12 @@ bool Settings::changeKey(Keyboard::Key key)
 
 void Settings::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
+	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 20, 20, 40, 40)) // back button
+	{
+		GameSettings::saveKeys();
+		GameSettings::saveConfig();
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+	}
 }
 
 void Settings::setCursor(int cursor)

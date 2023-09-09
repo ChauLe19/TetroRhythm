@@ -114,4 +114,31 @@ void MasterClass::loadResources()
 	assetManager->loadTexture("tiles", "Images/tiles.png");
 	assetManager->loadTexture("button", "Images/button.png");
 
+	sf::ConvexShape *backButton = new ConvexShape();
+	backButton->setPointCount(8);
+	backButton->setPoint(0, sf::Vector2f(20, 0));
+	backButton->setPoint(1, sf::Vector2f(0, 20));
+	backButton->setPoint(2, sf::Vector2f(20, 40));
+	backButton->setPoint(3, sf::Vector2f(20, 30));
+	backButton->setPoint(4, sf::Vector2f(40, 30));
+	backButton->setPoint(5, sf::Vector2f(40, 10));
+	backButton->setPoint(6, sf::Vector2f(20, 10));
+	backButton->setPoint(7, sf::Vector2f(20, 0));
+	backButton->setPosition(20, 20);
+	backButton->setFillColor(Color::White);
+	assetManager->loadDrawable("back button", std::unique_ptr<Drawable>(backButton));
+
+	sf::ConvexShape *backButtonHL = new ConvexShape();
+	backButtonHL->setPointCount(8);
+	backButtonHL->setPoint(0, sf::Vector2f(20, 0));
+	backButtonHL->setPoint(1, sf::Vector2f(0, 20));
+	backButtonHL->setPoint(2, sf::Vector2f(20, 40));
+	backButtonHL->setPoint(3, sf::Vector2f(20, 30));
+	backButtonHL->setPoint(4, sf::Vector2f(40, 30));
+	backButtonHL->setPoint(5, sf::Vector2f(40, 10));
+	backButtonHL->setPoint(6, sf::Vector2f(20, 10));
+	backButtonHL->setPoint(7, sf::Vector2f(20, 0));
+	backButtonHL->setPosition(20, 20);
+	backButtonHL->setFillColor(Color(0, 186, 211));
+	assetManager->loadDrawable("back button hl", std::unique_ptr<Drawable>(backButtonHL));
 }

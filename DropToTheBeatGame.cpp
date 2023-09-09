@@ -371,6 +371,7 @@ void DropToTheBeatGame::render(RenderWindow& window)
 		remainder = 60;
 	}
 	int thresholdRemainder = threshold * remainder / 100;
+	thresholdRemainder = thresholdRemainder == 0 ? 1 : thresholdRemainder;
 	int thresholdCheckpoint = threshold * checkpoint / 100;
 	int progressScoreLeft = score - thresholdCheckpoint;
 	progress.setSize(Vector2f(progressScoreLeft * progressBarLength / thresholdRemainder , 20));

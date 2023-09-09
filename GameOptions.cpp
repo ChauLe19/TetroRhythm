@@ -82,7 +82,14 @@ void GameOptions::render(RenderWindow& window)
 	window.draw(sprite);
 
 	startButton.render(window, text);
-
+	if (mouseInBox(window, 20, 20, 40, 40)) // back button
+	{
+		window.draw(assetManager->getDrawable("back button hl"));
+	}
+	else
+	{
+		window.draw(assetManager->getDrawable("back button"));
+	}
 }
 
 void GameOptions::keyEvent(const float & dt, Event event)
@@ -203,6 +210,10 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 		Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
 		pressedPosition = Vector2f(mouseViewPos.x, mouseViewPos.y);
 		prevMapRenderOffset = mapRenderOffset;
+	}
+	else if (event.type == Event::MouseButtonPressed && mouseInBox(window, 20, 20, 40, 40)) // back button
+	{
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 	}
 	else if (isPressed && Mouse::isButtonPressed(Mouse::Left))
 	{

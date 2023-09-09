@@ -122,6 +122,15 @@ void GameBase::render(RenderWindow& window)
 
 	// render input
 	window.draw(inputVertex);
+
+	if (mouseInBox(window, 20, 20, 40, 40)) // back button
+	{
+		window.draw(assetManager->getDrawable("back button hl"));
+	}
+	else
+	{
+		window.draw(assetManager->getDrawable("back button"));
+	}
 }
 
 
@@ -205,14 +214,22 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 		{
 			restart();
 		}
-		else if (event.type == Event::MouseButtonPressed && mouseInBox(window, 1024 - 150, 576 + 20, 300, 60)) // Menu button
+		else if (event.type == Event::MouseButtonPressed) // Menu button
 		{
-			// reset();
-			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+			if (mouseInBox(window, 1024 - 150, 576 + 20, 300, 60))
+			{
+				stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+			}
 		}
 	}
 	else // game is still going
 	{
+		if (event.type == Event::MouseButtonPressed && mouseInBox(window, 20, 20, 40, 40)) // back button
+		{
+			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+			return;
+		}
+
 		if (keyMouseRegistered == true || event.type == sf::Event::MouseButtonPressed)
 		{
 			locked = true;
@@ -277,7 +294,6 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 						{
 							clearLines();
 						}
-						board.print();
 
 						nextPiece();
 					}

@@ -315,6 +315,15 @@ void BeatMapEditor::render(RenderWindow& window)
 	text.setPosition(330, 1152 - sliderHeight - 40);
 	text.setString(tTotalString);
 	window.draw(text);
+
+	if (mouseInBox(window, 20, 20, 40, 40)) // back button
+	{
+		window.draw(assetManager->getDrawable("back button hl"));
+	}
+	else
+	{
+		window.draw(assetManager->getDrawable("back button"));
+	}
 }
 
 void BeatMapEditor::keyEvent(const float & dt, Event event)
@@ -440,6 +449,13 @@ void BeatMapEditor::mouseEvent(const float & dt, RenderWindow& window, Event eve
 			{
 				sound.pause();
 			}
+		}
+		else if (mouseInBox(window, 20, 20, 40, 40)) // back button
+		{
+			save();
+			sound.stop();
+			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+			return;
 		}
 	}
 	else if (Mouse::isButtonPressed(Mouse::Right))

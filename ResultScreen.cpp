@@ -60,6 +60,14 @@ void ResultScreen::render(RenderWindow& window)
 	text.setCharacterSize(150);
 	window.draw(text);
 
+	if (mouseInBox(window, 20, 20, 40, 40)) // back button
+	{
+		window.draw(assetManager->getDrawable("back button hl"));
+	}
+	else
+	{
+		window.draw(assetManager->getDrawable("back button"));
+	}
 
 }
 
@@ -79,4 +87,8 @@ void ResultScreen::keyEvent(const float & dt, Event event)
 
 void ResultScreen::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
+	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 20, 20, 40, 40)) // back button
+	{
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+	}
 }
