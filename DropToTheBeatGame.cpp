@@ -244,6 +244,14 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 		clearLines();
 		checkDropOnBeat();
 		this->inputVertex.clear();
+		std::array <int, 4> possibleMovesCurrent = currentPiecePtr->firstPossibleMove(board);
+		if (possibleMovesCurrent[3] == 1) // if possible to place current piece
+		{
+		}
+		else
+		{
+			gameOver();
+		}
 		return;
 	}
 	else if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && inputVertex.getVertexCount() > 0)

@@ -27,6 +27,12 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 		}
 	}
 
+	if (!sfxBuffer.loadFromFile("SFX/drop.wav"))
+	{
+		cerr << "Unable to open file drop.wav" << endl;
+	}
+	sfx.setBuffer(sfxBuffer);
+
 	// load song
 	fs::path oggPath = folderPath;
 	fs::path wavPath = folderPath;
@@ -36,14 +42,14 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 	{
 		if (!buffer.loadFromFile(oggPath.string()))
 		{
-			cerr << "Unable to open file " + oggPath.string() << endl;;
+			cerr << "Unable to open file " + oggPath.string() << endl;
 		}
 	}
 	else if (fs::exists(wavPath))
 	{
 		if (!buffer.loadFromFile(wavPath.string()))
 		{
-			cerr << "Unable to open file " + wavPath.string() << endl;;
+			cerr << "Unable to open file " + wavPath.string() << endl;
 		}
 	}
 	else
@@ -226,6 +232,7 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 	{
 		if (event.type == Event::MouseButtonPressed && mouseInBox(window, 20, 20, 40, 40)) // back button
 		{
+			gameOver();
 			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 			return;
 		}
@@ -290,6 +297,7 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 
 					if (possible) // if set piece sucessfully, move to next piece
 					{
+						sfx.play();
 						if (prevPiecePtr != nullptr)
 						{
 							clearLines();

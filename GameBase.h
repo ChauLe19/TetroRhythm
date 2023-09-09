@@ -51,7 +51,9 @@ protected:
 	string songName; // the folder will have the same name
 	Text text;
 	SoundBuffer buffer;
+	SoundBuffer sfxBuffer;
 	Sound sound;
+	Sound sfx;
 	Shader beatShader;
 
 	// Objects in game
