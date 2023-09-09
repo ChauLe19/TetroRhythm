@@ -72,10 +72,12 @@ void MapEditorSelect::tick(const float & dt, RenderWindow& window)
 void MapEditorSelect::render(RenderWindow& window)
 {
 	RenderTexture mapsTexture;
-	mapsTexture.create(1000, 1000);
+	mapsTexture.create(1000, 800);
 
 	mapsTexture.clear(Color::Transparent);
 	mapsTexture.display();
+
+	startButton.setHighlight(startButton.mouseInButton(window));
 
 	text.setFillColor(Color::White);
 	text.setPosition(100, 50);
@@ -91,8 +93,10 @@ void MapEditorSelect::render(RenderWindow& window)
 	}
 
 	Sprite sprite(mapsTexture.getTexture());
-	sprite.setPosition(2048/2 - 1000/2, 100);
+	sprite.setPosition(2048/2 - 800/2, 100);
 	window.draw(sprite);
+
+	startButton.render(window, text);
 }
 
 void MapEditorSelect::keyEvent(const float & dt, Event event)
@@ -109,16 +113,18 @@ void MapEditorSelect::keyEvent(const float & dt, Event event)
 		break;
 	case Keyboard::Key::Up:
 		cursor = clamp(cursor - 1, 0, (int)maps.size() - 1);
+		mapRenderOffset = -cursor * 150;
 		break;
 	case Keyboard::Key::Down:
 		cursor = clamp(cursor + 1, 0, (int)maps.size() - 1);
+		mapRenderOffset = -cursor * 150;
 		break;
 	}
 }
 
 void MapEditorSelect::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
-	if (event.type == Event::MouseButtonPressed && mouseInBox(window, 2048/2 - 1000/2, 100, 1000, 1000))
+	if (event.type == Event::MouseButtonPressed && mouseInBox(window, 2048/2 - 800/2, 100, 1000, 800))
 	{
 		isPressed = true;
 		Vector2i pixelPos = Mouse::getPosition(window);
@@ -139,5 +145,9 @@ void MapEditorSelect::mouseEvent(const float & dt, RenderWindow& window, Event e
 		isPressed = false;
 		mapRenderOffset = -cursor * 150;
 		prevMapRenderOffset = mapRenderOffset;
+	}
+	else if (event.type == Event::MouseButtonPressed && startButton.mouseInButton(window))
+	{
+		stateManager.addState(std::unique_ptr<StateScreen>(new BeatMapEditor(stateManager, fs::absolute(maps[cursor]).string())));
 	}
 }

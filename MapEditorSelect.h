@@ -8,6 +8,7 @@ class MapEditorSelect : public StateScreen
 {
 private:
 	Text text;
+	Button startButton = Button(Color::White, 50, Color::Transparent, "Start", Vector2f(2048 / 2 - 100, 1000), Vector2f(200, 100), Color(0, 186, 211), Keyboard::Enter);
 	vector<fs::path> maps;
 	int cursor;
 	int mapRenderOffset = 0;
