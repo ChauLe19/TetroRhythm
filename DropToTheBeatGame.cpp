@@ -237,6 +237,7 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 	if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && 
 		this->gravityButton->mouseInButton(window) && (inputVertex.getVertexCount() == 0 || this->gravityButton->posInButton(inputVertex[0].position.x, inputVertex[0].position.y)))
 	{
+		if (gravityCharge != 100) return;
 		gravityCharge = 0;
 		gravityButton->setProgress(gravityCharge);
 		board.enforceGravity();
