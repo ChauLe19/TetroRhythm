@@ -53,8 +53,6 @@ public:
 	void keyEvent(const float & dt, Event event);
 	void mouseEvent(const float & dt, RenderWindow& window, Event event);
 
-	void drawGameModeOption(RenderTexture& window, string gameMode, int x, int y, bool isHighlight);
-
 	/**
 	 * Draw option out to window. If the cursor is on it, highlight it.
 	 * 
@@ -64,7 +62,7 @@ public:
 	 * \param y
 	 * \param isHighlight
 	 */
-	void drawGameModeOption(RenderWindow& window, string gameMode, int x, int y, bool isHighlight);
+	void drawGameModeOption(RenderTexture& window, string gameMode, int x, int y, bool isHighlight);
 };
 
 #endif

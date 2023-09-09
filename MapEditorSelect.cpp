@@ -20,12 +20,33 @@ MapEditorSelect::~MapEditorSelect()
 {
 }
 
+void MapEditorSelect::drawOptions(RenderTexture& window, string option, int x, int y, bool isHighlight)
+{
+	if (isHighlight)
+	{
+		RectangleShape rect(Vector2f(window.getSize().x, 150));
+		rect.setPosition(x, y - 150/4);
+		rect.setFillColor(Color(0, 186, 211));
+		window.draw(rect);
+
+		text.setFillColor(Color::Black);
+
+	}
+	else
+	{
+		text.setFillColor(Color::White);
+	}
+	text.setPosition(x, y);
+	text.setCharacterSize(60);
+	text.setString(option);
+	window.draw(text);
+}
 void MapEditorSelect::drawOptions(RenderWindow& window, string options, int x, int y, bool isHighlight)
 {
 	if (isHighlight)
 	{
-		RectangleShape rect(Vector2f(800, 100));
-		rect.setPosition(x, y - 25);
+		RectangleShape rect(Vector2f(800, 150));
+		rect.setPosition(x, y - 150/4);
 		rect.setFillColor(Color::White);
 		window.draw(rect);
 
@@ -50,6 +71,12 @@ void MapEditorSelect::tick(const float & dt, RenderWindow& window)
 
 void MapEditorSelect::render(RenderWindow& window)
 {
+	RenderTexture mapsTexture;
+	mapsTexture.create(1000, 1000);
+
+	mapsTexture.clear(Color::Transparent);
+	mapsTexture.display();
+
 	text.setFillColor(Color::White);
 	text.setPosition(100, 50);
 	text.setCharacterSize(30);
@@ -57,15 +84,15 @@ void MapEditorSelect::render(RenderWindow& window)
 	window.draw(text);
 
 
-	int tempCursor = cursor - 2;
 	int size = maps.size();
-	for (int i = 0; i < 5 && tempCursor < size; ++tempCursor, ++i)
+	for (int i = 0; i < size; ++i)
 	{
-		if (tempCursor >= 0)
-		{
-			drawOptions(window, maps[tempCursor].filename().string(), 600, 100 + i * 200, cursor == tempCursor);
-		}
+		drawOptions(mapsTexture, maps[i].filename().string(), 0, mapsTexture.getSize().y/2 - 150/2 + i * 150 + mapRenderOffset, cursor == i);
 	}
+
+	Sprite sprite(mapsTexture.getTexture());
+	sprite.setPosition(2048/2 - 1000/2, 100);
+	window.draw(sprite);
 }
 
 void MapEditorSelect::keyEvent(const float & dt, Event event)
@@ -91,4 +118,26 @@ void MapEditorSelect::keyEvent(const float & dt, Event event)
 
 void MapEditorSelect::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
+	if (event.type == Event::MouseButtonPressed && mouseInBox(window, 2048/2 - 1000/2, 100, 1000, 1000))
+	{
+		isPressed = true;
+		Vector2i pixelPos = Mouse::getPosition(window);
+		Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
+		pressedPosition = Vector2f(mouseViewPos.x, mouseViewPos.y);
+		prevMapRenderOffset = mapRenderOffset;
+	}
+	else if (isPressed && Mouse::isButtonPressed(Mouse::Left))
+	{
+		Vector2i pixelPos = Mouse::getPosition(window);
+		Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
+		mapRenderOffset = prevMapRenderOffset;
+		mapRenderOffset += mouseViewPos.y - pressedPosition.y;
+		cursor = clamp( - (mapRenderOffset - 150/2) / 150, 0, (int)maps.size() - 1);
+	}
+	else if (event.type == Event::MouseButtonReleased)
+	{
+		isPressed = false;
+		mapRenderOffset = -cursor * 150;
+		prevMapRenderOffset = mapRenderOffset;
+	}
 }
