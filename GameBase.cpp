@@ -14,7 +14,6 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
 	// add 2 initial 7-bags
-	/*
 	for (int j = 0; j < 2; j++)
 	{
 		vector<Type> tempTypeVector = allPieces;
@@ -27,55 +26,6 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 			bag.push_back(new Tetromino(tempType)); // append all 7 pieces to he bag
 		}
 	}
-	*/
-	bag.push_back(new Tetromino(Type::J));
-	bag.push_back(new Tetromino(Type::T));
-	bag.push_back(new Tetromino(Type::Z));
-	bag.push_back(new Tetromino(Type::S));
-	bag.push_back(new Tetromino(Type::L));
-	bag.push_back(new Tetromino(Type::O));
-	bag.push_back(new Tetromino(Type::I));
-
-	bag.push_back(new Tetromino(Type::S));
-	bag.push_back(new Tetromino(Type::T));
-	bag.push_back(new Tetromino(Type::Z));
-	bag.push_back(new Tetromino(Type::I));
-	bag.push_back(new Tetromino(Type::L));
-	bag.push_back(new Tetromino(Type::O));
-	bag.push_back(new Tetromino(Type::J));
-
-	bag.push_back(new Tetromino(Type::O));
-	bag.push_back(new Tetromino(Type::S));
-	bag.push_back(new Tetromino(Type::Z));
-	bag.push_back(new Tetromino(Type::J));
-	bag.push_back(new Tetromino(Type::L));
-	bag.push_back(new Tetromino(Type::T));
-	bag.push_back(new Tetromino(Type::I));
-	//done
-
-	bag.push_back(new Tetromino(Type::L));
-	bag.push_back(new Tetromino(Type::J));
-	bag.push_back(new Tetromino(Type::S));
-	bag.push_back(new Tetromino(Type::I));
-	bag.push_back(new Tetromino(Type::Z));
-	bag.push_back(new Tetromino(Type::O));
-	bag.push_back(new Tetromino(Type::T));
-
-	bag.push_back(new Tetromino(Type::Z));
-	bag.push_back(new Tetromino(Type::I));
-	bag.push_back(new Tetromino(Type::O));
-	bag.push_back(new Tetromino(Type::J));
-	bag.push_back(new Tetromino(Type::L));
-	bag.push_back(new Tetromino(Type::S));
-	bag.push_back(new Tetromino(Type::T));
-
-	bag.push_back(new Tetromino(Type::I));
-	bag.push_back(new Tetromino(Type::S));
-	bag.push_back(new Tetromino(Type::J));
-	bag.push_back(new Tetromino(Type::L));
-	bag.push_back(new Tetromino(Type::Z));
-	bag.push_back(new Tetromino(Type::T));
-	bag.push_back(new Tetromino(Type::O));
 
 	// load song
 	fs::path oggPath = folderPath;
