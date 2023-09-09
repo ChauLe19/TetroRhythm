@@ -336,7 +336,6 @@ void DropToTheBeatGame::render(RenderWindow& window)
 	GameBase::render(window);
 	renderBeatSignal(window);
 
-	int progressBarLength = 500;
 	RectangleShape progress;
 	progress.setPosition(boardX, boardY + boardHeight * boardSquareSize + 30);
 	progress.setOutlineColor(Color::Transparent);
@@ -347,7 +346,7 @@ void DropToTheBeatGame::render(RenderWindow& window)
 	if (score >= threshold) // SS
 	{
 		checkpoint = 100;
-		remainder = 1;
+		remainder = 0;
 	}
 	else if (score >= threshold * 95 / 100) // S
 	{
@@ -379,11 +378,11 @@ void DropToTheBeatGame::render(RenderWindow& window)
 		checkpoint = 0;
 		remainder = 60;
 	}
-	int thresholdRemainder = threshold * remainder / 100;
-	thresholdRemainder = thresholdRemainder == 0 ? 1 : thresholdRemainder;
 	int thresholdCheckpoint = threshold * checkpoint / 100;
 	int progressScoreLeft = score - thresholdCheckpoint;
-	progress.setSize(Vector2f(progressScoreLeft * progressBarLength / thresholdRemainder , 20));
+	int thresholdRemainder = threshold * remainder / 100;
+	thresholdRemainder = thresholdRemainder == 0 ? progressScoreLeft : thresholdRemainder;
+	progress.setSize(Vector2f(progressScoreLeft * boardWidth * boardSquareSize / thresholdRemainder , 20));
 	window.draw(progress);
 	window.draw(assetManager->getDrawable("Whole Rank bar"));
 
