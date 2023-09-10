@@ -82,64 +82,7 @@ const static std::array<std::array<std::array<int, 4>, 4>, 7> tetrominos = { {
 										} };
 
 
-// 0 = spawn state
-// R = state resulting from a clockwise rotation("right") from spawn
-// L = state resulting from a counter - clockwise("left") rotation from spawn
-// 2 = state resulting from 2 successive rotations in either direction from spawn.
 
-const static std::array<std::array<std::array<int, 2>, 5>, 8> JLSTZWallKickData = { {
-													{{ // 0 -> R
-														{0,0}, {-1,0}, {-1, 1}, {0,-2}, {-1,-2}
-													}},
-													{{ // R -> 0
-														{0,0}, { 1,0}, { 1,-1}, {0, 2}, { 1, 2}
-													}},
-													{{ // R -> 2
-														{0,0}, { 1,0}, { 1,-1}, {0, 2}, { 1, 2}
-													}},
-													{{ // 2 -> R
-														{0,0}, {-1,0}, {-1, 1}, {0,-2}, {-1,-2}
-													}},
-													{{ // 2 -> L
-														{0,0}, { 1,0}, { 1, 1}, {0,-2}, { 1,-2}
-													}},
-													{{ // L -> 2
-														{0,0}, {-1,0}, {-1,-1}, {0, 2}, {-1, 2}
-													}},
-													{{ // L -> 0
-														{0,0}, {-1,0}, {-1,-1}, {0, 2}, {-1, 2}
-													}},
-													{{ // 0 -> L
-														{0,0}, { 1,0}, { 1, 1}, {0,-2}, { 1,-2}
-													}},
-} };
-
-const static std::array<std::array<std::array<int, 2>, 5>, 8> IWallKickData = { {
-												{{ // 0 -> R
-													{0,0}, {-2,0}, { 1, 0}, {-2,-1}, { 1, 2}
-												}},
-												{{ // R -> 0
-													{0,0}, { 2,0}, {-1, 0}, { 2, 1}, {-1,-2}
-												}},
-												{{ // R -> 2
-													{0,0}, {-1,0}, { 2, 0}, {-1, 2}, { 2,-1}
-												}},
-												{{ // 2 -> R
-													{0,0}, { 1,0}, {-2, 0}, { 1,-2}, {-2, 1}
-												}},
-												{{ // 2 -> L
-													{0,0}, { 2,0}, {-1, 0}, { 2, 1}, {-1,-2}
-												}},
-												{{ // L -> 2
-													{0,0}, {-2,0}, { 1, 0}, {-2,-1}, { 1, 2}
-												}},
-												{{ // L -> 0
-													{0,0}, { 1,0}, {-2, 0}, { 1,-2}, {-2, 1}
-												}},
-												{{ // 0 -> L
-													{0,0}, {-1,0}, { 2, 0}, {-1, 2}, { 2,-1}
-												}},
-} };
 
 // orientational mapping from mouse moving direction
 const static std::array<std::array<Orientation, 4>, 7> orientationFromMouse = { {
@@ -151,8 +94,8 @@ const static std::array<std::array<Orientation, 4>, 7> orientationFromMouse = { 
 	}},
 	{{ // L piece
 		{Orientation::LEFT}, // UP
-		{Orientation::SPAWN},  // LEFT
-		{Orientation::FLIP}, // RIGHT
+		{Orientation::FLIP},  // LEFT
+		{Orientation::SPAWN}, // RIGHT
 		{Orientation::RIGHT}  // DOWN
 	}},
 	{{ // O piece
@@ -175,8 +118,8 @@ const static std::array<std::array<Orientation, 4>, 7> orientationFromMouse = { 
 	}},
 	{{ // J piece
 		{Orientation::RIGHT}, // UP
-		{Orientation::FLIP},  // LEFT
-		{Orientation::SPAWN}, // RIGHT
+		{Orientation::SPAWN},  // LEFT
+		{Orientation::FLIP}, // RIGHT
 		{Orientation::LEFT}  // DOWN
 	}},
 	{{ // T piece
@@ -196,10 +139,10 @@ const static std::array<std::array<std::array<int, 2>, 4>, 7> shiftPos = { {
 		{0,-2}  // LEFT
 	}},
 	{{ // L piece
-		{-2,-1}, // SPAWN
+		{-1,-1}, // SPAWN
 		{-1,-1}, // RIGHT
-		{0,-1}, // FLIP
-		{-1,-2}  // LEFT
+		{-1,-1}, // FLIP
+		{-1,-1}  // LEFT
 	}},
 	{{ // O piece
 		{-1,-1}, // SPAWN
@@ -220,9 +163,9 @@ const static std::array<std::array<std::array<int, 2>, 4>, 7> shiftPos = { {
 		{-1,-2}  // LEFT
 	}},
 	{{ // J piece
-		{0,-1}, // SPAWN
-		{-1,-2}, // RIGHT
-		{-2,-1}, // FLIP
+		{-1,-1}, // SPAWN
+		{-1,-1}, // RIGHT
+		{-1,-1}, // FLIP
 		{-1,-1}  // LEFT
 	}},
 	{{ // T piece
