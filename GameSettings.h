@@ -29,6 +29,7 @@ public:
 	static void saveKeys();
 	static void saveConfig();
 	static void saveHighscores();
+	static int getBeatMapThreshold(std::string songName);
 private:
 	static Controls_Settings* controlsSettings;
 	static Highscores* highscores;

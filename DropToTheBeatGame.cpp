@@ -31,7 +31,11 @@ DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPa
 	currentPiecePtr = &nextPiece();
 
 	std::map<std::string, int> thresholds = GameSettings::getHighscores()->dropToBeatThreshold;
-	threshold = thresholds.find(songName) != thresholds.end() ? thresholds.at(songName) : 1;
+	if (thresholds.find(songName) == thresholds.end())
+	{
+		GameSettings::getHighscores()->dropToBeatThreshold.insert(std::pair(songName, GameSettings::getBeatMapThreshold(songName)));
+	}
+	threshold = GameSettings::getHighscores()->dropToBeatThreshold.at(songName);
 }
 
 

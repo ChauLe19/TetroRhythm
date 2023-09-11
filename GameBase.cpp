@@ -27,9 +27,9 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 		}
 	}
 
-	if (!sfxBuffer.loadFromFile("SFX/drop.wav"))
+	if (!sfxBuffer.loadFromFile("SFX/drop.ogg"))
 	{
-		cerr << "Unable to open file drop.wav" << endl;
+		cerr << "Unable to open file drop.ogg" << endl;
 	}
 	sfx.setBuffer(sfxBuffer);
 

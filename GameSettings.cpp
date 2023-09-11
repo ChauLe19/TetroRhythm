@@ -74,7 +74,7 @@ void GameSettings::saveHighscores()
 	outFile.close();
 }
 
-int getBeatMapThreshold(std::string songName)
+int GameSettings::getBeatMapThreshold(std::string songName)
 {
 	ifstream beatStream("BeatMaps/" + songName +"/"+ songName+ ".txt");
 	int beatCount = 0;
