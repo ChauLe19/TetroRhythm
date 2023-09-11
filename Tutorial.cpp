@@ -18,6 +18,7 @@ Tutorial::Tutorial(StateManager& stateManager) : StateScreen(stateManager)
 		cerr << "Unable to open file drop.wav" << endl;
 	}
 	sfx.setBuffer(sfxBuffer);
+	sfx.setVolume(GameSettings::getSettings()->sfx);
 }
 
 Tutorial::~Tutorial()
