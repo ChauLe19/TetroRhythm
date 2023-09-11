@@ -37,9 +37,9 @@ void Board::render(RenderWindow& window)
 			rect.setOutlineColor(Color(50, 50, 50));
 			rect.setOutlineThickness(5);
 			window.draw(rect);
-			if (board[i][j] % 8 != 0)
+			if (board[i][j] % 9 != 0)
 			{
-				cellImage.setTextureRect(IntRect((board[i][j] % 8 - 1) * 45, 0, 45, 45));
+				cellImage.setTextureRect(IntRect((board[i][j] % 9 - 1) * 45, 0, 45, 45));
 				cellImage.setScale(Vector2f(3, 3));
 				cellImage.setPosition(xPos + boardSquareSize * j, yPos + boardSquareSize * i);
 				window.draw(cellImage);

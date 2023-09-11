@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include "Tutorial.h"
 
 Menu::Menu(StateManager &stateManager) : StateScreen(stateManager)
 {
@@ -21,14 +22,15 @@ void Menu::render(RenderWindow& window)
 	text.setFillColor(Color::White);
 	text.setCharacterSize(200);
 	text.setString("TetroRhythm");
-	text.setPosition(1024 - text.getLocalBounds().width / 2, 200);
+	text.setPosition(1024 - text.getLocalBounds().width / 2, 100);
 	window.draw(text);
 
 
 	beginButton.render(window, text);
 	settingsButton.render(window, text);
 	beatmapButton.render(window, text);
-
+	tutorialButton.render(window, text);
+	exitButton.render(window, text);
 }
 
 void Menu::keyEvent(const float & dt, Event event)
@@ -50,7 +52,7 @@ void Menu::keyEvent(const float & dt, Event event)
 
 void Menu::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
-	if (event.type == Event::MouseButtonPressed)
+	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 	{
 		if (beginButton.mouseInButton(window)) // BEGIN button
 		{
@@ -64,11 +66,21 @@ void Menu::mouseEvent(const float & dt, RenderWindow& window, Event event)
 		{
 			stateManager.addState(std::unique_ptr<StateScreen>(new MapEditorSelect(stateManager)));
 		}
+		else if (tutorialButton.mouseInButton(window)) // tutorial button
+		{
+			stateManager.addState(std::unique_ptr<StateScreen>(new Tutorial(stateManager)));
+		}
+		else if (exitButton.mouseInButton(window)) // exit button
+		{
+			window.close();
+		}
 	}
 	else if (event.type == Event::MouseMoved)
 	{
 		beginButton.setHighlight(beginButton.mouseInButton(window));
 		settingsButton.setHighlight(settingsButton.mouseInButton(window));
 		beatmapButton.setHighlight(beatmapButton.mouseInButton(window));
+		tutorialButton.setHighlight(tutorialButton.mouseInButton(window));
+		exitButton.setHighlight(exitButton.mouseInButton(window));
 	}
 }

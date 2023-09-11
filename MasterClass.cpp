@@ -113,6 +113,7 @@ void MasterClass::loadResources()
 	assetManager->loadTexture("frame", "Images/frame.png");
 	assetManager->loadTexture("tiles", "Images/tiles.png");
 	assetManager->loadTexture("button", "Images/button.png");
+	assetManager->loadTexture("instruction", "Images/instruction.png");
 
 	sf::ConvexShape *backButton = new ConvexShape();
 	backButton->setPointCount(8);

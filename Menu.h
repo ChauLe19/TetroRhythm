@@ -28,9 +28,11 @@ class Menu : public StateScreen
 private:
 	Text text;
 	Sprite buttonImage;
-	Button beginButton = Button(Color::White, 50, Color::Transparent, "BEGIN", Vector2f(1024 - 250, 550), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
-	Button settingsButton = Button(Color::White,50, Color::Transparent, "SETTINGS", Vector2f(1024 - 250, 700), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
-	Button beatmapButton = Button(Color::White, 50, Color::Transparent, "EDIT BEAT MAPS", Vector2f(1024 - 250, 850), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
+	Button beginButton = Button(Color::White, 50, Color::Transparent, "PLAY", Vector2f(1024 - 250, 450), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
+	Button beatmapButton = Button(Color::White, 50, Color::Transparent, "EDIT BEAT MAPS", Vector2f(1024 - 250, 570), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
+	Button tutorialButton = Button(Color::White, 50, Color::Transparent, "TUTORIAL", Vector2f(1024 - 250, 690), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
+	Button settingsButton = Button(Color::White,40, Color::Transparent, "Settings", Vector2f(1024 - 250, 810), Vector2f(240, 100), Color(0, 186, 211), Keyboard::A);
+	Button exitButton = Button(Color::White,40, Color::Transparent, "Exit", Vector2f(1024 + 10, 810), Vector2f(240, 100), Color(0, 186, 211), Keyboard::A);
 
 public:
 	Menu(StateManager &stateManager);

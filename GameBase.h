@@ -34,8 +34,8 @@ using namespace sf;
 namespace fs = std::filesystem;
 
 //const int boardX = 1024- 45*5;
-const int boardX = 1024 - 90 * 5;
-const int boardY = 576 - 90 * 5;
+const int boardX = 1024 - boardSquareSize* boardWidth/2;
+const int boardY = 576 - boardSquareSize * boardHeight/2;
 
 // frame per cell. how many frame in between dropping 1 cell
 //https://tetris.wiki/Marathon

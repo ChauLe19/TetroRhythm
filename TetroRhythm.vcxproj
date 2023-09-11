@@ -151,6 +151,7 @@
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="StateScreen.h" />
     <ClInclude Include="Tetromino.h" />
+    <ClInclude Include="Tutorial.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +177,7 @@
     <ClCompile Include="StateScreen.cpp" />
     <ClCompile Include="Tetromino.cpp" />
     <ClCompile Include="TetroRhythm.cpp" />
+    <ClCompile Include="Tutorial.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
