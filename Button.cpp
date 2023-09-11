@@ -50,8 +50,12 @@ void Button::render(RenderWindow& window, Text& text)
 	text.setFillColor(isHighlight ? highlightColor : textColor);
 	text.setCharacterSize(fontSize);
 	text.setString(textString);
-	text.setPosition(position.x + size.x / 2 - text.getLocalBounds().width / 2, position.y + size.y /2 - text.getLocalBounds().height);
+	text.setOrigin(text.getGlobalBounds().getSize() / 2.f + text.getLocalBounds().getPosition());
+	text.setPosition(buttonRect.getPosition() + (buttonRect.getSize() / 2.f));
 	window.draw(text);
+
+	// reset text origin
+	text.setOrigin(0, 0);
 }
 
 bool Button::mouseInButton(RenderWindow& window)
