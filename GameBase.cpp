@@ -299,6 +299,7 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 
 					if (possible) // if set piece sucessfully, move to next piece
 					{
+						sfx.stop();
 						sfx.play();
 						if (prevPiecePtr != nullptr)
 						{

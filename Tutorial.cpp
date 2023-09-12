@@ -13,9 +13,9 @@ Tutorial::Tutorial(StateManager& stateManager) : StateScreen(stateManager)
 	currentPiecePtr = bag.at(counter);
 	board.setBoard(tutorialBoards.at(counter));
 
-	if (!sfxBuffer.loadFromFile("SFX/drop.wav"))
+	if (!sfxBuffer.loadFromFile("SFX/drop.ogg"))
 	{
-		cerr << "Unable to open file drop.wav" << endl;
+		cerr << "Unable to open file drop.ogg" << endl;
 	}
 	sfx.setBuffer(sfxBuffer);
 	sfx.setVolume(GameSettings::getSettings()->sfx);
@@ -186,6 +186,7 @@ void Tutorial::mouseEvent(const float& dt, RenderWindow& window, Event event)
 
 					if (possible) // if set piece sucessfully, move to next piece
 					{
+						sfx.stop();
 						sfx.play();
 						stageRender = 60;
 						cout << "success" << endl;
