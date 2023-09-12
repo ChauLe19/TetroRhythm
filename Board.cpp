@@ -4,14 +4,10 @@ Board::Board(int xPos, int yPos) : Board()
 {
 	this->xPos = xPos;
 	this->yPos = yPos;
-	image.setScale(4, 4);
-	image.setPosition((float)xPos, (float)yPos);
-
 }
 
 Board::Board()
 {
-	image.setTexture(AssetManager::getInstance()->getTexture("frame"));
 	cellImage.setTexture(AssetManager::getInstance()->getTexture("tiles"));
 }
 

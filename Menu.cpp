@@ -5,8 +5,6 @@ Menu::Menu(StateManager &stateManager) : StateScreen(stateManager)
 {
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
-
-	buttonImage.setTexture(assetManager->getTexture("button"));
 }
 
 Menu::~Menu()

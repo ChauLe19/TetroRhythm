@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include <sstream>
 
 bool mouseInBox(RenderWindow& window, int x, int y, int width, int height)
 {

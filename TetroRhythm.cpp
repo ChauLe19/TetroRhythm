@@ -8,6 +8,7 @@
 #include <filesystem>
 
 #include "MasterClass.h"
+#define NDEBUG false
 
 using namespace std;
 using namespace sf;
