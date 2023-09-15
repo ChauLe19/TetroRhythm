@@ -73,7 +73,7 @@ int main()
 	window.setKeyRepeatEnabled(true);
 
 	Image icon;
-	icon.loadFromFile("Images/logo.png");
+	icon.loadFromFile("Images/Logo.png");
 	window.setIcon(32, 32, icon.getPixelsPtr());
 
 	HWND handle = window.getSystemHandle();

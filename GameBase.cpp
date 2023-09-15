@@ -1,5 +1,7 @@
 #include "GameBase.h"
 #include "Menu.h"
+#include <numbers>
+constexpr double PI = 3.14159265358979323846;
 
 GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme")
 	: StateScreen(stateManager), songName(fs::path(folderPath).filename().string())
@@ -262,27 +264,23 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 				int XorYdir = max(abs(xDir), abs(yDir));
 				if (XorYdir >= 50) // only register input if it's long enough
 				{
-					if (XorYdir == abs(xDir))// favor x direction
+					double angle = atan2(yDir, xDir);
+
+					if ((angle <= PI / 4 && angle >= 0) || (angle >= -PI / 4 && angle <= 0))
 					{
-						if (xDir > 0) // mouse move right
-						{
-							mouseDirection = Moving_Direction::RIGHT_DIR;
-						}
-						else if (xDir < 0)
-						{
-							mouseDirection = Moving_Direction::LEFT_DIR;
-						}
+						mouseDirection = Moving_Direction::RIGHT_DIR;
 					}
-					else // favor y direction
+					else if(angle >= PI/4 && angle <= PI * 3/4)
 					{
-						if (yDir > 0)
-						{
-							mouseDirection = Moving_Direction::DOWN_DIR;
-						}
-						else if (yDir < 0)
-						{
-							mouseDirection = Moving_Direction::UP_DIR;
-						}
+						mouseDirection = Moving_Direction::DOWN_DIR;
+					}
+					else if (angle >= PI * 3/4 || angle <= -PI * 3 / 4)
+					{
+						mouseDirection = Moving_Direction::LEFT_DIR;
+					}
+					else if (angle <= -PI / 4 && angle >= -PI * 3 / 4)
+					{
+						mouseDirection = Moving_Direction::UP_DIR;
 					}
 
 					int minX = -currentPiecePtr->getMinX();
