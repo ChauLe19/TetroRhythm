@@ -266,6 +266,7 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 				{
 					double angle = atan2(yDir, xDir);
 
+					// get mouse drawing direction
 					if ((angle <= PI / 4 && angle >= 0) || (angle >= -PI / 4 && angle <= 0))
 					{
 						mouseDirection = Moving_Direction::RIGHT_DIR;
@@ -283,15 +284,8 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 						mouseDirection = Moving_Direction::UP_DIR;
 					}
 
-					int minX = -currentPiecePtr->getMinX();
-					int minY = -currentPiecePtr->getMinY();
-					int maxX = 9 - currentPiecePtr->getMaxX();
-					int maxY = 9 - currentPiecePtr->getMaxY();
-					// x - 1, y - 1 to offset to center of the piece
 					int x = std::floor((firstPoint.position.x - boardX) / boardSquareSize);
 					int y = std::floor((firstPoint.position.y - boardY) / boardSquareSize);
-
-					std::cout << x << ":" << y << "=" << static_cast<int> (mouseDirection) << std::endl;
 
 					bool possible = currentPiecePtr->setPiece(x, y, mouseDirection, board);
 
