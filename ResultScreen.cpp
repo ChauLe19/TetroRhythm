@@ -15,7 +15,7 @@ ResultScreen::ResultScreen(StateManager& stateManager, string songName, int accu
 	this->rawScore = rawScore;
 	this->rawScore = rawScore;
 	this->adjustedScore = rawScore;
-	std::map<std::string, int> thresholds = GameSettings::getHighscores()->dropToBeatThreshold;
+	std::map<std::string, int> thresholds = GameSettings::getInstance()->getHighscores()->dropToBeatThreshold;
 	int threshold = thresholds.find(songName) != thresholds.end() ? thresholds.at(songName) : 1;
 	this->letterRanked = getRank(rawScore, threshold);
 }

@@ -1,6 +1,7 @@
 #include "Tutorial.h"
 #include "Utils.h"
 #include "Menu.h"
+#include "GameSettings.h"
 
 Tutorial::Tutorial(StateManager& stateManager) : StateScreen(stateManager)
 {
@@ -18,7 +19,7 @@ Tutorial::Tutorial(StateManager& stateManager) : StateScreen(stateManager)
 		cerr << "Unable to open file drop.ogg" << endl;
 	}
 	sfx.setBuffer(sfxBuffer);
-	sfx.setVolume(GameSettings::getSettings()->sfx);
+	sfx.setVolume(GameSettings::getInstance()->getSettings()->sfx);
 }
 
 Tutorial::~Tutorial()

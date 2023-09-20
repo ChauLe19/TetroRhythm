@@ -24,8 +24,8 @@ void Settings::keyEvent(const float & dt, Event event)
 	switch (key)
 	{
 	case Keyboard::Key::Escape:
-		GameSettings::saveKeys();
-		GameSettings::saveConfig();
+		GameSettings::getInstance()->saveKeys();
+		GameSettings::getInstance()->saveConfig();
 		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::Down:
@@ -159,8 +159,8 @@ void Settings::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
-		GameSettings::saveKeys();
-		GameSettings::saveConfig();
+		GameSettings::getInstance()->saveKeys();
+		GameSettings::getInstance()->saveConfig();
 		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 	}
 }

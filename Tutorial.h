@@ -3,6 +3,8 @@
 #include "Button.h"
 #include "Board.h"
 #include "GameBase.h"
+#include "GameSettings.h"
+
 class Tutorial :
     public StateScreen
 {

@@ -90,8 +90,8 @@ protected:
 
 	Keyboard::Key holdKey;
 	Keyboard::Key currentKey;
-	GameSettings::Controls_Settings* controlsSettings = GameSettings::getSettings();
-	GameSettings::Highscores* highscores = GameSettings::getHighscores();
+	GameSettings::Controls_Settings* controlsSettings = GameSettings::getInstance()->getSettings();
+	GameSettings::Highscores* highscores = GameSettings::getInstance()->getHighscores();
 	bool firstPressed = false;
 	bool alreadyHold = false;
 	bool locked = false;

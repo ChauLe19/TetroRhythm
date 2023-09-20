@@ -2,8 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-GameSettings::Controls_Settings* GameSettings::controlsSettings = NULL;
-GameSettings::Highscores* GameSettings::highscores = NULL;
+
+GameSettings* GameSettings::instance = NULL;
 
 GameSettings::GameSettings()
 {
@@ -13,11 +13,22 @@ GameSettings::~GameSettings()
 {
 }
 
+GameSettings* GameSettings::getInstance()
+{
+	if (instance == nullptr)
+	{
+		instance = new GameSettings();
+	}
+	return instance;
+}
+
 GameSettings::Controls_Settings* GameSettings::getSettings()
 {
 	if (controlsSettings == nullptr)
 	{
-		loadFiles();
+		controlsSettings = new Controls_Settings();
+		initKeys();
+		initConfig();
 	}
 	return controlsSettings;
 }
@@ -26,18 +37,16 @@ GameSettings::Highscores* GameSettings::getHighscores()
 {
 	if (highscores == nullptr)
 	{
-		loadFiles();
+		highscores = new Highscores();
+		initHighscores();
 	}
 	return highscores;
 }
 
 void GameSettings::loadFiles()
 {
-	controlsSettings = new Controls_Settings();
-	highscores = new Highscores();
-	initKeys();
-	initConfig();
-	initHighscores();
+	getSettings();
+	getHighscores();
 }
 
 void GameSettings::saveKeys()

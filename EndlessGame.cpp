@@ -25,7 +25,7 @@ void EndlessGame::gameOver()
 {
 	GameBase::gameOver();
 	highscores->endless = max(highscores->endless, score);
-	GameSettings::saveHighscores();
+	GameSettings::getInstance()->saveHighscores();
 }
 
 void EndlessGame::keyEvent(const float & dt, Event event)

@@ -33,7 +33,7 @@ void LimitedTimeGame::gameOver()
 {
 	GameBase::gameOver();
 	highscores->limit = max(highscores->limit, score);
-	GameSettings::saveHighscores();
+	GameSettings::getInstance()->saveHighscores();
 }
 
 void LimitedTimeGame::keyEvent(const float & dt, Event event)

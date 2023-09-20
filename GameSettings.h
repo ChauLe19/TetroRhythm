@@ -22,22 +22,25 @@ public:
 		int limit = 0;
 	};
 
-	static Controls_Settings* getSettings();
-	static Highscores* getHighscores();
-	static void loadFiles();
+	static GameSettings* getInstance();
 
-	static void saveKeys();
-	static void saveConfig();
-	static void saveHighscores();
-	static int getBeatMapThreshold(std::string songName);
+	Controls_Settings* getSettings();
+	Highscores* getHighscores();
+	void loadFiles();
+
+	void saveKeys();
+	void saveConfig();
+	void saveHighscores();
+	int getBeatMapThreshold(std::string songName);
 private:
-	static Controls_Settings* controlsSettings;
-	static Highscores* highscores;
+	static GameSettings* instance;
+	Controls_Settings* controlsSettings;
+	Highscores* highscores;
 	GameSettings();
 	~GameSettings();
 
-	static void initKeys();
-	static void initConfig();
-	static void initHighscores();
+	void initKeys();
+	void initConfig();
+	void initHighscores();
 };
 

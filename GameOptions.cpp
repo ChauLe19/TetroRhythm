@@ -59,14 +59,14 @@ void GameOptions::render(RenderWindow& window)
 	limitedGameButton.render(window, text);		// get the highest score in 2 min
 	text.setFillColor(limitedGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
 	text.setCharacterSize(30);
-	text.setString("Highscore: " + to_string(GameSettings::getHighscores()->limit));
+	text.setString("Highscore: " + to_string(GameSettings::getInstance()->getHighscores()->limit));
 	text.setPosition(200, 500 - 40);
 	window.draw(text);
 
 	endlessGameButton.render(window, text);	// just play
 	text.setFillColor(endlessGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
 	text.setCharacterSize(30);
-	text.setString("Highscore: " + to_string(GameSettings::getHighscores()->endless));
+	text.setString("Highscore: " + to_string(GameSettings::getInstance()->getHighscores()->endless));
 	text.setPosition(200, 700 - 40);
 	window.draw(text);
 
@@ -255,8 +255,8 @@ void GameOptions::drawGameModeOption(RenderTexture& window, string gameMode, int
 	text.setFillColor(isHighlight ? Color(50, 50, 50) : Color(200, 200, 200));
 	text.setPosition(x, y - 30);
 	text.setCharacterSize(30);
-	std::map<std::string, int> thresholds = GameSettings::getHighscores()->dropToBeatThreshold;
-	auto highscores = GameSettings::getHighscores()->dropToBeatHS;
+	std::map<std::string, int> thresholds = GameSettings::getInstance()->getHighscores()->dropToBeatThreshold;
+	auto highscores = GameSettings::getInstance()->getHighscores()->dropToBeatHS;
 	int highscore = highscores.find(gameMode) != highscores.end() ? highscores.at(gameMode) : 0;
 	int threshold = thresholds.find(gameMode) != thresholds.end() ? thresholds.at(gameMode) : 1;
 

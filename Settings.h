@@ -28,7 +28,7 @@ class Settings : public StateScreen
 public:
 private:
 	Text text;
-	GameSettings::Controls_Settings* settings = GameSettings::getSettings();
+	GameSettings::Controls_Settings* settings = GameSettings::getInstance()->getSettings();
 	int cursor = 0;
 	bool isChanging = false;
 

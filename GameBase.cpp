@@ -61,8 +61,8 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 	}
 
 	sound.setBuffer(buffer);
-	sfx.setVolume(GameSettings::getSettings()->sfx);
-	sound.setVolume(GameSettings::getSettings()->music);
+	sfx.setVolume(GameSettings::getInstance()->getSettings()->sfx);
+	sound.setVolume(GameSettings::getInstance()->getSettings()->music);
 	currentPiecePtr = &nextPiece();
 	
 	loadStaticAssets();
