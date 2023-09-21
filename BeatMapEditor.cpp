@@ -219,11 +219,12 @@ void BeatMapEditor::render(RenderWindow& window)
 	dividerButton13->render(window, text);
 	dividerButton14->render(window, text);
 
-	text.setFillColor(Color::White);
-	text.setPosition(20, 10);
+	text.setFillColor(Color(255, 255, 255, 100));
 	text.setCharacterSize(30);
-	text.setString("Drag the bottom cursor to navigate along the beats. Hover your mouse over green tick(s) while holding right click to erase them. Press B or right click the center circle to place beat. Spacebar to play/pause.");
-	// window.draw(text);
+	text.setString("Right click over the beat to delete it");
+	text.setPosition(100, sliderHeight);
+	window.draw(text);
+
 
 
 	if (sound.getStatus() != Music::Status::Playing) // draw playing status
@@ -279,7 +280,14 @@ void BeatMapEditor::render(RenderWindow& window)
 		it++;
 
 	}
+
+	text.setFillColor(Color(255, 255, 255, 50));
+	text.setCharacterSize(100);
+	text.setString("Preview");
+	text.setPosition(100 + (boardSquareSize*boardWidth)/2 - text.getLocalBounds().width/2, 1152 / 2 - (boardSquareSize * boardHeight) / 2 + 2* boardSquareSize);
+	window.draw(text);
 	simulatorBoard.setBoard(infBoardSimulation.at(currentBeatIndex % infBoardSimulation.size()));
+	Board simulatorBoard = Board(100, 1152 / 2 - (boardSquareSize * boardHeight)/2);
 
 
 	// render major/minor notes
@@ -297,6 +305,7 @@ void BeatMapEditor::render(RenderWindow& window)
 	//window.draw(assetManager->getDrawable("beat button"));
 
 	// draw audio timestamp
+	text.setFillColor(Color::White);
 	Int32 tleft = sound.getPlayingOffset().asMilliseconds();
 	Int32 tTotal = sound.getBuffer()->getDuration().asMilliseconds();
 	String tLeftString = getPaddingString(to_string(tleft / 1000 / 60), 2, '0', false) + ":"
@@ -480,7 +489,7 @@ void BeatMapEditor::mouseEvent(const float & dt, RenderWindow& window, Event eve
 
 	Vector2i pixelPos = Mouse::getPosition(window);
 	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
-	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1152 - sliderHeight, 10, sliderHeight))
+	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 0, 1152 - sliderHeight, sliderLength, sliderHeight))
 	{
 		cursorSelected = true;
 		cursorRelToMusicMS = (mouseViewPos.x - 24 + 5) * musicDurationMS / sliderLength;

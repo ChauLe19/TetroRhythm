@@ -80,11 +80,10 @@ void MapEditorSelect::render(RenderWindow& window)
 	startButton.setHighlight(startButton.mouseInButton(window));
 
 	text.setFillColor(Color::White);
-	text.setPosition(100, 50);
-	text.setCharacterSize(30);
-	text.setString("Enter to continue. Esc to exit to menu. Arrow keys to navigate.");
+	text.setCharacterSize(80);
+	text.setString("Select map to edit");
+	text.setPosition(1024 - text.getLocalBounds().width / 2, 50);
 	window.draw(text);
-
 
 	int size = maps.size();
 	for (int i = 0; i < size; ++i)
@@ -93,7 +92,7 @@ void MapEditorSelect::render(RenderWindow& window)
 	}
 
 	Sprite sprite(mapsTexture.getTexture());
-	sprite.setPosition(2048/2 - 800/2, 100);
+	sprite.setPosition(2048/2 - 800/2, 150);
 	window.draw(sprite);
 
 	if (mouseInBox(window, 20, 20, 40, 40)) // back button
