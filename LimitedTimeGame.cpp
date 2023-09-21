@@ -65,7 +65,7 @@ void LimitedTimeGame::render(RenderWindow& window)
 	text.setPosition(300, 500);
 	window.draw(text);
 	text.setCharacterSize(70);
-	text.setString(to_string(tleft / 1000/60) + ":"+to_string(tleft / 1000%60) + ":" + to_string((tleft % 1000)/10));
+	text.setString(getTimeFormat(tleft));
 	text.setPosition(300, 550);
 	window.draw(text);
 
