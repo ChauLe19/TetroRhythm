@@ -7,7 +7,6 @@ private:
 	static AssetManager* assetManager;
 	std::map<std::string, std::string> textureFiles;
 	std::map<std::string, std::string> fontFiles;
-	std::map<std::string, std::string> drawableFiles;
 	std::map<std::string, sf::Texture> textures;
 	std::map<std::string, sf::Font> fonts;
 	std::map<std::string, std::unique_ptr<sf::Drawable>> drawables;
