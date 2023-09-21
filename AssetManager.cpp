@@ -21,31 +21,37 @@ AssetManager* AssetManager::getInstance()
 
 void AssetManager::loadTexture(std::string name, std::string filename)
 {
-	sf::Texture texture;
-
-	if (texture.loadFromFile(filename))
-	{
-		this->textures[name] = texture;
-	}
+	this->textureFiles[name] = filename;
 }
 
 sf::Texture& AssetManager::getTexture(std::string name)
 {
+	if (this->textures.find(name) == this->textures.end())
+	{
+		sf::Texture texture;
+		if (texture.loadFromFile(this->textureFiles.at(name)))
+		{
+			this->textures[name] = texture;
+		}
+	}
 	return this->textures.at(name);
 }
 
 void AssetManager::loadFont(std::string name, std::string filename)
 {
-	sf::Font font;
-
-	if (font.loadFromFile(filename))
-	{
-		this->fonts[name] = font;
-	}
+	this->fontFiles[name] = filename;
 }
 
 sf::Font& AssetManager::getFont(std::string name)
 {
+	if (this->fonts.find(name) == this->fonts.end())
+	{
+		sf::Font font;
+		if (font.loadFromFile(this->fontFiles.at(name)))
+		{
+			this->fonts[name] = font;
+		}
+	}
 	return this->fonts.at(name);
 }
 
