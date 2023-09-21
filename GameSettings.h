@@ -20,6 +20,7 @@ public:
 		std::map<std::string, int> dropToBeatThreshold;
 		int endless = 0;
 		int limit = 0;
+		int sprintTime = INT_MAX; // time in miliseconds, the lower the better
 	};
 
 	static GameSettings* getInstance();

@@ -74,7 +74,7 @@ void GameSettings::saveHighscores()
 	std::cout << "save hs: " << highscores->limit << " " << highscores->endless << endl;
 	ofstream outFile;
 	outFile.open("Config/scores.sav", ios::out);
-	outFile << highscores->limit << " " << highscores->endless << endl;
+	outFile << highscores->limit << " " << highscores->endless << " " << highscores->sprintTime << endl;
 	for (auto const& [name, score] : highscores->dropToBeatHS)
 	{
 		outFile << name << std::endl;	// song name
@@ -147,15 +147,16 @@ void GameSettings::initHighscores()
 	ifstream scoresStream("Config/scores.sav");
 	if (scoresStream.is_open()) {
 		std::string line("");
-		int limitHS, endlessHS;
+		int limitHS, endlessHS, sprintHS;
 		// parse the first line
 		if (std::getline(scoresStream, line));
 		{
 			std::istringstream iss(line);
-			if (iss >> limitHS >> endlessHS)
+			if (iss >> limitHS >> endlessHS >> sprintHS)
 			{
 				highscores->limit = limitHS;
 				highscores->endless = endlessHS;
+				highscores->sprintTime = sprintHS;
 			}
 		}
 

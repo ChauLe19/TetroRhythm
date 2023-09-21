@@ -27,7 +27,7 @@ void GameOptions::tick(const float & dt, RenderWindow& window)
 void GameOptions::render(RenderWindow& window)
 {
 	RenderTexture mapsTexture;
-	mapsTexture.create(1000, 500);
+	mapsTexture.create(1000, 550);
 
 	mapsTexture.clear(Color::Transparent);
 	mapsTexture.display();
@@ -38,21 +38,10 @@ void GameOptions::render(RenderWindow& window)
 	text.setPosition(1024 - text.getLocalBounds().width / 2, 50);
 	window.draw(text);
 
-	dropOnBeatGameButton.setHighlight(false);
-	limitedGameButton.setHighlight(false);
-	endlessGameButton.setHighlight(false);
-	switch (cursorMode)
-	{
-	case 0:
-		dropOnBeatGameButton.setHighlight(true);
-		break;
-	case 1:
-		limitedGameButton.setHighlight(true);
-		break;
-	case 2:
-		endlessGameButton.setHighlight(true);
-		break;
-	}
+	dropOnBeatGameButton.setHighlight(cursorMode == 0);
+	limitedGameButton.setHighlight(cursorMode == 1);
+	endlessGameButton.setHighlight(cursorMode == 2);
+	sprintGameButton.setHighlight(cursorMode == 3);
 
 	dropOnBeatGameButton.render(window, text);		// drop blocks on the beat receives bonus
 
@@ -60,16 +49,22 @@ void GameOptions::render(RenderWindow& window)
 	text.setFillColor(limitedGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
 	text.setCharacterSize(30);
 	text.setString("Highscore: " + to_string(GameSettings::getInstance()->getHighscores()->limit));
-	text.setPosition(200, 500 - 40);
+	text.setPosition(200, 450 - 40);
 	window.draw(text);
 
 	endlessGameButton.render(window, text);	// just play
 	text.setFillColor(endlessGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
 	text.setCharacterSize(30);
 	text.setString("Highscore: " + to_string(GameSettings::getInstance()->getHighscores()->endless));
-	text.setPosition(200, 700 - 40);
+	text.setPosition(200, 600 - 40);
 	window.draw(text);
 
+	sprintGameButton.render(window, text);	// sprint
+	text.setFillColor(sprintGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
+	text.setCharacterSize(30);
+	text.setString("Best time: " + (GameSettings::getInstance()->getHighscores()->sprintTime != INT_MAX ? getTimeFormat(GameSettings::getInstance()->getHighscores()->sprintTime) : "N/A"));
+	text.setPosition(200, 750 - 40);
+	window.draw(text);
 
 	int size = maps.size();
 	static int starterCounter = -size * 200; // temporary solution. it's ugly in code
@@ -127,6 +122,9 @@ void GameOptions::keyEvent(const float & dt, Event event)
 			break;
 		case 2:
 			gamePtr = new EndlessGame(stateManager, fs::absolute(maps[cursorMap]).string());
+			break;
+		case 3:
+			gamePtr = new SprintGame(stateManager, fs::absolute(maps[cursorMap]).string());
 			break;
 		default:
 			gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
@@ -194,6 +192,9 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 		case 2:
 			gamePtr = new EndlessGame(stateManager, fs::absolute(maps[cursorMap]).string());
 			break;
+		case 3:
+			gamePtr = new SprintGame(stateManager, fs::absolute(maps[cursorMap]).string());
+			break;
 		default:
 			gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
 			break;
@@ -212,6 +213,10 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 	else if (event.type == Event::MouseButtonPressed && endlessGameButton.mouseInButton(window))
 	{
 		cursorMode = 2;
+	}
+	else if (event.type == Event::MouseButtonPressed && sprintGameButton.mouseInButton(window))
+	{
+		cursorMode = 3;
 	}
 	else if (event.type == Event::MouseButtonPressed && mouseInBox(window, 2048 - 1000, 300, 1000, 700))
 	{

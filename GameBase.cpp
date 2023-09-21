@@ -590,6 +590,7 @@ void GameBase::reset()
 	score = 0;
 	isGameOver = false;
 	alreadyHold = false;
+	linesCleared = 0;
 
 	bag.clear();
 

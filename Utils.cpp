@@ -90,3 +90,8 @@ std::string getRank(int score, int threshold)
 	}
 }
 
+std::string getTimeFormat(int timeInMiliseconds)
+{
+	return to_string(timeInMiliseconds / 1000 / 60) + ":" + to_string(timeInMiliseconds / 1000 % 60) + "." + to_string((timeInMiliseconds % 1000) / 10);
+}
+

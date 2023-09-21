@@ -1,24 +1,27 @@
 /*****************************************************************//**
- * \file   EndlessGame.h
- * \brief  Game mode that will let player plays endlessly
+ * \file   SprintGame.h
+ * \brief  Game mode that users have to race to finish clearing 40L
  *
  * \author Chau Le
- * \date   August 2021
+ * \date   Sept 2023
  *********************************************************************/
 #pragma once
-#ifndef LIMITED_TIME_GAME_H
-#define LIMITED_TIME_GAME_H
+#ifndef SPRINT_GAME_H
+#define SPRINT_GAME_H
 
 #include "GameBase.h"
+#include "Button.h"
 
-class LimitedTimeGame :
+class SprintGame :
 	public GameBase
 {
 private:
-	sf::Clock clock;
+	sf::Clock timer;
+	bool hsSaved = false;
+	sf::Int32 currSprintTime;
 public:
-	LimitedTimeGame(StateManager &stateManager, string folderPath);
-	~LimitedTimeGame();
+	SprintGame(StateManager &stateManager, string folderPath);
+	~SprintGame();
 	// Game Base functions
 	//************************************************
 
@@ -29,6 +32,7 @@ public:
 
 private:
 	void gameOver();
+	void restart();
 
 };
 

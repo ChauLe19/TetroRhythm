@@ -14,6 +14,7 @@
 #include "DropToTheBeatGame.h"
 #include "EndlessGame.h"
 #include "LimitedTimeGame.h"
+#include "SprintGame.h"
 #include "Settings.h"
 #include "ResultScreen.h"
 #include "Enums.h"
@@ -37,8 +38,9 @@ private:
 	int mapRenderOffset = 0;
 
 	Button dropOnBeatGameButton = Button(Color::White, 50, Color::Transparent, "Drop On Beat", Vector2f(200, 300), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
-	Button limitedGameButton = Button(Color::White, 50, Color::Transparent, "Limited Time", Vector2f(200, 500), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
-	Button endlessGameButton = Button(Color::White, 50, Color::Transparent, "Endless", Vector2f(200, 700), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
+	Button limitedGameButton = Button(Color::White, 50, Color::Transparent, "Limited Time", Vector2f(200, 450), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
+	Button endlessGameButton = Button(Color::White, 50, Color::Transparent, "Endless", Vector2f(200, 600), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
+	Button sprintGameButton = Button(Color::White, 50, Color::Transparent, "Sprint 40L", Vector2f(200, 750), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
 	Button startButton = Button(Color::White, 50, Color::Transparent, "Start", Vector2f(2048 / 2 - 100, 1000), Vector2f(200, 100), Color(0, 186, 211), Keyboard::Enter);
 
 

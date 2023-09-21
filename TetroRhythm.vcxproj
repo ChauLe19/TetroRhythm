@@ -150,6 +150,7 @@
     <ClInclude Include="MiniBpm.h" />
     <ClInclude Include="ResultScreen.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="SprintGame.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="StateScreen.h" />
     <ClInclude Include="Tetromino.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="MiniBpm.cpp" />
     <ClCompile Include="ResultScreen.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="SprintGame.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="StateScreen.cpp" />
     <ClCompile Include="Tetromino.cpp" />
