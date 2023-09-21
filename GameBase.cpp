@@ -1,6 +1,7 @@
 #include "GameBase.h"
 #include "Menu.h"
 #include <numbers>
+#include <filesystem>
 constexpr double PI = 3.14159265358979323846;
 
 GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme")
@@ -64,7 +65,25 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 	sfx.setVolume(GameSettings::getInstance()->getSettings()->sfx);
 	sound.setVolume(GameSettings::getInstance()->getSettings()->music);
 	currentPiecePtr = &nextPiece();
-	
+
+	if (std::filesystem::exists(folderPath + "\\background.jpg"))
+	{
+		assetManager->loadTexture(songName + " background", folderPath + "\\background.jpg");
+		cout << folderPath + "\\background.jpg" << endl;
+	}
+	else if (std::filesystem::exists(folderPath + "\\background.png"))
+	{
+		assetManager->loadTexture(songName + " background", folderPath + "\\background.png");
+		cout << folderPath + "\\background.png" << endl;
+	}
+	else
+	{
+		assetManager->loadTexture(songName + " background", "Images/background.png");
+	}
+
+	songBackground.setTexture(assetManager->getTexture(songName + " background"));
+	songBackground.setColor(Color(255, 255, 255, 100));
+
 	loadStaticAssets();
 }
 
@@ -84,6 +103,9 @@ void GameBase::tick(const float & dt, RenderWindow& window)
 
 void GameBase::render(RenderWindow& window)
 {
+	window.clear();
+	window.draw(songBackground); // supports 2048x1152 background size
+
 	text.setFillColor(Color::White);
 	text.setCharacterSize(50);
 	board.render(window);

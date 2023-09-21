@@ -55,6 +55,7 @@ protected:
 	Sound sound;
 	Sound sfx;
 	Shader beatShader;
+	Sprite songBackground;
 
 	// Objects in game
 	//**************************************

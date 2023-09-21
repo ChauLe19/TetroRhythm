@@ -20,10 +20,19 @@ void GravityButton::setProgress(int progress)
 
 void GravityButton::render(RenderWindow& window, Text& text)
 {
+	Button::render(window, text);
 	int sizeY = size.y * progress / 100;
 	progressRect.setSize(Vector2f(size.x, sizeY));
 	progressRect.setPosition(Vector2f(position.x, position.y + size.y - sizeY));
 	window.draw(progressRect);
 
-	Button::render(window, text);
+	text.setFillColor(isHighlight ? highlightColor : textColor);
+	text.setCharacterSize(fontSize);
+	text.setString(textString);
+	text.setOrigin(text.getGlobalBounds().getSize() / 2.f + text.getLocalBounds().getPosition());
+	text.setPosition(buttonRect.getPosition() + (buttonRect.getSize() / 2.f));
+	window.draw(text);
+
+	// reset text origin
+	text.setOrigin(0, 0);
 }

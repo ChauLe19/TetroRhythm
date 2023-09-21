@@ -3,7 +3,7 @@
 DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
 {
 	loadStaticAssets();
-	this->gravityButton = new GravityButton(Color::White, 50, Color::Transparent, "Gravity", Vector2f(boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200), Vector2f(200, 200), Color(0, 186, 211), Keyboard::Unknown);
+	this->gravityButton = new GravityButton(Color::White, 50, Color(0,0,0, 150), "Gravity", Vector2f(boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200), Vector2f(200, 200), Color(0, 186, 211), Keyboard::Unknown);
 
 	// Load map info
 	fs::path txtPath = folderPath;
