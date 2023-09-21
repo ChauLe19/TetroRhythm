@@ -72,9 +72,19 @@ void GameOptions::render(RenderWindow& window)
 
 
 	int size = maps.size();
+	static int starterCounter = -size * 200; // temporary solution. it's ugly in code
 	for (int i = 0; i < size; ++i)
 	{
-		drawGameModeOption(mapsTexture, maps[i].filename().string(), 0, i * 200 + mapRenderOffset + 200, cursorMap == i);
+		if (starterCounter < 0)
+		{
+			int tempCursorMap = clamp( - (starterCounter - 100) / 200, 0, (int)maps.size() - 1);
+			drawGameModeOption(mapsTexture, maps[i].filename().string(), 0, i * 200 + starterCounter + 200, tempCursorMap == i);
+			starterCounter+=5;
+		}
+		else
+		{
+			drawGameModeOption(mapsTexture, maps[i].filename().string(), 0, i * 200 + mapRenderOffset + 200, cursorMap == i);
+		}
 	}
 
 	Sprite sprite(mapsTexture.getTexture());
