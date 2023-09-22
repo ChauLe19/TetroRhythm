@@ -169,3 +169,13 @@ void MapEditorSelect::mouseEvent(const float & dt, RenderWindow& window, Event e
 		}
 	}
 }
+
+void MapEditorSelect::mouseScrollEvent(const float& dt, RenderWindow& window, Event event)
+{
+	if (event.type == sf::Event::MouseWheelScrolled && mouseInBox(window, 2048/2 - 800/2, 150, 1000, 800))
+	{
+		cursor = clamp(cursor - (int) event.mouseWheelScroll.delta, 0, (int)maps.size() - 1);
+		mapRenderOffset = -cursor * 150;
+		prevMapRenderOffset = mapRenderOffset;
+	}
+}
