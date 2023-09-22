@@ -284,7 +284,7 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 				Moving_Direction mouseDirection = Moving_Direction::UP_DIR;
 				
 				int XorYdir = max(abs(xDir), abs(yDir));
-				if (XorYdir >= 50) // only register input if it's long enough
+				if (XorYdir >= 40) // only register input if it's long enough
 				{
 					double angle = atan2(yDir, xDir);
 
