@@ -173,7 +173,6 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 {
 	static bool isPressed = false;
 	static Vector2f pressedPosition = Vector2f(0,0);
-	static int prevMapRenderOffset = 0;
 	if (event.type == Event::MouseMoved)
 	{
 		startButton.setHighlight(startButton.mouseInButton(window));
@@ -241,6 +240,16 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 	else if (event.type == Event::MouseButtonReleased)
 	{
 		isPressed = false;
+		mapRenderOffset = -cursorMap * 200;
+		prevMapRenderOffset = mapRenderOffset;
+	}
+}
+
+void GameOptions::mouseScrollEvent(const float& dt, RenderWindow& window, Event event)
+{
+	if (event.type == sf::Event::MouseWheelScrolled && mouseInBox(window, 2048 - 1000, 300, 1000, 550))
+	{
+		cursorMap = clamp(cursorMap - (int) event.mouseWheelScroll.delta, 0, (int)maps.size() - 1);
 		mapRenderOffset = -cursorMap * 200;
 		prevMapRenderOffset = mapRenderOffset;
 	}

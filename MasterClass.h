@@ -75,11 +75,19 @@ public:
 	
 	/**
 	 * Based on the key input and current state, do things accordingly. 
-	 * Distribute keyEvent to the State_Screen's keyEvent
+	 * Distribute keyEvent to the State_Screen's mouseEvent
 	 * 
 	 * \param key: input from keyboard
 	 */
 	void mouseEvent(const float & dt, Event event);
+
+	/**
+	 * Based on the key input and current state, do things accordingly. 
+	 * Distribute keyEvent to the State_Screen's mouseScrolledEvent
+	 * 
+	 * \param key: input from keyboard
+	 */
+	void mouseScrolledEvent(const float & dt, Event event);
 
 	void updateDt();
 

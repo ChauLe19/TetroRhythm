@@ -51,6 +51,10 @@ void MasterClass::run()
 			{
 				mouseEvent(dt, event);
 			}
+			else if (event.type == Event::MouseWheelScrolled)
+			{
+				mouseScrolledEvent(dt, event);
+			}
 
 		}
 		if (scrollEntered == false) { firstScroll = true; }
@@ -93,6 +97,11 @@ void MasterClass::keyEvent(const float & dt, Event event)
 void MasterClass::mouseEvent(const float & dt, Event event)
 {
 	this->stateManager.getCurrentState().get()->mouseEvent(dt, *window, event);
+}
+
+void MasterClass::mouseScrolledEvent(const float& dt, Event event)
+{
+	this->stateManager.getCurrentState().get()->mouseScrollEvent(dt, *window, event);
 }
 
 void MasterClass::updateDt()

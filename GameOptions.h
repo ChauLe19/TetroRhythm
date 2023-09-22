@@ -36,6 +36,7 @@ private:
 	const int modeCount = 3;
 	vector<fs::path> maps;
 	int mapRenderOffset = 0;
+	int prevMapRenderOffset = 0;
 
 	Button dropOnBeatGameButton = Button(Color::White, 50, Color::Transparent, "Drop On Beat", Vector2f(200, 300), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
 	Button limitedGameButton = Button(Color::White, 50, Color::Transparent, "Limited Time", Vector2f(200, 450), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
@@ -54,6 +55,7 @@ public:
 	void render(RenderWindow& window);
 	void keyEvent(const float & dt, Event event);
 	void mouseEvent(const float & dt, RenderWindow& window, Event event);
+	void mouseScrollEvent(const float & dt, RenderWindow& window, Event event);
 
 	/**
 	 * Draw option out to window. If the cursor is on it, highlight it.

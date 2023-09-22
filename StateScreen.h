@@ -61,7 +61,7 @@ public:
 	 * Function run when a mouse scroll event is detected.
 	 *
 	 */
-	virtual void mouseScrollEvent(const float & dt, Event event) {};
+	virtual void mouseScrollEvent(const float & dt, RenderWindow& window, Event event) {};
 
 
 	virtual void init() {};
