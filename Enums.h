@@ -14,6 +14,10 @@ enum class Controls_Key {
 	HOLD, HARD_DROP, HARD_DROP_ALT
 };
 
+enum class HitType {
+	HIT, ALMOST, MISS, INVALID
+};
+
 const map<ClearType, string> clearTypeStringMap = {
 	{ClearType::NONE, "None"},
 	{ClearType::SINGLE, "Single"},

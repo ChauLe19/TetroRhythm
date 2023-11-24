@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Game Modes">
+      <UniqueIdentifier>{af437f84-db75-41b5-bca3-cbaf37b296c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Modes">
+      <UniqueIdentifier>{dfceaab6-dab7-4b14-beb5-9d97fb169acc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\External Libs">
+      <UniqueIdentifier>{fdb6cf8e-3fb0-4c67-a6e8-0b71d8d85f20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\External Libs">
+      <UniqueIdentifier>{b10a312e-7e98-408b-a933-f587cabac218}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h">
@@ -27,25 +39,13 @@
     <ClInclude Include="Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DropToTheBeatGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EndlessGame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Enums.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameOptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameSettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LimitedTimeGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MapEditorSelect.h">
@@ -55,9 +55,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MiniBpm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ResultScreen.h">
@@ -87,6 +84,24 @@
     <ClInclude Include="Tutorial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DropToTheBeatGame.h">
+      <Filter>Header Files\Game Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="EndlessGame.h">
+      <Filter>Header Files\Game Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBase.h">
+      <Filter>Header Files\Game Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="LimitedTimeGame.h">
+      <Filter>Header Files\Game Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="SprintGame.h">
+      <Filter>Header Files\Game Modes</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniBpm.h">
+      <Filter>Header Files\External Libs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp">
@@ -101,22 +116,10 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DropToTheBeatGame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EndlessGame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameOptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameSettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LimitedTimeGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MapEditorSelect.cpp">
@@ -126,9 +129,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MiniBpm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ResultScreen.cpp">
@@ -161,6 +161,24 @@
     <ClCompile Include="Tutorial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DropToTheBeatGame.cpp">
+      <Filter>Source Files\Game Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="EndlessGame.cpp">
+      <Filter>Source Files\Game Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBase.cpp">
+      <Filter>Source Files\Game Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="SprintGame.cpp">
+      <Filter>Source Files\Game Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="LimitedTimeGame.cpp">
+      <Filter>Source Files\Game Modes</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniBpm.cpp">
+      <Filter>Source Files\External Libs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Images\background.png">
@@ -175,8 +193,16 @@
     <Image Include="Images\button.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Images\Logo.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

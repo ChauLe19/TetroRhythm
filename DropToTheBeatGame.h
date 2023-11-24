@@ -11,6 +11,7 @@
 #define DROP_TO_BEAT_H
 
 #include "GameBase.h"
+#include "Enums.h"
 #include "Button.h"
 #include "ResultScreen.h"
 #include "Utils.h"
@@ -24,9 +25,7 @@ class DropToTheBeatGame :
 {
 private:
 	list<int> beatsTime;
-	list<int>::iterator beatIt;
-	int nextBeatTimeMS = 0;
-	int prevBeatTimeMS = 0;
+	list<int> beatsTimeOriginal;
 
 	int combo = 0;
 	int maxCombo = 0;
@@ -48,7 +47,7 @@ public:
 
 
 	string comboString="";
-	int hitType = 0; // miss=0, almost=1, hit=2,
+	HitType hitType = HitType::INVALID; // miss=0, almost=1, hit=2,
 
 	// Game Base functions
 	//*****************************************************
@@ -60,7 +59,7 @@ public:
 	void render(RenderWindow& window);
 	void renderBeatSignal(RenderWindow& window);
 private:
-	void checkDropOnBeat();
+	void checkDropOnBeat(int beatTime);
 	void gameOver();
 };
 #endif

@@ -23,11 +23,10 @@ DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPa
 	inFile.getline(beat, 10, '\r');
 	while (inFile.getline(beat, 10, '\r'))
 	{
-		beatsTime.push_back(atoi(beat));
+		beatsTimeOriginal.push_back(atoi(beat));
 	}
-	beatIt = beatsTime.begin();
-	nextBeatTimeMS = *beatIt;
-
+	beatsTime.assign(beatsTimeOriginal.begin(), beatsTimeOriginal.end());
+	
 	currentPiecePtr = &nextPiece();
 
 	GameSettings* gameSettings = GameSettings::getInstance();
@@ -102,18 +101,15 @@ void DropToTheBeatGame::tick(const float & dt, RenderWindow& window)
 		health = clamp(health  + 1, 0, 100);
 		healthCounter = 0;
 	}*/
-
-	// skip beat was out of 1000ms window
-	if (beatIt != beatsTime.end() && sound.getPlayingOffset().asMilliseconds() - 1000 >= nextBeatTimeMS)
+	int currTime = sound.getPlayingOffset().asMilliseconds();
+	// remove beats that has passed and is out of the 1000ms window
+	while (beatsTime.front() <= currTime - 1000)
 	{
+		beatsTime.pop_front();
 		combo = 0;
 		comboString = "TOO LATE";
 		beatAccuracyCount[0]++;
 		health = clamp(health - 10, 0, 100);
-		prevBeatTimeMS = nextBeatTimeMS;
-		beatIt++;
-		if(beatIt != beatsTime.end())
-			nextBeatTimeMS = *beatIt;
 	}
 
 	if (health <= 0)
@@ -152,7 +148,7 @@ void DropToTheBeatGame::keyEvent(const float & dt, Event event)
 	map<string, Keyboard::Key> keybinds = controlsSettings->keybinds;
 	if (event.type == Event::KeyReleased && (event.key.code == keybinds["HARD_DROP"] || event.key.code == keybinds["HARD_DROP_ALT"]))
 	{
-		checkDropOnBeat();
+		checkDropOnBeat(sound.getPlayingOffset().asMilliseconds());
 	}
 	GameBase::keyEvent(dt, event);
 
@@ -163,77 +159,93 @@ void DropToTheBeatGame::keyEvent(const float & dt, Event event)
 	}
 }
 
-void DropToTheBeatGame::checkDropOnBeat()
+void DropToTheBeatGame::checkDropOnBeat(int beatTime)
 {
-	int tempTime = sound.getPlayingOffset().asMilliseconds();
 
 	// if pressed in 400ms window, doesn't get "TOO LATE"
 	// TOO LATE	-> health -= 10
 	// MISS		-> health -= 1
 	// ALMOST	-> health += 1
 	// HIT		-> health += 2
-	if (abs(tempTime - nextBeatTimeMS) <= 200) // HIT
+	list<int>::iterator bestBeat = beatsTime.end(); // beat to be removed
+	for (list<int>::iterator beat = beatsTime.begin(); beat != beatsTime.end(); beat++) // assuming beatsTime begin at the start of the hit window
 	{
-		combo++;
-		hitType = 2;
-		score += combo;
-		gravityCharge = clamp(gravityCharge + 5, 0, 100);
-		gravityButton->setProgress(gravityCharge);
-	}
-	else if (abs(tempTime - nextBeatTimeMS) <= 400) // ALMOST
-	{
-		combo++;
-		hitType = 1;
-		score += combo;
-		gravityCharge = clamp(gravityCharge + 5, 0, 100);
-		gravityButton->setProgress(gravityCharge);
-	}
-	else // MISS
-	{
-		hitType = 0;
-		combo = 0;
+		if (abs(beatTime - *beat) <= 400) // ALMOST or HIT
+		{
+			bestBeat = beat;
+			break;
+		}
+		else if (abs(beatTime - *beat) > 400 && abs(beatTime - *beat) <= 1000) // MISS, best beat is the first miss beat but keep looking for ALMOST or HIT
+		{
+			if (bestBeat == beatsTime.end())
+			{
+				bestBeat = beat;
+			}
+		}
 	}
 
-	beatAccuracyCount[hitType]++;
+	if (bestBeat == beatsTime.end())
+	{
+		hitType = HitType::MISS;
+	}
+	else
+	{
+		if (abs(beatTime - *bestBeat) <= 200) // HIT
+		{
+			hitType = HitType::HIT;
+		}
+		else if (abs(beatTime - *bestBeat) <= 400) // ALMOST
+		{
+			hitType = HitType::ALMOST;
+		}
+		else // MISS
+		{
+			hitType = HitType::MISS;
+		}
+		beatsTime.erase(bestBeat);
+	}
+
+	beatAccuracyCount[(int) hitType]++;
+
+	switch (hitType)
+	{
+	case HitType::MISS:
+		comboString = "MISS";
+		health = clamp(health - 10, 0, 100);
+		combo = 0;
+		break;
+	case HitType::ALMOST:
+		comboString = "ALMOST";
+		health = clamp(health + 1, 0, 100);
+		score += 5;
+		combo++;
+		score += combo;
+		gravityCharge = clamp(gravityCharge + 5, 0, 100);
+		gravityButton->setProgress(gravityCharge);
+		break;
+	case HitType::HIT:
+		comboString = "HIT";
+		health = clamp(health + 2, 0, 100);
+		score += 10;
+		combo++;
+		score += combo;
+		gravityCharge = clamp(gravityCharge + 5, 0, 100);
+		gravityButton->setProgress(gravityCharge);
+	break;
+	default:
+		break;
+	}
 
 	if (combo > maxCombo)
 	{
 		maxCombo = combo;
 	}
 	beatPressed = false;
-
-
-	switch (hitType)
-	{
-		case 0:
-			comboString = "MISS";
-			health = clamp(health - 10, 0, 100);
-		break;
-		case 1:
-			comboString = "ALMOST";
-			health = clamp(health + 1, 0, 100);
-			score += 5;
-		break;
-		case 2:
-			comboString = "HIT";
-			health = clamp(health + 2, 0, 100);
-			score += 10;
-		break;
-		default:
-			break;
-	}
-
-	if (beatIt != beatsTime.end() && *beatIt <= tempTime + 800 )
-	{
-		prevBeatTimeMS = nextBeatTimeMS;
-		beatIt++;
-		if (beatIt != beatsTime.end())
-			nextBeatTimeMS = *beatIt;
-	}
 }
 void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event event)
 {
 	if (finished) return;
+	int currTime = sound.getPlayingOffset().asMilliseconds();
 	if (!isGameOver && event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left &&
 		this->gravityButton->mouseInButton(window))
 	{
@@ -247,7 +259,7 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 		gravityButton->setProgress(gravityCharge);
 		board.enforceGravity();
 		clearLines();
-		checkDropOnBeat();
+		checkDropOnBeat(currTime);
 		this->inputVertex.clear();
 		std::array <int, 4> possibleMovesCurrent = currentPiecePtr->firstPossibleMove(board);
 		if (possibleMovesCurrent[3] == 1) // if possible to place current piece
@@ -272,7 +284,7 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 		int XorYdir = max(abs(xDir), abs(yDir));
 		if (XorYdir >= 50) // only register input if it's long enough
 		{
-			checkDropOnBeat();
+			checkDropOnBeat(currTime);
 		}
 	}
 	GameBase::mouseEvent(dt, window, event);
@@ -299,8 +311,7 @@ void DropToTheBeatGame::renderBeatSignal(RenderWindow& window)
 	window.draw(assetManager->getDrawable("hit window"));
 
 
-
-	for (list<int>::iterator tempBeatIt = beatIt; tempBeatIt != beatsTime.end(); ++tempBeatIt, ++tempRainbowIndex)
+	for (list<int>::iterator tempBeatIt = beatsTime.begin(); tempBeatIt != beatsTime.end(); ++tempBeatIt, ++tempRainbowIndex)
 	{
 		int bufferTime = *tempBeatIt;
 		int timeOffset = bufferTime - nowTime;
@@ -329,11 +340,9 @@ void DropToTheBeatGame::restart()
 	beatAccuracyCount[1] = 0;
 	beatAccuracyCount[2] = 0;
 	finished = false;
-	beatIt = beatsTime.begin();
-	nextBeatTimeMS = *beatIt;
-	prevBeatTimeMS = 0;
 	gravityCharge = 0;
 	gravityButton->setProgress(gravityCharge);
+	beatsTime.assign(beatsTimeOriginal.begin(), beatsTimeOriginal.end());
 }
 
 void DropToTheBeatGame::render(RenderWindow& window)
