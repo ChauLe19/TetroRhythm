@@ -100,7 +100,7 @@ void Tutorial::render(RenderWindow& window)
 	{
 		blankPopup.render(window, text);
 		helpButton.setHighlight(true);
-		instructionSprite.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+		instructionSprite.setPosition(window.getView().getSize().x / 2, window.getView().getSize().y / 2);
 		window.draw(instructionSprite);
 	}
 	else
