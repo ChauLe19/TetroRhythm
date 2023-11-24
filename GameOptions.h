@@ -29,6 +29,9 @@ using namespace sf;
 class GameOptions : public StateScreen
 {
 private:
+	sf::Music previewMusic;
+	Sprite songBackground;
+
 	Text text;
 	bool choosingMap = false;
 	int cursorMap = 0; // a table of game
@@ -67,6 +70,8 @@ public:
 	 * \param isHighlight
 	 */
 	void drawGameModeOption(RenderTexture& window, string gameMode, int x, int y, bool isHighlight);
+private:
+	void selectMap(int mapIndex);
 };
 
 #endif

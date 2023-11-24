@@ -20,6 +20,7 @@ class StateManager;
 class StateScreen
 {
 private:
+	Sprite* songBackground = nullptr;
 protected:
 	StateManager &stateManager;
 	AssetManager* assetManager = AssetManager::getInstance();
@@ -40,7 +41,9 @@ public:
 	 *
 	 * \param window Rendering window
 	 */
-	virtual void render(RenderWindow& window) = 0;
+	virtual void render(RenderWindow& window) {
+		window.clear();
+	};
 
 	/**
 	 * Function run when a keyboard key event is detected.

@@ -19,6 +19,48 @@ AssetManager* AssetManager::getInstance()
 	return assetManager;
 }
 
+fs::path AssetManager::getImageFilePathExtension(fs::path filePathWithNoExtension)
+{
+	fs::path jpgPath = filePathWithNoExtension;
+	fs::path pngPath = filePathWithNoExtension;
+	jpgPath.replace_extension("jpg");
+	pngPath.replace_extension("png");
+
+	if (std::filesystem::exists(jpgPath))
+	{
+		return jpgPath;
+	}
+	else if (std::filesystem::exists(pngPath))
+	{
+		return pngPath;
+	}
+	else
+	{
+		throw "No match image file path.";
+	}
+}
+
+fs::path AssetManager::getAudioFilePathExtension(fs::path filePathWithNoExtention)
+{
+	fs::path wavPath = filePathWithNoExtention;
+	fs::path oggPath = filePathWithNoExtention;
+	wavPath.replace_extension("wav");
+	oggPath.replace_extension("ogg");
+
+	if (std::filesystem::exists(wavPath))
+	{
+		return wavPath;
+	}
+	else if (std::filesystem::exists(oggPath))
+	{
+		return oggPath;
+	}
+	else
+	{
+		throw "No match audio file path.";
+	}
+}
+
 void AssetManager::loadTexture(std::string name, std::string filename)
 {
 	this->textureFiles[name] = filename;

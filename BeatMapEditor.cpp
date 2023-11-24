@@ -18,29 +18,11 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 
 
 
-	fs::path oggPath = folderPath;
-	fs::path wavPath = folderPath;
-	oggPath.append(oggPath.filename().string() + ".ogg");
-	wavPath.append(wavPath.filename().string() + ".wav");
-	if (fs::exists(oggPath))
-	{
-		if (!buffer.loadFromFile(oggPath.string()))
-		{
-			cerr << "Unable to open file " + oggPath.string() << endl;;
-		}
-	}
-	else if (fs::exists(wavPath))
-	{
-		if (!buffer.loadFromFile(wavPath.string()))
-		{
-			cerr << "Unable to open file " + wavPath.string() << endl;;
-		}
-	}
-	else
-	{
-		cerr << "Audio file doesn't exist." << endl;
-		throw "Audio file doesn't exist.";
-	}
+	fs::path audioPath = folderPath;
+	audioPath.append(audioPath.filename().string());
+	audioPath = AssetManager::getAudioFilePathExtension(audioPath);
+	std::cout << audioPath.string() << std::endl;
+	buffer.loadFromFile(audioPath.string()); // TODO: add error catching
 	sound.setBuffer(buffer);
 
 	fs::path txtPath = folderPath;

@@ -235,7 +235,7 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 		Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
 		mapRenderOffset = prevMapRenderOffset;
 		mapRenderOffset += mouseViewPos.y - pressedPosition.y;
-		cursorMap = clamp( - (mapRenderOffset - 100) / 200, 0, (int)maps.size() - 1);
+		selectMap(clamp(-(mapRenderOffset - 100) / 200, 0, (int)maps.size() - 1));
 	}
 	else if (event.type == Event::MouseButtonReleased)
 	{
@@ -249,7 +249,7 @@ void GameOptions::mouseScrollEvent(const float& dt, RenderWindow& window, Event 
 {
 	if (event.type == sf::Event::MouseWheelScrolled && mouseInBox(window, 2048 - 1000, 300, 1000, 550))
 	{
-		cursorMap = clamp(cursorMap - (int) event.mouseWheelScroll.delta, 0, (int)maps.size() - 1);
+		selectMap(clamp(cursorMap - (int) event.mouseWheelScroll.delta, 0, (int)maps.size() - 1));
 		mapRenderOffset = -cursorMap * 200;
 		prevMapRenderOffset = mapRenderOffset;
 	}
@@ -287,4 +287,9 @@ void GameOptions::drawGameModeOption(RenderTexture& window, string gameMode, int
 	text.setString("Rank: " + getRank(highscore, threshold) + "\t HS : " + to_string(highscore));
 	window.draw(text);
 
+}
+
+void GameOptions::selectMap(int mapIndex)
+{
+	cursorMap = mapIndex;
 }

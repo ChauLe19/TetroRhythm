@@ -1,6 +1,10 @@
 #pragma once
 #include <string>
 #include <SFML/Graphics.hpp>
+#include <filesystem>
+
+namespace fs = std::filesystem;
+
 class AssetManager
 {
 private:
@@ -16,6 +20,9 @@ private:
 
 public:
 	static AssetManager* getInstance();
+	
+	static fs::path getImageFilePathExtension(fs::path filePathWithNoExtention);
+	static fs::path getAudioFilePathExtension(fs::path filePathWithNoExtention);
 
 	void loadTexture(std::string name, std::string fileName);
 	sf::Texture& getTexture(std::string name);
