@@ -103,7 +103,7 @@ void DropToTheBeatGame::tick(const float & dt, RenderWindow& window)
 	}*/
 	int currTime = sound.getPlayingOffset().asMilliseconds();
 	// remove beats that has passed and is out of the 1000ms window
-	while (beatsTime.front() <= currTime - 1000)
+	while (!beatsTime.empty() && beatsTime.front() <= currTime - 1000)
 	{
 		beatsTime.pop_front();
 		combo = 0;
