@@ -14,6 +14,7 @@ GameOptions::GameOptions(StateManager& stateManager)
 	{
 		maps.push_back(entry.path());
 	}
+	selectMap(0);
 }
 
 GameOptions::~GameOptions()
@@ -180,6 +181,7 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 	else if (event.type == Event::MouseButtonPressed && startButton.mouseInButton(window))
 	{
 		GameBase* gamePtr;
+		previewMusic.stop();
 		switch (cursorMode)
 		{
 		case 0:
@@ -292,4 +294,10 @@ void GameOptions::drawGameModeOption(RenderTexture& window, string gameMode, int
 void GameOptions::selectMap(int mapIndex)
 {
 	cursorMap = mapIndex;
+	fs::path audioPath = maps[mapIndex];
+	audioPath.append(audioPath.filename().string());
+	audioPath = AssetManager::getAudioFilePathExtension(audioPath);
+	std::cout << audioPath.string() << endl;
+	previewMusic.openFromFile(audioPath.string());
+	previewMusic.play();
 }
