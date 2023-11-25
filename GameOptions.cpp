@@ -138,7 +138,7 @@ void GameOptions::keyEvent(const float & dt, Event event)
 	case Keyboard::Key::Up:
 		if (choosingMap)
 		{
-			cursorMap = clamp(cursorMap - 1, 0, (int)maps.size() - 1);
+			selectMap(clamp(cursorMap - 1, 0, (int)maps.size() - 1));
 			mapRenderOffset = -cursorMap * 200;
 		}
 		else
@@ -149,7 +149,7 @@ void GameOptions::keyEvent(const float & dt, Event event)
 	case Keyboard::Key::Down:
 		if (choosingMap)
 		{
-			cursorMap = clamp(cursorMap + 1, 0, (int)maps.size() - 1);
+			selectMap(cursorMap = clamp(cursorMap + 1, 0, (int)maps.size() - 1));
 			mapRenderOffset = -cursorMap * 200;
 		}
 		else
