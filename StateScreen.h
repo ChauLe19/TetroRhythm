@@ -20,8 +20,9 @@ class StateManager;
 class StateScreen
 {
 private:
-	Sprite* songBackground = nullptr;
 protected:
+	sf::Texture backgroundTexture;
+	Sprite* background = nullptr;
 	StateManager &stateManager;
 	AssetManager* assetManager = AssetManager::getInstance();
 
@@ -43,6 +44,10 @@ public:
 	 */
 	virtual void render(RenderWindow& window) {
 		window.clear();
+		if (background)
+		{
+			window.draw(*background);
+		}
 	};
 
 	/**
@@ -65,7 +70,6 @@ public:
 	 *
 	 */
 	virtual void mouseScrollEvent(const float & dt, RenderWindow& window, Event event) {};
-
 
 	virtual void init() {};
 	virtual void pause() {};

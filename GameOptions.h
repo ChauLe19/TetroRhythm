@@ -72,6 +72,7 @@ public:
 	void drawGameModeOption(RenderTexture& window, string gameMode, int x, int y, bool isHighlight);
 private:
 	void selectMap(int mapIndex);
+	void startGame();
 };
 
 #endif
