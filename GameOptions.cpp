@@ -113,27 +113,7 @@ void GameOptions::keyEvent(const float & dt, Event event)
 			return;
 		}
 		previewMusic.stop();
-		GameBase* gamePtr;
-		switch (cursorMode)
-		{
-		case 0:
-			gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
-			break;
-		case 1:
-			gamePtr = new LimitedTimeGame(stateManager, fs::absolute(maps[cursorMap]).string());
-			break;
-		case 2:
-			gamePtr = new EndlessGame(stateManager, fs::absolute(maps[cursorMap]).string());
-			break;
-		case 3:
-			gamePtr = new SprintGame(stateManager, fs::absolute(maps[cursorMap]).string());
-			break;
-		default:
-			gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
-			break;
-		}
-		stateManager.addState(std::unique_ptr<StateScreen>(gamePtr));
-		gamePtr->start();
+		startGame();
 		break;
 	case Keyboard::Key::Up:
 		if (choosingMap)
@@ -181,28 +161,8 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 	}
 	else if (event.type == Event::MouseButtonPressed && startButton.mouseInButton(window))
 	{
-		GameBase* gamePtr;
 		previewMusic.stop();
-		switch (cursorMode)
-		{
-		case 0:
-			gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
-			break;
-		case 1:
-			gamePtr = new LimitedTimeGame(stateManager, fs::absolute(maps[cursorMap]).string());
-			break;
-		case 2:
-			gamePtr = new EndlessGame(stateManager, fs::absolute(maps[cursorMap]).string());
-			break;
-		case 3:
-			gamePtr = new SprintGame(stateManager, fs::absolute(maps[cursorMap]).string());
-			break;
-		default:
-			gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
-			break;
-		}
-		stateManager.addState(std::unique_ptr<StateScreen>(gamePtr));
-		gamePtr->start();
+		startGame();
 	}
 	else if (event.type == Event::MouseButtonPressed && dropOnBeatGameButton.mouseInButton(window))
 	{
@@ -301,4 +261,29 @@ void GameOptions::selectMap(int mapIndex)
 	std::cout << audioPath.string() << endl;
 	previewMusic.openFromFile(audioPath.string());
 	previewMusic.play();
+}
+
+void GameOptions::startGame()
+{
+	GameBase* gamePtr;
+	switch (cursorMode)
+	{
+	case 0:
+		gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
+		break;
+	case 1:
+		gamePtr = new LimitedTimeGame(stateManager, fs::absolute(maps[cursorMap]).string());
+		break;
+	case 2:
+		gamePtr = new EndlessGame(stateManager, fs::absolute(maps[cursorMap]).string());
+		break;
+	case 3:
+		gamePtr = new SprintGame(stateManager, fs::absolute(maps[cursorMap]).string());
+		break;
+	default:
+		gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
+		break;
+	}
+	stateManager.addState(std::unique_ptr<StateScreen>(gamePtr));
+	gamePtr->start();
 }
