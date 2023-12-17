@@ -23,6 +23,8 @@
 #include "StateManager.h"
 
 #define backgroundImagePath "images/background.png"
+#define resolutionX 2048
+#define resolutionY 1152
 
 /**
  * Controls states and rendering.
@@ -32,6 +34,7 @@ class MasterClass
 public:
 	static string BeatMapFolderPath;
 private:
+	sf::View view;
 	Clock clock;
 	Clock dtClock;
 	float dt;

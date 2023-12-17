@@ -56,6 +56,7 @@ LRESULT CALLBACK dragdropfileCallback(HWND handle, UINT message, WPARAM wParam, 
 	return CallWindowProcW(reinterpret_cast<WNDPROC>(originalsfmlcallback), handle, message, wParam, lParam);
 }
 
+
 int main()
 {
 
@@ -67,8 +68,7 @@ int main()
 	// randomize init
 	srand(static_cast<unsigned int> (time(NULL)));
 
-
-	RenderWindow window(sf::VideoMode(2048, 1152), "TetroRhythm", Style::Default);
+	RenderWindow window(sf::VideoMode(resolutionX, resolutionY), "TetroRhythm", Style::Default);
 	window.setFramerateLimit(60);
 	window.setKeyRepeatEnabled(true);
 
@@ -80,11 +80,7 @@ int main()
 	DragAcceptFiles(handle, TRUE);
 	originalsfmlcallback = SetWindowLongPtrW(handle, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(dragdropfileCallback));
 
-
 	MasterClass gameMC(window);
 	gameMC.run();
 	return 0;
 }
-
-
- 

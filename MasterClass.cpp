@@ -1,5 +1,6 @@
 #include "MasterClass.h"
 #include "AssetManager.h"
+
 MasterClass::MasterClass(RenderWindow& window)
 {
 	this->window = &window;
@@ -16,8 +17,6 @@ MasterClass::MasterClass(RenderWindow& window)
 MasterClass::~MasterClass()
 {
 }
-
-
 
 void MasterClass::run()
 {
@@ -54,6 +53,25 @@ void MasterClass::run()
 			else if (event.type == Event::MouseWheelScrolled)
 			{
 				mouseScrolledEvent(dt, event);
+			}
+			else if (event.type == Event::Resized)
+			{
+				float m_window_width = event.size.width;
+				float m_window_height = event.size.height;
+				float m_initial_aspect_ratio = resolutionX / float(resolutionY);
+				float new_width = m_initial_aspect_ratio * m_window_height;
+				float new_height = m_window_width / m_initial_aspect_ratio;
+				float offset_width = (m_window_width - new_width) / 2.0;
+				float offset_height = (m_window_height - new_height) / 2.0;
+				sf::View view = window->getDefaultView();
+				if (m_window_width >= m_initial_aspect_ratio * m_window_height) {
+					view.setViewport(sf::FloatRect(offset_width / m_window_width, 0.0, new_width / m_window_width, 1.0));
+				}
+				else {
+					view.setViewport(sf::FloatRect(0.0, offset_height / m_window_height, 1.0, new_height / m_window_height));
+				}
+
+				window->setView(view);
 			}
 
 		}
