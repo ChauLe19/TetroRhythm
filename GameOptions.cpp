@@ -190,6 +190,7 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 	}
 	else if (event.type == Event::MouseButtonPressed && mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
+		previewMusic.stop();
 		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 	}
 	else if (isPressed && Mouse::isButtonPressed(Mouse::Left))
