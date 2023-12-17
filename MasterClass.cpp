@@ -1,6 +1,42 @@
 #include "MasterClass.h"
 #include "AssetManager.h"
 
+// source: https://github.com/SFML/SFML/wiki/Source%3A-Letterbox-effect-using-a-view
+sf::View getLetterboxView(RenderWindow* window, sf::View view, float windowWidth, float windowHeight)
+{
+	// Compares the aspect ratio of the window to the aspect ratio of the view,
+	// and sets the view's viewport accordingly in order to archieve a letterbox effect.
+	// A new view (with a new viewport set) is returned.
+	float windowRatio = windowWidth / windowHeight;
+	float viewRatio = view.getSize().x / (float)view.getSize().y;
+	float sizeX = 1;
+	float sizeY = 1;
+	float posX = 0;
+	float posY = 0;
+	View resultView = window->getDefaultView();
+
+	bool horizontalSpacing = true;
+	if (windowRatio < viewRatio)
+		horizontalSpacing = false;
+
+	// If horizontalSpacing is true, the black bars will appear on the left and right side.
+	// Otherwise, the black bars will appear on the top and bottom.
+	if (horizontalSpacing)
+	{
+		sizeX = viewRatio / windowRatio;
+		posX = (1 - sizeX) / 2.f;
+	}
+	else
+	{
+		sizeY = windowRatio / viewRatio;
+		posY = (1 - sizeY) / 2.f;
+	}
+
+	resultView.setViewport(sf::FloatRect(posX, posY, sizeX, sizeY));
+
+	return resultView;
+}
+
 MasterClass::MasterClass(RenderWindow& window)
 {
 	this->window = &window;
@@ -28,6 +64,7 @@ void MasterClass::run()
 
 	while (window->isOpen())
 	{
+		m_view.setSize(resolutionX, resolutionY);
 		// Calculate FPS
 		Time elapsed = clock.restart();
 		text.setPosition(0, 0);
@@ -56,22 +93,7 @@ void MasterClass::run()
 			}
 			else if (event.type == Event::Resized)
 			{
-				float m_window_width = event.size.width;
-				float m_window_height = event.size.height;
-				float m_initial_aspect_ratio = resolutionX / float(resolutionY);
-				float new_width = m_initial_aspect_ratio * m_window_height;
-				float new_height = m_window_width / m_initial_aspect_ratio;
-				float offset_width = (m_window_width - new_width) / 2.0;
-				float offset_height = (m_window_height - new_height) / 2.0;
-				sf::View view = window->getDefaultView();
-				if (m_window_width >= m_initial_aspect_ratio * m_window_height) {
-					view.setViewport(sf::FloatRect(offset_width / m_window_width, 0.0, new_width / m_window_width, 1.0));
-				}
-				else {
-					view.setViewport(sf::FloatRect(0.0, offset_height / m_window_height, 1.0, new_height / m_window_height));
-				}
-
-				window->setView(view);
+				m_view = getLetterboxView(window, m_view, event.size.width, event.size.height);
 			}
 
 		}
@@ -86,6 +108,7 @@ void MasterClass::run()
 
 		// Render and display
 		window->clear(Color::Transparent);
+		window->setView(m_view);
 		window->draw(backgroundSprite);
 		window->draw(text);
 

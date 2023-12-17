@@ -34,7 +34,7 @@ class MasterClass
 public:
 	static string BeatMapFolderPath;
 private:
-	sf::View view;
+	sf::View m_view;
 	Clock clock;
 	Clock dtClock;
 	float dt;

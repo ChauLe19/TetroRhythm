@@ -72,6 +72,8 @@ int main()
 	window.setFramerateLimit(60);
 	window.setKeyRepeatEnabled(true);
 
+	::ShowWindow(window.getSystemHandle(), SW_MAXIMIZE);
+
 	Image icon;
 	icon.loadFromFile("Images/Logo.png");
 	window.setIcon(32, 32, icon.getPixelsPtr());
