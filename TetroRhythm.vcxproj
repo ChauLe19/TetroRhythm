@@ -217,6 +217,7 @@
     <Import Project="packages\sfml_audio.2.6.0\build\native\sfml_audio.targets" Condition="Exists('packages\sfml_audio.2.6.0\build\native\sfml_audio.targets')" />
     <Import Project="packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets" Condition="Exists('packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets')" />
     <Import Project="packages\jsoncpp.0.6.0.1\build\native\jsoncpp.targets" Condition="Exists('packages\jsoncpp.0.6.0.1\build\native\jsoncpp.targets')" />
+    <Import Project="packages\boost.1.85.0\build\boost.targets" Condition="Exists('packages\boost.1.85.0\build\boost.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -224,5 +225,6 @@
     </PropertyGroup>
     <Error Condition="!Exists('packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\jsoncpp.redist.0.6.0.1\build\native\jsoncpp.redist.targets'))" />
     <Error Condition="!Exists('packages\jsoncpp.0.6.0.1\build\native\jsoncpp.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\jsoncpp.0.6.0.1\build\native\jsoncpp.targets'))" />
+    <Error Condition="!Exists('packages\boost.1.85.0\build\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\boost.1.85.0\build\boost.targets'))" />
   </Target>
 </Project>

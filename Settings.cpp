@@ -55,7 +55,7 @@ void Settings::render(RenderWindow& window)
 	for (int i = 0; i < 3; i++)
 	{
 		Controls_Key key = static_cast<Controls_Key> (i);
-		drawKeyConfig(fromControlsToString(key), fromKtoS(settings->keybinds[controlsList[i]]), 500, 300 + 80 * i, window, cursor == i, isChanging);
+		drawKeyConfig(fromControlsToString(key), fromKtoS(settings->keybinds[key]), 500, 300 + 80 * i, window, cursor == i, isChanging);
 	}
 
 
@@ -149,7 +149,7 @@ bool Settings::changeKey(Keyboard::Key key)
 		return false;
 	}
 
-	settings->keybinds[controlsList[cursor]] = key;
+	settings->keybinds[Controls_Key(cursor)] = key;
 	isChanging = false;
 	return true;
 }

@@ -145,8 +145,8 @@ void DropToTheBeatGame::gameOver()
 void DropToTheBeatGame::keyEvent(const float & dt, Event event)
 {
 	if (event.type != Event::KeyPressed && event.type != Event::KeyReleased) return;
-	map<string, Keyboard::Key> keybinds = controlsSettings->keybinds;
-	if (event.type == Event::KeyReleased && (event.key.code == keybinds["HARD_DROP"] || event.key.code == keybinds["HARD_DROP_ALT"]))
+	map<Controls_Key, Keyboard::Key> keybinds = controlsSettings->keybinds;
+	if (event.type == Event::KeyReleased && (event.key.code == keybinds[Controls_Key::HARD_DROP] || event.key.code == keybinds[Controls_Key::HARD_DROP_ALT]))
 	{
 		checkDropOnBeat(sound.getPlayingOffset().asMilliseconds());
 	}

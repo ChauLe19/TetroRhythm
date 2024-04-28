@@ -3,6 +3,8 @@ extern std::string importedPath;
 #ifndef ENUMS_H
 #define ENUMS_H
 #include <iostream>
+#include <boost/bimap.hpp>
+#include <boost/assign.hpp>
 #include "Board.h"
 
 enum class State {
@@ -17,6 +19,11 @@ enum class Controls_Key {
 enum class HitType {
 	HIT, ALMOST, MISS, INVALID
 };
+
+const boost::bimap<Controls_Key, string> controlsKeyStringMap = boost::assign::list_of<boost::bimap<Controls_Key, string>::relation>
+	(Controls_Key::HOLD, "HOLD")
+	(Controls_Key::HARD_DROP, "HARD_DROP")
+	(Controls_Key::HARD_DROP_ALT, "HARD_DROP_ALT");
 
 const map<ClearType, string> clearTypeStringMap = {
 	{ClearType::NONE, "None"},

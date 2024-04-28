@@ -47,11 +47,19 @@ GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme
 	sound.setVolume(GameSettings::getInstance()->getSettings()->music);
 	currentPiecePtr = &nextPiece();
 
-	fs::path bgPath(folderPath);
-	bgPath.append("background");
-	bgPath = AssetManager::getImageFilePathExtension(bgPath);
-	backgroundTexture.loadFromFile(bgPath.string());
-	background = new Sprite();
+	try
+	{
+		fs::path bgPath(folderPath);
+		bgPath.append("background");
+		bgPath = AssetManager::getImageFilePathExtension(bgPath);
+		backgroundTexture.loadFromFile(bgPath.string());
+		background = new Sprite();
+	}
+	catch (exception e) // no beat map background found, use the default one
+	{
+		background = new Sprite();
+		backgroundTexture = AssetManager::getInstance()->getTexture("background");
+	}
 	background->setTexture(backgroundTexture);
 	background->setColor(Color(255, 255, 255, 100));
 
@@ -139,7 +147,7 @@ void GameBase::render(RenderWindow& window)
 void GameBase::keyEvent(const float & dt, Event event)
 {
 	Keyboard::Key key = event.key.code;
-	map<string, Keyboard::Key> keybinds = controlsSettings->keybinds;
+	map<Controls_Key, Keyboard::Key> keybinds = controlsSettings->keybinds;
 	if (event.type == Event::KeyPressed)
 	{
 		if (key == Keyboard::Escape)
@@ -151,7 +159,7 @@ void GameBase::keyEvent(const float & dt, Event event)
 		{
 			restart();
 		}
-		else if (key == keybinds["HARD_DROP"] || key == keybinds["HARD_DROP_ALT"])
+		else if (key == keybinds[Controls_Key::HARD_DROP] || key == keybinds[Controls_Key::HARD_DROP_ALT])
 		{
 			keyMouseRegistered = true;
 		}
@@ -159,7 +167,7 @@ void GameBase::keyEvent(const float & dt, Event event)
 	}
 	else if (event.type == Event::KeyReleased)
 	{
-		if (key == keybinds["HARD_DROP"] || key == keybinds["HARD_DROP_ALT"])
+		if (key == keybinds[Controls_Key::HARD_DROP] || key == keybinds[Controls_Key::HARD_DROP_ALT])
 		{
 			keyMouseReleased = true;
 		}
@@ -169,11 +177,9 @@ void GameBase::keyEvent(const float & dt, Event event)
 
 	
 	// No hold key control (rotation)
-	if (key == keybinds["ROTATE_CW"]
-		|| key == keybinds["ROTATE_CCW"]
-		|| key == keybinds["HOLD"]) return;
+	if (key == keybinds[Controls_Key::HOLD]) return;
 
-	if ( key == keybinds["HARD_DROP"])
+	if ( key == keybinds[Controls_Key::HARD_DROP])
 	{
 
 	}

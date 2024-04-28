@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <SFML/Graphics.hpp>
+#include "Enums.h"
 
 using namespace std;
 
@@ -10,7 +11,7 @@ class GameSettings
 {
 public:
 	struct Controls_Settings {
-		std::map<std::string, sf::Keyboard::Key> keybinds;
+		std::map<Controls_Key, sf::Keyboard::Key> keybinds;
 		int sfx = 0;
 		int music = 0;
 	};

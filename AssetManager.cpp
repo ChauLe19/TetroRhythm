@@ -36,7 +36,7 @@ fs::path AssetManager::getImageFilePathExtension(fs::path filePathWithNoExtensio
 	}
 	else
 	{
-		throw "No match image file path.";
+		throw std::exception("No match image file path.");
 	}
 }
 

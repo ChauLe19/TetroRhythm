@@ -53,9 +53,9 @@ void GameSettings::saveKeys()
 {
 	ofstream outFile;
 	outFile.open("Config/Keybinds.ini", ios::out);
-	for (std::map<string, sf::Keyboard::Key>::iterator it = controlsSettings->keybinds.begin(); it != controlsSettings->keybinds.end(); ++it)
+	for (std::map<Controls_Key, sf::Keyboard::Key>::iterator it = controlsSettings->keybinds.begin(); it != controlsSettings->keybinds.end(); ++it)
 	{
-		outFile << it->first << ' ' << it->second << endl;
+		outFile << controlsKeyStringMap.left.find(it->first)->second << ' ' << it->second << endl;
 	}
 	outFile.close();
 }
@@ -112,7 +112,7 @@ void GameSettings::initKeys()
 		int keyVal = 0;
 		while (keybindsStream >> key >> keyVal)
 		{
-			controlsSettings->keybinds[key] = sf::Keyboard::Key(keyVal);
+			controlsSettings->keybinds[controlsKeyStringMap.right.find(key)->second] = sf::Keyboard::Key(keyVal);
 			std::cout << key << " " << keyVal << std::endl;
 		}
 	}
