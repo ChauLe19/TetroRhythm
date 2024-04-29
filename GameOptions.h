@@ -36,7 +36,7 @@ private:
 	bool choosingMap = false;
 	int cursorMap = 0; // a table of game
 	int cursorMode = 0;
-	const int modeCount = 3;
+	const int modeCount = 4;
 	vector<fs::path> maps;
 	int mapRenderOffset = 0;
 	int prevMapRenderOffset = 0;

@@ -104,6 +104,7 @@ void GameOptions::keyEvent(const float & dt, Event event)
 	switch (event.key.code)
 	{
 	case Keyboard::Key::Escape:
+		previewMusic.stop();
 		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::Return:
