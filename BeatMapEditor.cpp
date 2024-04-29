@@ -29,7 +29,11 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 	txtPath.append(txtPath.filename().string() + ".txt");
 
 	if (!fs::exists(txtPath))
+	{
 		cerr << "Text file doesn't exist." << endl;
+		ofstream newBeatMapTextFile(txtPath);
+		newBeatMapTextFile.close();
+	}
 
 
 	this->textFilePath = fs::absolute(txtPath).string(); // change to text file file with audio file path

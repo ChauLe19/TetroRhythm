@@ -169,7 +169,7 @@ const map<Keyboard::Key, string> keyboardKeyStringMap = {
 };
 
 
-const array<array<array<short, boardWidth>, boardHeight>, 43> infBoardSimulation = { {
+const array<array<array<short, boardWidth>, boardHeight>, 42> infBoardSimulation = { {
 	{{
 		{{0, 0, 0, 0 ,0, 0}},
 		{{0, 0, 0, 0 ,0, 0}},
@@ -505,14 +505,6 @@ const array<array<array<short, boardWidth>, boardHeight>, 43> infBoardSimulation
 		{{0, 0, 0, 0, 0, 0 }},
 		{{7, 7, 7, 1, 0, 0 }},
 		{{4, 7, 1, 1, 0, 0 }}
-	}},
-	{{
-		{{0, 0, 0, 0, 0, 0 }},
-		{{0, 0, 0, 0, 0, 0 }},
-		{{0, 0, 0, 0, 0, 0 }},
-		{{0, 0, 0, 0, 0, 0 }},
-		{{0, 0, 0, 0, 0, 0 }},
-		{{0, 0, 0, 0, 0, 0 }}
 	}}
 }};
 
@@ -668,7 +660,7 @@ const array<array<array<short, boardWidth>, boardHeight>, 19> tutorialBoards = {
 		{{8, 0, 0, 0, 0, 8}},
 		{{8, 8, 8, 8, 8, 8}},
 		{{8, 8, 8, 8, 8, 8}}
-	}},
+	}}
 }};
 
 #endif
