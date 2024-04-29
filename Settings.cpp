@@ -52,15 +52,15 @@ void Settings::render(RenderWindow& window)
 	text.setPosition(1024 - text.getLocalBounds().width / 2, 50);
 	window.draw(text);
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < int(Controls_Key::SIZE); i++)
 	{
 		Controls_Key key = static_cast<Controls_Key> (i);
 		drawKeyConfig(fromControlsToString(key), fromKtoS(settings->keybinds[key]), 500, 300 + 80 * i, window, cursor == i, isChanging);
 	}
 
 
-	drawKeyConfig("SFX", "<  " + to_string(settings->sfx) + "  >", 500, 300 + 80 * 3, window, cursor == 3, isChanging);
-	drawKeyConfig("MUSIC", "<  " + to_string(settings->music) + "  >", 500, 300 + 80 * 4, window, cursor == 4, isChanging);
+	drawKeyConfig("SFX", "<  " + to_string(settings->sfx) + "  >", 500, 300 + 80 * int(Controls_Key::SIZE), window, cursor == int(Controls_Key::SIZE), isChanging);
+	drawKeyConfig("MUSIC", "<  " + to_string(settings->music) + "  >", 500, 300 + 80 * (int(Controls_Key::SIZE) + 1), window, cursor == (int(Controls_Key::SIZE) + 1), isChanging);
 
 	if (mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
@@ -168,7 +168,7 @@ void Settings::mouseEvent(const float & dt, RenderWindow& window, Event event)
 void Settings::setCursor(int cursor)
 {
 	// clamping from 0 to 9
-	this->cursor = clamp(cursor, 0, 4);
+	this->cursor = clamp(cursor, 0, int(Controls_Key::SIZE) - 1 + 2); // + 2 for the SFX + MUSIC option
 }
 
 // TODO: Handle invalid input

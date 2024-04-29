@@ -13,7 +13,7 @@ enum class State {
 };
 
 enum class Controls_Key {
-	HOLD, HARD_DROP, HARD_DROP_ALT
+	/*HOLD,*/ HARD_DROP, HARD_DROP_ALT, SIZE
 };
 
 enum class HitType {
@@ -21,7 +21,7 @@ enum class HitType {
 };
 
 const boost::bimap<Controls_Key, string> controlsKeyStringMap = boost::assign::list_of<boost::bimap<Controls_Key, string>::relation>
-	(Controls_Key::HOLD, "HOLD")
+//	(Controls_Key::HOLD, "HOLD")
 	(Controls_Key::HARD_DROP, "HARD_DROP")
 	(Controls_Key::HARD_DROP_ALT, "HARD_DROP_ALT");
 
@@ -58,7 +58,7 @@ const map<ClearType, string> clearTypeStringMap = {
 };
 
 const map<Controls_Key, string> controlsStringMap = {
-	{Controls_Key::HOLD, "Hold"},
+//	{Controls_Key::HOLD, "Hold"},
 	{Controls_Key::HARD_DROP, "Hard drop"},
 	{Controls_Key::HARD_DROP_ALT, "Hard drop alt"},
 };

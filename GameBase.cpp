@@ -175,15 +175,6 @@ void GameBase::keyEvent(const float & dt, Event event)
 
 	if (isGameOver) return;
 
-	
-	// No hold key control (rotation)
-	if (key == keybinds[Controls_Key::HOLD]) return;
-
-	if ( key == keybinds[Controls_Key::HARD_DROP])
-	{
-
-	}
-
 	currentKey = key;
 	firstPressed = true;
 }
