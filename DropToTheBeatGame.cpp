@@ -142,13 +142,37 @@ void DropToTheBeatGame::gameOver()
 	GameSettings::getInstance()->saveHighscores();
 }
 
+void DropToTheBeatGame::activateGravity(int beatTime)
+{
+	if (gravityCharge != 100) return;
+	gravityCharge = 0;
+	gravityButton->setProgress(gravityCharge);
+	board.enforceGravity();
+	clearLines();
+	checkDropOnBeat(beatTime);
+	this->inputVertex.clear();
+	std::array <int, 4> possibleMovesCurrent = currentPiecePtr->firstPossibleMove(board);
+	if (possibleMovesCurrent[3] == 1) // if possible to place current piece
+	{
+	}
+	else
+	{
+		gameOver();
+	}
+}
+
 void DropToTheBeatGame::keyEvent(const float & dt, Event event)
 {
+	int currTime = sound.getPlayingOffset().asMilliseconds();
 	if (event.type != Event::KeyPressed && event.type != Event::KeyReleased) return;
 	map<Controls_Key, Keyboard::Key> keybinds = controlsSettings->keybinds;
 	if (event.type == Event::KeyReleased && (event.key.code == keybinds[Controls_Key::HARD_DROP] || event.key.code == keybinds[Controls_Key::HARD_DROP_ALT]))
 	{
-		checkDropOnBeat(sound.getPlayingOffset().asMilliseconds());
+		checkDropOnBeat(currTime);
+	}
+	else if (event.type == Event::KeyReleased && (event.key.code == keybinds[Controls_Key::GRAVITY]))
+	{
+		activateGravity(currTime);
 	}
 	GameBase::keyEvent(dt, event);
 
@@ -254,21 +278,7 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 	if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && 
 		this->gravityButton->mouseInButton(window) && (inputVertex.getVertexCount() == 0 || this->gravityButton->posInButton(inputVertex[0].position.x, inputVertex[0].position.y)))
 	{
-		if (gravityCharge != 100) return;
-		gravityCharge = 0;
-		gravityButton->setProgress(gravityCharge);
-		board.enforceGravity();
-		clearLines();
-		checkDropOnBeat(currTime);
-		this->inputVertex.clear();
-		std::array <int, 4> possibleMovesCurrent = currentPiecePtr->firstPossibleMove(board);
-		if (possibleMovesCurrent[3] == 1) // if possible to place current piece
-		{
-		}
-		else
-		{
-			gameOver();
-		}
+		activateGravity(currTime);
 		return;
 	}
 	else if (!isGameOver && event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && inputVertex.getVertexCount() > 0)

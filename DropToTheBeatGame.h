@@ -61,5 +61,6 @@ public:
 private:
 	void checkDropOnBeat(int beatTime);
 	void gameOver();
+	void activateGravity(int beatTime);
 };
 #endif
