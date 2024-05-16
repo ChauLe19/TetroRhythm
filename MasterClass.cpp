@@ -56,12 +56,6 @@ MasterClass::~MasterClass()
 
 void MasterClass::run()
 {
-	static sf::Shader shader;
-	// if (!shader.loadFromFile("BeatShader.frag", sf::Shader::Fragment))
-	// {
-	//		std::cout << "error reading shader" << std::endl;
-	// }
-
 	while (window->isOpen())
 	{
 		m_view.setSize(resolutionX, resolutionY);

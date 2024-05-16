@@ -187,12 +187,6 @@
     <Image Include="Images\tiles.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Images\frame.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Images\button.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Images\Logo.ico">
       <Filter>Resource Files</Filter>
     </Image>
