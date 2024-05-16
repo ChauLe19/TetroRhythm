@@ -25,14 +25,20 @@
     <Filter Include="Source Files\External Libs">
       <UniqueIdentifier>{b10a312e-7e98-408b-a933-f587cabac218}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\State Screens">
+      <UniqueIdentifier>{9e51ca9e-8b83-485c-af82-b2263fcaea3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\State Screens">
+      <UniqueIdentifier>{bb6796fb-5c76-465f-a53c-af2eeac2c23c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{f998c9e4-46e5-4770-92cf-7799cadc8c96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers">
+      <UniqueIdentifier>{d4267086-559b-49bf-99f5-97c62bb88f58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AssetManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BeatMapEditor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Board.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -42,31 +48,10 @@
     <ClInclude Include="Enums.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameOptions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapEditorSelect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MasterClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ResultScreen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Settings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StateManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StateScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tetromino.h">
@@ -79,9 +64,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GravityButton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Tutorial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DropToTheBeatGame.h">
@@ -102,45 +84,48 @@
     <ClInclude Include="MiniBpm.h">
       <Filter>Header Files\External Libs</Filter>
     </ClInclude>
+    <ClInclude Include="GameOptions.h">
+      <Filter>Header Files\State Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="MapEditorSelect.h">
+      <Filter>Header Files\State Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultScreen.h">
+      <Filter>Header Files\State Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="StateScreen.h">
+      <Filter>Header Files\State Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Tutorial.h">
+      <Filter>Header Files\State Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Header Files\State Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="BeatMapEditor.h">
+      <Filter>Header Files\State Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files\State Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="StateManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AssetManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BeatMapEditor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Board.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameOptions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapEditorSelect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MasterClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultScreen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Settings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StateManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StateScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Tetromino.cpp">
@@ -156,9 +141,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GravityButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Tutorial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DropToTheBeatGame.cpp">
@@ -178,6 +160,36 @@
     </ClCompile>
     <ClCompile Include="MiniBpm.cpp">
       <Filter>Source Files\External Libs</Filter>
+    </ClCompile>
+    <ClCompile Include="BeatMapEditor.cpp">
+      <Filter>Source Files\State Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOptions.cpp">
+      <Filter>Source Files\State Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="Settings.cpp">
+      <Filter>Source Files\State Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="StateScreen.cpp">
+      <Filter>Source Files\State Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScreen.cpp">
+      <Filter>Source Files\State Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorSelect.cpp">
+      <Filter>Source Files\State Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files\State Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="Tutorial.cpp">
+      <Filter>Source Files\State Screens</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="StateManager.cpp">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
