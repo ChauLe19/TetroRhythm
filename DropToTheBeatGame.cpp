@@ -148,6 +148,8 @@ void DropToTheBeatGame::activateGravity(int beatTime)
 	gravityCharge = 0;
 	gravityButton->setProgress(gravityCharge);
 	board.enforceGravity();
+	sfx.stop();
+	sfx.play();
 	clearLines();
 	checkDropOnBeat(beatTime);
 	this->inputVertex.clear();
