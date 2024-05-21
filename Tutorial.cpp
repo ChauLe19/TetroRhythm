@@ -5,8 +5,9 @@
 
 Tutorial::Tutorial(StateManager& stateManager) : StateScreen(stateManager)
 {
+	using namespace std;
 	text.setFont(assetManager->getFont("game font"));
-	text.setFillColor(Color::White);
+	text.setFillColor(sf::Color::White);
 
 	instructionSprite.setTexture(AssetManager::getInstance()->getTexture("instruction"));
 	instructionSprite.setOrigin(instructionSprite.getLocalBounds().width / 2.0f, instructionSprite.getLocalBounds().height / 2.0f);
@@ -26,7 +27,7 @@ Tutorial::~Tutorial()
 {
 }
 
-void Tutorial::tick(const float& dt, RenderWindow& window)
+void Tutorial::tick(const float& dt, sf::RenderWindow& window)
 {
 	if (stageRender > 0)
 	{
@@ -47,7 +48,7 @@ void Tutorial::tick(const float& dt, RenderWindow& window)
 	}
 }
 
-void Tutorial::render(RenderWindow& window)
+void Tutorial::render(sf::RenderWindow& window)
 {
 	text.setCharacterSize(100);
 	text.setString("How to play");
@@ -65,7 +66,7 @@ void Tutorial::render(RenderWindow& window)
 	}
 	helpButton.render(window, text);
 
-	text.setFillColor(Color::White);
+	text.setFillColor(sf::Color::White);
 	if (tutorialOver)
 	{
 		text.setCharacterSize(100);
@@ -110,12 +111,14 @@ void Tutorial::render(RenderWindow& window)
 
 }
 
-void Tutorial::keyEvent(const float& dt, Event event)
+void Tutorial::keyEvent(const float& dt, sf::Event event)
 {
 }
 
-void Tutorial::mouseEvent(const float& dt, RenderWindow& window, Event event)
+void Tutorial::mouseEvent(const float& dt, sf::RenderWindow& window, sf::Event event)
 {
+	using namespace sf;
+	using namespace std;
 	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
 		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
@@ -223,7 +226,7 @@ void Tutorial::mouseEvent(const float& dt, RenderWindow& window, Event event)
 
 }
 
-void Tutorial::drawInstructionPopup(RenderWindow& window)
+void Tutorial::drawInstructionPopup(sf::RenderWindow& window)
 {
 
 }

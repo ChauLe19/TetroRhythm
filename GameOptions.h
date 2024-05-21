@@ -21,8 +21,6 @@
 
 #include <SFML/Graphics.hpp>
 
-using namespace sf;
-
 /**
  * Controls Game Options screen.
  */
@@ -30,22 +28,22 @@ class GameOptions : public StateScreen
 {
 private:
 	sf::Music previewMusic;
-	Sprite songBackground;
+	sf::Sprite songBackground;
 
-	Text text;
+	sf::Text text;
 	bool choosingMap = false;
 	int cursorMap = 0; // a table of game
 	int cursorMode = 0;
 	const int modeCount = 4;
-	vector<fs::path> maps;
+	std::vector<fs::path> maps;
 	int mapRenderOffset = 0;
 	int prevMapRenderOffset = 0;
 
-	Button dropOnBeatGameButton = Button(Color::White, 50, Color::Transparent, "Drop On Beat", Vector2f(200, 300), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
-	Button limitedGameButton = Button(Color::White, 50, Color::Transparent, "Limited Time", Vector2f(200, 450), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
-	Button endlessGameButton = Button(Color::White, 50, Color::Transparent, "Endless", Vector2f(200, 600), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
-	Button sprintGameButton = Button(Color::White, 50, Color::Transparent, "Sprint 40L", Vector2f(200, 750), Vector2f(500, 100), Color(0, 186, 211), Keyboard::A);
-	Button startButton = Button(Color::White, 50, Color::Transparent, "Start", Vector2f(2048 / 2 - 100, 1000), Vector2f(200, 100), Color(0, 186, 211), Keyboard::Enter);
+	Button dropOnBeatGameButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Drop On Beat", sf::Vector2f(200, 300), sf::Vector2f(500, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
+	Button limitedGameButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Limited Time", sf::Vector2f(200, 450), sf::Vector2f(500, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
+	Button endlessGameButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Endless", sf::Vector2f(200, 600), sf::Vector2f(500, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
+	Button sprintGameButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Sprint 40L", sf::Vector2f(200, 750), sf::Vector2f(500, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
+	Button startButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Start", sf::Vector2f(2048 / 2 - 100, 1000), sf::Vector2f(200, 100), sf::Color(0, 186, 211), sf::Keyboard::Enter);
 
 
 public:
@@ -54,11 +52,11 @@ public:
 
 	// StateScreen functions
 	//****************************************************
-	void tick(const float & dt, RenderWindow& window);
-	void render(RenderWindow& window);
-	void keyEvent(const float & dt, Event event);
-	void mouseEvent(const float & dt, RenderWindow& window, Event event);
-	void mouseScrollEvent(const float & dt, RenderWindow& window, Event event);
+	void tick(const float & dt, sf::RenderWindow& window);
+	void render(sf::RenderWindow& window);
+	void keyEvent(const float & dt, sf::Event event);
+	void mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event);
+	void mouseScrollEvent(const float & dt, sf::RenderWindow& window, sf::Event event);
 
 	/**
 	 * Draw option out to window. If the cursor is on it, highlight it.
@@ -69,7 +67,7 @@ public:
 	 * \param y
 	 * \param isHighlight
 	 */
-	void drawGameModeOption(RenderTexture& window, string gameMode, int x, int y, bool isHighlight);
+	void drawGameModeOption(sf::RenderTexture& window, std::string gameMode, int x, int y, bool isHighlight);
 private:
 	void selectMap(int mapIndex);
 	void startGame();

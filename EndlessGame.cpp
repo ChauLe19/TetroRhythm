@@ -1,7 +1,7 @@
 #include "EndlessGame.h"
 
 //TODO: speed depends on the song speed. the song speed up after every round
-EndlessGame::EndlessGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
+EndlessGame::EndlessGame(StateManager &stateManager, std::string folderPath) : GameBase(stateManager, folderPath)
 {
 }
 
@@ -9,13 +9,13 @@ EndlessGame::~EndlessGame()
 {
 }
 
-void EndlessGame::tick(const float & dt, RenderWindow& window)
+void EndlessGame::tick(const float & dt, sf::RenderWindow& window)
 {
 	if (isGameOver) return;
 	GameBase::tick(dt, window);
 	frameCount++;
 	// restart song if not game over
-	if (!isGameOver && sound.getStatus() == SoundSource::Status::Stopped)
+	if (!isGameOver && sound.getStatus() == sf::SoundSource::Status::Stopped)
 	{
 		sound.play();
 	}
@@ -24,16 +24,16 @@ void EndlessGame::tick(const float & dt, RenderWindow& window)
 void EndlessGame::gameOver()
 {
 	GameBase::gameOver();
-	highscores->endless = max(highscores->endless, score);
+	highscores->endless = std::max(highscores->endless, score);
 	GameSettings::getInstance()->saveHighscores();
 }
 
-void EndlessGame::keyEvent(const float & dt, Event event)
+void EndlessGame::keyEvent(const float & dt, sf::Event event)
 {
 	GameBase::keyEvent(dt, event);
 }
 
-void EndlessGame::mouseEvent(const float & dt, RenderWindow& window, Event event)
+void EndlessGame::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event)
 {
 	GameBase::mouseEvent(dt, window, event);
 	if (isGameOver && !hsSaved)
@@ -42,8 +42,9 @@ void EndlessGame::mouseEvent(const float & dt, RenderWindow& window, Event event
 	}
 }
 
-void EndlessGame::render(RenderWindow& window)
+void EndlessGame::render(sf::RenderWindow& window)
 {
+	using namespace std;
 	GameBase::render(window);
 
 	if (isGameOver)
@@ -51,7 +52,7 @@ void EndlessGame::render(RenderWindow& window)
 		GameBase::renderGameOver(window);
 
 		text.setCharacterSize(80);
-		text.setFillColor(Color::White);
+		text.setFillColor(sf::Color::White);
 		text.setString(to_string(score));
 		text.setPosition(1024 - text.getLocalBounds().width / 2, 576 - 250);
 		window.draw(text);

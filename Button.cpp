@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button(Color textColor, int fontSize, Color boxColor, string textString, Vector2f position, Vector2f size, Color highlightColor, Keyboard::Key key)
+Button::Button(sf::Color textColor, int fontSize, sf::Color boxColor, std::string textString, sf::Vector2f position, sf::Vector2f size, sf::Color highlightColor, sf::Keyboard::Key key)
 {
 	this->textColor = textColor;
 	this->fontSize = fontSize;
@@ -33,7 +33,7 @@ bool Button::isHighlighted()
 	return this->isHighlight;
 }
 
-bool Button::keyEvent(Keyboard::Key key)
+bool Button::keyEvent(sf::Keyboard::Key key)
 {
 	if (this->key == key)
 	{
@@ -42,7 +42,7 @@ bool Button::keyEvent(Keyboard::Key key)
 	return false;
 }
 
-void Button::render(RenderWindow& window, Text& text)
+void Button::render(sf::RenderWindow& window, sf::Text& text)
 {
 	buttonRect.setOutlineColor(isHighlight ? highlightColor : textColor);
 	window.draw(buttonRect);
@@ -58,7 +58,7 @@ void Button::render(RenderWindow& window, Text& text)
 	text.setOrigin(0, 0);
 }
 
-bool Button::mouseInButton(RenderWindow& window)
+bool Button::mouseInButton(sf::RenderWindow& window)
 {
 	return mouseInBox(window, position.x, position.y, size.x, size.y);
 }

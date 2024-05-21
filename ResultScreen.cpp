@@ -2,10 +2,10 @@
 #include "Menu.h"
 #include "GameBase.h"
 
-ResultScreen::ResultScreen(StateManager& stateManager, string songName, int accuracyBeatCount[3], int rawScore, int combo) : StateScreen(stateManager), songName(songName)
+ResultScreen::ResultScreen(StateManager& stateManager, std::string songName, int accuracyBeatCount[3], int rawScore, int combo) : StateScreen(stateManager), songName(songName)
 {
 	text.setFont(assetManager->getFont("game font"));
-	text.setFillColor(Color::White);
+	text.setFillColor(sf::Color::White);
 	if (2 * (accuracyBeatCount[0] + accuracyBeatCount[1] + accuracyBeatCount[2]) != 0) 
 		accuracy = ((float)accuracyBeatCount[1] + 2.0 * (float)accuracyBeatCount[2]) * 100.0 / (2.0 * ((float)accuracyBeatCount[0] + (float)accuracyBeatCount[1] + (float)accuracyBeatCount[2])) ;
 	this->accuracyBeatCount[0] = accuracyBeatCount[0];
@@ -24,13 +24,14 @@ ResultScreen::~ResultScreen()
 {
 }
 
-void ResultScreen::tick(const float & dt, RenderWindow& window)
+void ResultScreen::tick(const float & dt, sf::RenderWindow& window)
 {
 }
 
-void ResultScreen::render(RenderWindow& window)
+void ResultScreen::render(sf::RenderWindow& window)
 {
-	text.setFillColor(Color::White);
+	using namespace std;
+	text.setFillColor(sf::Color::White);
 	text.setCharacterSize(60);
 
 	text.setPosition(200, 200);
@@ -71,8 +72,9 @@ void ResultScreen::render(RenderWindow& window)
 
 }
 
-void ResultScreen::keyEvent(const float & dt, Event event)
+void ResultScreen::keyEvent(const float & dt, sf::Event event)
 {
+	using namespace sf;
 	if (event.type != Event::KeyPressed) return;
 	switch (event.key.code)
 	{
@@ -85,8 +87,9 @@ void ResultScreen::keyEvent(const float & dt, Event event)
 	}
 }
 
-void ResultScreen::mouseEvent(const float & dt, RenderWindow& window, Event event)
+void ResultScreen::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event)
 {
+	using namespace sf;
 	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
 		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));

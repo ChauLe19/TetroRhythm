@@ -4,8 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include "Enums.h"
 
-using namespace std;
-
 // singleton class for loading game settings
 class GameSettings
 {

@@ -6,14 +6,14 @@ Tetromino::Tetromino(Type type)
 	this->type = type;
 	cellImage.setTexture(AssetManager::getInstance()->getTexture("tiles"));
 	int halfSquareSize = squareSize / 2;
-	cellImage.setTextureRect(IntRect(static_cast<int>(type) * halfSquareSize, 0, halfSquareSize, halfSquareSize));
+	cellImage.setTextureRect(sf::IntRect(static_cast<int>(type) * halfSquareSize, 0, halfSquareSize, halfSquareSize));
 	this->cells = tetrominos[static_cast<int>(type)];
 }
 
 Tetromino::Tetromino(Type type, bool isGhost) : Tetromino(type)
 {
 	if (isGhost)
-		cellImage.setColor(Color(255, 255, 255, 100));
+		cellImage.setColor(sf::Color(255, 255, 255, 100));
 }
 
 Tetromino::~Tetromino()
@@ -30,12 +30,13 @@ Tetromino Tetromino::getGhost(Board& board)
 
 void Tetromino::turnToGhostColor()
 {
-	cellImage.setColor(Color(255, 255, 255, 50));
+	cellImage.setColor(sf::Color(255, 255, 255, 50));
 }
 
 // moving direction is the mouse direction in this method
 bool Tetromino::setPiece(int x, int y, Moving_Direction mDir, Board& board)
 {
+	using namespace std;
 	Orientation newOrientation = orientationFromMouse[static_cast<int>(type)][static_cast<int>(mDir)];
 	Rotational_Direction rDir = static_cast<Rotational_Direction> ((static_cast<int>(newOrientation) - static_cast<int> (orientation) + 5) % 4 - 1);
 	array<array<int, 4>, 4> tempCells = cells;
@@ -79,6 +80,7 @@ bool Tetromino::setPiece(int x, int y, Moving_Direction mDir, Board& board)
 
 bool Tetromino::rotate(Rotational_Direction rDir, Board& board)
 {
+	using namespace std;
 	int newOrientationInt = ((static_cast<int>(orientation) + static_cast<int>(rDir)) + 4) % 4;
 	Orientation newOrientation = static_cast<Orientation> (newOrientationInt);
 	int wallKickGroup = 0;
@@ -173,8 +175,9 @@ bool Tetromino::checkIsOnGround(Board& board)
 
 // Rotate a square array
 // TODO: Check rotation is correct
-void Tetromino::rotateArray(array<array<int, 4>, 4>& arr, int size, Rotational_Direction rDir)
+void Tetromino::rotateArray(std::array<std::array<int, 4>, 4>& arr, int size, Rotational_Direction rDir)
 {
+	using namespace std;
 	// TODO: Check this copy
 	array<array<int, 4>, 4> temp;
 	temp = arr;
@@ -221,6 +224,7 @@ bool Tetromino::move(Moving_Direction dir, Board& board)
 
 bool Tetromino::checkCollision(int xPos, int yPos, Board& board)
 {
+	using namespace std;
 	array<array<short, boardWidth>, boardHeight> boardMatrix = board.getBoard();
 	//Traverse the cells if it collide with any blocks on the board
 	for (int i = 0; i < 4; i++)
@@ -243,6 +247,7 @@ bool Tetromino::checkCollision(int xPos, int yPos, Board& board)
 
 bool Tetromino::checkCollision(Board& board)
 {
+	using namespace std;
 	array<array<short, boardWidth>, boardHeight> boardMatrix = board.getBoard();
 	//Traverse the cells if it collide with any blocks on the board
 	for (int i = 0; i < 4; i++)
@@ -309,7 +314,7 @@ std::array<int, 4> Tetromino::firstPossibleMove(Board& board)
 	return { -1,-1,-1,0 };
 }
 
-void Tetromino::render(RenderWindow& window, Board& board)
+void Tetromino::render(sf::RenderWindow& window, Board& board)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -318,14 +323,14 @@ void Tetromino::render(RenderWindow& window, Board& board)
 			if (cells[i][j] > 0)
 			{
 				cellImage.setPosition(board.getXPos() + (xPos + j) * boardSquareSize, board.getYPos() + (yPos + i) * boardSquareSize);
-				cellImage.setScale(Vector2f(2, 2));
+				cellImage.setScale(sf::Vector2f(2, 2));
 				window.draw(cellImage);
 			}
 		}
 	}
 }
 
-void Tetromino::render(RenderWindow& window, int x, int y, int scale)
+void Tetromino::render(sf::RenderWindow& window, int x, int y, int scale)
 {
 	int blockSize = squareSize * (float)scale / 2;
 	for (int i = 0; i < 4; i++)
@@ -335,7 +340,7 @@ void Tetromino::render(RenderWindow& window, int x, int y, int scale)
 			if (cells[i][j] > 0)
 			{
 				cellImage.setPosition(x + j * blockSize, y + i * blockSize);
-				cellImage.setScale(Vector2f(scale, scale));
+				cellImage.setScale(sf::Vector2f(scale, scale));
 				window.draw(cellImage);
 			}
 		}
@@ -344,11 +349,12 @@ void Tetromino::render(RenderWindow& window, int x, int y, int scale)
 
 void Tetromino::setTransparency(sf::Uint8 transparency)
 {
-	cellImage.setColor(Color(255, 255, 255, transparency));
+	cellImage.setColor(sf::Color(255, 255, 255, transparency));
 }
 
-void Tetromino::renderBorder(RenderWindow& window, Board& board, Color color)
+void Tetromino::renderBorder(sf::RenderWindow& window, Board& board, sf::Color color)
 {
+	using namespace sf;
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)

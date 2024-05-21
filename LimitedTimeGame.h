@@ -17,15 +17,16 @@ class LimitedTimeGame :
 private:
 	sf::Clock clock;
 public:
-	LimitedTimeGame(StateManager &stateManager, string folderPath);
+	LimitedTimeGame(StateManager &stateManager, std::string folderPath);
 	~LimitedTimeGame();
+
 	// Game Base functions
 	//************************************************
 
-	void tick(const float & dt, RenderWindow& window);
-	void keyEvent(const float & dt, Event event);
-	void mouseEvent(const float & dt, RenderWindow& window, Event event);
-	void render(RenderWindow& window);
+	void tick(const float & dt, sf::RenderWindow& window);
+	void keyEvent(const float & dt, sf::Event event);
+	void mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event);
+	void render(sf::RenderWindow& window);
 
 private:
 	void gameOver();

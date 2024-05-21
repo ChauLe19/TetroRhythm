@@ -7,13 +7,13 @@
 class MapEditorSelect : public StateScreen
 {
 private:
-	Text text;
-	Button startButton = Button(Color::White, 50, Color::Transparent, "Start", Vector2f(2048 / 2 - 100, 1000), Vector2f(200, 100), Color(0, 186, 211), Keyboard::Enter);
-	vector<fs::path> maps;
+	sf::Text text;
+	Button startButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Start", sf::Vector2f(2048 / 2 - 100, 1000), sf::Vector2f(200, 100), sf::Color(0, 186, 211), sf::Keyboard::Enter);
+	std::vector<fs::path> maps;
 	int cursor = 0;
 	int mapRenderOffset = 0;
 	bool isPressed = false;
-	Vector2f pressedPosition;
+	sf::Vector2f pressedPosition;
 	int prevMapRenderOffset = mapRenderOffset;
 public:
 	MapEditorSelect(StateManager &stateManager);
@@ -21,15 +21,15 @@ public:
 
 	// StateScreen functions
 	//****************************************************
-	void tick(const float & dt, RenderWindow& window);
-	void render(RenderWindow& window);
-	void keyEvent(const float & dt, Event event);
-	void mouseEvent(const float & dt, RenderWindow& window, Event event);
-	void mouseScrollEvent(const float & dt, RenderWindow& window, Event event);
+	void tick(const float & dt, sf::RenderWindow& window);
+	void render(sf::RenderWindow& window);
+	void keyEvent(const float & dt, sf::Event event);
+	void mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event);
+	void mouseScrollEvent(const float & dt, sf::RenderWindow& window, sf::Event event);
 
 
 private:
-	void drawOptions(RenderTexture& window, string option, int x, int y, bool isHighlight);
-	void drawOptions(RenderWindow& window, string options, int x, int y, bool isHighlight);
+	void drawOptions(sf::RenderTexture& window, std::string option, int x, int y, bool isHighlight);
+	void drawOptions(sf::RenderWindow& window, std::string options, int x, int y, bool isHighlight);
 };
 

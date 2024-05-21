@@ -1,8 +1,9 @@
 #include "Utils.h"
 #include <sstream>
 
-bool mouseInBox(RenderWindow& window, int x, int y, int width, int height)
+bool mouseInBox(sf::RenderWindow& window, int x, int y, int width, int height)
 {
+	using namespace sf;
 	Vector2i pixelPos = Mouse::getPosition(window);
 	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
 	return (mouseViewPos.x >= x && mouseViewPos.x <= x + width
@@ -15,15 +16,17 @@ bool posInBox(int posX, int posY, int x, int y, int width, int height)
 		&& posY >= y && posY <= y + height);
 }
 
-bool mouseInCircle(RenderWindow& window, int x, int y, int r)
+bool mouseInCircle(sf::RenderWindow& window, int x, int y, int r)
 {
+	using namespace sf;
 	Vector2i pixelPos = Mouse::getPosition(window);
 	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
 	return (mouseViewPos.x - x) * (mouseViewPos.x - x) + (mouseViewPos.y - y) * (mouseViewPos.y - y) <= r * r;
 }
 
-void createButton(RenderWindow& window, Text& text,  Color textColor, int textSize, Color boxColor, string textString, int width, int height, int x, int y)
+void createButton(sf::RenderWindow& window, sf::Text& text,  sf::Color textColor, int textSize, sf::Color boxColor, std::string textString, int width, int height, int x, int y)
 {
+	using namespace sf;
 	RectangleShape rect;
 	rect.setFillColor(boxColor);
 	rect.setSize(Vector2f(width, height));
@@ -92,6 +95,6 @@ std::string getRank(int score, int threshold)
 
 std::string getTimeFormat(int timeInMiliseconds)
 {
-	return to_string(timeInMiliseconds / 1000 / 60) + ":" + to_string(timeInMiliseconds / 1000 % 60) + "." + to_string((timeInMiliseconds % 1000) / 10);
+	return std::to_string(timeInMiliseconds / 1000 / 60) + ":" + std::to_string(timeInMiliseconds / 1000 % 60) + "." + std::to_string((timeInMiliseconds % 1000) / 10);
 }
 

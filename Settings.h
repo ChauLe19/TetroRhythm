@@ -19,15 +19,12 @@
 #include "GameSettings.h"
 #include "StateManager.h"
 
-using namespace sf;
-using namespace std;
-
-const string controlsList[8] = { "HOLD","HARD_DROP","HARD_DROP_ALT" };
+const std::string controlsList[8] = { "HOLD","HARD_DROP","HARD_DROP_ALT" };
 class Settings : public StateScreen
 {
 public:
 private:
-	Text text;
+	sf::Text text;
 	GameSettings::Controls_Settings* settings = GameSettings::getInstance()->getSettings();
 	int cursor = 0;
 	bool isChanging = false;
@@ -38,7 +35,7 @@ private:
 	 * \param k Keyboard key
 	 * \return String representation of key
 	 */
-	string fromKtoS(const sf::Keyboard::Key& k);
+	std::string fromKtoS(const sf::Keyboard::Key& k);
 
 	/**
 	* Map the action to its string representation.
@@ -46,7 +43,7 @@ private:
 	* \param k Controls key
 	* \return String representation of the action
 	*/
-	string fromControlsToString(Controls_Key key);
+	std::string fromControlsToString(Controls_Key key);
 public:
 
 	Settings(StateManager &stateManager);
@@ -55,20 +52,20 @@ public:
 	// GameBase functions
 	//********************************************
 
-	void tick(const float & dt, RenderWindow& window);
-	void render(RenderWindow& window);
-	void keyEvent(const float & dt, Event event);
-	void mouseEvent(const float & dt, RenderWindow& window, Event event);
+	void tick(const float & dt, sf::RenderWindow& window);
+	void render(sf::RenderWindow& window);
+	void keyEvent(const float & dt, sf::Event event);
+	void mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event);
 
 	/**
 	 * Draw option
 	 */
-	void drawKeyConfig(string name, string key, int x, int y, RenderWindow& window, bool isHighlight, bool changing);
+	void drawKeyConfig(std::string name, std::string key, int x, int y, sf::RenderWindow& window, bool isHighlight, bool changing);
 
 	/**
 	 * Switch out the key at current cursor to the key in argument.
 	 */
-	bool changeKey(Keyboard::Key key);
+	bool changeKey(sf::Keyboard::Key key);
 
 	/**
 	 * Set cursor. At the same time clamp the cursor from 0 to 9.

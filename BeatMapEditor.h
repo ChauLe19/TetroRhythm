@@ -27,18 +27,15 @@
 #include <stdlib.h>
 #include "StateManager.h"
 
-
-using namespace std;
-using namespace sf;
 namespace fs = std::filesystem;
 
 class BeatMapEditor : public StateScreen
 {
 private:
-	Sound sound;
-	SoundBuffer buffer;
-	Text text;
-	Button beatButton = Button(Color::Black, 50, Color(255, 255, 255, 200), "Beat", Vector2f(1024 + 1024 / 2 - 200, 1152 / 2 - 200), Vector2f(400, 400), Color(0, 186, 211), Keyboard::Key::Unknown);
+	sf::Sound sound;
+	sf::SoundBuffer buffer;
+	sf::Text text;
+	Button beatButton = Button(sf::Color::Black, 50, sf::Color(255, 255, 255, 200), "Beat", sf::Vector2f(1024 + 1024 / 2 - 200, 1152 / 2 - 200), sf::Vector2f(400, 400), sf::Color(0, 186, 211), sf::Keyboard::Key::Unknown);
 	Button* speedButton025; // speed x0.25
 	Button* speedButton050; // speed x0.5
 	Button* speedButton100; // speed x1
@@ -49,11 +46,11 @@ private:
 	Button* dividerButton14; // divider 1/4
 	Board simulatorBoard = Board(100, 1152 / 2 - (boardSquareSize * boardHeight)/2);
 
-	list<int> beatsTime;
-	list<int>::iterator beatIt;
+	std::list<int> beatsTime;
+	std::list<int>::iterator beatIt;
 
-	string audioFilePath;
-	string textFilePath;
+	std::string audioFilePath;
+	std::string textFilePath;
 
 	int musicDurationMS = 0;
 	int bpm = 0;
@@ -67,16 +64,16 @@ private:
 
 	void loadStaticAssets();
 public:
-	BeatMapEditor(StateManager &stateManager, string folderPath);
+	BeatMapEditor(StateManager &stateManager, std::string folderPath);
 	~BeatMapEditor();
 
 	void save();
 	void addCursorToBeatList();
 
-	void tick(const float & dt, RenderWindow& window);
-	void render(RenderWindow& window);
-	void keyEvent(const float & dt, Event event);
-	void mouseEvent(const float & dt, RenderWindow& window, Event event);
+	void tick(const float & dt, sf::RenderWindow& window);
+	void render(sf::RenderWindow& window);
+	void keyEvent(const float & dt, sf::Event event);
+	void mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event);
 };
 
 #endif

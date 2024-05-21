@@ -1,12 +1,12 @@
 #include "GravityButton.h"
 
-GravityButton::GravityButton(Color textColor, int fontSize, sf::Color boxColor, string textString, Vector2f position, Vector2f size, sf::Color highlightColor, Keyboard::Key key)
+GravityButton::GravityButton(sf::Color textColor, int fontSize, sf::Color boxColor, std::string textString, sf::Vector2f position, sf::Vector2f size, sf::Color highlightColor, sf::Keyboard::Key key)
 	:Button(textColor, fontSize, boxColor, textString, position, size, highlightColor, key)
 {
-	progressRect.setFillColor(Color(0, 186, 211, 200));
+	progressRect.setFillColor(sf::Color(0, 186, 211, 200));
 	progressRect.setPosition(position);
 	progressRect.setOutlineThickness(5);
-	progressRect.setOutlineColor(Color::Transparent);
+	progressRect.setOutlineColor(sf::Color::Transparent);
 }
 
 GravityButton::~GravityButton()
@@ -15,15 +15,15 @@ GravityButton::~GravityButton()
 
 void GravityButton::setProgress(int progress)
 {
-	this->progress = clamp(progress, 0, 100);
+	this->progress = std::clamp(progress, 0, 100);
 }
 
-void GravityButton::render(RenderWindow& window, Text& text)
+void GravityButton::render(sf::RenderWindow& window, sf::Text& text)
 {
 	Button::render(window, text);
 	int sizeY = size.y * progress / 100;
-	progressRect.setSize(Vector2f(size.x, sizeY));
-	progressRect.setPosition(Vector2f(position.x, position.y + size.y - sizeY));
+	progressRect.setSize(sf::Vector2f(size.x, sizeY));
+	progressRect.setPosition(sf::Vector2f(position.x, position.y + size.y - sizeY));
 	window.draw(progressRect);
 
 	text.setFillColor(isHighlight ? highlightColor : textColor);

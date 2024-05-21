@@ -14,9 +14,6 @@
 #include <array>
 #include <SFML/Graphics.hpp>
 
-using namespace std;
-using namespace sf;
-
 #define boardWidth 6
 #define boardHeight 6
 #define boardSquareSize 135 // px
@@ -103,10 +100,10 @@ struct ClearingInfo
 class Board
 {
 private:
-	Sprite image;
-	Sprite cellImage;
+	sf::Sprite image;
+	sf::Sprite cellImage;
 
-	array<array<short, boardWidth>, boardHeight> board = { 0 };
+	std::array<std::array<short, boardWidth>, boardHeight> board = { 0 };
 	int xPos = 0;
 	int yPos = 0;
 
@@ -118,7 +115,7 @@ public:
 	/**
 	 * Draw board.
 	 */
-	void render(RenderWindow& window);
+	void render(sf::RenderWindow& window);
 
 	/**
 	 * Clear all lines that werre filled.
@@ -133,7 +130,7 @@ public:
 	/**
 	 * Get an array representation of the board.
 	 */
-	array<array<short, boardWidth>, boardHeight> getBoard();
+	std::array<std::array<short, boardWidth>, boardHeight> getBoard();
 
 	/**
 	 * Set cell with a specific value.

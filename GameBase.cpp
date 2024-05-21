@@ -4,9 +4,11 @@
 #include <filesystem>
 constexpr double PI = 3.14159265358979323846;
 
-GameBase::GameBase(StateManager &stateManager, string folderPath = "Tetris_theme")
+GameBase::GameBase(StateManager &stateManager, std::string folderPath = "Tetris_theme")
 	: StateScreen(stateManager), songName(fs::path(folderPath).filename().string())
 {
+	using namespace sf;
+	using namespace std;
 	cout << "Initializing game" << endl;
 
 	text.setFont(assetManager->getFont("game font"));
@@ -74,14 +76,15 @@ GameBase::~GameBase()
 }
 
 
-void GameBase::tick(const float & dt, RenderWindow& window)
+void GameBase::tick(const float & dt, sf::RenderWindow& window)
 {
 	if (isGameOver) return;
 	std::array <int, 2> res = findNearestPossiblePlacement(window, *currentPiecePtr, board);
 }
 
-void GameBase::render(RenderWindow& window)
+void GameBase::render(sf::RenderWindow& window)
 {
+	using namespace sf;
 	StateScreen::render(window); // supports 2048x1152 background size
 
 	text.setFillColor(Color::White);
@@ -125,7 +128,7 @@ void GameBase::render(RenderWindow& window)
 	}
 
 	text.setCharacterSize(70);
-	text.setString(to_string(score));
+	text.setString(std::to_string(score));
 	text.setPosition(boardX + boardSquareSize* boardWidth / 2 - text.getLocalBounds().width/2, boardY + boardSquareSize * boardHeight + 50);
 	window.draw(text);
 
@@ -144,10 +147,11 @@ void GameBase::render(RenderWindow& window)
 }
 
 
-void GameBase::keyEvent(const float & dt, Event event)
+void GameBase::keyEvent(const float & dt, sf::Event event)
 {
+	using namespace sf;
 	Keyboard::Key key = event.key.code;
-	map<Controls_Key, Keyboard::Key> keybinds = controlsSettings->keybinds;
+	std::map<Controls_Key, Keyboard::Key> keybinds = controlsSettings->keybinds;
 	if (event.type == Event::KeyPressed)
 	{
 		if (key == Keyboard::Escape)
@@ -185,7 +189,7 @@ void GameBase::clearLines()
 	Board tempBoard = board;
 	ClearingInfo tempClearingInfo = board.clearLines();
 	linesCleared += tempClearingInfo.linesCleared;
-	level = clamp(linesCleared / 10 + 1, 1, 15);
+	level = std::clamp(linesCleared / 10 + 1, 1, 15);
 	ClearType tempScoresType = GameBase::determineClearType(*currentPiecePtr, tempClearingInfo, prevClearType, tempBoard);
 
 	//update clear type everytime the play drop a piece
@@ -201,12 +205,13 @@ void GameBase::clearLines()
 	score += GameBase::convertClearTypeToScores(tempScoresType);
 }
 
-void GameBase::mouseScrollEvent(Event event)
+void GameBase::mouseScrollEvent(sf::Event event)
 {
 }
 
-void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
+void GameBase::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event)
 {
+	using namespace sf;
 	if (isGameOver)
 	{
 		if (event.type == Event::MouseButtonReleased && mouseInBox(window, 1024 - 150, 576 - 60 - 20, 300, 60)) // Restart button
@@ -250,7 +255,7 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 				int yDir = lastPoint.position.y - firstPoint.position.y;
 				Moving_Direction mouseDirection = Moving_Direction::UP_DIR;
 				
-				int XorYdir = max(abs(xDir), abs(yDir));
+				int XorYdir = std::max(abs(xDir), abs(yDir));
 				if (XorYdir >= 40) // only register input if it's long enough
 				{
 					double angle = atan2(yDir, xDir);
@@ -320,8 +325,9 @@ void GameBase::mouseEvent(const float & dt, RenderWindow& window, Event event)
 	}
 }
 
-void GameBase::renderGameOver(RenderWindow& window)
+void GameBase::renderGameOver(sf::RenderWindow& window)
 {
+	using namespace sf;
 	RectangleShape blurScreen;
 	blurScreen.setPosition(0, 0);
 	blurScreen.setSize(Vector2f(window.getView().getSize()));
@@ -493,7 +499,7 @@ ClearType GameBase::determineClearType(Tetromino clearingPiece, ClearingInfo inf
 	}
 }
 
-string GameBase::clearTypeToString(ClearType clearType)
+std::string GameBase::clearTypeToString(ClearType clearType)
 {
 	return clearTypeStringMap.find(clearType)->second;
 }
@@ -511,8 +517,8 @@ Tetromino& GameBase::nextPiece()
 	// add in a shuffled bag of all pieces into current bag.
 	if (bag.size() <= 7)
 	{
-		vector<Type> tempTypeVector = allPieces;
-		shuffle(tempTypeVector.begin(), tempTypeVector.end(), default_random_engine(seed));
+		std::vector<Type> tempTypeVector = allPieces;
+		std::shuffle(tempTypeVector.begin(), tempTypeVector.end(), std::default_random_engine(seed));
 
 		while (!tempTypeVector.empty())
 		{
@@ -588,8 +594,8 @@ void GameBase::reset()
 	// add 2 initial 7-bags
 	for (int j = 0; j < 2; j++)
 	{
-		vector<Type> tempTypeVector = allPieces;
-		shuffle(tempTypeVector.begin(), tempTypeVector.end(), default_random_engine(seed));
+		std::vector<Type> tempTypeVector = allPieces;
+		std::shuffle(tempTypeVector.begin(), tempTypeVector.end(), std::default_random_engine(seed));
 
 		while (!tempTypeVector.empty())
 		{
@@ -600,7 +606,7 @@ void GameBase::reset()
 	}
 
 	sound.stop();
-	sound.setPlayingOffset(seconds(0));
+	sound.setPlayingOffset(sf::seconds(0));
 
 	currentPiecePtr = &nextPiece();
 }
@@ -616,8 +622,9 @@ int GameBase::getScore()
 	return score;
 }
 
-std::array<int, 2> GameBase::findNearestPossiblePlacement(RenderWindow& window, Tetromino& piece, Board& board)
+std::array<int, 2> GameBase::findNearestPossiblePlacement(sf::RenderWindow& window, Tetromino& piece, Board& board)
 {
+	using namespace sf;
 	Vector2i pixelPos = Mouse::getPosition(window);
 	Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
 	int minX = -currentPiecePtr->getMinX();

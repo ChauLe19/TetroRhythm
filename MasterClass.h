@@ -32,21 +32,21 @@
 class MasterClass
 {
 public:
-	static string BeatMapFolderPath;
+	static std::string BeatMapFolderPath;
 private:
 	sf::View m_view;
-	Clock clock;
-	Clock dtClock;
+	sf::Clock clock;
+	sf::Clock dtClock;
 	float dt;
-	Text text;
+	sf::Text text;
 	sf::Sprite backgroundSprite;
 
-	RenderWindow* window;
+	sf::RenderWindow* window;
 	StateManager stateManager;
 
 	bool firstScroll = true;
 public:
-	MasterClass(RenderWindow& window);
+	MasterClass(sf::RenderWindow& window);
 	~MasterClass();
 
 	/**
@@ -74,7 +74,7 @@ public:
 	 * 
 	 * \param key: input from keyboard
 	 */
-	void keyEvent(const float & dt, Event event);
+	void keyEvent(const float & dt, sf::Event event);
 	
 	/**
 	 * Based on the key input and current state, do things accordingly. 
@@ -82,7 +82,7 @@ public:
 	 * 
 	 * \param key: input from keyboard
 	 */
-	void mouseEvent(const float & dt, Event event);
+	void mouseEvent(const float & dt, sf::Event event);
 
 	/**
 	 * Based on the key input and current state, do things accordingly. 
@@ -90,7 +90,7 @@ public:
 	 * 
 	 * \param key: input from keyboard
 	 */
-	void mouseScrolledEvent(const float & dt, Event event);
+	void mouseScrolledEvent(const float & dt, sf::Event event);
 
 	void updateDt();
 

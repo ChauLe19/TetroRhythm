@@ -3,6 +3,7 @@
 
 Settings::Settings(StateManager& stateManager) : StateScreen(stateManager)
 {
+	using namespace sf;
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
 }
@@ -11,8 +12,10 @@ Settings::~Settings()
 {
 }
 
-void Settings::keyEvent(const float & dt, Event event)
+void Settings::keyEvent(const float & dt, sf::Event event)
 {
+	using namespace sf;
+	using namespace std;
 	if (event.type != Event::KeyPressed) return;
 	Keyboard::Key key = event.key.code;
 	if (isChanging)
@@ -40,12 +43,14 @@ void Settings::keyEvent(const float & dt, Event event)
 	}
 }
 
-void Settings::tick(const float & dt, RenderWindow& window)
+void Settings::tick(const float & dt, sf::RenderWindow& window)
 {
 }
 
-void Settings::render(RenderWindow& window)
+void Settings::render(sf::RenderWindow& window)
 {
+	using namespace sf;
+	using namespace std;
 	text.setFillColor(Color::White);
 	text.setCharacterSize(120);
 	text.setString("Change key config");
@@ -72,8 +77,9 @@ void Settings::render(RenderWindow& window)
 	}
 }
 
-void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow& window, bool isHighlight, bool changing)
+void Settings::drawKeyConfig(std::string name, std::string key, int x, int y, sf::RenderWindow& window, bool isHighlight, bool changing)
 {
+	using namespace sf;
 	if (isHighlight)
 	{
 		RectangleShape rect(Vector2f(1000, 50));
@@ -105,8 +111,10 @@ void Settings::drawKeyConfig(string name, string key, int x, int y, RenderWindow
 	window.draw(text);
 }
 
-bool Settings::changeKey(Keyboard::Key key)
+bool Settings::changeKey(sf::Keyboard::Key key)
 {
+	using namespace sf;
+	using namespace std;
 	// dismiss special keys
 	if (key == Keyboard::Key::Escape || key == Keyboard::Key::Unknown || key == Keyboard::Key::R) return false;
 
@@ -155,8 +163,9 @@ bool Settings::changeKey(Keyboard::Key key)
 }
 
 
-void Settings::mouseEvent(const float & dt, RenderWindow& window, Event event)
+void Settings::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event)
 {
+	using namespace sf;
 	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
 		GameSettings::getInstance()->saveKeys();
@@ -168,17 +177,17 @@ void Settings::mouseEvent(const float & dt, RenderWindow& window, Event event)
 void Settings::setCursor(int cursor)
 {
 	// clamping from 0 to 9
-	this->cursor = clamp(cursor, 0, int(Controls_Key::SIZE) - 1 + 2); // + 2 for the SFX + MUSIC option
+	this->cursor = std::clamp(cursor, 0, int(Controls_Key::SIZE) - 1 + 2); // + 2 for the SFX + MUSIC option
 }
 
 // TODO: Handle invalid input
-string Settings::fromControlsToString(Controls_Key key)
+std::string Settings::fromControlsToString(Controls_Key key)
 {
 	return controlsStringMap.at(key);
 }
 
 // TODO: Handle invalid input
-string Settings::fromKtoS(const sf::Keyboard::Key& k)
+std::string Settings::fromKtoS(const sf::Keyboard::Key& k)
 {
 	return keyboardKeyStringMap.at(k);
 }

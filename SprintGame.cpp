@@ -1,15 +1,15 @@
 #include "SprintGame.h"
 
-SprintGame::SprintGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
+SprintGame::SprintGame(StateManager &stateManager, std::string folderPath) : GameBase(stateManager, folderPath)
 {
-	timer = Clock();
+	timer = sf::Clock();
 }
 
 SprintGame::~SprintGame()
 {
 }
 
-void SprintGame::tick(const float & dt, RenderWindow& window)
+void SprintGame::tick(const float & dt, sf::RenderWindow& window)
 {
 	if (!isGameOver && linesCleared >= 40)
 	{
@@ -23,7 +23,7 @@ void SprintGame::gameOver()
 	if (linesCleared >= 40)
 	{
 		currSprintTime = timer.getElapsedTime().asMilliseconds();
-		highscores->sprintTime = min(highscores->sprintTime, currSprintTime);
+		highscores->sprintTime = std::min(highscores->sprintTime, currSprintTime);
 		GameSettings::getInstance()->saveHighscores();
 	}
 }
@@ -31,21 +31,23 @@ void SprintGame::gameOver()
 void SprintGame::restart()
 {
 	GameBase::restart();
-	timer = Clock();
+	timer = sf::Clock();
 }
 
-void SprintGame::keyEvent(const float & dt, Event event)
+void SprintGame::keyEvent(const float & dt, sf::Event event)
 {
 	GameBase::keyEvent(dt, event);
 }
 
-void SprintGame::mouseEvent(const float & dt, RenderWindow& window, Event event)
+void SprintGame::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event)
 {
 	GameBase::mouseEvent(dt, window, event);
 }
 
-void SprintGame::render(RenderWindow& window)
+void SprintGame::render(sf::RenderWindow& window)
 {
+	using namespace sf;
+	using namespace std;
 	GameBase::render(window);
 
 	text.setFillColor(Color::White);

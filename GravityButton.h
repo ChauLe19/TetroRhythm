@@ -5,11 +5,11 @@ class GravityButton : public Button
 {
 private:
 	int progress = 0;
-	RectangleShape progressRect;
+	sf::RectangleShape progressRect;
 public:
-	GravityButton(Color textColor, int fontSize, sf::Color boxColor, string textString, Vector2f position, Vector2f size, sf::Color highlightColor = Color::White, Keyboard::Key key = Keyboard::Unknown);
+	GravityButton(sf::Color textColor, int fontSize, sf::Color boxColor, std::string textString, sf::Vector2f position, sf::Vector2f size, sf::Color highlightColor = sf::Color::White, sf::Keyboard::Key key = sf::Keyboard::Unknown);
 	~GravityButton();
 	void setProgress(int progress);
-	void render(RenderWindow& window, Text& text);
+	void render(sf::RenderWindow& window, sf::Text& text);
 };
 

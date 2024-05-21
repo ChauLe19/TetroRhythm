@@ -12,30 +12,29 @@
 #define RESULT_SCREEN_H
 #include "StateScreen.h"
 
-using namespace std;
 class ResultScreen :
 	public StateScreen
 {
 private:
-	string songName;
+	std::string songName;
 	float accuracy = 0; // percentage = (almostCount + 2*hitCount)/(2*(almostCount + hitCount + missCount)
 	int rawScore = 0;
 	int adjustedScore = 0; // adjustedScore = accuracyPercentage * rawScore
 	int combo = 0;
 	int accuracyBeatCount[3];
-	string letterRanked;
+	std::string letterRanked;
 
-	Text text;
+	sf::Text text;
 public:
-	ResultScreen(StateManager& stateManager, string folderPath, int accuracyBeatCount[3], int rawScore, int combo);
+	ResultScreen(StateManager& stateManager, std::string folderPath, int accuracyBeatCount[3], int rawScore, int combo);
 	~ResultScreen();
 
 	// StateScreen functions
 	//****************************************************
-	void tick(const float & dt, RenderWindow& window);
-	void render(RenderWindow& window);
-	void keyEvent(const float & dt, Event event);
-	void mouseEvent(const float & dt, RenderWindow& window, Event event);
+	void tick(const float & dt, sf::RenderWindow& window);
+	void render(sf::RenderWindow& window);
+	void keyEvent(const float & dt, sf::Event event);
+	void mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event);
 
 };
 #endif

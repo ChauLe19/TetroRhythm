@@ -147,6 +147,7 @@
     <ClInclude Include="MasterClass.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MiniBpm.h" />
+    <ClInclude Include="ProgressBar.h" />
     <ClInclude Include="ResultScreen.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SprintGame.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="MasterClass.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MiniBpm.cpp" />
+    <ClCompile Include="ProgressBar.cpp" />
     <ClCompile Include="ResultScreen.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SprintGame.cpp" />

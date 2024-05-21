@@ -7,25 +7,25 @@
 class Button
 {
 protected:
-	Vector2f position;
-	Vector2f size;
+	sf::Vector2f position;
+	sf::Vector2f size;
 	int fontSize;
 	bool isHighlight;
-	string textString;
+	std::string textString;
 	sf::Color boxColor;
 	sf::Color textColor;
 	sf::Color highlightColor;
 
-	RectangleShape buttonRect;
-	Keyboard::Key key;
+	sf::RectangleShape buttonRect;
+	sf::Keyboard::Key key;
 public:
-	Button(Color textColor, int fontSize, sf::Color boxColor, string textString, Vector2f position, Vector2f size, sf::Color highlightColor = Color::White, Keyboard::Key key = Keyboard::Unknown);
+	Button(sf::Color textColor, int fontSize, sf::Color boxColor, std::string textString, sf::Vector2f position, sf::Vector2f size, sf::Color highlightColor = sf::Color::White, sf::Keyboard::Key key = sf::Keyboard::Unknown);
 	~Button();
 	void setHighlight(bool isHighlight);
 	bool isHighlighted();
-	bool keyEvent(Keyboard::Key key);
-	void render(RenderWindow& window, Text& text);
-	bool mouseInButton(RenderWindow& window);
+	bool keyEvent(sf::Keyboard::Key key);
+	void render(sf::RenderWindow& window, sf::Text& text);
+	bool mouseInButton(sf::RenderWindow& window);
 	bool posInButton(int x, int y);
 
 };

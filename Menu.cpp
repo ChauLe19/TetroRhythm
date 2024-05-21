@@ -4,20 +4,20 @@
 Menu::Menu(StateManager &stateManager) : StateScreen(stateManager)
 {
 	text.setFont(assetManager->getFont("game font"));
-	text.setFillColor(Color::White);
+	text.setFillColor(sf::Color::White);
 }
 
 Menu::~Menu()
 {
 }
 
-void Menu::tick(const float & dt, RenderWindow& window)
+void Menu::tick(const float & dt, sf::RenderWindow& window)
 {
 }
 
-void Menu::render(RenderWindow& window)
+void Menu::render(sf::RenderWindow& window)
 {
-	text.setFillColor(Color::White);
+	text.setFillColor(sf::Color::White);
 	text.setCharacterSize(200);
 	text.setString("TetroRhythm");
 	text.setPosition(1024 - text.getLocalBounds().width / 2, 100);
@@ -31,8 +31,9 @@ void Menu::render(RenderWindow& window)
 	exitButton.render(window, text);
 }
 
-void Menu::keyEvent(const float & dt, Event event)
+void Menu::keyEvent(const float & dt, sf::Event event)
 {
+	using namespace sf;
 	if (event.type != Event::KeyPressed) return;
 	switch (event.key.code)
 	{
@@ -48,8 +49,9 @@ void Menu::keyEvent(const float & dt, Event event)
 	}
 }
 
-void Menu::mouseEvent(const float & dt, RenderWindow& window, Event event)
+void Menu::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event)
 {
+	using namespace sf;
 	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 	{
 		if (beginButton.mouseInButton(window)) // BEGIN button

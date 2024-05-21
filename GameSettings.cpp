@@ -51,6 +51,7 @@ void GameSettings::loadFiles()
 
 void GameSettings::saveKeys()
 {
+	using namespace std;
 	ofstream outFile;
 	outFile.open("Config/Keybinds.ini", ios::out);
 	for (std::map<Controls_Key, sf::Keyboard::Key>::iterator it = controlsSettings->keybinds.begin(); it != controlsSettings->keybinds.end(); ++it)
@@ -62,6 +63,7 @@ void GameSettings::saveKeys()
 
 void GameSettings::saveConfig()
 {
+	using namespace std;
 	ofstream outFile;
 	outFile.open("Config/Config.ini", ios::out);
 	outFile << "SFX " << controlsSettings->sfx << endl;
@@ -71,6 +73,7 @@ void GameSettings::saveConfig()
 
 void GameSettings::saveHighscores()
 {
+	using namespace std;
 	std::cout << "save hs: " << highscores->limit << " " << highscores->endless << endl;
 	ofstream outFile;
 	outFile.open("Config/scores.sav", ios::out);
@@ -85,6 +88,7 @@ void GameSettings::saveHighscores()
 
 int GameSettings::getBeatMapThreshold(std::string songName)
 {
+	using namespace std;
 	ifstream beatStream("BeatMaps/" + songName +"/"+ songName+ ".txt");
 	int beatCount = 0;
 	if (beatStream.is_open()) {
@@ -103,6 +107,7 @@ int GameSettings::getBeatMapThreshold(std::string songName)
 
 void GameSettings::initKeys()
 {
+	using namespace std;
 	ifstream keybindsStream("Config/Keybinds.ini");
 	controlsSettings->keybinds.clear();
 
@@ -121,6 +126,7 @@ void GameSettings::initKeys()
 
 void GameSettings::initConfig()
 {
+	using namespace std;
 	ifstream configStream("Config/Config.ini");
 
 	if (configStream.is_open())
@@ -144,6 +150,7 @@ void GameSettings::initConfig()
 
 void GameSettings::initHighscores()
 {
+	using namespace std;
 	ifstream scoresStream("Config/scores.sav");
 	if (scoresStream.is_open()) {
 		std::string line("");

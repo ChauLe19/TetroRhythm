@@ -4,6 +4,7 @@
 
 MapEditorSelect::MapEditorSelect(StateManager &stateManager) : StateScreen(stateManager)
 {
+	using namespace sf;
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
 
@@ -20,8 +21,9 @@ MapEditorSelect::~MapEditorSelect()
 {
 }
 
-void MapEditorSelect::drawOptions(RenderTexture& window, string option, int x, int y, bool isHighlight)
+void MapEditorSelect::drawOptions(sf::RenderTexture& window, std::string option, int x, int y, bool isHighlight)
 {
+	using namespace sf;
 	if (isHighlight)
 	{
 		RectangleShape rect(Vector2f(window.getSize().x, 150));
@@ -41,8 +43,9 @@ void MapEditorSelect::drawOptions(RenderTexture& window, string option, int x, i
 	text.setString(option);
 	window.draw(text);
 }
-void MapEditorSelect::drawOptions(RenderWindow& window, string options, int x, int y, bool isHighlight)
+void MapEditorSelect::drawOptions(sf::RenderWindow& window, std::string options, int x, int y, bool isHighlight)
 {
+	using namespace sf;
 	if (isHighlight)
 	{
 		RectangleShape rect(Vector2f(800, 150));
@@ -65,12 +68,13 @@ void MapEditorSelect::drawOptions(RenderWindow& window, string options, int x, i
 }
 
 
-void MapEditorSelect::tick(const float & dt, RenderWindow& window)
+void MapEditorSelect::tick(const float & dt, sf::RenderWindow& window)
 {
 }
 
-void MapEditorSelect::render(RenderWindow& window)
+void MapEditorSelect::render(sf::RenderWindow& window)
 {
+	using namespace sf;
 	RenderTexture mapsTexture;
 	mapsTexture.create(1000, 800);
 
@@ -106,8 +110,10 @@ void MapEditorSelect::render(RenderWindow& window)
 	startButton.render(window, text);
 }
 
-void MapEditorSelect::keyEvent(const float & dt, Event event)
+void MapEditorSelect::keyEvent(const float & dt, sf::Event event)
 {
+	using namespace sf;
+	using namespace std;
 	if (event.type != Event::KeyPressed) return;
 	Keyboard::Key key = event.key.code;
 	switch (key)
@@ -129,8 +135,9 @@ void MapEditorSelect::keyEvent(const float & dt, Event event)
 	}
 }
 
-void MapEditorSelect::mouseEvent(const float & dt, RenderWindow& window, Event event)
+void MapEditorSelect::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event)
 {
+	using namespace sf;
 	if (event.type == Event::MouseButtonPressed && mouseInBox(window, 2048/2 - 800/2, 100, 1000, 800))
 	{
 		isPressed = true;
@@ -145,7 +152,7 @@ void MapEditorSelect::mouseEvent(const float & dt, RenderWindow& window, Event e
 		Vector2f mouseViewPos = window.mapPixelToCoords(pixelPos);
 		mapRenderOffset = prevMapRenderOffset;
 		mapRenderOffset += mouseViewPos.y - pressedPosition.y;
-		cursor = clamp( - (mapRenderOffset - 150/2) / 150, 0, (int)maps.size() - 1);
+		cursor = std::clamp( - (mapRenderOffset - 150/2) / 150, 0, (int)maps.size() - 1);
 	}
 	else if (event.type == Event::MouseButtonReleased)
 	{
@@ -170,8 +177,9 @@ void MapEditorSelect::mouseEvent(const float & dt, RenderWindow& window, Event e
 	}
 }
 
-void MapEditorSelect::mouseScrollEvent(const float& dt, RenderWindow& window, Event event)
+void MapEditorSelect::mouseScrollEvent(const float& dt, sf::RenderWindow& window, sf::Event event)
 {
+	using namespace std;
 	if (event.type == sf::Event::MouseWheelScrolled && mouseInBox(window, 2048/2 - 800/2, 150, 1000, 800))
 	{
 		cursor = clamp(cursor - (int) event.mouseWheelScroll.delta, 0, (int)maps.size() - 1);

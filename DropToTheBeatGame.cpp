@@ -1,7 +1,9 @@
 #include "DropToTheBeatGame.h"
 
-DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, string folderPath) : GameBase(stateManager, folderPath)
+DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, std::string folderPath) : GameBase(stateManager, folderPath)
 {
+	using namespace sf;
+	using namespace std;
 	loadStaticAssets();
 	this->gravityButton = new GravityButton(Color::White, 50, Color(0,0,0, 150), "Gravity", Vector2f(boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200), Vector2f(200, 200), Color(0, 186, 211), Keyboard::Unknown);
 
@@ -46,6 +48,7 @@ DropToTheBeatGame::~DropToTheBeatGame()
 
 void DropToTheBeatGame::loadStaticAssets()
 {
+	using namespace sf;
 	const int BarWindow = 2000;
 	const int boardWidthPx = boardWidth * boardSquareSize;
 	RectangleShape *beatBar = new RectangleShape(Vector2f(boardWidthPx, 20));
@@ -89,18 +92,13 @@ void DropToTheBeatGame::loadStaticAssets()
 	assetManager->loadDrawable("Whole Rank bar", std::unique_ptr<Drawable>(WholeRankBar));
 }
 
-void DropToTheBeatGame::tick(const float & dt, RenderWindow& window)
+void DropToTheBeatGame::tick(const float & dt, sf::RenderWindow& window)
 {
+	using namespace sf;
+	using namespace std;
 	if (isGameOver) return;
 	GameBase::tick(dt, window);
 
-	// every secon passed, health + 1
-	/*healthCounter++;
-	if (healthCounter >= 60)
-	{
-		health = clamp(health  + 1, 0, 100);
-		healthCounter = 0;
-	}*/
 	int currTime = sound.getPlayingOffset().asMilliseconds();
 	// remove beats that has passed and is out of the 1000ms window
 	while (!beatsTime.empty() && beatsTime.front() <= currTime - 1000)
@@ -133,7 +131,7 @@ void DropToTheBeatGame::gameOver()
 	GameBase::gameOver();
 	if (highscores->dropToBeatHS.find(songName) != highscores->dropToBeatHS.end())
 	{
-		highscores->dropToBeatHS[songName] = max(highscores->dropToBeatHS[songName], score);
+		highscores->dropToBeatHS[songName] = std::max(highscores->dropToBeatHS[songName], score);
 	}
 	else
 	{
@@ -163,8 +161,10 @@ void DropToTheBeatGame::activateGravity(int beatTime)
 	}
 }
 
-void DropToTheBeatGame::keyEvent(const float & dt, Event event)
+void DropToTheBeatGame::keyEvent(const float & dt, sf::Event event)
 {
+	using namespace sf;
+	using namespace std;
 	int currTime = sound.getPlayingOffset().asMilliseconds();
 	if (event.type != Event::KeyPressed && event.type != Event::KeyReleased) return;
 	map<Controls_Key, Keyboard::Key> keybinds = controlsSettings->keybinds;
@@ -187,7 +187,7 @@ void DropToTheBeatGame::keyEvent(const float & dt, Event event)
 
 void DropToTheBeatGame::checkDropOnBeat(int beatTime)
 {
-
+	using namespace std;
 	// if pressed in 400ms window, doesn't get "TOO LATE"
 	// TOO LATE	-> health -= 10
 	// MISS		-> health -= 1
@@ -268,8 +268,10 @@ void DropToTheBeatGame::checkDropOnBeat(int beatTime)
 	}
 	beatPressed = false;
 }
-void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event event)
+void DropToTheBeatGame::mouseEvent(const float& dt, sf::RenderWindow& window, sf::Event event)
 {
+	using namespace sf;
+	using namespace std;
 	if (finished) return;
 	int currTime = sound.getPlayingOffset().asMilliseconds();
 	if (!isGameOver && event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left &&
@@ -302,8 +304,10 @@ void DropToTheBeatGame::mouseEvent(const float & dt, RenderWindow& window, Event
 	GameBase::mouseEvent(dt, window, event);
 }
 
-void DropToTheBeatGame::renderBeatSignal(RenderWindow& window)
+void DropToTheBeatGame::renderBeatSignal(sf::RenderWindow& window)
 {
+	using namespace sf;
+	using namespace std;
 	static vector<Color> rainbow = { Color::Red, Color(255, 165, 0), Color::Yellow, Color::Green, Color::Blue, Color(75,0,130) ,Color(127,0,255) };
 	int tempRainbowIndex = rainbowIndex;
 
@@ -357,8 +361,10 @@ void DropToTheBeatGame::restart()
 	beatsTime.assign(beatsTimeOriginal.begin(), beatsTimeOriginal.end());
 }
 
-void DropToTheBeatGame::render(RenderWindow& window)
+void DropToTheBeatGame::render(sf::RenderWindow& window)
 {
+	using namespace sf;
+	using namespace std;
 	GameBase::render(window);
 	renderBeatSignal(window);
 

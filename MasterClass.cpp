@@ -2,8 +2,9 @@
 #include "AssetManager.h"
 
 // source: https://github.com/SFML/SFML/wiki/Source%3A-Letterbox-effect-using-a-view
-sf::View getLetterboxView(RenderWindow* window, sf::View view, float windowWidth, float windowHeight)
+sf::View getLetterboxView(sf::RenderWindow* window, sf::View view, float windowWidth, float windowHeight)
 {
+	using namespace sf;
 	// Compares the aspect ratio of the window to the aspect ratio of the view,
 	// and sets the view's viewport accordingly in order to archieve a letterbox effect.
 	// A new view (with a new viewport set) is returned.
@@ -37,8 +38,9 @@ sf::View getLetterboxView(RenderWindow* window, sf::View view, float windowWidth
 	return resultView;
 }
 
-MasterClass::MasterClass(RenderWindow& window)
+MasterClass::MasterClass(sf::RenderWindow& window)
 {
+	using namespace sf;
 	this->window = &window;
 	loadResources();
 
@@ -56,13 +58,14 @@ MasterClass::~MasterClass()
 
 void MasterClass::run()
 {
+	using namespace sf;
 	while (window->isOpen())
 	{
 		m_view.setSize(resolutionX, resolutionY);
 		// Calculate FPS
 		Time elapsed = clock.restart();
 		text.setPosition(0, 0);
-		text.setString(to_string(round(1 / elapsed.asSeconds())));
+		text.setString(std::to_string(round(1 / elapsed.asSeconds())));
 
 
 		updateDt();
@@ -124,17 +127,17 @@ void MasterClass::tick(const float & dt)
 	this->stateManager.getCurrentState().get()->tick(dt, *this->window);
 }
 
-void MasterClass::keyEvent(const float & dt, Event event)
+void MasterClass::keyEvent(const float & dt, sf::Event event)
 {
 	this->stateManager.getCurrentState().get()->keyEvent(dt, event);
 }
 
-void MasterClass::mouseEvent(const float & dt, Event event)
+void MasterClass::mouseEvent(const float & dt, sf::Event event)
 {
 	this->stateManager.getCurrentState().get()->mouseEvent(dt, *window, event);
 }
 
-void MasterClass::mouseScrolledEvent(const float& dt, Event event)
+void MasterClass::mouseScrolledEvent(const float& dt, sf::Event event)
 {
 	this->stateManager.getCurrentState().get()->mouseScrollEvent(dt, *window, event);
 }
@@ -146,6 +149,7 @@ void MasterClass::updateDt()
 
 void MasterClass::loadResources()
 {
+	using namespace sf;
 	AssetManager *assetManager = AssetManager::getInstance();
 
 	// load fonts

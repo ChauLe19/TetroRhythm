@@ -18,21 +18,19 @@
 #include <iterator>
 #include <algorithm>
 
-using namespace std;
-
 enum class Type { Z = 0, L = 1, O = 2, S = 3, I = 4, J = 5, T = 6 };
 enum class Orientation { SPAWN = 0, RIGHT = 1, FLIP = 2, LEFT = 3 };
 enum class Rotational_Direction { CCW = -1, NORO = 0, CW = 1, R180 = 2 };
 enum class Moving_Direction { UP_DIR = 0, LEFT_DIR = 1, RIGHT_DIR = 2, DOWN_DIR = 3 };
-const static vector<Type> allPieces{ Type::Z, Type::L, Type::O, Type::S, Type::I, Type::J, Type::T };
-const static map<Type, Color> pieceColorMap {
-	{Type::Z, Color(255, 0, 0)},
-	{ Type::L, Color(255,74,2) },
-	{ Type::O, Color(255, 191, 0)},
-	{ Type::S, Color(0, 219, 100)},
-	{ Type::I, Color(0, 219, 255) },
-	{ Type::J, Color(0, 0, 124) },
-	{ Type::T, Color(241, 10, 249)}
+const static std::vector<Type> allPieces{ Type::Z, Type::L, Type::O, Type::S, Type::I, Type::J, Type::T };
+const static std::map<Type, sf::Color> pieceColorMap{
+	{Type::Z, sf::Color(255, 0, 0)},
+	{ Type::L, sf::Color(255,74,2) },
+	{ Type::O, sf::Color(255, 191, 0)},
+	{ Type::S, sf::Color(0, 219, 100)},
+	{ Type::I, sf::Color(0, 219, 255) },
+	{ Type::J, sf::Color(0, 0, 124) },
+	{ Type::T, sf::Color(241, 10, 249)}
 };
  
 
@@ -185,11 +183,11 @@ class Tetromino
 {
 private:
 	static const int squareSize = 90;
-	Texture cellsTexture;
-	Sprite cellImage;
+	sf::Texture cellsTexture;
+	sf::Sprite cellImage;
 	Orientation orientation = Orientation::SPAWN;
 
-	array<array<int, 4>, 4> cells = { 0 };
+	std::array<std::array<int, 4>, 4> cells = { 0 };
 	Type type;
 
 	// Spawn position
@@ -208,7 +206,7 @@ private:
 	 * \param size Size of the square. (Max:4)
 	 * \param rDir Direction of rotation
 	 */
-	void rotateArray(array<array<int, 4>, 4>& arr, int size, Rotational_Direction rDir);
+	void rotateArray(std::array<std::array<int, 4>, 4>& arr, int size, Rotational_Direction rDir);
 
 public:
 	Tetromino(Type type);
@@ -316,9 +314,9 @@ public:
 	 * \param window
 	 * \param board
 	 */
-	void render(RenderWindow& window, Board& board);
+	void render(sf::RenderWindow& window, Board& board);
 	void setTransparency(sf::Uint8 transparency);
-	void renderBorder(RenderWindow& window, Board& board, Color color);
+	void renderBorder(sf::RenderWindow& window, Board& board, sf::Color color);
 
 	/**
 	 * Render tetromino with a definite x and y on the window.
@@ -327,7 +325,7 @@ public:
 	 * \param x
 	 * \param y
 	 */
-	void render(RenderWindow& window, int x, int y, int scale = 2);
+	void render(sf::RenderWindow& window, int x, int y, int scale = 2);
 
 	/**
 	 * Reset back to spawn condition.
@@ -358,7 +356,7 @@ public:
 	 */
 	bool getRotateLast();
 
-	Color getBaseColor()
+	sf::Color getBaseColor()
 	{
 		return  pieceColorMap.find(this->type)->second;
 	};

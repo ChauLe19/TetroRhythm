@@ -15,8 +15,9 @@ Board::~Board()
 {
 }
 
-void Board::render(RenderWindow& window)
+void Board::render(sf::RenderWindow& window)
 {
+	using namespace sf;
 	RectangleShape frame(Vector2f(boardSquareSize * boardWidth, boardSquareSize * boardHeight));
 	frame.setOutlineThickness(10);
 	frame.setOutlineColor(Color(255, 255, 255, 150));
@@ -144,7 +145,7 @@ void Board::enforceGravity()
 
 
 // TODO: check if this return a copy or reference
-array<array<short, boardWidth>, boardHeight> Board::getBoard()
+std::array<std::array<short, boardWidth>, boardHeight> Board::getBoard()
 {
 	return board;
 }
@@ -197,6 +198,7 @@ bool Board::createGarbageLine(int holePos)
 
 void Board::print()
 {
+	using namespace std;
 	cout <<  "{{" << std::endl;
 	for (int i = 0; i < board.size(); i++)
 	{

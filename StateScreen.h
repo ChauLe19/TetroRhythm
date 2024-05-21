@@ -13,16 +13,13 @@
 #include <SFML/Graphics.hpp>
 #include "AssetManager.h"
 
-
-using namespace sf;
-
 class StateManager;
 class StateScreen
 {
 private:
 protected:
 	sf::Texture backgroundTexture;
-	Sprite* background = nullptr;
+	sf::Sprite* background = nullptr;
 	StateManager &stateManager;
 	AssetManager* assetManager = AssetManager::getInstance();
 
@@ -35,14 +32,14 @@ public:
 	 *
 	 * \param window Rendering window
 	 */
-	virtual void tick(const float & dt, RenderWindow& window) = 0;
+	virtual void tick(const float & dt, sf::RenderWindow& window) = 0;
 
 	/**
 	 * Function for drawing the screen.
 	 *
 	 * \param window Rendering window
 	 */
-	virtual void render(RenderWindow& window) {
+	virtual void render(sf::RenderWindow& window) {
 		window.clear();
 		if (background)
 		{
@@ -57,19 +54,19 @@ public:
 	 *
 	 * \param key Was pressed
 	 */
-	virtual void keyEvent(const float & dt, Event event) = 0;
+	virtual void keyEvent(const float & dt, sf::Event event) = 0;
 
 	/**
 	 * Function run when a mouse event is detected.
 	 *
 	 */
-	virtual void mouseEvent(const float & dt, RenderWindow& window, Event event) = 0;
+	virtual void mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event) = 0;
 	
 	/**
 	 * Function run when a mouse scroll event is detected.
 	 *
 	 */
-	virtual void mouseScrollEvent(const float & dt, RenderWindow& window, Event event) {};
+	virtual void mouseScrollEvent(const float & dt, sf::RenderWindow& window, sf::Event event) {};
 
 	virtual void init() {};
 	virtual void pause() {};

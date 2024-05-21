@@ -4,6 +4,7 @@
 GameOptions::GameOptions(StateManager& stateManager)
 	: StateScreen(stateManager)
 {
+	using namespace sf;
 	cursorMap = 0;
 	cursorMode = 0;
 	text.setFont(assetManager->getFont("game font"));
@@ -21,12 +22,14 @@ GameOptions::~GameOptions()
 {
 }
 
-void GameOptions::tick(const float & dt, RenderWindow& window)
+void GameOptions::tick(const float & dt, sf::RenderWindow& window)
 {
 }
 
-void GameOptions::render(RenderWindow& window)
+void GameOptions::render(sf::RenderWindow& window)
 {
+	using namespace sf;
+	using namespace std;
 	RenderTexture mapsTexture;
 	mapsTexture.create(1000, 550);
 
@@ -98,8 +101,10 @@ void GameOptions::render(RenderWindow& window)
 	}
 }
 
-void GameOptions::keyEvent(const float & dt, Event event)
+void GameOptions::keyEvent(const float & dt, sf::Event event)
 {
+	using namespace sf;
+	using namespace std;
 	if (event.type != Event::KeyPressed) return;
 	switch (event.key.code)
 	{
@@ -152,8 +157,10 @@ void GameOptions::keyEvent(const float & dt, Event event)
 	}
 }
 
-void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event)
+void GameOptions::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event)
 {
+	using namespace sf;
+	using namespace std;
 	static bool isPressed = false;
 	static Vector2f pressedPosition = Vector2f(0,0);
 	if (event.type == Event::MouseMoved)
@@ -210,18 +217,20 @@ void GameOptions::mouseEvent(const float & dt, RenderWindow& window, Event event
 	}
 }
 
-void GameOptions::mouseScrollEvent(const float& dt, RenderWindow& window, Event event)
+void GameOptions::mouseScrollEvent(const float& dt, sf::RenderWindow& window, sf::Event event)
 {
 	if (event.type == sf::Event::MouseWheelScrolled && mouseInBox(window, 2048 - 1000, 300, 1000, 550))
 	{
-		selectMap(clamp(cursorMap - (int) event.mouseWheelScroll.delta, 0, (int)maps.size() - 1));
+		selectMap(std::clamp(cursorMap - (int) event.mouseWheelScroll.delta, 0, (int)maps.size() - 1));
 		mapRenderOffset = -cursorMap * 200;
 		prevMapRenderOffset = mapRenderOffset;
 	}
 }
 
-void GameOptions::drawGameModeOption(RenderTexture& window, string gameMode, int x, int y, bool isHighlight)
+void GameOptions::drawGameModeOption(sf::RenderTexture& window, std::string gameMode, int x, int y, bool isHighlight)
 {
+	using namespace sf;
+	using namespace std;
 	if (isHighlight)
 	{
 		RectangleShape rect(Vector2f(window.getSize().x, 150));
@@ -256,6 +265,7 @@ void GameOptions::drawGameModeOption(RenderTexture& window, string gameMode, int
 
 void GameOptions::selectMap(int mapIndex)
 {
+	using namespace std;
 	cursorMap = mapIndex;
 	fs::path audioPath = maps[mapIndex];
 	audioPath.append(audioPath.filename().string());

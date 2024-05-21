@@ -2,8 +2,10 @@
 #include "Menu.h"
 #include <memory>
 
-BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : StateScreen(stateManager)
+BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath) : StateScreen(stateManager)
 {
+	using namespace sf;
+	using namespace std;
 	loadStaticAssets();
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
@@ -96,6 +98,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, string folderPath) : St
 
 void BeatMapEditor::loadStaticAssets()
 {
+	using namespace sf;
 	CircleShape *playButton = new CircleShape(20, 3);
 	playButton->setFillColor(Color::White);
 	playButton->setPosition(80, 1152 - sliderHeight - 40);
@@ -160,6 +163,7 @@ BeatMapEditor::~BeatMapEditor()
 
 void BeatMapEditor::save()
 {
+	using namespace std;
 	std::ofstream outFile;
 	outFile.open(textFilePath, ios::out);
 	outFile << "bpm " << bpm << '\r';
@@ -173,8 +177,9 @@ void BeatMapEditor::save()
 	outFile.close();
 }
 
-void BeatMapEditor::tick(const float & dt, RenderWindow& window)
+void BeatMapEditor::tick(const float & dt, sf::RenderWindow& window)
 {
+	using namespace sf;
 	if (sound.getStatus() == Music::Status::Stopped)
 	{
 		sound.play();
@@ -184,8 +189,10 @@ void BeatMapEditor::tick(const float & dt, RenderWindow& window)
 	cursorRelToMusicMS = sound.getPlayingOffset().asMilliseconds();
 }
 
-void BeatMapEditor::render(RenderWindow& window)
+void BeatMapEditor::render(sf::RenderWindow& window)
 {
+	using namespace sf;
+	using namespace std;
 	simulatorBoard.render(window);
 	beatButton.setHighlight(beatButton.mouseInButton(window));
 	beatButton.render(window, text);
@@ -234,7 +241,7 @@ void BeatMapEditor::render(RenderWindow& window)
 	wholeAudioCursor.setPosition(24 - 5 + sliderLength * cursorRelToMusicMS / musicDurationMS, 1152 - sliderHeight * 2 /3);
 	window.draw(wholeAudioCursor);
 
-	list<int>::iterator it = beatsTime.begin(); // draw beats
+	std::list<int>::iterator it = beatsTime.begin(); // draw beats
 	int count = 0;
 	int currentBeatIndex = 0;
 	while (it != beatsTime.end())
@@ -294,7 +301,7 @@ void BeatMapEditor::render(RenderWindow& window)
 	text.setFillColor(Color::White);
 	Int32 tleft = sound.getPlayingOffset().asMilliseconds();
 	Int32 tTotal = sound.getBuffer()->getDuration().asMilliseconds();
-	String tLeftString = getPaddingString(to_string(tleft / 1000 / 60), 2, '0', false) + ":"
+	String tLeftString = getPaddingString(std::to_string(tleft / 1000 / 60), 2, '0', false) + ":"
 		+ getPaddingString(to_string(tleft / 1000 % 60), 2, ' 0', false) + ":" 
 		+ getPaddingString(to_string(tleft % 1000), 3, '0', false);
 	String tTotalString = getPaddingString(to_string(tTotal / 1000 / 60), 2, '0', false) + ":"
@@ -321,8 +328,9 @@ void BeatMapEditor::render(RenderWindow& window)
 	}
 }
 
-void BeatMapEditor::keyEvent(const float & dt, Event event)
+void BeatMapEditor::keyEvent(const float & dt, sf::Event event)
 {
+	using namespace sf;
 	if (event.type != Event::KeyPressed) return;
 	Keyboard::Key key = event.key.code;
 	switch (key)
@@ -367,7 +375,7 @@ void BeatMapEditor::addCursorToBeatList()
 {
 	int nearestBeat = std::round((float)(cursorRelToMusicMS) / ((float)mspb / divider));
 	nearestBeat = nearestBeat * ((float)mspb / divider);
-	list<int>::iterator temp = beatsTime.begin();
+	std::list<int>::iterator temp = beatsTime.begin();
 	int prev = 0;
 	while (temp != beatsTime.end() && *temp < nearestBeat)
 	{
@@ -387,9 +395,10 @@ void BeatMapEditor::addCursorToBeatList()
 	}
 }
 
-void BeatMapEditor::mouseEvent(const float & dt, RenderWindow& window, Event event)
+void BeatMapEditor::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event)
 {
-
+	using namespace sf;
+	using namespace std;
 	if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)
 	{
 		cursorSelected = false;

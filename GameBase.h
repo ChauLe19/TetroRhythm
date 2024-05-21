@@ -30,7 +30,6 @@
 
 #define inputThickness 5
 
-using namespace sf;
 namespace fs = std::filesystem;
 
 //const int boardX = 1024- 45*5;
@@ -48,18 +47,18 @@ const int levelSpeed[15] = { 60, 58, 37, 28, 21, 16, 11, 8, 6, 4, 3, 2, 1, 1, 1 
 class GameBase : public StateScreen
 {
 protected:
-	string songName; // the folder will have the same name
-	Text text;
-	SoundBuffer buffer;
-	SoundBuffer sfxBuffer;
-	Sound sound;
-	Sound sfx;
-	Sprite songBackground;
+	std::string songName; // the folder will have the same name
+	sf::Text text;
+	sf::SoundBuffer buffer;
+	sf::SoundBuffer sfxBuffer;
+	sf::Sound sound;
+	sf::Sound sfx;
+	sf::Sprite songBackground;
 
 	// Objects in game
 	//**************************************
 
-	list<Tetromino*> bag;
+	std::list<Tetromino*> bag;
 	Tetromino* prevPiecePtr;
 	Tetromino* currentPiecePtr;
 	Tetromino* holdPiecePtr;
@@ -88,8 +87,8 @@ protected:
 	// Controls related variables
 	//****************************************
 
-	Keyboard::Key holdKey;
-	Keyboard::Key currentKey;
+	sf::Keyboard::Key holdKey;
+	sf::Keyboard::Key currentKey;
 	GameSettings::Controls_Settings* controlsSettings = GameSettings::getInstance()->getSettings();
 	GameSettings::Highscores* highscores = GameSettings::getInstance()->getHighscores();
 	bool firstPressed = false;
@@ -97,8 +96,8 @@ protected:
 	bool locked = false;
 	bool keyMouseRegistered = false;
 	bool keyMouseReleased = false;
-	VertexArray inputVertex = VertexArray(PrimitiveType::Quads);
-	Vector2i lastMousePos = Vector2i(0,0);
+	sf::VertexArray inputVertex = sf::VertexArray(sf::PrimitiveType::Quads);
+	sf::Vector2i lastMousePos = sf::Vector2i(0,0);
 
 	static bool isB2BChain(ClearType type);
 	static int getTSpinType(Tetromino piece, Board& board);
@@ -107,19 +106,19 @@ protected:
 	void clearLines();
 
 public:
-	GameBase(StateManager& stateManager, string folderPath);
+	GameBase(StateManager& stateManager, std::string folderPath);
 	~GameBase();
 
 	// State Screen functions
 	//***************************************************
 
-	virtual void tick(const float & dt, RenderWindow& window);
-	virtual void render(RenderWindow& window);
-	virtual void keyEvent(const float & dt, Event event);
-	virtual void mouseEvent(const float & dt, RenderWindow& window, Event event);
-	virtual void mouseScrollEvent(Event event);
+	virtual void tick(const float & dt, sf::RenderWindow& window);
+	virtual void render(sf::RenderWindow& window);
+	virtual void keyEvent(const float & dt, sf::Event event);
+	virtual void mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event);
+	virtual void mouseScrollEvent(sf::Event event);
 
-	void renderGameOver(RenderWindow& window);
+	void renderGameOver(sf::RenderWindow& window);
 
 	/**
 	 * Convert the clear type to the appropriate score.
@@ -143,7 +142,7 @@ public:
 	 */
 	static ClearType determineClearType(Tetromino clearingPiece, ClearingInfo info, ClearType prevClearType, Board board);
 
-	string clearTypeToString(ClearType clearType);
+	std::string clearTypeToString(ClearType clearType);
 
 
 	/**
@@ -174,6 +173,6 @@ public:
 	int getScore();
 
 private:
-	std::array<int, 2> findNearestPossiblePlacement(RenderWindow& window, Tetromino& piece, Board& board);
+	std::array<int, 2> findNearestPossiblePlacement(sf::RenderWindow& window, Tetromino& piece, Board& board);
 };
 #endif

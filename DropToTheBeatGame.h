@@ -24,8 +24,8 @@ class DropToTheBeatGame :
 	public GameBase
 {
 private:
-	list<int> beatsTime;
-	list<int> beatsTimeOriginal;
+	std::list<int> beatsTime;
+	std::list<int> beatsTimeOriginal;
 
 	int combo = 0;
 	int maxCombo = 0;
@@ -41,23 +41,23 @@ private:
 
 	void loadStaticAssets();
 public:
-	DropToTheBeatGame(StateManager &stateManager, string folderPath);
+	DropToTheBeatGame(StateManager &stateManager, std::string folderPath);
 	~DropToTheBeatGame();
 
 
 
-	string comboString="";
+	std::string comboString="";
 	HitType hitType = HitType::INVALID; // miss=0, almost=1, hit=2,
 
 	// Game Base functions
 	//*****************************************************
 
-	void tick(const float & dt, RenderWindow& window);
-	void keyEvent(const float & dt, Event event);
-	void mouseEvent(const float & dt, RenderWindow& window, Event event);
+	void tick(const float & dt, sf::RenderWindow& window);
+	void keyEvent(const float & dt, sf::Event event);
+	void mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event);
 	void restart();
-	void render(RenderWindow& window);
-	void renderBeatSignal(RenderWindow& window);
+	void render(sf::RenderWindow& window);
+	void renderBeatSignal(sf::RenderWindow& window);
 private:
 	void checkDropOnBeat(int beatTime);
 	void gameOver();
