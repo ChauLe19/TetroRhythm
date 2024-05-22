@@ -16,23 +16,14 @@ GravityButton::~GravityButton()
 void GravityButton::setProgress(int progress)
 {
 	this->progress = std::clamp(progress, 0, 100);
+	int sizeY = getSize().y * progress / 100;
+	progressRect.setSize(sf::Vector2f(getSize().x, sizeY));
+	progressRect.setPosition(sf::Vector2f(getPosition().x, getPosition().y + getSize().y - sizeY));
 }
 
-void GravityButton::render(sf::RenderWindow& window, sf::Text& text)
+void GravityButton::draw(sf::RenderTarget& window, sf::RenderStates states) const
 {
-	Button::render(window, text);
-	int sizeY = size.y * progress / 100;
-	progressRect.setSize(sf::Vector2f(size.x, sizeY));
-	progressRect.setPosition(sf::Vector2f(position.x, position.y + size.y - sizeY));
+	Button::draw(window);
 	window.draw(progressRect);
-
-	text.setFillColor(isHighlight ? highlightColor : textColor);
-	text.setCharacterSize(fontSize);
-	text.setString(textString);
-	text.setOrigin(text.getGlobalBounds().getSize() / 2.f + text.getLocalBounds().getPosition());
-	text.setPosition(buttonRect.getPosition() + (buttonRect.getSize() / 2.f));
 	window.draw(text);
-
-	// reset text origin
-	text.setOrigin(0, 0);
 }

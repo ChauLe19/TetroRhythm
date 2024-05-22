@@ -47,23 +47,23 @@ void GameOptions::render(sf::RenderWindow& window)
 	endlessGameButton.setHighlight(cursorMode == 2);
 	sprintGameButton.setHighlight(cursorMode == 3);
 
-	dropOnBeatGameButton.render(window, text);		// drop blocks on the beat receives bonus
+	window.draw(dropOnBeatGameButton);		// drop blocks on the beat receives bonus
 
-	limitedGameButton.render(window, text);		// get the highest score in 2 min
+	window.draw(limitedGameButton);			// get the highest score in 2 min
 	text.setFillColor(limitedGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
 	text.setCharacterSize(30);
 	text.setString("Highscore: " + to_string(GameSettings::getInstance()->getHighscores()->limit));
 	text.setPosition(200, 450 - 40);
 	window.draw(text);
 
-	endlessGameButton.render(window, text);	// just play
+	window.draw(endlessGameButton);	// just play
 	text.setFillColor(endlessGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
 	text.setCharacterSize(30);
 	text.setString("Highscore: " + to_string(GameSettings::getInstance()->getHighscores()->endless));
 	text.setPosition(200, 600 - 40);
 	window.draw(text);
 
-	sprintGameButton.render(window, text);	// sprint
+	window.draw(sprintGameButton);	// sprint
 	text.setFillColor(sprintGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
 	text.setCharacterSize(30);
 	text.setString("Best time: " + (GameSettings::getInstance()->getHighscores()->sprintTime != INT_MAX ? getTimeFormat(GameSettings::getInstance()->getHighscores()->sprintTime) : "N/A"));
@@ -90,7 +90,7 @@ void GameOptions::render(sf::RenderWindow& window)
 	sprite.setPosition(2048 - 1000, 300);
 	window.draw(sprite);
 
-	startButton.render(window, text);
+	window.draw(startButton);
 	if (mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
 		window.draw(assetManager->getDrawable("back button hl"));

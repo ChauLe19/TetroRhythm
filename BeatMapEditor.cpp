@@ -195,22 +195,22 @@ void BeatMapEditor::render(sf::RenderWindow& window)
 	using namespace std;
 	simulatorBoard.render(window);
 	beatButton.setHighlight(beatButton.mouseInButton(window));
-	beatButton.render(window, text);
+	window.draw(beatButton);
 	speedButton025->setHighlight(speedButton025->mouseInButton(window) || sound.getPitch() == 0.25);
 	speedButton050->setHighlight(speedButton050->mouseInButton(window) || sound.getPitch() == 0.5);
 	speedButton100->setHighlight(speedButton100->mouseInButton(window) || sound.getPitch() == 1);
-	speedButton025->render(window, text);
-	speedButton050->render(window, text);
-	speedButton100->render(window, text);
+	window.draw(*speedButton025);
+	window.draw(*speedButton050);
+	window.draw(*speedButton100);
 
 	dividerButton1->setHighlight(dividerButton1->mouseInButton(window) || divider == 1);
 	dividerButton12->setHighlight(dividerButton12->mouseInButton(window) || divider == 2);
 	dividerButton13->setHighlight(dividerButton13->mouseInButton(window) || divider == 3);
 	dividerButton14->setHighlight(dividerButton14->mouseInButton(window) || divider == 4);
-	dividerButton1->render(window, text);
-	dividerButton12->render(window, text);
-	dividerButton13->render(window, text);
-	dividerButton14->render(window, text);
+	window.draw(*dividerButton1);
+	window.draw(*dividerButton12);
+	window.draw(*dividerButton13);
+	window.draw(*dividerButton14);
 
 	text.setFillColor(Color(255, 255, 255, 100));
 	text.setCharacterSize(30);

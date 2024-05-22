@@ -64,7 +64,7 @@ void Tutorial::render(sf::RenderWindow& window)
 	{
 		window.draw(assetManager->getDrawable("back button"));
 	}
-	helpButton.render(window, text);
+	window.draw(helpButton);
 
 	text.setFillColor(sf::Color::White);
 	if (tutorialOver)
@@ -99,7 +99,7 @@ void Tutorial::render(sf::RenderWindow& window)
 	
 	if (helpButton.mouseInButton(window))
 	{
-		blankPopup.render(window, text);
+		window.draw(blankPopup);
 		helpButton.setHighlight(true);
 		instructionSprite.setPosition(window.getView().getSize().x / 2, window.getView().getSize().y / 2);
 		window.draw(instructionSprite);

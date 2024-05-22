@@ -5,37 +5,37 @@ Menu::Menu(StateManager &stateManager) : StateScreen(stateManager)
 {
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(sf::Color::White);
-
 	sf::Text playText = sf::Text("PLAY", assetManager->getFont("game font"), 50);
 	sf::RectangleShape playRect = sf::RectangleShape(sf::Vector2f(500, 100));
 	playRect.setPosition(1024 - 250, 450);
-	playRect.setFillColor(sf::Color::Transparent);
 	beginButton = Button(playRect, playText, sf::Color::White, sf::Color(0, 186, 211));
 
 	sf::Text beatMapText = sf::Text("EDIT BEAT MAPS", assetManager->getFont("game font"), 50);
 	sf::RectangleShape beatMapRect = sf::RectangleShape(sf::Vector2f(500, 100));
-	beatMapRect.setPosition(1024 - 250, 570);
-	beatMapRect.setFillColor(sf::Color::Transparent);
-	beatmapButton = Button(beatMapRect, beatMapText, sf::Color::White, sf::Color(0, 186, 211));
+	beatmapButton = Button(beatMapRect, playText, sf::Color::White, sf::Color(0, 186, 211));
 
 	sf::Text tutorialText = sf::Text("TUTORIAL", assetManager->getFont("game font"), 50);
 	sf::RectangleShape tutorialRect = sf::RectangleShape(sf::Vector2f(500, 100));
-	tutorialRect.setPosition(1024 - 250, 690);
-	tutorialRect.setFillColor(sf::Color::Transparent);
 	tutorialButton = Button(tutorialRect, tutorialText, sf::Color::White, sf::Color(0, 186, 211));
 
 	sf::Text settingsText= sf::Text("Settings", assetManager->getFont("game font"), 40);
 	sf::RectangleShape settingsRect = sf::RectangleShape(sf::Vector2f(240, 100));
-	settingsRect.setPosition(1024 - 250, 810);
-	settingsRect.setFillColor(sf::Color::Transparent);
-	settingsButton = Button(settingsRect, settingsText, sf::Color::White, sf::Color(0, 186, 211));
+	tutorialButton = Button(settingsRect, settingsText, sf::Color::White, sf::Color(0, 186, 211));
 
 	sf::Text exitText = sf::Text("Exit", assetManager->getFont("game font"), 40);
 	sf::RectangleShape exitRect = sf::RectangleShape(sf::Vector2f(240, 100));
-	exitRect.setPosition(1024 + 10, 810);
-	exitRect.setFillColor(sf::Color::Transparent);
 	exitButton = Button(exitRect, exitText, sf::Color::White, sf::Color(0, 186, 211));
 
+	Button beginButton = Button(sf::Color::White, 50, sf::Color::Transparent, "PLAY", sf::Vector2f(1024 - 250, 450), sf::Vector2f(500, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
+	Button beatmapButton = Button(sf::Color::White, 50, sf::Color::Transparent, "EDIT BEAT MAPS", sf::Vector2f(1024 - 250, 570), sf::Vector2f(500, 100), , sf::Keyboard::A);
+	Button tutorialButton = Button(sf::Color::White, 50, sf::Color::Transparent, "TUTORIAL", sf::Vector2f(1024 - 250, 690), sf::Vector2f(500, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
+	Button settingsButton = Button(sf::Color::White,40, sf::Color::Transparent, "Settings", sf::Vector2f(1024 - 250, 810), sf::Vector2f(240, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
+	Button exitButton = Button(sf::Color::White,40, sf::Color::Transparent, "Exit", sf::Vector2f(1024 + 10, 810), sf::Vector2f(240, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
+	beginButton.setFont(assetManager->getFont("game font"));
+	//beatmapButton.setFont(assetManager->getFont("game font"));
+	//tutorialButton.setFont(assetManager->getFont("game font"));
+	//settingsButton.setFont(assetManager->getFont("game font"));
+	//exitButton.setFont(assetManager->getFont("game font"));
 }
 
 Menu::~Menu()

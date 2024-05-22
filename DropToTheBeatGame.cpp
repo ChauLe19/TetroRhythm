@@ -454,7 +454,7 @@ void DropToTheBeatGame::render(sf::RenderWindow& window)
 	text.setPosition(boardX + boardWidth * boardSquareSize - text.getLocalBounds().width, boardY + boardHeight * boardSquareSize + 50);
 	window.draw(text);
 
-	this->gravityButton->render(window, text);
+	window.draw(*gravityButton);
 
 
 

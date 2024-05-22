@@ -107,7 +107,7 @@ void MapEditorSelect::render(sf::RenderWindow& window)
 	{
 		window.draw(assetManager->getDrawable("back button"));
 	}
-	startButton.render(window, text);
+	window.draw(startButton);
 }
 
 void MapEditorSelect::keyEvent(const float & dt, sf::Event event)
