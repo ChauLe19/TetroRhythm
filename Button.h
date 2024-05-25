@@ -16,19 +16,23 @@ protected:
 	sf::RectangleShape buttonRect;
 	sf::Keyboard::Key key;
 public:
-	Button();
+	Button(sf::Text text = sf::Text());
 	Button(sf::RectangleShape buttonRect, sf::Text text, sf::Color baseColor, sf::Color highlightColor);
 	Button(sf::Color textColor, int fontSize, sf::Color boxColor, std::string textString, sf::Vector2f position, sf::Vector2f size, sf::Color highlightColor = sf::Color::White, sf::Keyboard::Key key = sf::Keyboard::Unknown);
 	~Button();
 	sf::Vector2f getPosition();
 	sf::Vector2f getSize();
-	void setFont(sf::Font& font);
-	void setFontSize(int fontSize);
+	void setSize(const sf::Vector2f& size);
+	void setFont(const sf::Font& font);
+	void setFontSize(unsigned int fontSize);
 	void setTextString(std::string textString);
 	void recomputePosition();
 	void setHighlightColor(const sf::Color& color);
 	void setBaseColor(const sf::Color& color);
 	void setColor(const sf::Color& baseColor, const sf::Color& highlightColor);
+	virtual void setPosition(const sf::Vector2f& position);
+	void setFillColor(const sf::Color& color);
+	void setShortcut(const sf::Keyboard::Key& key); // set keyboard equivalent/shortcut
 	void setHighlight(bool isHighlight);
 	bool isHighlighted();
 	bool keyEvent(sf::Keyboard::Key key);

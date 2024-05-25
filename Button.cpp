@@ -1,8 +1,9 @@
 #include "Button.h"
 #include "AssetManager.h"
 
-Button::Button() : Button(sf::RectangleShape(), sf::Text(), sf::Color::White, sf::Color::Blue)
+Button::Button(sf::Text text) : Button(sf::RectangleShape(), text, sf::Color::White, sf::Color::Blue)
 {
+	setFillColor(sf::Color::Transparent);
 };
 
 Button::Button(sf::RectangleShape buttonRect, sf::Text text, sf::Color baseColor, sf::Color highlightColor)
@@ -51,20 +52,26 @@ Button::~Button()
 sf::Vector2f Button::getPosition()
 {
 	return this->buttonRect.getPosition();
-
 }
+
+void Button::setSize(const sf::Vector2f& size)
+{
+	this->buttonRect.setSize(size);
+	recomputePosition();
+}
+
 sf::Vector2f Button::getSize()
 {
 	return this->buttonRect.getSize();
 }
 
-void Button::setFont(sf::Font& font)
+void Button::setFont(const sf::Font& font)
 {
 	this->text.setFont(font);
 	recomputePosition();
 }
 
-void Button::setFontSize(int fontSize)
+void Button::setFontSize(unsigned int fontSize)
 {
 	this->text.setCharacterSize(fontSize);
 	recomputePosition();
@@ -103,6 +110,22 @@ void Button::setHighlight(bool isHighlight)
 	this->isHighlight = isHighlight;
 	buttonRect.setOutlineColor(isHighlight ? highlightColor : baseColor);
 	text.setFillColor(isHighlight ? highlightColor : baseColor);
+}
+
+void Button::setPosition(const sf::Vector2f& pos)
+{
+	buttonRect.setPosition(pos);
+	recomputePosition();
+}
+
+void Button::setFillColor(const sf::Color& color)
+{
+	buttonRect.setFillColor(color);
+}
+
+void Button::setShortcut(const sf::Keyboard::Key& key)
+{
+	this->key = key;
 }
 
 bool Button::isHighlighted()

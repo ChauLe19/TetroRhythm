@@ -1,11 +1,16 @@
 #include "DropToTheBeatGame.h"
+#include "Styles.h"
 
 DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, std::string folderPath) : GameBase(stateManager, folderPath)
 {
 	using namespace sf;
 	using namespace std;
 	loadStaticAssets();
-	this->gravityButton = new GravityButton(Color::White, 50, Color(0,0,0, 150), "Gravity", Vector2f(boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200), Vector2f(200, 200), Color(0, 186, 211), Keyboard::Unknown);
+
+	this->gravityButton = new GravityButton(sf::Text("Gravity", AssetManager::getInstance()->getFont("game font"), 50));
+	this->gravityButton->setPosition(sf::Vector2f(boardX - 200 - boardSquareSize, boardY + boardWidth * boardSquareSize - 200));
+	this->gravityButton->setSize(sf::Vector2f(200, 200));
+	this->gravityButton->setProgressFillColor(TRStyles::btnHLColor);
 
 	// Load map info
 	fs::path txtPath = folderPath;

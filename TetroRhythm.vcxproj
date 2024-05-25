@@ -153,6 +153,7 @@
     <ClInclude Include="SprintGame.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="StateScreen.h" />
+    <ClInclude Include="Styles.h" />
     <ClInclude Include="Tetromino.h" />
     <ClInclude Include="Tutorial.h" />
     <ClInclude Include="Utils.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="SprintGame.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="StateScreen.cpp" />
+    <ClCompile Include="Styles.cpp" />
     <ClCompile Include="Tetromino.cpp" />
     <ClCompile Include="TetroRhythm.cpp" />
     <ClCompile Include="Tutorial.cpp" />

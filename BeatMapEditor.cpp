@@ -1,5 +1,6 @@
 #include "BeatMapEditor.h"
 #include "Menu.h"
+#include "Styles.h"
 #include <memory>
 
 BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath) : StateScreen(stateManager)
@@ -9,16 +10,51 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	loadStaticAssets();
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
-	speedButton025 = new Button(Color::White, 35, Color::Transparent, "x0.25", Vector2f(2048 - 3 * 170, 1152 - sliderHeight - 70), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Num2);
-	speedButton050 = new Button(Color::White, 35, Color::Transparent, "x0.50", Vector2f(2048 - 2 * 170, 1152 - sliderHeight - 70), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Num5);
-	speedButton100 = new Button(Color::White, 35, Color::Transparent, "x1", Vector2f(2048 - 170, 1152 - sliderHeight - 70), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Num1);
 
-	dividerButton1 = new Button(Color::White, 35, Color::Transparent, "1", Vector2f(2048 - 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
-	dividerButton12 = new Button(Color::White, 35, Color::Transparent, "1/2", Vector2f(2048 - 2 * 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
-	dividerButton13 = new Button(Color::White, 35, Color::Transparent, "1/3", Vector2f(2048 - 3 * 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
-	dividerButton14 = new Button(Color::White, 35, Color::Transparent, "1/4", Vector2f(2048 - 4 * 170, sliderHeight + 10), Vector2f(120, 60), Color(0, 186, 211), Keyboard::Key::Unknown);
+	speedButton025 = new Button(sf::Text("x0.25", assetManager->getFont("game font"), 35));
+	speedButton025->setHighlightColor(TRStyles::btnHLColor);
+	speedButton025->setFillColor(TRStyles::btnFillColor);
+	speedButton025->setSize(sf::Vector2f(120, 60));
+	speedButton025->setPosition(sf::Vector2f(2048 - 3 * 170, 1152 - sliderHeight - 70));
+	speedButton025->setShortcut(Keyboard::Key::Num2);
 
+	speedButton050 = new Button(sf::Text("x0.50", assetManager->getFont("game font"), 35));
+	speedButton050->setHighlightColor(TRStyles::btnHLColor);
+	speedButton050->setFillColor(TRStyles::btnFillColor);
+	speedButton050->setSize(sf::Vector2f(120, 60));
+	speedButton050->setPosition(sf::Vector2f(2048 - 2 * 170, 1152 - sliderHeight - 70));
+	speedButton050->setShortcut(Keyboard::Key::Num5);
 
+	speedButton100 = new Button(sf::Text("x1", assetManager->getFont("game font"), 35));
+	speedButton100->setHighlightColor(TRStyles::btnHLColor);
+	speedButton100->setFillColor(TRStyles::btnFillColor);
+	speedButton100->setSize(sf::Vector2f(120, 60));
+	speedButton100->setPosition(sf::Vector2f(2048 - 170, 1152 - sliderHeight - 70));
+	speedButton100->setShortcut(Keyboard::Key::Num1);
+
+	dividerButton1 = new Button(sf::Text("1", assetManager->getFont("game font"), 35));
+	dividerButton1->setHighlightColor(TRStyles::btnHLColor);
+	dividerButton1->setFillColor(TRStyles::btnFillColor);
+	dividerButton1->setSize(sf::Vector2f(120, 60));
+	dividerButton1->setPosition(sf::Vector2f(2048 - 170, sliderHeight + 10));
+
+	dividerButton12 = new Button(sf::Text("1/2", assetManager->getFont("game font"), 35));
+	dividerButton12->setHighlightColor(TRStyles::btnHLColor);
+	dividerButton12->setFillColor(TRStyles::btnFillColor);
+	dividerButton12->setSize(sf::Vector2f(120, 60));
+	dividerButton12->setPosition(sf::Vector2f(2048 - 2 * 170, sliderHeight + 10));
+
+	dividerButton13 = new Button(sf::Text("1/3", assetManager->getFont("game font"), 35));
+	dividerButton13->setHighlightColor(TRStyles::btnHLColor);
+	dividerButton13->setFillColor(TRStyles::btnFillColor);
+	dividerButton13->setSize(sf::Vector2f(120, 60));
+	dividerButton13->setPosition(sf::Vector2f(2048 - 3 * 170, sliderHeight + 10));
+
+	dividerButton14 = new Button(sf::Text("1/4", assetManager->getFont("game font"), 35));
+	dividerButton14->setHighlightColor(TRStyles::btnHLColor);
+	dividerButton14->setFillColor(TRStyles::btnFillColor);
+	dividerButton14->setSize(sf::Vector2f(120, 60));
+	dividerButton14->setPosition(sf::Vector2f(2048 - 4 * 170, sliderHeight + 10));
 
 	fs::path audioPath = folderPath;
 	audioPath.append(audioPath.filename().string());
