@@ -2,12 +2,24 @@
 #include "Utils.h"
 #include "Menu.h"
 #include "GameSettings.h"
+#include "Styles.h"
 
 Tutorial::Tutorial(StateManager& stateManager) : StateScreen(stateManager)
 {
 	using namespace std;
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(sf::Color::White);
+
+	helpButton.setPosition(sf::Vector2f(2048 - 40 - 10, 10));
+	helpButton.setSize(sf::Vector2f(40, 40));
+	helpButton.setHighlightColor(TRStyles::btnHLColor);
+	helpButton.setBaseColor(TRStyles::btnBaseColor);
+
+	blankPopup.setFillColor(sf::Color(0, 0, 0, 230));
+	blankPopup.setBaseColor(sf::Color::White);
+	blankPopup.setHighlightColor(sf::Color::Transparent);
+	blankPopup.setSize(sf::Vector2f(2048 - 400, 1152 - 200));
+	blankPopup.setPosition(sf::Vector2f(200, 100));
 
 	instructionSprite.setTexture(AssetManager::getInstance()->getTexture("instruction"));
 	instructionSprite.setOrigin(instructionSprite.getLocalBounds().width / 2.0f, instructionSprite.getLocalBounds().height / 2.0f);

@@ -1,5 +1,6 @@
 #include "GameOptions.h"
 #include "Menu.h"
+#include "Styles.h"
 
 GameOptions::GameOptions(StateManager& stateManager)
 	: StateScreen(stateManager)
@@ -9,6 +10,31 @@ GameOptions::GameOptions(StateManager& stateManager)
 	cursorMode = 0;
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
+
+	dropOnBeatGameButton.setPosition(Vector2f(200, 300));
+	dropOnBeatGameButton.setSize(Vector2f(500, 100));
+	dropOnBeatGameButton.setHighlightColor(TRStyles::btnHLColor);
+	dropOnBeatGameButton.setBaseColor(TRStyles::btnBaseColor);
+
+	limitedGameButton.setPosition(Vector2f(200, 450));
+	limitedGameButton.setSize(Vector2f(500, 100));
+	limitedGameButton.setHighlightColor(TRStyles::btnHLColor);
+	limitedGameButton.setBaseColor(TRStyles::btnBaseColor);
+
+	endlessGameButton.setPosition(Vector2f(200, 600));
+	endlessGameButton.setSize(Vector2f(500, 100));
+	endlessGameButton.setHighlightColor(TRStyles::btnHLColor);
+	endlessGameButton.setBaseColor(TRStyles::btnBaseColor);
+
+	sprintGameButton.setPosition(Vector2f(200, 750));
+	sprintGameButton.setSize(Vector2f(500, 100));
+	sprintGameButton.setHighlightColor(TRStyles::btnHLColor);
+	sprintGameButton.setBaseColor(TRStyles::btnBaseColor);
+
+	startButton.setPosition(Vector2f(2048 / 2 - 100, 1000));
+	startButton.setSize(Vector2f(200, 100));
+	startButton.setHighlightColor(TRStyles::btnHLColor);
+	startButton.setBaseColor(TRStyles::btnBaseColor);
 
 	std::string path = "BeatMaps";
 	for (const auto& entry : fs::directory_iterator(path))

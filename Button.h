@@ -18,7 +18,6 @@ protected:
 public:
 	Button(sf::Text text = sf::Text());
 	Button(sf::RectangleShape buttonRect, sf::Text text, sf::Color baseColor, sf::Color highlightColor);
-	Button(sf::Color textColor, int fontSize, sf::Color boxColor, std::string textString, sf::Vector2f position, sf::Vector2f size, sf::Color highlightColor = sf::Color::White, sf::Keyboard::Key key = sf::Keyboard::Unknown);
 	~Button();
 	sf::Vector2f getPosition();
 	sf::Vector2f getSize();

@@ -22,29 +22,6 @@ Button::Button(sf::RectangleShape buttonRect, sf::Text text, sf::Color baseColor
 	recomputePosition();
 }
 
-Button::Button(sf::Color baseColor, int fontSize, sf::Color boxColor, std::string textString, sf::Vector2f position, sf::Vector2f size, sf::Color highlightColor, sf::Keyboard::Key key)
-{
-	this->baseColor = baseColor;
-	this->boxColor = boxColor;
-	this->highlightColor = highlightColor;
-	this->key = key;
-	this->isHighlight = false;
-
-	buttonRect.setPosition(position);
-	buttonRect.setSize(size);
-	buttonRect.setFillColor(boxColor);
-	buttonRect.setSize(size);
-	buttonRect.setOutlineThickness(5);
-	buttonRect.setOutlineColor(baseColor);
-
-	text.setCharacterSize(fontSize);
-	text.setString(textString);
-	text.setFillColor(baseColor);
-	text.setFont(AssetManager::getInstance()->getFont("game font"));
-
-	recomputePosition();
-}
-
 Button::~Button()
 {
 }

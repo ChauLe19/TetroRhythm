@@ -39,12 +39,11 @@ private:
 	int mapRenderOffset = 0;
 	int prevMapRenderOffset = 0;
 
-	Button dropOnBeatGameButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Drop On Beat", sf::Vector2f(200, 300), sf::Vector2f(500, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
-	Button limitedGameButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Limited Time", sf::Vector2f(200, 450), sf::Vector2f(500, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
-	Button endlessGameButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Endless", sf::Vector2f(200, 600), sf::Vector2f(500, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
-	Button sprintGameButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Sprint 40L", sf::Vector2f(200, 750), sf::Vector2f(500, 100), sf::Color(0, 186, 211), sf::Keyboard::A);
-	Button startButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Start", sf::Vector2f(2048 / 2 - 100, 1000), sf::Vector2f(200, 100), sf::Color(0, 186, 211), sf::Keyboard::Enter);
-
+	Button dropOnBeatGameButton = Button(sf::Text("Drop On Beat", assetManager->getFont("game font"), 50U));
+	Button limitedGameButton = Button(sf::Text("Limited Time", assetManager->getFont("game font"), 50U));
+	Button endlessGameButton = Button(sf::Text("Endless", assetManager->getFont("game font"), 50U));
+	Button sprintGameButton = Button(sf::Text("Sprint 40L", assetManager->getFont("game font"), 50U));
+	Button startButton = Button(sf::Text("Start", assetManager->getFont("game font"), 50U));
 
 public:
 	GameOptions(StateManager &stateManager);

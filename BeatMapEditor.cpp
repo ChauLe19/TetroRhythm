@@ -11,6 +11,12 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
 
+	beatButton.setBaseColor(sf::Color::Black);
+	beatButton.setFillColor(sf::Color(255, 255, 255, 200));
+	beatButton.setHighlightColor(TRStyles::btnHLColor);
+	beatButton.setSize(sf::Vector2f(400, 400));
+	beatButton.setPosition(sf::Vector2f(1024 + 1024 / 2 - 200, 1152 / 2 - 200));
+	
 	speedButton025 = new Button(sf::Text("x0.25", assetManager->getFont("game font"), 35));
 	speedButton025->setHighlightColor(TRStyles::btnHLColor);
 	speedButton025->setFillColor(TRStyles::btnFillColor);

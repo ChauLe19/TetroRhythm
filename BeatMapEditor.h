@@ -35,7 +35,7 @@ private:
 	sf::Sound sound;
 	sf::SoundBuffer buffer;
 	sf::Text text;
-	Button beatButton = Button(sf::Color::Black, 50, sf::Color(255, 255, 255, 200), "Beat", sf::Vector2f(1024 + 1024 / 2 - 200, 1152 / 2 - 200), sf::Vector2f(400, 400), sf::Color(0, 186, 211), sf::Keyboard::Key::Unknown);
+	Button beatButton = Button(sf::Text("Beat", assetManager->getFont("game font"), 50));
 	Button* speedButton025; // speed x0.25
 	Button* speedButton050; // speed x0.5
 	Button* speedButton100; // speed x1

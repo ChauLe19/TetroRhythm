@@ -1,5 +1,6 @@
 #include "MapEditorSelect.h"
 #include "Menu.h"
+#include "Styles.h"
 
 
 MapEditorSelect::MapEditorSelect(StateManager &stateManager) : StateScreen(stateManager)
@@ -8,6 +9,11 @@ MapEditorSelect::MapEditorSelect(StateManager &stateManager) : StateScreen(state
 	text.setFont(assetManager->getFont("game font"));
 	text.setFillColor(Color::White);
 
+	startButton.setShortcut(sf::Keyboard::Enter);
+	startButton.setBaseColor(TRStyles::btnBaseColor);
+	startButton.setHighlightColor(TRStyles::btnHLColor);
+	startButton.setSize(Vector2f(200, 100));
+	startButton.setPosition(Vector2f(2048 / 2 - 100, 1000));
 
 	cursor = 0;
 	std::string path = "BeatMaps";

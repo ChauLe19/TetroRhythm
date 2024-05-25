@@ -8,7 +8,7 @@ class MapEditorSelect : public StateScreen
 {
 private:
 	sf::Text text;
-	Button startButton = Button(sf::Color::White, 50, sf::Color::Transparent, "Start", sf::Vector2f(2048 / 2 - 100, 1000), sf::Vector2f(200, 100), sf::Color(0, 186, 211), sf::Keyboard::Enter);
+	Button startButton = Button(sf::Text("Start", assetManager->getFont("game font"), 50U));
 	std::vector<fs::path> maps;
 	int cursor = 0;
 	int mapRenderOffset = 0;

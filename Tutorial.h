@@ -9,8 +9,8 @@ class Tutorial :
     public StateScreen
 {
 private:
-	Button helpButton = Button(sf::Color::White, 50, sf::Color::Transparent, "?", sf::Vector2f(2048 - 40 - 10, 10), sf::Vector2f(40, 40), sf::Color(0, 186, 211), sf::Keyboard::A);
-	Button blankPopup = Button(sf::Color::White, 50, sf::Color(0,0,0,230), "", sf::Vector2f(200, 100), sf::Vector2f(2048-400, 1152 - 200), sf::Color::Transparent, sf::Keyboard::Unknown);
+	Button helpButton = Button(sf::Text("?", assetManager->getFont("game font"), 50U));
+	Button blankPopup = Button(sf::Text("", assetManager->getFont("game font"), 50U));
 	sf::Text text;
 	sf::Sprite instructionSprite;
 	Board board = Board(boardX, boardY);
