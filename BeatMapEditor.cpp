@@ -24,6 +24,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	speedButton025->setSize(sf::Vector2f(120, 60));
 	speedButton025->setPosition(sf::Vector2f(2048 - 3 * 170, 1152 - sliderHeight - 70));
 	speedButton025->setShortcut(Keyboard::Key::Num2);
+	speedButton025->setSelectable(true);
 	speedButton025->setCallback([this]() { sound.setPitch(0.25); });
 
 	speedButton050 = new Button(sf::Text("x0.50", assetManager->getFont("game font"), 35));
@@ -32,6 +33,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	speedButton050->setSize(sf::Vector2f(120, 60));
 	speedButton050->setPosition(sf::Vector2f(2048 - 2 * 170, 1152 - sliderHeight - 70));
 	speedButton050->setShortcut(Keyboard::Key::Num5);
+	speedButton050->setSelectable(true);
 	speedButton050->setCallback([this]() { sound.setPitch(0.5); });
 
 	speedButton100 = new Button(sf::Text("x1", assetManager->getFont("game font"), 35));
@@ -40,6 +42,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	speedButton100->setSize(sf::Vector2f(120, 60));
 	speedButton100->setPosition(sf::Vector2f(2048 - 170, 1152 - sliderHeight - 70));
 	speedButton100->setShortcut(Keyboard::Key::Num1);
+	speedButton100->setSelectable(true);
 	speedButton100->setCallback([this]() { sound.setPitch(1); });
 
 	dividerButton1 = new Button(sf::Text("1", assetManager->getFont("game font"), 35));
@@ -47,6 +50,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	dividerButton1->setFillColor(TRStyles::btnFillColor);
 	dividerButton1->setSize(sf::Vector2f(120, 60));
 	dividerButton1->setPosition(sf::Vector2f(2048 - 170, sliderHeight + 10));
+	dividerButton1->setSelectable(true);
 	dividerButton1->setCallback([this]() { setDivider(1); });
 
 	dividerButton12 = new Button(sf::Text("1/2", assetManager->getFont("game font"), 35));
@@ -54,6 +58,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	dividerButton12->setFillColor(TRStyles::btnFillColor);
 	dividerButton12->setSize(sf::Vector2f(120, 60));
 	dividerButton12->setPosition(sf::Vector2f(2048 - 2 * 170, sliderHeight + 10));
+	dividerButton12->setSelectable(true);
 	dividerButton12->setCallback([this]() { setDivider(2); });
 
 	dividerButton13 = new Button(sf::Text("1/3", assetManager->getFont("game font"), 35));
@@ -61,6 +66,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	dividerButton13->setFillColor(TRStyles::btnFillColor);
 	dividerButton13->setSize(sf::Vector2f(120, 60));
 	dividerButton13->setPosition(sf::Vector2f(2048 - 3 * 170, sliderHeight + 10));
+	dividerButton13->setSelectable(true);
 	dividerButton13->setCallback([this]() { setDivider(3); });
 
 	dividerButton14 = new Button(sf::Text("1/4", assetManager->getFont("game font"), 35));
@@ -68,6 +74,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	dividerButton14->setFillColor(TRStyles::btnFillColor);
 	dividerButton14->setSize(sf::Vector2f(120, 60));
 	dividerButton14->setPosition(sf::Vector2f(2048 - 4 * 170, sliderHeight + 10));
+	dividerButton14->setSelectable(true);
 	dividerButton14->setCallback([this]() { setDivider(4); });
 
 	fs::path audioPath = folderPath;
@@ -207,21 +214,6 @@ void BeatMapEditor::loadStaticAssets()
 void BeatMapEditor::setDivider(int divider)
 {
 	this->divider = divider;
-	switch (divider)
-	{
-	case 1:
-		dividerButton1->setHighlight(true);
-		break;
-	case 2:
-		dividerButton12->setHighlight(true);
-		break;
-	case 3:
-		dividerButton13->setHighlight(true);
-		break;
-	case 4:
-		dividerButton14->setHighlight(true);
-		break;
-	}
 }
 
 BeatMapEditor::~BeatMapEditor()
@@ -264,19 +256,10 @@ void BeatMapEditor::render(sf::RenderWindow& window)
 	using namespace sf;
 	using namespace std;
 	simulatorBoard.render(window);
-	beatButton.setHighlight(beatButton.mouseInButton(window));
 	window.draw(beatButton);
-	speedButton025->setHighlight(speedButton025->mouseInButton(window) || sound.getPitch() == 0.25);
-	speedButton050->setHighlight(speedButton050->mouseInButton(window) || sound.getPitch() == 0.5);
-	speedButton100->setHighlight(speedButton100->mouseInButton(window) || sound.getPitch() == 1);
 	window.draw(*speedButton025);
 	window.draw(*speedButton050);
 	window.draw(*speedButton100);
-
-	dividerButton1->setHighlight(dividerButton1->mouseInButton(window) || divider == 1);
-	dividerButton12->setHighlight(dividerButton12->mouseInButton(window) || divider == 2);
-	dividerButton13->setHighlight(dividerButton13->mouseInButton(window) || divider == 3);
-	dividerButton14->setHighlight(dividerButton14->mouseInButton(window) || divider == 4);
 	window.draw(*dividerButton1);
 	window.draw(*dividerButton12);
 	window.draw(*dividerButton13);
@@ -469,33 +452,24 @@ void BeatMapEditor::mouseEvent(const float & dt, sf::RenderWindow& window, sf::E
 {
 	using namespace sf;
 	using namespace std;
+
+	beatButton.mouseEvent(window, event);
+	speedButton025->mouseEvent(window, event);
+	speedButton050->mouseEvent(window, event);
+	speedButton100->mouseEvent(window, event);
+	dividerButton1->mouseEvent(window, event);
+	dividerButton12->mouseEvent(window, event);
+	dividerButton13->mouseEvent(window, event);
+	dividerButton14->mouseEvent(window, event);
+
 	if (event.type == Event::MouseButtonReleased && event.mouseButton.button == Mouse::Left)
 	{
 		cursorSelected = false;
 	}
 	else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 	{
-		beatButton.mouseEvent(window, event);
-		speedButton025->mouseEvent(window, event);
-		speedButton050->mouseEvent(window, event);
-		speedButton100->mouseEvent(window, event);
-		if (dividerButton1->mouseInButton(window))
-		{
-			divider = 1;
-		}
-		else if (dividerButton12->mouseInButton(window))
-		{
-			divider = 2;
-		}
-		else if (dividerButton13->mouseInButton(window))
-		{
-			divider = 3;
-		}
-		else if (dividerButton14->mouseInButton(window))
-		{
-			divider = 4;
-		}
-		else if (mouseInBox(window, 50, 1152 - sliderHeight - 40, 30, 40))
+
+		if (mouseInBox(window, 50, 1152 - sliderHeight - 40, 30, 40))
 		{
 			if (sound.getPlayingOffset().asMilliseconds() == musicDurationMS)
 			{

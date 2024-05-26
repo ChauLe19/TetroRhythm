@@ -112,13 +112,8 @@ void Tutorial::render(sf::RenderWindow& window)
 	if (helpButton.mouseInButton(window))
 	{
 		window.draw(blankPopup);
-		helpButton.setHighlight(true);
 		instructionSprite.setPosition(window.getView().getSize().x / 2, window.getView().getSize().y / 2);
 		window.draw(instructionSprite);
-	}
-	else
-	{
-		helpButton.setHighlight(false);
 	}
 
 }

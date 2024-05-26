@@ -7,8 +7,20 @@
 
 class Button : public sf::Drawable
 {
+	enum ButtonState
+	{
+		Idle,
+		Hover,
+		Pressed,
+		PressedOutside, // mouse pressing but moved outside of the button
+		Selected,
+		SelectedHover,
+		SelectedPressed,
+		SelectedPressedOutside // in a selected state with mouse pressed but moved outside
+	};
 protected:
-	bool isHighlight;
+	bool m_isSelectable;
+	ButtonState state = Idle;
 	sf::Color boxColor;
 	sf::Color highlightColor;
 	sf::Color baseColor;
@@ -35,8 +47,9 @@ public:
 	void setFillColor(const sf::Color& color);
 	void setShortcut(const sf::Keyboard::Key& key); // set keyboard equivalent/shortcut
 	void setCallback(std::function<void(void)> callback); // set function to be executed on click
-	void setHighlight(bool isHighlight);
-	bool isHighlighted();
+	bool isSelectable();
+	void setSelectable(bool selectable);
+	void setSelected(bool selected);
 	bool keyEvent(sf::Keyboard::Key key);
 	bool mouseInButton(sf::RenderWindow& window);
 	bool posInButton(int x, int y);

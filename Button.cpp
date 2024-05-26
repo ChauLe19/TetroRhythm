@@ -13,7 +13,7 @@ Button::Button(sf::RectangleShape buttonRect, sf::Text text, sf::Color baseColor
 
 	this->baseColor = baseColor;
 	this->highlightColor = highlightColor;
-	this->isHighlight = false;
+	this->m_isSelectable = false;
 
 	this->buttonRect.setOutlineThickness(5);
 	this->buttonRect.setOutlineColor(baseColor);
@@ -82,12 +82,6 @@ void Button::setColor(const sf::Color& baseColor, const sf::Color& highlightColo
 	setHighlightColor(highlightColor);
 }
 
-void Button::setHighlight(bool isHighlight)
-{
-	this->isHighlight = isHighlight;
-	buttonRect.setOutlineColor(isHighlight ? highlightColor : baseColor);
-	text.setFillColor(isHighlight ? highlightColor : baseColor);
-}
 
 void Button::setPosition(const sf::Vector2f& pos)
 {
@@ -110,10 +104,26 @@ void Button::setCallback(std::function<void(void)> callback)
 	this->callback = callback;
 }
 
-
-bool Button::isHighlighted()
+bool Button::isSelectable()
 {
-	return this->isHighlight;
+	return this->m_isSelectable;
+}
+
+void Button::setSelectable(bool selectable)
+{
+	this->m_isSelectable = selectable;
+}
+
+void Button::setSelected(bool selected)
+{
+	if (selected)
+	{
+		this->state = Selected;
+	}
+	else
+	{
+		this->state = Idle;
+	}
 }
 
 bool Button::keyEvent(sf::Keyboard::Key key)
@@ -137,9 +147,105 @@ bool Button::posInButton(int x, int y)
 
 void Button::mouseEvent(sf::RenderWindow& window, sf::Event event)
 {
-	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && mouseInButton(window))
+	switch (state)
 	{
-		callback();
+	case Idle:
+		if (mouseInButton(window))
+		{
+			state = Hover;
+			buttonRect.setOutlineColor(highlightColor);
+			text.setFillColor(highlightColor);
+		}
+		break;
+	case Hover:
+		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && mouseInButton(window))
+		{
+			state = Pressed;
+			buttonRect.setOutlineColor(highlightColor);
+			text.setFillColor(highlightColor);
+		}
+		else if (!mouseInButton(window))
+		{
+			state = Idle;
+			buttonRect.setOutlineColor(baseColor);
+			text.setFillColor(baseColor);
+		}
+		break;
+	case Pressed:
+		buttonRect.setOutlineColor(highlightColor);
+		text.setFillColor(highlightColor);
+		if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && mouseInButton(window))
+		{
+			if (isSelectable())
+			{
+				state = Selected;
+			}
+			else
+			{
+				state = Idle;
+			}
+			callback();
+		}
+		else if (!mouseInButton(window))
+		{
+			state = PressedOutside;
+		}
+		break;
+	case PressedOutside:
+		if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && !mouseInButton(window))
+		{
+			state = Idle;
+			buttonRect.setOutlineColor(baseColor);
+			text.setFillColor(baseColor);
+		}
+		else if (mouseInButton(window))
+		{
+			state = Pressed;
+		}
+		break;
+	case Selected:
+		if (mouseInButton(window))
+		{
+			state = SelectedHover;
+			buttonRect.setOutlineColor(highlightColor);
+			text.setFillColor(highlightColor);
+		}
+		break;
+	case SelectedHover:
+		if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && mouseInButton(window))
+		{
+			state = SelectedPressed;
+		}
+		else if (!mouseInButton(window))
+		{
+			state = SelectedPressedOutside;
+		}
+		break;
+	case SelectedPressed:
+		if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && mouseInButton(window))
+		{
+			state = Idle;
+			callback();
+			buttonRect.setOutlineColor(baseColor);
+			text.setFillColor(baseColor);
+		}
+		else if (!mouseInButton(window))
+		{
+			state = PressedOutside;
+		}
+		break;
+	case SelectedPressedOutside:
+		if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && !mouseInButton(window))
+		{
+			state = Selected;
+		}
+		else if (mouseInButton(window))
+		{
+			state = SelectedPressed;
+		}
+		break;
+	default:
+		break;
 	}
 }
 

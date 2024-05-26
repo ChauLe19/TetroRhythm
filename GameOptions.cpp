@@ -15,26 +15,31 @@ GameOptions::GameOptions(StateManager& stateManager)
 	dropOnBeatGameButton.setSize(Vector2f(500, 100));
 	dropOnBeatGameButton.setHighlightColor(TRStyles::btnHLColor);
 	dropOnBeatGameButton.setBaseColor(TRStyles::btnBaseColor);
+	dropOnBeatGameButton.setSelectable(true);
 
 	limitedGameButton.setPosition(Vector2f(200, 450));
 	limitedGameButton.setSize(Vector2f(500, 100));
 	limitedGameButton.setHighlightColor(TRStyles::btnHLColor);
 	limitedGameButton.setBaseColor(TRStyles::btnBaseColor);
+	limitedGameButton.setSelectable(true);
 
 	endlessGameButton.setPosition(Vector2f(200, 600));
 	endlessGameButton.setSize(Vector2f(500, 100));
 	endlessGameButton.setHighlightColor(TRStyles::btnHLColor);
 	endlessGameButton.setBaseColor(TRStyles::btnBaseColor);
+	endlessGameButton.setSelectable(true);
 
 	sprintGameButton.setPosition(Vector2f(200, 750));
 	sprintGameButton.setSize(Vector2f(500, 100));
 	sprintGameButton.setHighlightColor(TRStyles::btnHLColor);
 	sprintGameButton.setBaseColor(TRStyles::btnBaseColor);
+	sprintGameButton.setSelectable(true);
 
 	startButton.setPosition(Vector2f(2048 / 2 - 100, 1000));
 	startButton.setSize(Vector2f(200, 100));
 	startButton.setHighlightColor(TRStyles::btnHLColor);
 	startButton.setBaseColor(TRStyles::btnBaseColor);
+	startButton.setSelectable(true);
 
 	std::string path = "BeatMaps";
 	for (const auto& entry : fs::directory_iterator(path))
@@ -68,29 +73,21 @@ void GameOptions::render(sf::RenderWindow& window)
 	text.setPosition(1024 - text.getLocalBounds().width / 2, 50);
 	window.draw(text);
 
-	dropOnBeatGameButton.setHighlight(cursorMode == 0);
-	limitedGameButton.setHighlight(cursorMode == 1);
-	endlessGameButton.setHighlight(cursorMode == 2);
-	sprintGameButton.setHighlight(cursorMode == 3);
-
 	window.draw(dropOnBeatGameButton);		// drop blocks on the beat receives bonus
 
 	window.draw(limitedGameButton);			// get the highest score in 2 min
-	text.setFillColor(limitedGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
 	text.setCharacterSize(30);
 	text.setString("Highscore: " + to_string(GameSettings::getInstance()->getHighscores()->limit));
 	text.setPosition(200, 450 - 40);
 	window.draw(text);
 
 	window.draw(endlessGameButton);	// just play
-	text.setFillColor(endlessGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
 	text.setCharacterSize(30);
 	text.setString("Highscore: " + to_string(GameSettings::getInstance()->getHighscores()->endless));
 	text.setPosition(200, 600 - 40);
 	window.draw(text);
 
 	window.draw(sprintGameButton);	// sprint
-	text.setFillColor(sprintGameButton.isHighlighted() ? Color(0, 186, 211) : Color::White);
 	text.setCharacterSize(30);
 	text.setString("Best time: " + (GameSettings::getInstance()->getHighscores()->sprintTime != INT_MAX ? getTimeFormat(GameSettings::getInstance()->getHighscores()->sprintTime) : "N/A"));
 	text.setPosition(200, 750 - 40);
@@ -189,11 +186,7 @@ void GameOptions::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Eve
 	using namespace std;
 	static bool isPressed = false;
 	static Vector2f pressedPosition = Vector2f(0,0);
-	if (event.type == Event::MouseMoved)
-	{
-		startButton.setHighlight(startButton.mouseInButton(window));
-	}
-	else if (event.type == Event::MouseButtonPressed && startButton.mouseInButton(window))
+	if (event.type == Event::MouseButtonPressed && startButton.mouseInButton(window))
 	{
 		previewMusic.stop();
 		startGame();

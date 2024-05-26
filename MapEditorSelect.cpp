@@ -87,8 +87,6 @@ void MapEditorSelect::render(sf::RenderWindow& window)
 	mapsTexture.clear(Color::Transparent);
 	mapsTexture.display();
 
-	startButton.setHighlight(startButton.mouseInButton(window));
-
 	text.setFillColor(Color::White);
 	text.setCharacterSize(80);
 	text.setString("Select map to edit");

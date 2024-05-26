@@ -105,12 +105,4 @@ void Menu::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event even
 			window.close();
 		}
 	}
-	else if (event.type == Event::MouseMoved)
-	{
-		beginButton.setHighlight(beginButton.mouseInButton(window));
-		settingsButton.setHighlight(settingsButton.mouseInButton(window));
-		beatmapButton.setHighlight(beatmapButton.mouseInButton(window));
-		tutorialButton.setHighlight(tutorialButton.mouseInButton(window));
-		exitButton.setHighlight(exitButton.mouseInButton(window));
-	}
 }
