@@ -2,6 +2,7 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 #include <SFML/Graphics.hpp>
+#include <functional>
 #include "Utils.h"
 
 class Button : public sf::Drawable
@@ -12,6 +13,7 @@ protected:
 	sf::Color highlightColor;
 	sf::Color baseColor;
 	sf::Text text;
+	std::function<void(void)> callback = std::function<void()>();
 
 	sf::RectangleShape buttonRect;
 	sf::Keyboard::Key key;
@@ -32,11 +34,13 @@ public:
 	virtual void setPosition(const sf::Vector2f& position);
 	void setFillColor(const sf::Color& color);
 	void setShortcut(const sf::Keyboard::Key& key); // set keyboard equivalent/shortcut
+	void setCallback(std::function<void(void)> callback); // set function to be executed on click
 	void setHighlight(bool isHighlight);
 	bool isHighlighted();
 	bool keyEvent(sf::Keyboard::Key key);
 	bool mouseInButton(sf::RenderWindow& window);
 	bool posInButton(int x, int y);
+	void mouseEvent(sf::RenderWindow& window, sf::Event event);
 
 
 	// Inherited via Drawable

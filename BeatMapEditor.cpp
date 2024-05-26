@@ -16,6 +16,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	beatButton.setHighlightColor(TRStyles::btnHLColor);
 	beatButton.setSize(sf::Vector2f(400, 400));
 	beatButton.setPosition(sf::Vector2f(1024 + 1024 / 2 - 200, 1152 / 2 - 200));
+	beatButton.setCallback(std::bind(&BeatMapEditor::addCursorToBeatList, this));
 	
 	speedButton025 = new Button(sf::Text("x0.25", assetManager->getFont("game font"), 35));
 	speedButton025->setHighlightColor(TRStyles::btnHLColor);
@@ -23,6 +24,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	speedButton025->setSize(sf::Vector2f(120, 60));
 	speedButton025->setPosition(sf::Vector2f(2048 - 3 * 170, 1152 - sliderHeight - 70));
 	speedButton025->setShortcut(Keyboard::Key::Num2);
+	speedButton025->setCallback([this]() { sound.setPitch(0.25); });
 
 	speedButton050 = new Button(sf::Text("x0.50", assetManager->getFont("game font"), 35));
 	speedButton050->setHighlightColor(TRStyles::btnHLColor);
@@ -30,6 +32,7 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	speedButton050->setSize(sf::Vector2f(120, 60));
 	speedButton050->setPosition(sf::Vector2f(2048 - 2 * 170, 1152 - sliderHeight - 70));
 	speedButton050->setShortcut(Keyboard::Key::Num5);
+	speedButton050->setCallback([this]() { sound.setPitch(0.5); });
 
 	speedButton100 = new Button(sf::Text("x1", assetManager->getFont("game font"), 35));
 	speedButton100->setHighlightColor(TRStyles::btnHLColor);
@@ -37,30 +40,35 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	speedButton100->setSize(sf::Vector2f(120, 60));
 	speedButton100->setPosition(sf::Vector2f(2048 - 170, 1152 - sliderHeight - 70));
 	speedButton100->setShortcut(Keyboard::Key::Num1);
+	speedButton100->setCallback([this]() { sound.setPitch(1); });
 
 	dividerButton1 = new Button(sf::Text("1", assetManager->getFont("game font"), 35));
 	dividerButton1->setHighlightColor(TRStyles::btnHLColor);
 	dividerButton1->setFillColor(TRStyles::btnFillColor);
 	dividerButton1->setSize(sf::Vector2f(120, 60));
 	dividerButton1->setPosition(sf::Vector2f(2048 - 170, sliderHeight + 10));
+	dividerButton1->setCallback([this]() { setDivider(1); });
 
 	dividerButton12 = new Button(sf::Text("1/2", assetManager->getFont("game font"), 35));
 	dividerButton12->setHighlightColor(TRStyles::btnHLColor);
 	dividerButton12->setFillColor(TRStyles::btnFillColor);
 	dividerButton12->setSize(sf::Vector2f(120, 60));
 	dividerButton12->setPosition(sf::Vector2f(2048 - 2 * 170, sliderHeight + 10));
+	dividerButton12->setCallback([this]() { setDivider(2); });
 
 	dividerButton13 = new Button(sf::Text("1/3", assetManager->getFont("game font"), 35));
 	dividerButton13->setHighlightColor(TRStyles::btnHLColor);
 	dividerButton13->setFillColor(TRStyles::btnFillColor);
 	dividerButton13->setSize(sf::Vector2f(120, 60));
 	dividerButton13->setPosition(sf::Vector2f(2048 - 3 * 170, sliderHeight + 10));
+	dividerButton13->setCallback([this]() { setDivider(3); });
 
 	dividerButton14 = new Button(sf::Text("1/4", assetManager->getFont("game font"), 35));
 	dividerButton14->setHighlightColor(TRStyles::btnHLColor);
 	dividerButton14->setFillColor(TRStyles::btnFillColor);
 	dividerButton14->setSize(sf::Vector2f(120, 60));
 	dividerButton14->setPosition(sf::Vector2f(2048 - 4 * 170, sliderHeight + 10));
+	dividerButton14->setCallback([this]() { setDivider(4); });
 
 	fs::path audioPath = folderPath;
 	audioPath.append(audioPath.filename().string());
@@ -194,6 +202,26 @@ void BeatMapEditor::loadStaticAssets()
 	assetManager->loadDrawable("part audio cursor", std::unique_ptr<sf::Drawable>(partAudioCursor));
 	assetManager->loadDrawable("beat button", std::unique_ptr<sf::Drawable>(beatButton));
 	assetManager->loadDrawable("beat highlight button", std::unique_ptr<sf::Drawable>(beatHLButton));
+}
+
+void BeatMapEditor::setDivider(int divider)
+{
+	this->divider = divider;
+	switch (divider)
+	{
+	case 1:
+		dividerButton1->setHighlight(true);
+		break;
+	case 2:
+		dividerButton12->setHighlight(true);
+		break;
+	case 3:
+		dividerButton13->setHighlight(true);
+		break;
+	case 4:
+		dividerButton14->setHighlight(true);
+		break;
+	}
 }
 
 BeatMapEditor::~BeatMapEditor()
@@ -447,23 +475,11 @@ void BeatMapEditor::mouseEvent(const float & dt, sf::RenderWindow& window, sf::E
 	}
 	else if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
 	{
-		if (beatButton.mouseInButton(window))
-		{
-			addCursorToBeatList();
-		}
-		else if (speedButton025->mouseInButton(window))
-		{
-			sound.setPitch(0.25);
-		}
-		else if (speedButton050->mouseInButton(window))
-		{
-			sound.setPitch(0.5);
-		}
-		else if (speedButton100->mouseInButton(window))
-		{
-			sound.setPitch(1);
-		}
-		else if (dividerButton1->mouseInButton(window))
+		beatButton.mouseEvent(window, event);
+		speedButton025->mouseEvent(window, event);
+		speedButton050->mouseEvent(window, event);
+		speedButton100->mouseEvent(window, event);
+		if (dividerButton1->mouseInButton(window))
 		{
 			divider = 1;
 		}

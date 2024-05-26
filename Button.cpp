@@ -105,6 +105,12 @@ void Button::setShortcut(const sf::Keyboard::Key& key)
 	this->key = key;
 }
 
+void Button::setCallback(std::function<void(void)> callback)
+{
+	this->callback = callback;
+}
+
+
 bool Button::isHighlighted()
 {
 	return this->isHighlight;
@@ -127,6 +133,14 @@ bool Button::mouseInButton(sf::RenderWindow& window)
 bool Button::posInButton(int x, int y)
 {
 	return posInBox(x, y, getPosition().x, getPosition().y, getSize().x, getSize().y);
+}
+
+void Button::mouseEvent(sf::RenderWindow& window, sf::Event event)
+{
+	if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && mouseInButton(window))
+	{
+		callback();
+	}
 }
 
 void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
