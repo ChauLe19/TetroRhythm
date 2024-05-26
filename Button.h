@@ -5,8 +5,10 @@
 #include <functional>
 #include "Utils.h"
 
+class ButtonGroup;
 class Button : public sf::Drawable
 {
+private:
 	enum ButtonState
 	{
 		Idle,
@@ -18,17 +20,24 @@ class Button : public sf::Drawable
 		SelectedPressed,
 		SelectedPressedOutside // in a selected state with mouse pressed but moved outside
 	};
+	void refreshColors();
+
 protected:
 	bool m_isSelectable;
+	bool m_isHighlighted;
 	ButtonState state = Idle;
 	sf::Color boxColor;
 	sf::Color highlightColor;
 	sf::Color baseColor;
 	sf::Text text;
 	std::function<void(void)> callback = std::function<void()>();
+	ButtonGroup* group = nullptr;
 
 	sf::RectangleShape buttonRect;
 	sf::Keyboard::Key key;
+
+	void setButtonGroup(ButtonGroup* group);
+	ButtonGroup* getButtonGroup();
 public:
 	Button(sf::Text text = sf::Text());
 	Button(sf::RectangleShape buttonRect, sf::Text text, sf::Color baseColor, sf::Color highlightColor);
@@ -47,9 +56,12 @@ public:
 	void setFillColor(const sf::Color& color);
 	void setShortcut(const sf::Keyboard::Key& key); // set keyboard equivalent/shortcut
 	void setCallback(std::function<void(void)> callback); // set function to be executed on click
+	void setHighlighted(bool isHighlighted);
+	bool isHighlighted();
 	bool isSelectable();
 	void setSelectable(bool selectable);
 	void setSelected(bool selected);
+	bool isSelected();
 	bool keyEvent(sf::Keyboard::Key key);
 	bool mouseInButton(sf::RenderWindow& window);
 	bool posInButton(int x, int y);
@@ -59,5 +71,6 @@ public:
 	// Inherited via Drawable
 	void draw(sf::RenderTarget& target, sf::RenderStates states = sf::RenderStates::Default) const override;
 
+	friend class ButtonGroup;
 };
 #endif

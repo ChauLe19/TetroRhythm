@@ -26,6 +26,7 @@
 #include <filesystem>
 #include <stdlib.h>
 #include "StateManager.h"
+#include "ButtonGroup.h"
 
 namespace fs = std::filesystem;
 
@@ -36,10 +37,12 @@ private:
 	sf::SoundBuffer buffer;
 	sf::Text text;
 	Button beatButton = Button(sf::Text("Beat", assetManager->getFont("game font"), 50));
+	ButtonGroup speedButtonGroup; // speed x0.25
 	Button* speedButton025; // speed x0.25
 	Button* speedButton050; // speed x0.5
 	Button* speedButton100; // speed x1
 
+	ButtonGroup dividerButtonGroup; // speed x0.25
 	Button* dividerButton1; // divider 1
 	Button* dividerButton12; // divider 1/2
 	Button* dividerButton13; // divider 1/3

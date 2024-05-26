@@ -45,6 +45,11 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	speedButton100->setSelectable(true);
 	speedButton100->setCallback([this]() { sound.setPitch(1); });
 
+	speedButtonGroup.addButton(speedButton025);
+	speedButtonGroup.addButton(speedButton050);
+	speedButtonGroup.addButton(speedButton100);
+	speedButton100->setSelected(true);
+
 	dividerButton1 = new Button(sf::Text("1", assetManager->getFont("game font"), 35));
 	dividerButton1->setHighlightColor(TRStyles::btnHLColor);
 	dividerButton1->setFillColor(TRStyles::btnFillColor);
@@ -76,6 +81,12 @@ BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath)
 	dividerButton14->setPosition(sf::Vector2f(2048 - 4 * 170, sliderHeight + 10));
 	dividerButton14->setSelectable(true);
 	dividerButton14->setCallback([this]() { setDivider(4); });
+
+	dividerButtonGroup.addButton(dividerButton1);
+	dividerButtonGroup.addButton(dividerButton12);
+	dividerButtonGroup.addButton(dividerButton13);
+	dividerButtonGroup.addButton(dividerButton14);
+	dividerButton1->setSelected(true);
 
 	fs::path audioPath = folderPath;
 	audioPath.append(audioPath.filename().string());
