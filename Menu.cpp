@@ -1,41 +1,45 @@
 #include "Menu.h"
 #include "Tutorial.h"
 
-Menu::Menu(StateManager &stateManager) : StateScreen(stateManager)
+Menu::Menu(StateManager &stateManager, Context context) : StateScreen(stateManager, context)
 {
-	text.setFont(assetManager->getFont("game font"));
+	text.setFont(getAssetManager()->getFont("game font"));
 	text.setFillColor(sf::Color::White);
 
-	sf::Text playText = sf::Text("PLAY", assetManager->getFont("game font"), 50);
+	sf::Text playText = sf::Text("PLAY", getAssetManager()->getFont("game font"), 50);
 	sf::RectangleShape playRect = sf::RectangleShape(sf::Vector2f(500, 100));
 	playRect.setPosition(1024 - 250, 450);
 	playRect.setFillColor(sf::Color::Transparent);
 	beginButton = Button(playRect, playText, sf::Color::White, sf::Color(0, 186, 211));
+	beginButton.setCallback([this]() { this->stateManager.addState(std::unique_ptr<StateScreen>(new GameOptions(this->stateManager, m_context))); });
 
-	sf::Text beatMapText = sf::Text("EDIT BEAT MAPS", assetManager->getFont("game font"), 50);
+	sf::Text beatMapText = sf::Text("EDIT BEAT MAPS", getAssetManager()->getFont("game font"), 50);
 	sf::RectangleShape beatMapRect = sf::RectangleShape(sf::Vector2f(500, 100));
 	beatMapRect.setPosition(1024 - 250, 570);
 	beatMapRect.setFillColor(sf::Color::Transparent);
 	beatmapButton = Button(beatMapRect, beatMapText, sf::Color::White, sf::Color(0, 186, 211));
+	beatmapButton.setCallback([this]() { this->stateManager.addState(std::unique_ptr<StateScreen>(new MapEditorSelect(this->stateManager, m_context))); });
 
-	sf::Text tutorialText = sf::Text("TUTORIAL", assetManager->getFont("game font"), 50);
+	sf::Text tutorialText = sf::Text("TUTORIAL", getAssetManager()->getFont("game font"), 50);
 	sf::RectangleShape tutorialRect = sf::RectangleShape(sf::Vector2f(500, 100));
 	tutorialRect.setPosition(1024 - 250, 690);
 	tutorialRect.setFillColor(sf::Color::Transparent);
 	tutorialButton = Button(tutorialRect, tutorialText, sf::Color::White, sf::Color(0, 186, 211));
+	tutorialButton.setCallback([this]() { this->stateManager.addState(std::unique_ptr<StateScreen>(new Tutorial(this->stateManager, m_context))); });
 
-	sf::Text settingsText= sf::Text("Settings", assetManager->getFont("game font"), 40);
+	sf::Text settingsText= sf::Text("Settings", getAssetManager()->getFont("game font"), 40);
 	sf::RectangleShape settingsRect = sf::RectangleShape(sf::Vector2f(240, 100));
 	settingsRect.setPosition(1024 - 250, 810);
 	settingsRect.setFillColor(sf::Color::Transparent);
 	settingsButton = Button(settingsRect, settingsText, sf::Color::White, sf::Color(0, 186, 211));
+	settingsButton.setCallback([this]() { this->stateManager.addState(std::unique_ptr<StateScreen>(new Settings(this->stateManager, m_context))); });
 
-	sf::Text exitText = sf::Text("Exit", assetManager->getFont("game font"), 40);
+	sf::Text exitText = sf::Text("Exit", getAssetManager()->getFont("game font"), 40);
 	sf::RectangleShape exitRect = sf::RectangleShape(sf::Vector2f(240, 100));
 	exitRect.setPosition(1024 + 10, 810);
 	exitRect.setFillColor(sf::Color::Transparent);
 	exitButton = Button(exitRect, exitText, sf::Color::White, sf::Color(0, 186, 211));
-
+	exitButton.setCallback([this]() { m_context.window->close(); });
 }
 
 Menu::~Menu()
@@ -68,13 +72,13 @@ void Menu::keyEvent(const float & dt, sf::Event event)
 	switch (event.key.code)
 	{
 	case Keyboard::Key::Return:
-		stateManager.addState(std::unique_ptr<StateScreen>(new GameOptions(stateManager)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new GameOptions(stateManager, m_context)));
 		break;
 	case Keyboard::Key::C:
-		stateManager.addState(std::unique_ptr<StateScreen>(new Settings(stateManager)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Settings(stateManager, m_context)));
 		break;
 	case Keyboard::Key::E:
-		stateManager.addState(std::unique_ptr<StateScreen>(new MapEditorSelect(stateManager)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new MapEditorSelect(stateManager, m_context)));
 		break;
 	}
 }
@@ -82,27 +86,15 @@ void Menu::keyEvent(const float & dt, sf::Event event)
 void Menu::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event event)
 {
 	using namespace sf;
-	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left)
-	{
-		if (beginButton.mouseInButton(window)) // BEGIN button
-		{
-			stateManager.addState(std::unique_ptr<StateScreen>(new GameOptions(stateManager)));
-		}
-		else if (settingsButton.mouseInButton(window)) //SETTINGS button
-		{
-			stateManager.addState(std::unique_ptr<StateScreen>(new Settings(stateManager)));
-		}
-		else if (beatmapButton.mouseInButton(window)) // EDIT BEAT MAPS button
-		{
-			stateManager.addState(std::unique_ptr<StateScreen>(new MapEditorSelect(stateManager)));
-		}
-		else if (tutorialButton.mouseInButton(window)) // tutorial button
-		{
-			stateManager.addState(std::unique_ptr<StateScreen>(new Tutorial(stateManager)));
-		}
-		else if (exitButton.mouseInButton(window)) // exit button
-		{
-			window.close();
-		}
-	}
+	beginButton.mouseEvent(window, event);
+	settingsButton.mouseEvent(window, event);
+	beatmapButton.mouseEvent(window, event);
+	tutorialButton.mouseEvent(window, event);
+	exitButton.mouseEvent(window, event);
+	exitButton.getPosition();
+}
+
+void Menu::b()
+{
+
 }

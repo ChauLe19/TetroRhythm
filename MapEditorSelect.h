@@ -8,7 +8,7 @@ class MapEditorSelect : public StateScreen
 {
 private:
 	sf::Text text;
-	Button startButton = Button(sf::Text("Start", assetManager->getFont("game font"), 50U));
+	Button startButton = Button(sf::Text("Start", getAssetManager()->getFont("game font"), 50U));
 	std::vector<fs::path> maps;
 	int cursor = 0;
 	int mapRenderOffset = 0;
@@ -16,7 +16,7 @@ private:
 	sf::Vector2f pressedPosition;
 	int prevMapRenderOffset = mapRenderOffset;
 public:
-	MapEditorSelect(StateManager &stateManager);
+	MapEditorSelect(StateManager &stateManager, Context context);
 	~MapEditorSelect();
 
 	// StateScreen functions

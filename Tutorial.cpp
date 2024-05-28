@@ -4,10 +4,10 @@
 #include "GameSettings.h"
 #include "Styles.h"
 
-Tutorial::Tutorial(StateManager& stateManager) : StateScreen(stateManager)
+Tutorial::Tutorial(StateManager& stateManager, Context context) : StateScreen(stateManager, context)
 {
 	using namespace std;
-	text.setFont(assetManager->getFont("game font"));
+	text.setFont(getAssetManager()->getFont("game font"));
 	text.setFillColor(sf::Color::White);
 
 	helpButton.setPosition(sf::Vector2f(2048 - 40 - 10, 10));
@@ -70,11 +70,11 @@ void Tutorial::render(sf::RenderWindow& window)
 
 	if (mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
-		window.draw(assetManager->getDrawable("back button hl"));
+		window.draw(getAssetManager()->getDrawable("back button hl"));
 	}
 	else
 	{
-		window.draw(assetManager->getDrawable("back button"));
+		window.draw(getAssetManager()->getDrawable("back button"));
 	}
 	window.draw(helpButton);
 
@@ -128,7 +128,7 @@ void Tutorial::mouseEvent(const float& dt, sf::RenderWindow& window, sf::Event e
 	using namespace std;
 	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
 		return;
 	}
 

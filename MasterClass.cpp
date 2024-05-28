@@ -49,7 +49,7 @@ MasterClass::MasterClass(sf::RenderWindow& window)
 	text.setFillColor(Color::White);
 	backgroundSprite.setTexture(AssetManager::getInstance()->getTexture("background"));
 	backgroundSprite.setColor(Color(255, 255, 255, 100));
-	this->stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+	this->stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, StateScreen::Context(&window, AssetManager::getInstance()))));
 }
 
 MasterClass::~MasterClass()

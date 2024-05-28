@@ -16,17 +16,26 @@
 class StateManager;
 class StateScreen
 {
+public:
+	struct Context
+	{
+		Context(sf::RenderWindow* window, AssetManager* assetManager);
+		sf::RenderWindow* window;
+		AssetManager* assetManager = AssetManager::getInstance();
+	};
 private:
 protected:
+	Context m_context;
 	sf::Texture backgroundTexture;
 	sf::Sprite* background = nullptr;
 	StateManager &stateManager;
-	AssetManager* assetManager = AssetManager::getInstance();
 
 	virtual void loadStaticAssets() {};
 public:
-	StateScreen(StateManager& stateManager);
+	StateScreen(StateManager& stateManager, Context context);
 	~StateScreen();
+
+	AssetManager* getAssetManager() const;
 	/**
 	 * Life cycle function. Run each frame.
 	 *

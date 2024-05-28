@@ -46,7 +46,7 @@ private:
 	std::string fromControlsToString(Controls_Key key);
 public:
 
-	Settings(StateManager &stateManager);
+	Settings(StateManager &stateManager, Context context);
 	~Settings();
 
 	// GameBase functions

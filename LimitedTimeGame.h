@@ -17,7 +17,7 @@ class LimitedTimeGame :
 private:
 	sf::Clock clock;
 public:
-	LimitedTimeGame(StateManager &stateManager, std::string folderPath);
+	LimitedTimeGame(StateManager &stateManager, Context context, std::string folderPath);
 	~LimitedTimeGame();
 
 	// Game Base functions

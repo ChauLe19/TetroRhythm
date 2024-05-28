@@ -39,14 +39,14 @@ private:
 	int mapRenderOffset = 0;
 	int prevMapRenderOffset = 0;
 
-	Button dropOnBeatGameButton = Button(sf::Text("Drop On Beat", assetManager->getFont("game font"), 50U));
-	Button limitedGameButton = Button(sf::Text("Limited Time", assetManager->getFont("game font"), 50U));
-	Button endlessGameButton = Button(sf::Text("Endless", assetManager->getFont("game font"), 50U));
-	Button sprintGameButton = Button(sf::Text("Sprint 40L", assetManager->getFont("game font"), 50U));
-	Button startButton = Button(sf::Text("Start", assetManager->getFont("game font"), 50U));
+	Button dropOnBeatGameButton = Button(sf::Text("Drop On Beat", getAssetManager()->getFont("game font"), 50U));
+	Button limitedGameButton = Button(sf::Text("Limited Time", getAssetManager()->getFont("game font"), 50U));
+	Button endlessGameButton = Button(sf::Text("Endless", getAssetManager()->getFont("game font"), 50U));
+	Button sprintGameButton = Button(sf::Text("Sprint 40L", getAssetManager()->getFont("game font"), 50U));
+	Button startButton = Button(sf::Text("Start", getAssetManager()->getFont("game font"), 50U));
 
 public:
-	GameOptions(StateManager &stateManager);
+	GameOptions(StateManager &stateManager, Context context);
 	~GameOptions();
 
 	// StateScreen functions

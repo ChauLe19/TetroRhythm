@@ -9,8 +9,8 @@ class Tutorial :
     public StateScreen
 {
 private:
-	Button helpButton = Button(sf::Text("?", assetManager->getFont("game font"), 50U));
-	Button blankPopup = Button(sf::Text("", assetManager->getFont("game font"), 50U));
+	Button helpButton = Button(sf::Text("?", getAssetManager()->getFont("game font"), 50U));
+	Button blankPopup = Button(sf::Text("", getAssetManager()->getFont("game font"), 50U));
 	sf::Text text;
 	sf::Sprite instructionSprite;
 	Board board = Board(boardX, boardY);
@@ -49,7 +49,7 @@ private:
 
 	void drawInstructionPopup(sf::RenderWindow& window);
 public:
-	Tutorial(StateManager &stateManager);
+	Tutorial(StateManager &stateManager, Context context);
 	~Tutorial();
 
 	// StateScreen functions

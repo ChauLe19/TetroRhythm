@@ -1,10 +1,10 @@
 #include "Settings.h"
 #include "Menu.h"
 
-Settings::Settings(StateManager& stateManager) : StateScreen(stateManager)
+Settings::Settings(StateManager& stateManager, Context context) : StateScreen(stateManager, context)
 {
 	using namespace sf;
-	text.setFont(assetManager->getFont("game font"));
+	text.setFont(getAssetManager()->getFont("game font"));
 	text.setFillColor(Color::White);
 }
 
@@ -29,7 +29,7 @@ void Settings::keyEvent(const float & dt, sf::Event event)
 	case Keyboard::Key::Escape:
 		GameSettings::getInstance()->saveKeys();
 		GameSettings::getInstance()->saveConfig();
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
 		break;
 	case Keyboard::Key::Down:
 		setCursor(cursor + 1);
@@ -69,11 +69,11 @@ void Settings::render(sf::RenderWindow& window)
 
 	if (mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
-		window.draw(assetManager->getDrawable("back button hl"));
+		window.draw(getAssetManager()->getDrawable("back button hl"));
 	}
 	else
 	{
-		window.draw(assetManager->getDrawable("back button"));
+		window.draw(getAssetManager()->getDrawable("back button"));
 	}
 }
 
@@ -170,7 +170,7 @@ void Settings::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event 
 	{
 		GameSettings::getInstance()->saveKeys();
 		GameSettings::getInstance()->saveConfig();
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
 	}
 }
 

@@ -17,7 +17,7 @@ class EndlessGame :
 private:
 	bool hsSaved = false;
 public:
-	EndlessGame(StateManager &stateManager, std::string folderPath);
+	EndlessGame(StateManager &stateManager, Context context, std::string folderPath);
 	~EndlessGame();
 	//sf::Clock clock;
 	// Game Base functions

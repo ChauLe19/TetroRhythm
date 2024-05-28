@@ -4,14 +4,14 @@
 #include <filesystem>
 constexpr double PI = 3.14159265358979323846;
 
-GameBase::GameBase(StateManager &stateManager, std::string folderPath = "Tetris_theme")
-	: StateScreen(stateManager), songName(fs::path(folderPath).filename().string())
+GameBase::GameBase(StateManager &stateManager, Context context, std::string folderPath = "Tetris_theme")
+	: StateScreen(stateManager, context), songName(fs::path(folderPath).filename().string())
 {
 	using namespace sf;
 	using namespace std;
 	cout << "Initializing game" << endl;
 
-	text.setFont(assetManager->getFont("game font"));
+	text.setFont(getAssetManager()->getFont("game font"));
 	text.setFillColor(Color::White);
 
 	boardPtr = new Board(boardX, boardY);
@@ -138,11 +138,11 @@ void GameBase::render(sf::RenderWindow& window)
 
 	if (mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
-		window.draw(assetManager->getDrawable("back button hl"));
+		window.draw(getAssetManager()->getDrawable("back button hl"));
 	}
 	else
 	{
-		window.draw(assetManager->getDrawable("back button"));
+		window.draw(getAssetManager()->getDrawable("back button"));
 	}
 }
 
@@ -157,7 +157,7 @@ void GameBase::keyEvent(const float & dt, sf::Event event)
 		if (key == Keyboard::Escape)
 		{
 			reset();
-			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
 		}
 		else if (key == Keyboard::R)
 		{
@@ -222,7 +222,7 @@ void GameBase::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event 
 		{
 			if (mouseInBox(window, 1024 - 150, 576 + 20, 300, 60))
 			{
-				stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+				stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
 			}
 		}
 	}
@@ -231,7 +231,7 @@ void GameBase::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event 
 		if (event.type == Event::MouseButtonPressed && mouseInBox(window, 20, 20, 40, 40)) // back button
 		{
 			gameOver();
-			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
+			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
 			return;
 		}
 

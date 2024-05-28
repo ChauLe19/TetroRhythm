@@ -121,7 +121,7 @@ ButtonGroup* Button::getButtonGroup()
 
 void Button::setCallback(std::function<void(void)> callback)
 {
-	this->callback = callback;
+	this->callback = std::move(callback);
 }
 
 void Button::setHighlighted(bool isHighlighted)
@@ -223,7 +223,7 @@ void Button::mouseEvent(sf::RenderWindow& window, sf::Event event)
 			{
 				state = Idle;
 			}
-			callback();
+			if(callback) callback();
 		}
 		else if (!mouseInButton(window))
 		{
@@ -271,7 +271,7 @@ void Button::mouseEvent(sf::RenderWindow& window, sf::Event event)
 			{
 				state = Idle;
 			}
-			callback();
+			if(callback) callback();
 		}
 		else if (!mouseInButton(window))
 		{

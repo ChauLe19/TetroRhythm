@@ -1,7 +1,7 @@
 #include "DropToTheBeatGame.h"
 #include "Styles.h"
 
-DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, std::string folderPath) : GameBase(stateManager, folderPath)
+DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, Context context, std::string folderPath) : GameBase(stateManager, context, folderPath)
 {
 	using namespace sf;
 	using namespace std;
@@ -90,11 +90,11 @@ void DropToTheBeatGame::loadStaticAssets()
 	WholeRankBar->setOutlineColor(Color(255, 255, 255, 200));
 	WholeRankBar->setOutlineThickness(5);
 
-	assetManager->loadDrawable("beat bar", std::unique_ptr<sf::Drawable>(beatBar));
-	assetManager->loadDrawable("almost window", std::unique_ptr<sf::Drawable>(almostBar));
-	assetManager->loadDrawable("hit window", std::unique_ptr<sf::Drawable>(hitBar));
-	assetManager->loadDrawable("health bar", std::unique_ptr<Drawable>(healthBar));
-	assetManager->loadDrawable("Whole Rank bar", std::unique_ptr<Drawable>(WholeRankBar));
+	getAssetManager()->loadDrawable("beat bar", std::unique_ptr<sf::Drawable>(beatBar));
+	getAssetManager()->loadDrawable("almost window", std::unique_ptr<sf::Drawable>(almostBar));
+	getAssetManager()->loadDrawable("hit window", std::unique_ptr<sf::Drawable>(hitBar));
+	getAssetManager()->loadDrawable("health bar", std::unique_ptr<Drawable>(healthBar));
+	getAssetManager()->loadDrawable("Whole Rank bar", std::unique_ptr<Drawable>(WholeRankBar));
 }
 
 void DropToTheBeatGame::tick(const float & dt, sf::RenderWindow& window)
@@ -125,7 +125,7 @@ void DropToTheBeatGame::tick(const float & dt, sf::RenderWindow& window)
 	{
 		finished = true;
 		gameOver();
-		ResultScreen *resultScreenPtr = new ResultScreen(stateManager, songName, beatAccuracyCount, score, maxCombo);
+		ResultScreen *resultScreenPtr = new ResultScreen(stateManager, m_context, songName, beatAccuracyCount, score, maxCombo);
 		stateManager.addState(unique_ptr<StateScreen>(resultScreenPtr));
 		return;
 	}
@@ -327,9 +327,9 @@ void DropToTheBeatGame::renderBeatSignal(sf::RenderWindow& window)
 	int boardWidthPx = boardWidth * boardSquareSize;
 
 
-	window.draw(assetManager->getDrawable("beat bar"));
-	window.draw(assetManager->getDrawable("almost window"));
-	window.draw(assetManager->getDrawable("hit window"));
+	window.draw(getAssetManager()->getDrawable("beat bar"));
+	window.draw(getAssetManager()->getDrawable("almost window"));
+	window.draw(getAssetManager()->getDrawable("hit window"));
 
 
 	for (list<int>::iterator tempBeatIt = beatsTime.begin(); tempBeatIt != beatsTime.end(); ++tempBeatIt, ++tempRainbowIndex)
@@ -421,7 +421,7 @@ void DropToTheBeatGame::render(sf::RenderWindow& window)
 	thresholdRemainder = thresholdRemainder == 0 ? progressScoreLeft : thresholdRemainder;
 	progress.setSize(Vector2f(progressScoreLeft * boardWidth * boardSquareSize / thresholdRemainder , 20));
 	window.draw(progress);
-	window.draw(assetManager->getDrawable("Whole Rank bar"));
+	window.draw(getAssetManager()->getDrawable("Whole Rank bar"));
 
 
 	RectangleShape healthRect;
@@ -432,7 +432,7 @@ void DropToTheBeatGame::render(sf::RenderWindow& window)
 	healthRect.setOutlineThickness(5);
 	window.draw(healthRect);
 
-	window.draw(assetManager->getDrawable("health bar"));
+	window.draw(getAssetManager()->getDrawable("health bar"));
 
 	text.setCharacterSize(50);
 	text.setString("Combo: " + getPaddingString(to_string(combo), 4, ' ') );

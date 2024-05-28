@@ -32,8 +32,9 @@ private:
 	Button exitButton;
 
 public:
-	Menu(StateManager &stateManager);
+	Menu(StateManager &stateManager, Context context);
 	~Menu();
+	void b();
 
 	// StateScreen functions
 	//**************************************************

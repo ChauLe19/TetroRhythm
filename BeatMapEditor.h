@@ -36,7 +36,7 @@ private:
 	sf::Sound sound;
 	sf::SoundBuffer buffer;
 	sf::Text text;
-	Button beatButton = Button(sf::Text("Beat", assetManager->getFont("game font"), 50));
+	Button beatButton = Button(sf::Text("Beat", getAssetManager()->getFont("game font"), 50));
 	ButtonGroup speedButtonGroup; // speed x0.25
 	Button* speedButton025; // speed x0.25
 	Button* speedButton050; // speed x0.5
@@ -68,7 +68,7 @@ private:
 	void loadStaticAssets();
 	void setDivider(int divider);
 public:
-	BeatMapEditor(StateManager &stateManager, std::string folderPath);
+	BeatMapEditor(StateManager &stateManager, Context context, std::string folderPath);
 	~BeatMapEditor();
 
 	void save();

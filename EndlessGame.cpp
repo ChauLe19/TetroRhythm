@@ -1,7 +1,7 @@
 #include "EndlessGame.h"
 
 //TODO: speed depends on the song speed. the song speed up after every round
-EndlessGame::EndlessGame(StateManager &stateManager, std::string folderPath) : GameBase(stateManager, folderPath)
+EndlessGame::EndlessGame(StateManager &stateManager, Context context, std::string folderPath) : GameBase(stateManager, context, folderPath)
 {
 }
 

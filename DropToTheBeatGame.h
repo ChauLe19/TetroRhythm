@@ -41,7 +41,7 @@ private:
 
 	void loadStaticAssets();
 public:
-	DropToTheBeatGame(StateManager &stateManager, std::string folderPath);
+	DropToTheBeatGame(StateManager &stateManager, Context context, std::string folderPath);
 	~DropToTheBeatGame();
 
 
