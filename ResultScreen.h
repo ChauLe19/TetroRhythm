@@ -26,7 +26,7 @@ private:
 
 	sf::Text text;
 public:
-	ResultScreen(StateManager& stateManager, Context context, std::string folderPath, int accuracyBeatCount[3], int rawScore, int combo);
+	ResultScreen(StateManager& stateManager, std::string folderPath, int accuracyBeatCount[3], int rawScore, int combo);
 	~ResultScreen();
 
 	// StateScreen functions

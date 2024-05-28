@@ -1,7 +1,7 @@
 #include "DropToTheBeatGame.h"
 #include "Styles.h"
 
-DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, Context context, std::string folderPath) : GameBase(stateManager, context, folderPath)
+DropToTheBeatGame::DropToTheBeatGame(StateManager &stateManager, std::string folderPath) : GameBase(stateManager, folderPath)
 {
 	using namespace sf;
 	using namespace std;
@@ -125,7 +125,7 @@ void DropToTheBeatGame::tick(const float & dt, sf::RenderWindow& window)
 	{
 		finished = true;
 		gameOver();
-		ResultScreen *resultScreenPtr = new ResultScreen(stateManager, m_context, songName, beatAccuracyCount, score, maxCombo);
+		ResultScreen *resultScreenPtr = new ResultScreen(stateManager, songName, beatAccuracyCount, score, maxCombo);
 		stateManager.addState(unique_ptr<StateScreen>(resultScreenPtr));
 		return;
 	}

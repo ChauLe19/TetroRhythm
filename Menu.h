@@ -32,7 +32,7 @@ private:
 	Button exitButton;
 
 public:
-	Menu(StateManager &stateManager, Context context);
+	Menu(StateManager &stateManager);
 	~Menu();
 	void b();
 

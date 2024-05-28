@@ -3,7 +3,7 @@
 #include "Styles.h"
 
 
-MapEditorSelect::MapEditorSelect(StateManager &stateManager, Context context) : StateScreen(stateManager, context)
+MapEditorSelect::MapEditorSelect(StateManager &stateManager) : StateScreen(stateManager)
 {
 	using namespace sf;
 	text.setFont(getAssetManager()->getFont("game font"));
@@ -123,10 +123,10 @@ void MapEditorSelect::keyEvent(const float & dt, sf::Event event)
 	switch (key)
 	{
 	case Keyboard::Key::Return:
-		stateManager.addState(std::unique_ptr<StateScreen>(new BeatMapEditor(stateManager, m_context, fs::absolute(maps[cursor]).string())));
+		stateManager.addState(std::unique_ptr<StateScreen>(new BeatMapEditor(stateManager, fs::absolute(maps[cursor]).string())));
 		break;
 	case Keyboard::Key::Escape:
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::Up:
 		cursor = clamp(cursor - 1, 0, (int)maps.size() - 1);
@@ -168,15 +168,15 @@ void MapEditorSelect::mouseEvent(const float & dt, sf::RenderWindow& window, sf:
 	{
 		if (startButton.mouseInButton(window))
 		{
-			stateManager.addState(std::unique_ptr<StateScreen>(new BeatMapEditor(stateManager, m_context, fs::absolute(maps[cursor]).string())));
+			stateManager.addState(std::unique_ptr<StateScreen>(new BeatMapEditor(stateManager, fs::absolute(maps[cursor]).string())));
 		}
 		else if (mouseInBox(window, 20, 20, 40, 40)) // back button
 		{
-			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		}
 		else if (mouseInBox(window, 20, 20, 40, 40)) // back button
 		{
-			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		}
 	}
 }

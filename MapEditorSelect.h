@@ -16,7 +16,7 @@ private:
 	sf::Vector2f pressedPosition;
 	int prevMapRenderOffset = mapRenderOffset;
 public:
-	MapEditorSelect(StateManager &stateManager, Context context);
+	MapEditorSelect(StateManager &stateManager);
 	~MapEditorSelect();
 
 	// StateScreen functions

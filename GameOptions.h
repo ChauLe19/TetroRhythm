@@ -46,7 +46,7 @@ private:
 	Button startButton = Button(sf::Text("Start", getAssetManager()->getFont("game font"), 50U));
 
 public:
-	GameOptions(StateManager &stateManager, Context context);
+	GameOptions(StateManager &stateManager);
 	~GameOptions();
 
 	// StateScreen functions

@@ -38,7 +38,7 @@ sf::View getLetterboxView(sf::RenderWindow* window, sf::View view, float windowW
 	return resultView;
 }
 
-MasterClass::MasterClass(sf::RenderWindow& window)
+MasterClass::MasterClass(sf::RenderWindow& window) : stateManager(StateManager::Context(&window, AssetManager::getInstance()))
 {
 	using namespace sf;
 	this->window = &window;
@@ -49,7 +49,7 @@ MasterClass::MasterClass(sf::RenderWindow& window)
 	text.setFillColor(Color::White);
 	backgroundSprite.setTexture(AssetManager::getInstance()->getTexture("background"));
 	backgroundSprite.setColor(Color(255, 255, 255, 100));
-	this->stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, StateScreen::Context(&window, AssetManager::getInstance()))));
+	this->stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 }
 
 MasterClass::~MasterClass()

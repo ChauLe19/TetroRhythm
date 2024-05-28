@@ -2,7 +2,7 @@
 #include "Menu.h"
 #include "GameBase.h"
 
-ResultScreen::ResultScreen(StateManager& stateManager, Context context, std::string songName, int accuracyBeatCount[3], int rawScore, int combo) : StateScreen(stateManager, context), songName(songName)
+ResultScreen::ResultScreen(StateManager& stateManager, std::string songName, int accuracyBeatCount[3], int rawScore, int combo) : StateScreen(stateManager), songName(songName)
 {
 	text.setFont(getAssetManager()->getFont("game font"));
 	text.setFillColor(sf::Color::White);
@@ -79,10 +79,10 @@ void ResultScreen::keyEvent(const float & dt, sf::Event event)
 	switch (event.key.code)
 	{
 	case Keyboard::Key::Escape:
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::R:
-		stateManager.addState(std::unique_ptr<StateScreen>(new DropToTheBeatGame(stateManager, m_context, fs::current_path().append("BeatMaps").append(songName).string())));
+		stateManager.addState(std::unique_ptr<StateScreen>(new DropToTheBeatGame(stateManager, fs::current_path().append("BeatMaps").append(songName).string())));
 		break;
 	}
 }
@@ -92,6 +92,6 @@ void ResultScreen::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Ev
 	using namespace sf;
 	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 	}
 }

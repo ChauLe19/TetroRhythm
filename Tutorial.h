@@ -49,7 +49,7 @@ private:
 
 	void drawInstructionPopup(sf::RenderWindow& window);
 public:
-	Tutorial(StateManager &stateManager, Context context);
+	Tutorial(StateManager &stateManager);
 	~Tutorial();
 
 	// StateScreen functions

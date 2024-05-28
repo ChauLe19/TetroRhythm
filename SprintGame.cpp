@@ -1,6 +1,6 @@
 #include "SprintGame.h"
 
-SprintGame::SprintGame(StateManager &stateManager, Context context, std::string folderPath) : GameBase(stateManager, context, folderPath)
+SprintGame::SprintGame(StateManager &stateManager, std::string folderPath) : GameBase(stateManager, folderPath)
 {
 	timer = sf::Clock();
 }

@@ -20,7 +20,7 @@ private:
 	bool hsSaved = false;
 	sf::Int32 currSprintTime;
 public:
-	SprintGame(StateManager &stateManager, Context context, std::string folderPath);
+	SprintGame(StateManager &stateManager, std::string folderPath);
 	~SprintGame();
 	// Game Base functions
 	//************************************************

@@ -2,8 +2,8 @@
 #include "Menu.h"
 #include "Styles.h"
 
-GameOptions::GameOptions(StateManager& stateManager, Context context)
-	: StateScreen(stateManager, context)
+GameOptions::GameOptions(StateManager& stateManager)
+	: StateScreen(stateManager)
 {
 	using namespace sf;
 	cursorMap = 0;
@@ -133,7 +133,7 @@ void GameOptions::keyEvent(const float & dt, sf::Event event)
 	{
 	case Keyboard::Key::Escape:
 		previewMusic.stop();
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::Return:
 		if (!choosingMap) // if player is not choosing map (choosing mode), enter allow user to choose map
@@ -218,7 +218,7 @@ void GameOptions::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Eve
 	else if (event.type == Event::MouseButtonPressed && mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
 		previewMusic.stop();
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 	}
 	else if (isPressed && Mouse::isButtonPressed(Mouse::Left))
 	{
@@ -300,19 +300,19 @@ void GameOptions::startGame()
 	switch (cursorMode)
 	{
 	case 0:
-		gamePtr = new DropToTheBeatGame(stateManager, m_context, fs::absolute(maps[cursorMap]).string());
+		gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
 		break;
 	case 1:
-		gamePtr = new LimitedTimeGame(stateManager, m_context, fs::absolute(maps[cursorMap]).string());
+		gamePtr = new LimitedTimeGame(stateManager, fs::absolute(maps[cursorMap]).string());
 		break;
 	case 2:
-		gamePtr = new EndlessGame(stateManager, m_context, fs::absolute(maps[cursorMap]).string());
+		gamePtr = new EndlessGame(stateManager, fs::absolute(maps[cursorMap]).string());
 		break;
 	case 3:
-		gamePtr = new SprintGame(stateManager, m_context, fs::absolute(maps[cursorMap]).string());
+		gamePtr = new SprintGame(stateManager, fs::absolute(maps[cursorMap]).string());
 		break;
 	default:
-		gamePtr = new DropToTheBeatGame(stateManager, m_context, fs::absolute(maps[cursorMap]).string());
+		gamePtr = new DropToTheBeatGame(stateManager, fs::absolute(maps[cursorMap]).string());
 		break;
 	}
 	stateManager.addState(std::unique_ptr<StateScreen>(gamePtr));

@@ -1,7 +1,7 @@
 #include "Settings.h"
 #include "Menu.h"
 
-Settings::Settings(StateManager& stateManager, Context context) : StateScreen(stateManager, context)
+Settings::Settings(StateManager& stateManager) : StateScreen(stateManager)
 {
 	using namespace sf;
 	text.setFont(getAssetManager()->getFont("game font"));
@@ -29,7 +29,7 @@ void Settings::keyEvent(const float & dt, sf::Event event)
 	case Keyboard::Key::Escape:
 		GameSettings::getInstance()->saveKeys();
 		GameSettings::getInstance()->saveConfig();
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::Down:
 		setCursor(cursor + 1);
@@ -170,7 +170,7 @@ void Settings::mouseEvent(const float & dt, sf::RenderWindow& window, sf::Event 
 	{
 		GameSettings::getInstance()->saveKeys();
 		GameSettings::getInstance()->saveConfig();
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 	}
 }
 

@@ -106,7 +106,7 @@ protected:
 	void clearLines();
 
 public:
-	GameBase(StateManager& stateManager, Context context, std::string folderPath);
+	GameBase(StateManager& stateManager, std::string folderPath);
 	~GameBase();
 
 	// State Screen functions

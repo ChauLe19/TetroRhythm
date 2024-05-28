@@ -2,7 +2,7 @@
 #include "Utils.h"
 
 //TODO: speed depends on the song speed. the song speed up after every round
-LimitedTimeGame::LimitedTimeGame(StateManager& stateManager, Context context, std::string folderPath) : GameBase(stateManager, context, folderPath)
+LimitedTimeGame::LimitedTimeGame(StateManager& stateManager, std::string folderPath) : GameBase(stateManager, folderPath)
 {
 	clock = sf::Clock();
 }

@@ -4,7 +4,7 @@
 #include "GameSettings.h"
 #include "Styles.h"
 
-Tutorial::Tutorial(StateManager& stateManager, Context context) : StateScreen(stateManager, context)
+Tutorial::Tutorial(StateManager& stateManager) : StateScreen(stateManager)
 {
 	using namespace std;
 	text.setFont(getAssetManager()->getFont("game font"));
@@ -128,7 +128,7 @@ void Tutorial::mouseEvent(const float& dt, sf::RenderWindow& window, sf::Event e
 	using namespace std;
 	if (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && mouseInBox(window, 20, 20, 40, 40)) // back button
 	{
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		return;
 	}
 

@@ -7,6 +7,7 @@ namespace fs = std::filesystem;
 
 class AssetManager
 {
+public:
 private:
 	static AssetManager* assetManager;
 	std::map<std::string, std::string> textureFiles;

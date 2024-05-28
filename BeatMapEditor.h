@@ -68,7 +68,7 @@ private:
 	void loadStaticAssets();
 	void setDivider(int divider);
 public:
-	BeatMapEditor(StateManager &stateManager, Context context, std::string folderPath);
+	BeatMapEditor(StateManager &stateManager, std::string folderPath);
 	~BeatMapEditor();
 
 	void save();

@@ -1,6 +1,6 @@
 #include "StateManager.h"
 
-StateManager::StateManager()
+StateManager::StateManager(Context context) : context(context)
 {
 }
 
@@ -40,7 +40,16 @@ void StateManager::removeState()
     }
 }
 
+StateManager::Context& StateManager::getContext()
+{
+	return context;
+}
+
 std::unique_ptr<StateScreen>& StateManager::getCurrentState()
 {
     return this->stateStack.top();
+}
+
+StateManager::Context::Context(sf::RenderWindow* window, AssetManager* assetManager) : window(window), assetManager(assetManager)
+{
 }

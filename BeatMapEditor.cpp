@@ -3,7 +3,7 @@
 #include "Styles.h"
 #include <memory>
 
-BeatMapEditor::BeatMapEditor(StateManager &stateManager, Context context, std::string folderPath) : StateScreen(stateManager, context)
+BeatMapEditor::BeatMapEditor(StateManager &stateManager, std::string folderPath) : StateScreen(stateManager)
 {
 	using namespace sf;
 	using namespace std;
@@ -402,7 +402,7 @@ void BeatMapEditor::keyEvent(const float & dt, sf::Event event)
 	case Keyboard::Key::Escape:
 		save();
 		sound.stop();
-		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+		stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 		break;
 	case Keyboard::Key::Num2:
 		sound.setPitch(0.25);
@@ -501,7 +501,7 @@ void BeatMapEditor::mouseEvent(const float & dt, sf::RenderWindow& window, sf::E
 		{
 			save();
 			sound.stop();
-			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager, m_context)));
+			stateManager.addState(std::unique_ptr<StateScreen>(new Menu(stateManager)));
 			return;
 		}
 	}

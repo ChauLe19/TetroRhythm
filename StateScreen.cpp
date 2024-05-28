@@ -1,8 +1,8 @@
 #include "StateScreen.h"
+#include "StateManager.h"
 
-StateScreen::StateScreen(StateManager& stateManager, Context context) :
-	stateManager(stateManager),
-	m_context(context)
+StateScreen::StateScreen(StateManager& stateManager) :
+	stateManager(stateManager)
 {
 }
 
@@ -12,9 +12,5 @@ StateScreen::~StateScreen()
 
 AssetManager* StateScreen::getAssetManager() const
 {
-	return m_context.assetManager;
-}
-
-StateScreen::Context::Context(sf::RenderWindow* window, AssetManager* assetManager) : window(window), assetManager(assetManager)
-{
+	return stateManager.getContext().assetManager;
 }
