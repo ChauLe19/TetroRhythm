@@ -9,4 +9,4 @@ Other modes:
 + Sprint 40L
 
 ### TetroRhythm Gameplay:
-[![A Youtube Video of TetroRhythm](https://i.ytimg.com/an_webp/MbGwEet1NWU/mqdefault_6s.webp?du=3000&sqp=CPmIksIG&rs=AOn4CLA945VLaMCrQ7zU1j_QZU8RlH1Mzw)](https://www.youtube.com/watch?v=MbGwEet1NWU)
+[![A Youtube Video of TetroRhythm](https://i.ytimg.com/an_webp/MbGwEet1NWU/mqdefault_6s.webp?du=3000&sqp=CK-i4cIG&rs=AOn4CLCAOWAc8xPsYjb7go6g2Vk1xtaJuA)](https://www.youtube.com/watch?v=MbGwEet1NWU)
